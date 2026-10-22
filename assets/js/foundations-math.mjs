@@ -107,3 +107,160 @@ export function total(values) {
 export function remainingTokens(windowSize, promptLength) {
   return windowSize - promptLength;
 }
+
+/* ---------- Module 0, second half ---------- */
+
+const tidy = (v) => Math.round(v * 1e12) / 1e12;
+
+/** How many times base must be multiplied together to reach x (rounded to 12 places to hide float noise). */
+export function logSteps(base, x) {
+  return tidy(Math.log(x) / Math.log(base));
+}
+
+/** Amplitude ratio for a rise of `steps` earthquake-magnitude units (10 per unit). */
+export function magnitudeAmplitudeRatio(steps) {
+  return Math.pow(10, steps);
+}
+
+/** Energy ratio for a rise of `steps` magnitude units, from log10 E = 1.5·M + const. */
+export function magnitudeEnergyRatio(steps) {
+  return Math.pow(10, 1.5 * steps);
+}
+
+/** Decibel change for a power ratio: 10·log10(ratio). */
+export function decibelsFromPowerRatio(ratio) {
+  return tidy(10 * Math.log10(ratio));
+}
+
+/** Decibel change for an amplitude ratio (pressure, voltage): 20·log10(ratio). */
+export function decibelsFromAmplitudeRatio(ratio) {
+  return tidy(20 * Math.log10(ratio));
+}
+
+/** Power ratio that corresponds to a decibel change. */
+export function powerRatioFromDecibels(db) {
+  return Math.pow(10, db / 10);
+}
+
+/** Amplitude ratio that corresponds to a decibel change. */
+export function amplitudeRatioFromDecibels(db) {
+  return Math.pow(10, db / 20);
+}
+
+/** pH of a solution with hydrogen-ion concentration in mol/L. */
+export function pH(concentration) {
+  return tidy(-Math.log10(concentration));
+}
+
+/** Octaves between two frequencies (each octave doubles the frequency). */
+export function octavesBetween(f1, f2) {
+  return logSteps(2, f2 / f1);
+}
+
+/** Yes/no questions (bits) needed to single out one of n equally likely options. */
+export function bitsToChoose(n) {
+  return logSteps(2, n);
+}
+
+/** Product of a list of numbers. */
+export function product(values) {
+  return values.reduce((acc, v) => acc * v, 1);
+}
+
+/** Sum of natural logarithms of a list of positive numbers. */
+export function sumOfLogs(values) {
+  return values.reduce((acc, v) => acc + Math.log(v), 0);
+}
+
+/** Perplexity from an average negative log-probability measured in nats. */
+export function perplexityFromNats(nats) {
+  return Math.exp(nats);
+}
+
+/** Convert nats to bits. */
+export function natsToBits(nats) {
+  return nats / Math.LN2;
+}
+
+/** Sum of f(i) for i = lo..hi (0 when hi < lo). */
+export function sigma(lo, hi, f) {
+  let acc = 0;
+  for (let i = lo; i <= hi; i += 1) acc += f(i);
+  return acc;
+}
+
+/** The individual terms f(lo)..f(hi). */
+export function sigmaTerms(lo, hi, f) {
+  const out = [];
+  for (let i = lo; i <= hi; i += 1) out.push({ i, value: f(i) });
+  return out;
+}
+
+/** Rules offered in the Σ widget. */
+export const sigmaRules = {
+  same: { label: "i", tex: "i", fn: (i) => i },
+  square: { label: "i²", tex: "i^{2}", fn: (i) => i * i },
+  odd: { label: "2i − 1", tex: "2i-1", fn: (i) => 2 * i - 1 },
+};
+
+/** Σ wᵢ·xᵢ over two equal-length lists. */
+export function dotProduct(w, x) {
+  if (w.length !== x.length) throw new Error("lists must have the same length");
+  return sigma(0, w.length - 1, (i) => w[i] * x[i]);
+}
+
+/** Total surprise −Σ log2 p over a list of probabilities, in bits. */
+export function totalSurpriseBits(probs) {
+  return sigma(0, probs.length - 1, (i) => -Math.log2(probs[i]));
+}
+
+/** Mean of a list. */
+export function mean(values) {
+  return total(values) / values.length;
+}
+
+/** Median of a list (average of the middle pair when the length is even). */
+export function median(values) {
+  const s = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+}
+
+/** part as a percentage of whole. */
+export function percentOf(part, whole) {
+  return (part / whole) * 100;
+}
+
+/** Percentage change from old to new. */
+export function percentChange(oldValue, newValue) {
+  return ((newValue - oldValue) / oldValue) * 100;
+}
+
+/** Cosine and sine of an angle given in degrees (exact at multiples of 90°). */
+export function cosSinDegrees(deg) {
+  const d = ((deg % 360) + 360) % 360;
+  if (d === 0) return { cos: 1, sin: 0 };
+  if (d === 90) return { cos: 0, sin: 1 };
+  if (d === 180) return { cos: -1, sin: 0 };
+  if (d === 270) return { cos: 0, sin: -1 };
+  const rad = (d * Math.PI) / 180;
+  return { cos: Math.cos(rad), sin: Math.sin(rad) };
+}
+
+/** Horizontal and vertical parts of a force F pulling at an angle above the ground. */
+export function forceComponents(force, deg) {
+  const { cos, sin } = cosSinDegrees(deg);
+  return { along: force * cos, up: force * sin };
+}
+
+/** Sinusoidal position encoding pair (sin, cos) at one frequency (Vaswani et al., 2017). */
+export function positionEncodingPair(pos, i, dModel) {
+  const angle = pos / Math.pow(10000, (2 * i) / dModel);
+  return { sin: Math.sin(angle), cos: Math.cos(angle) };
+}
+
+/** 1-based entry of a list: the x₃ of (x₁, x₂, …). */
+export function entryAt(list, i) {
+  if (!Number.isInteger(i) || i < 1 || i > list.length) return undefined;
+  return list[i - 1];
+}

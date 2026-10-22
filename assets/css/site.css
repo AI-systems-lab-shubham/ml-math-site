@@ -226,3 +226,8 @@ a.module-item:hover { border-color: var(--burgundy); }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 @media print { .site-nav, .topbar { display: none; } }
+
+.table-scroll { overflow-x: auto; max-width: 100%; margin: 0 0 var(--s4); }
+.table-scroll table { border-collapse: collapse; min-width: 480px; width: 100%; }
+.table-scroll th, .table-scroll td { text-align: left; padding: var(--s2) var(--s3); border-bottom: 1px solid var(--rule); vertical-align: top; }
+.table-scroll th { font-weight: 600; }

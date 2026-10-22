@@ -1,8 +1,12 @@
-// Module 0 (first half): widgets, worked examples and checks. Every number comes from foundations-math.mjs.
+// Module 0: widgets, worked examples and checks. Every number comes from foundations-math.mjs.
 import {
   affine, splitTotal, solveTwoEquations, tabulate, slopeBetween, linearValue, xIntercept,
   exponentialValue, growthSequence, additionSequence, stepsToReach, namedFunctions,
   lineEndpoints, total, remainingTokens,
+  logSteps, magnitudeAmplitudeRatio, magnitudeEnergyRatio, powerRatioFromDecibels, amplitudeRatioFromDecibels,
+  decibelsFromPowerRatio, octavesBetween, bitsToChoose, product, sumOfLogs, perplexityFromNats, natsToBits,
+  sigma, sigmaTerms, sigmaRules, dotProduct, totalSurpriseBits, mean, median, percentChange, percentOf,
+  cosSinDegrees, forceComponents, positionEncodingPair, entryAt, pH,
 } from "./foundations-math.mjs";
 import {
   svg, slider, radios, widgetShell, drawAxes, axisNames, makeScale, fmt, mountStepper, mountPredict, mountSpotIt, mountExplain,
@@ -240,6 +244,189 @@ function exponentsWidget(host) {
   draw();
 }
 
+/* ---------- 6. Logarithms ---------- */
+const subs = "₀₁₂₃₄₅₆₇₈₉";
+const sub = (n) => String(n).split("").map((d) => subs[Number(d)] ?? d).join("");
+function logsWidget(host) {
+  const w = widgetShell({
+    title: "Count the multiplications",
+    description: "A row of boxes shows 1 multiplied by the base again and again. Two rulers below place the current number: on an ordinary ruler it sits very close to the start, on a log ruler each multiplication moves it the same distance.",
+  });
+  let base = 10;
+  let k = 3;
+  const maxK = 5;
+  const short = (n) => (n >= 1e6 ? `${n / 1e6}M` : n >= 1e3 ? `${n / 1e3}k` : String(n));
+  const draw = () => {
+    const c = w.canvas;
+    c.replaceChildren();
+    const slotW = 93;
+    for (let j = 0; j <= maxK; j += 1) {
+      const reached = j <= k;
+      svg("rect", { x: 40 + j * slotW, y: 40, width: slotW - 8, height: 44, rx: 6, style: reached ? fill("blue") : "fill:none;stroke:var(--c-blue);stroke-width:1.5;stroke-dasharray:5 4" }, c);
+      text(c, 40 + j * slotW + (slotW - 8) / 2, 68, short(exponentialValue(1, base, j)), { "text-anchor": "middle", style: reached ? "fill:#fff" : "" });
+      if (j > 0) text(c, 40 + j * slotW - 4, 28, `×${base}`, { "text-anchor": "middle", class: "tick-label" });
+    }
+    
+    const top = exponentialValue(1, base, maxK);
+    const N = exponentialValue(1, base, k);
+    const ruler = (y, name, pos) => {
+      text(c, 40, y - 30, name, { "text-anchor": "start" });
+      svg("line", { class: "axis", x1: 40, x2: 600, y1: y, y2: y }, c);
+      for (let j = 0; j <= maxK; j += 1) svg("line", { class: "grid", x1: pos(j), x2: pos(j), y1: y - 8, y2: y + 8 }, c);
+      svg("circle", { cx: pos(k), cy: y, r: 11, style: `${fill("burgundy")};stroke:#fff;stroke-width:2` }, c);
+    };
+    ruler(200, "Ordinary ruler", (j) => 40 + (exponentialValue(1, base, j) / top) * 560);
+    ruler(320, "Log ruler", (j) => 40 + (j / maxK) * 560);
+    text(c, 40, 232, "1", { class: "tick-label", "text-anchor": "start" });
+    text(c, 600, 232, short(top), { class: "tick-label", "text-anchor": "end" });
+    text(c, 40, 352, "1", { class: "tick-label", "text-anchor": "start" });
+    text(c, 600, 352, short(top), { class: "tick-label", "text-anchor": "end" });
+    w.readout.textContent = `log${sub(base)} ${N} = ${logSteps(base, N)}   →   multiply 1 by ${base}, ${k} time${k === 1 ? "" : "s"}, to reach ${N}`;
+  };
+  w.controls.append(
+    slider({ label: "Steps taken, k", min: 0, max: maxK, step: 1, value: k, onInput: (v) => { k = v; draw(); } }).el,
+    radios({ legend: "Base", name: "log-base", value: String(base), onChange: (v) => { base = Number(v); draw(); },
+      options: [{ value: "10", label: "10" }, { value: "2", label: "2" }] }),
+  );
+  host.append(w.root);
+  draw();
+}
+
+/* ---------- 7. Σ notation ---------- */
+function sigmaWidget(host) {
+  const w = widgetShell({
+    title: "Expand a sum",
+    description: "Bars show the terms of a sum for counter values one to six. The bars inside the chosen range are filled and are the ones added up; the rest are outlined.",
+  });
+  let rule = "square";
+  let lo = 1;
+  let hi = 4;
+  const slots = 6;
+  const draw = () => {
+    const c = w.canvas;
+    c.replaceChildren();
+    const f = sigmaRules[rule].fn;
+    const top = Math.max(...sigmaTerms(1, slots, f).map((t) => t.value));
+    const sy = makeScale([0, top], [330, 40]);
+    svg("line", { class: "axis", x1: 40, x2: 610, y1: 330, y2: 330 }, c);
+    const slot = 570 / slots;
+    sigmaTerms(1, slots, f).forEach(({ i, value }) => {
+      const on = i >= lo && i <= hi;
+      svg("rect", { x: 40 + (i - 1) * slot + slot * 0.2, y: sy(value), width: slot * 0.6, height: 330 - sy(value), rx: 3,
+        style: on ? fill("blue") : "fill:none;stroke:var(--c-blue);stroke-width:1.5;stroke-dasharray:5 4" }, c);
+      text(c, 40 + (i - 1) * slot + slot / 2, sy(value) - 6, String(value), { "text-anchor": "middle", class: "tick-label" });
+      text(c, 40 + (i - 1) * slot + slot / 2, 366, `i = ${i}`, { "text-anchor": "middle", class: "tick-label" });
+    });
+    const terms = sigmaTerms(lo, hi, f);
+    const shown = terms.length ? terms.map((t) => t.value).join(" + ") : "nothing to add";
+    w.readout.textContent = `Σ from i = ${lo} to ${hi} of ${sigmaRules[rule].label}   =   ${shown}   =   ${sigma(lo, hi, f)}` +
+      (terms.length ? "" : "   (an empty sum is 0)");
+  };
+  w.controls.append(
+    slider({ label: "Start, i =", min: 1, max: slots, step: 1, value: lo, onInput: (v) => { lo = v; draw(); } }).el,
+    slider({ label: "Stop, i =", min: 1, max: slots, step: 1, value: hi, onInput: (v) => { hi = v; draw(); } }).el,
+    radios({ legend: "Recipe for each term", name: "sigma-rule", value: rule, onChange: (v) => { rule = v; draw(); },
+      options: Object.entries(sigmaRules).map(([value, r]) => ({ value, label: r.label })) }),
+  );
+  host.append(w.root);
+  draw();
+}
+
+/* ---------- 8. Averages ---------- */
+function averageWidget(host) {
+  const w = widgetShell({
+    title: "Mean versus median",
+    description: "Five values on a number line. Four stay put; one can be dragged out to the right. The mean marker follows it; the median marker stays near the middle of the group.",
+  });
+  let last = 7;
+  const fixed = [3, 4, 5, 6];
+  const draw = () => {
+    const c = w.canvas;
+    c.replaceChildren();
+    const values = [...fixed, last];
+    const sx = makeScale([0, 40], [50, 600]);
+    svg("line", { class: "axis", x1: 50, x2: 600, y1: 200, y2: 200 }, c);
+    for (let t = 0; t <= 40; t += 10) {
+      svg("line", { class: "grid", x1: sx(t), x2: sx(t), y1: 194, y2: 206 }, c);
+      text(c, sx(t), 226, String(t), { class: "tick-label", "text-anchor": "middle" });
+    }
+    values.forEach((v, idx) => svg("circle", { cx: sx(v), cy: 200, r: idx === 4 ? 7 : 6, style: `${fill(idx === 4 ? "ochre" : "blue")};stroke:#fff;stroke-width:2;opacity:.9` }, c));
+    const m = mean(values);
+    const md = median(values);
+    svg("polygon", { points: `${sx(m)},250 ${sx(m) - 10},274 ${sx(m) + 10},274`, style: `${fill("burgundy")}` }, c);
+    text(c, sx(m), 304, "mean", { "text-anchor": "middle", style: "fill:var(--c-burgundy)" });
+    svg("rect", { x: sx(md) - 8, y: 120, width: 16, height: 16, style: `${fill("teal")}` }, c);
+    text(c, sx(md), 108, "median", { "text-anchor": "middle", style: "fill:var(--c-teal)" });
+    w.readout.textContent = `Values: ${values.join(", ")}\nMean ▲ = ${fmt(m, 2)}   Median ■ = ${fmt(md, 2)}`;
+    w.readout.style.whiteSpace = "pre-line";
+  };
+  w.controls.append(slider({ label: "The last value", min: 6, max: 40, step: 1, value: last, onInput: (v) => { last = v; draw(); } }).el);
+  host.append(w.root);
+  draw();
+}
+
+/* ---------- 9. Sine and cosine ---------- */
+function circleWidget(host) {
+  const w = widgetShell({
+    title: "Turn around the unit circle",
+    description: "A circle of radius one with an arrow from the centre. Dropping straight down to the horizontal axis gives the cosine; going across to the vertical axis gives the sine.",
+  });
+  let deg = 60;
+  const cx = 320, cy = 200, R = 150;
+  const draw = () => {
+    const c = w.canvas;
+    c.replaceChildren();
+    svg("line", { class: "axis", x1: cx - R - 20, x2: cx + R + 20, y1: cy, y2: cy }, c);
+    svg("line", { class: "axis", x1: cx, x2: cx, y1: cy - R - 20, y2: cy + R + 20 }, c);
+    svg("circle", { cx, cy, r: R, style: "fill:none;stroke:var(--line-strong);stroke-width:1.5" }, c);
+    const { cos, sin } = cosSinDegrees(deg);
+    const px = cx + R * cos, py = cy - R * sin;
+    svg("line", { x1: cx, y1: cy, x2: px, y2: py, style: stroke("burgundy", 3) }, c);
+    svg("line", { x1: cx, y1: cy, x2: px, y2: cy, style: stroke("blue", 5) }, c);
+    svg("line", { x1: px, y1: cy, x2: px, y2: py, style: stroke("teal", 5, "stroke-dasharray:2 7;stroke-linecap:round") }, c);
+    const a = ((deg % 360) + 360) % 360;
+    if (a > 0) {
+      const r2 = 36, end = (a * Math.PI) / 180;
+      svg("path", { d: `M ${cx + r2} ${cy} A ${r2} ${r2} 0 ${a > 180 ? 1 : 0} 0 ${cx + r2 * Math.cos(end)} ${cy - r2 * Math.sin(end)}`, style: stroke("burgundy", 2) }, c);
+    }
+    svg("circle", { cx: px, cy: py, r: 9, style: `${fill("burgundy")};stroke:#fff;stroke-width:2` }, c);
+    text(c, cx + R + 22, cy - 8, "1", { class: "tick-label", "text-anchor": "start" });
+    text(c, cx + 8, cy - R - 24, "1", { class: "tick-label", "text-anchor": "start" });
+    w.readout.style.whiteSpace = "pre-line";
+    w.readout.textContent = `θ = ${a}°\ncos θ = ${fmt(cos, 3).replace("-", "−")} (blue, across)   sin θ = ${fmt(sin, 3).replace("-", "−")} (teal dots, up)`;
+  };
+  w.controls.append(slider({ label: "Angle θ, degrees", min: 0, max: 360, step: 15, value: deg, unit: "°", onInput: (v) => { deg = v; draw(); } }).el);
+  host.append(w.root);
+  draw();
+}
+const round3 = (n) => Math.round(n * 1000) / 1000 || 0;
+
+/* ---------- 10. Reading notation ---------- */
+function notationWidget(host) {
+  const w = widgetShell({
+    title: "x with a subscript picks one entry",
+    description: "A list of five boxes, each labelled with its position as a subscript. The chosen box is highlighted.",
+  });
+  const list = [4, 7, 1, 9, 5];
+  let i = 3;
+  const draw = () => {
+    const c = w.canvas;
+    c.replaceChildren();
+    text(c, 50, 60, "x = (4, 7, 1, 9, 5)", { "text-anchor": "start" });
+    list.forEach((v, idx) => {
+      const x0 = 50 + idx * 112;
+      const on = idx + 1 === i;
+      svg("rect", { x: x0, y: 130, width: 96, height: 80, rx: 8, style: on ? fill("burgundy") : "fill:none;stroke:var(--line-strong);stroke-width:2" }, c);
+      text(c, x0 + 48, 182, String(v), { "text-anchor": "middle", style: on ? "fill:#fff" : "" });
+      text(c, x0 + 48, 120, `x${sub(idx + 1)}`, { "text-anchor": "middle", style: on ? "fill:var(--c-burgundy)" : "" });
+    });
+    w.readout.textContent = `x${sub(i)} = ${entryAt(list, i)}   ·   ${i} ∈ {1, …, ${list.length}} ✓`;
+  };
+  w.controls.append(slider({ label: "Subscript, i", min: 1, max: list.length, step: 1, value: i, onInput: (v) => { i = v; draw(); } }).el);
+  host.append(w.root);
+  draw();
+}
+
 /* ---------- worked examples (all numbers computed) ---------- */
 const stepperData = {
   variables() {
@@ -298,6 +485,57 @@ const stepperData = {
       { title: "How many doublings reach 1000?", text: "Keep doubling from 1 until the amount is at least 1000.", tex: `2^{${n - 1}}=${exponentialValue(1, 2, n - 1)}<1000\\le 2^{${n}}=${exponentialValue(1, 2, n)}` },
     ];
   },
+
+  logarithms() {
+    const a = 100, b = 1000;
+    return [
+      { title: "Count the multiplications", text: "Start at 1 and multiply by 2 until you reach 8. The number of multiplications is the logarithm.", tex: `1\\times2\\times2\\times2=${exponentialValue(1, 2, 3)}\\quad\\Rightarrow\\quad \\log_2 ${exponentialValue(1, 2, 3)}=${logSteps(2, 8)}` },
+      { title: "Logs of two numbers", text: "Use base 10 now: how many tens multiply to give each number?", tex: `\\log_{10}${a}=${logSteps(10, a)},\\qquad \\log_{10}${b}=${logSteps(10, b)}` },
+      { title: "Multiply the numbers", text: "Multiplying the numbers joins the two runs of tens into one longer run.", tex: `${a}\\times${b}=${a * b}` },
+      { title: "Add the logs", text: "The long run has as many tens as the two short runs together. Adding the logs gives the log of the product.", tex: `\\log_{10}${a * b}=${logSteps(10, a * b)}=${logSteps(10, a)}+${logSteps(10, b)}` },
+      { title: "Between the powers", text: "A number that is not a power of the base has a log between whole numbers. 50 lies between 10 and 100, so its log lies between 1 and 2.", tex: `\\log_{10}50\\approx ${fmt(logSteps(10, 50), 2)}` },
+    ];
+  },
+  sigma() {
+    const f = sigmaRules.square.fn;
+    const terms = sigmaTerms(1, 4, f);
+    return [
+      { title: "Read the recipe", text: "Start the counter i at 1, stop at 4. For each value of i, work out i², then add everything up.", tex: "\\sum_{i=1}^{4} i^{2}" },
+      { title: "Run the counter", text: "Write one term for each value of i.", tex: terms.map((t) => `${t.i}^{2}`).join("+") },
+      { title: "Work out each term", text: "Square each counter value.", tex: terms.map((t) => t.value).join("+") },
+      { title: "Add", text: "The Σ asks for the total of those terms.", tex: `${terms.map((t) => t.value).join("+")}=${sigma(1, 4, f)}` },
+      { title: "A shortcut for 1 + 2 + … + n", text: "Pairing the first with the last, the second with the second last, and so on gives n(n + 1)/2. For n = 100:", tex: `\\sum_{i=1}^{100} i=\\dfrac{100\\times101}{2}=${sigma(1, 100, (i) => i)}` },
+    ];
+  },
+  ratios() {
+    return [
+      { title: "A rise", text: "A price goes from 80 to 100. The change is 20, which as a share of the old price is:", tex: `\\dfrac{100-80}{80}=${percentChange(80, 100) / 100}=${percentChange(80, 100)}\\%` },
+      { title: "The way back", text: "Now the price falls from 100 back to 80. The same change of 20 is a share of the new, larger starting point:", tex: `\\dfrac{80-100}{100}=${percentChange(100, 80) / 100}=${percentChange(100, 80)}\\%` },
+      { title: "Why they differ", text: "A percentage is always measured against where you started, so a rise of 25% is undone by a fall of 20%, not 25%." },
+      { title: "Mean and median of 3, 4, 5, 6, 60", text: `The sum is ${total([3, 4, 5, 6, 60])} over 5 values; the middle value of the sorted list is ${median([3, 4, 5, 6, 60])}. The outlier drags the mean but not the median.`, tex: `\\text{mean}=\\dfrac{${total([3, 4, 5, 6, 60])}}{5}=${mean([3, 4, 5, 6, 60])},\\qquad \\text{median}=${median([3, 4, 5, 6, 60])}` },
+    ];
+  },
+  trig() {
+    const F = 50, deg = 60;
+    const { cos, sin } = cosSinDegrees(deg);
+    const f = forceComponents(F, deg);
+    return [
+      { title: "The set-up", text: `A sled is pulled with a rope at ${deg}° above the ground, with a force of ${F} newtons. How much of that force pulls it forward?`, tex: `F=${F}\\,\\text{N},\\quad\\theta=${deg}^{\\circ}` },
+      { title: "Read the circle", text: "At 60° the arrow's shadows on the axes are given by cosine and sine.", tex: `\\cos ${deg}^{\\circ}=${round3(cos)},\\qquad \\sin ${deg}^{\\circ}=${round3(sin)}` },
+      { title: "Scale up to the rope", text: "The circle has radius 1, the rope's force is 50, so multiply each shadow by 50.", tex: `\\text{forward}=${F}\\times${round3(cos)}=${fmt(f.along, 1)}\\,\\text{N}` },
+      { title: "The part that lifts", text: "The vertical shadow is the part that lifts the sled instead of pulling it along.", tex: `\\text{lift}=${F}\\times${round3(sin)}\\approx${fmt(f.up, 1)}\\,\\text{N}` },
+    ];
+  },
+  notation() {
+    const x = [4, 7, 1, 9, 5];
+    const w = 2, b = 1, i = 3;
+    return [
+      { title: "A sentence in symbols", text: "Read it aloud: for all i in the set one to five, y-hat sub i equals w times x sub i plus b.", tex: "\\forall\\, i\\in\\{1,\\dots,5\\}:\\quad \\hat{y}_i=w\\,x_i+b" },
+      { title: "Pick values", text: `Let w = ${w}, b = ${b} and x = (${x.join(", ")}). The “for all” means we may do this for any i in the set. Take i = ${i}.`, tex: `\\hat{y}_{${i}}=${w}\\,x_{${i}}+${b}` },
+      { title: "Look up the entry", text: `The subscript ${i} means the ${i === 3 ? "third" : "chosen"} entry of x.`, tex: `x_{${i}}=${entryAt(x, i)}` },
+      { title: "Work it out", text: "Now it is an ordinary calculation. The hat only tells us this is a prediction.", tex: `\\hat{y}_{${i}}=${w}\\times${entryAt(x, i)}+${b}=${affine(w, entryAt(x, i), b)}` },
+    ];
+  },
 };
 
 /* ---------- predict-then-reveal ---------- */
@@ -322,6 +560,28 @@ const predictions = {
     const v = exponentialValue(1, 2, 5);
     return { expected: v, explain: `Doubling five times: 1 → 2 → 4 → 8 → 16 → ${v}, which is 2⁵.` };
   },
+
+  logarithms() {
+    const v = logSteps(2, 32);
+    return { expected: v, explain: `Double 1 → 2 → 4 → 8 → 16 → 32: that is ${v} doublings, so log₂ 32 = ${v}.` };
+  },
+  sigma() {
+    const v = sigma(1, 4, (i) => i);
+    return { expected: v, explain: `The terms are 1, 2, 3 and 4. Added together they make ${v}.` };
+  },
+  ratios() {
+    const v = mean([2, 4, 9]);
+    return { expected: v, explain: `The sum is ${total([2, 4, 9])}; shared across 3 values that is ${v} each.` };
+  },
+  trig() {
+    const v = cosSinDegrees(180).cos;
+    return { expected: v, explain: `Half a turn lands on the far left of the circle, one unit to the left of the centre, so cosine is ${v}. Cosine can be negative.` };
+  },
+  notation() {
+    const x = [4, 7, 1, 9, 5];
+    const v = entryAt(x, 4);
+    return { expected: v, explain: `The subscript 4 picks the fourth entry of (${x.join(", ")}), which is ${v}.` };
+  },
 };
 
 /* ---------- numbers quoted in the "In an LLM" stages ---------- */
@@ -330,10 +590,42 @@ const calcs = {
   missingProbability: () => fmt(1 - total([0.5, 0.25, 0.125]), 3),
   pairCount: () => exponentialValue(1, 37000, 2).toLocaleString("en-US"),
   probTotal: () => String(total([0.5, 0.25, 0.125, 0.125])),
+
+  log50: () => fmt(logSteps(10, 50), 2),
+  db120: () => powerRatioFromDecibels(120).toLocaleString("en-US"),
+  eqAmp: () => String(magnitudeAmplitudeRatio(1)),
+  eqEnergy: () => fmt(magnitudeEnergyRatio(1), 1),
+  eqEnergyRounded: () => String(Math.round(magnitudeEnergyRatio(1))),
+  eqAmp2: () => String(magnitudeAmplitudeRatio(2)),
+  eqEnergy2: () => String(Math.round(magnitudeEnergyRatio(2))),
+  db10Power: () => String(powerRatioFromDecibels(10)),
+  db20Amp: () => String(amplitudeRatioFromDecibels(20)),
+  db20Power: () => String(powerRatioFromDecibels(20)),
+  db3Power: () => fmt(decibelsFromPowerRatio(2), 2),
+  octaves: () => String(octavesBetween(110, 880)),
+  bits8: () => String(bitsToChoose(8)),
+  ph7: () => String(pH(1e-7)),
+  underflow: () => String(product(Array(400).fill(0.01))),
+  sumLogs: () => fmt(sumOfLogs(Array(400).fill(0.01)), 1),
+  ppl4: () => fmt(perplexityFromNats(Math.log(4)), 2),
+  nats4: () => fmt(Math.log(4), 3),
+  bits4: () => fmt(natsToBits(Math.log(4)), 2),
+  dotExample: () => String(dotProduct([2, -1, 3], [4, 5, 1])),
+  surpriseBits: () => String(totalSurpriseBits([0.5, 0.25, 0.125])),
+  surpriseMean: () => String(totalSurpriseBits([0.5, 0.25, 0.125]) / 3),
+  forceAlong: () => fmt(forceComponents(50, 60).along, 1),
+  forceUp: () => fmt(forceComponents(50, 60).up, 1),
+  posSin: () => fmt(positionEncodingPair(1, 0, 512).sin, 3),
+  posCos: () => fmt(positionEncodingPair(1, 0, 512).cos, 3),
+  rise2to3: () => fmt(percentChange(2, 3), 0),
+  mean60: () => String(mean([3, 4, 5, 6, 60])),
+  median60: () => String(median([3, 4, 5, 6, 60])),
+  percentOf15: () => String(percentOf(15, 60)),
 };
 
 /* ---------- boot ---------- */
-const widgetMounts = { variables: variablesWidget, equations: equationsWidget, functions: functionsWidget, slope: slopeWidget, exponents: exponentsWidget };
+const widgetMounts = { variables: variablesWidget, equations: equationsWidget, functions: functionsWidget, slope: slopeWidget, exponents: exponentsWidget,
+  logs: logsWidget, sigma: sigmaWidget, average: averageWidget, circle: circleWidget, notation: notationWidget };
 
 function boot() {
   document.querySelectorAll("[data-widget]").forEach((h) => widgetMounts[h.dataset.widget]?.(h));

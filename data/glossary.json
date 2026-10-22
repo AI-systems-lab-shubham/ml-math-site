@@ -17,7 +17,7 @@
       "id": "parameter", "term": "parameter", "aliases": ["parameters"], "kind": "ml",
       "plain": "A variable inside a model that is adjusted while the model learns, then held fixed when the model is used.",
       "math": "\\theta",
-      "llm": "Large language models are described by their parameter count; GPT-3 has 175 billion (Brown et al., 2020).",
+      "llm": "Large language models are described by their parameter count; GPT-3 (2020) has 175 billion (Brown et al., 2020).",
       "learnMore": "modules/00-foundations/#concept-variables", "uses": ["variable"], "looseUse": null
     },
     {
@@ -145,13 +145,13 @@
       "id": "vocabulary", "term": "vocabulary", "aliases": [], "kind": "llm",
       "plain": "The complete list of tokens a language model can read or write.",
       "math": "V = |\\text{vocabulary}|",
-      "llm": "The original Transformer paper used a shared vocabulary of about 37,000 tokens for English-German translation (Vaswani et al., 2017).",
+      "llm": "In the original Transformer paper, the English-German translation experiment used a shared vocabulary of about 37,000 tokens; the English-French experiment used a 32,000 word-piece vocabulary (Vaswani et al., 2017).",
       "learnMore": "modules/00-foundations/#concept-exponents", "uses": ["token"], "looseUse": null
     },
     {
       "id": "context-window", "term": "context window", "aliases": ["context length"], "kind": "llm",
       "plain": "The largest number of tokens a language model can take in at once, prompt and reply together.",
-      "llm": "GPT-3 had a context window of 2,048 tokens (Brown et al., 2020).",
+      "llm": "GPT-3 (2020) had a context window of 2,048 tokens (Brown et al., 2020).",
       "learnMore": "modules/00-foundations/#concept-equations", "uses": ["token"], "looseUse": null
     },
     {
@@ -179,6 +179,208 @@
       "math": "z = w\\,x + b",
       "llm": "Transformer layers contain many such units working side by side.",
       "learnMore": "modules/00-foundations/#concept-slope", "uses": ["weight", "bias", "input"], "looseUse": "Called a neuron by analogy; it is a small formula, not a model of a brain cell."
+    },
+    {
+      "id": "logarithm", "term": "logarithm", "aliases": ["logarithms","log","logs","logarithmic"], "kind": "math",
+      "plain": "Counts steps: how many times you multiply the base by itself to get from 1 to a number. It turns huge ranges into small, evenly spaced ones.",
+      "math": "\\log_b x = k \\iff b^{k} = x",
+      "llm": "Models work with logarithms of probabilities rather than the probabilities themselves.",
+      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["base"], "looseUse": null
+    },
+    {
+      "id": "natural-logarithm", "term": "natural logarithm", "aliases": ["ln","natural log"], "kind": "math",
+      "plain": "The logarithm whose base is the special number e ≈ 2.718. It differs from other logarithms only by a constant factor, so it changes the units, not the idea.",
+      "math": "\\ln x = \\log_e x",
+      "llm": "Training code usually uses natural logarithms, so losses come out in nats.",
+      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["logarithm","base"], "looseUse": null
+    },
+    {
+      "id": "amplitude", "term": "amplitude", "aliases": ["amplitudes"], "kind": "math",
+      "plain": "The size of a wave's swing away from its resting level, such as how far air pressure rises and falls in a sound.",
+      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": [], "looseUse": null
+    },
+    {
+      "id": "decibel", "term": "decibel", "aliases": ["decibels","dB"], "kind": "math",
+      "plain": "A unit that compares two sizes on a logarithm scale. A rise of 10 dB means 10 times the power; a rise of 20 dB means 10 times the amplitude.",
+      "math": "\\Delta L = 10\\log_{10}\\tfrac{P_2}{P_1} = 20\\log_{10}\\tfrac{A_2}{A_1}",
+      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["logarithm","amplitude"], "looseUse": null
+    },
+    {
+      "id": "ph", "term": "pH", "aliases": ["pH scale"], "kind": "math",
+      "plain": "A chemistry scale for acidity on a logarithmic scale: pH 7 is neutral, and each step down means ten times as many hydrogen ions per litre.",
+      "math": "\\mathrm{pH} = -\\log_{10}[\\mathrm{H^{+}}]",
+      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["logarithm"], "looseUse": null
+    },
+    {
+      "id": "octave", "term": "octave", "aliases": ["octaves"], "kind": "math",
+      "plain": "A doubling of how fast a sound wave vibrates. Notes an octave apart sound like the same note, higher or lower. Counting octaves is counting doublings.",
+      "math": "f_2 = 2 f_1",
+      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": [], "looseUse": null
+    },
+    {
+      "id": "bit", "term": "bit", "aliases": ["bits"], "kind": "math",
+      "plain": "The information in one yes-or-no answer between two equally likely options. Picking one of n equally likely options takes a base-2 logarithm of n bits.",
+      "math": "\\text{bits} = \\log_2 n",
+      "llm": "Language-model quality is often quoted in bits per token.",
+      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["logarithm"], "looseUse": null
+    },
+    {
+      "id": "log-probability", "term": "log-probability", "aliases": ["log-probabilities","log probability","log probabilities"], "kind": "ml",
+      "plain": "The logarithm of a probability. Probabilities multiply along a sequence, but their logs add, which keeps tiny numbers manageable.",
+      "math": "\\ln p",
+      "llm": "Models report and train on log-probabilities of tokens.",
+      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["logarithm","probability"], "looseUse": null
+    },
+    {
+      "id": "perplexity", "term": "perplexity", "aliases": [], "kind": "ml",
+      "plain": "A measure of how unsure a language model is: the number of equally likely tokens it is effectively choosing between. It is computed from the average negative log-probability.",
+      "math": "\\exp\\!\\Big(-\\tfrac{1}{N}\\sum_{t=1}^{N}\\ln p_t\\Big)",
+      "llm": "A common way to report language-model quality on a test text; lower means less uncertain.",
+      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["token","log-probability"], "looseUse": null
+    },
+    {
+      "id": "sum", "term": "sum", "aliases": ["sums","summation","sigma notation","Σ"], "kind": "math",
+      "plain": "The result of adding a list of numbers. The symbol Σ (sigma) is shorthand for “add up these terms, one for each value of the counter”.",
+      "math": "\\sum_{i=1}^{n} a_i = a_1 + a_2 + \\cdots + a_n",
+      "learnMore": "modules/00-foundations/#concept-sigma", "uses": ["index"], "looseUse": null
+    },
+    {
+      "id": "index", "term": "index", "aliases": ["indices","counter"], "kind": "math",
+      "plain": "A counter, usually i, j or k, that labels positions in a list or the steps of a sum. It is written as a subscript.",
+      "math": "i \\in \\{1,\\dots,n\\}",
+      "learnMore": "modules/00-foundations/#concept-sigma", "uses": ["subscript"], "looseUse": null
+    },
+    {
+      "id": "subscript", "term": "subscript", "aliases": ["subscripts"], "kind": "math",
+      "plain": "A small label written low and to the right of a symbol to pick one item from a family: x₃ is the third x.",
+      "math": "x_3",
+      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+    },
+    {
+      "id": "ratio", "term": "ratio", "aliases": ["ratios"], "kind": "math",
+      "plain": "A comparison of two quantities by division: how many times bigger one is than the other.",
+      "math": "\\dfrac{a}{b}",
+      "learnMore": "modules/00-foundations/#concept-ratios", "uses": [], "looseUse": null
+    },
+    {
+      "id": "percentage", "term": "percentage", "aliases": ["percent","percentages"], "kind": "math",
+      "plain": "A ratio written out of 100. 25 percent means 25 out of every 100, or one quarter.",
+      "math": "p\\% = \\dfrac{p}{100}",
+      "learnMore": "modules/00-foundations/#concept-ratios", "uses": ["ratio"], "looseUse": null
+    },
+    {
+      "id": "mean", "term": "mean", "aliases": ["average","averages","means"], "kind": "math",
+      "plain": "The sum of the values divided by how many there are. It is the balance point of the data: the value everything would equal if shared out evenly.",
+      "math": "\\bar{x} = \\dfrac{1}{n}\\sum_{i=1}^{n} x_i",
+      "llm": "A training loss is typically the mean of a per-token loss.",
+      "learnMore": "modules/00-foundations/#concept-ratios", "uses": ["sum"], "looseUse": null
+    },
+    {
+      "id": "median", "term": "median", "aliases": ["medians"], "kind": "math",
+      "plain": "The middle value once the numbers are sorted. Half the values lie below it and half above.",
+      "learnMore": "modules/00-foundations/#concept-ratios", "uses": [], "looseUse": null
+    },
+    {
+      "id": "outlier", "term": "outlier", "aliases": ["outliers"], "kind": "math",
+      "plain": "A value far from the rest. It drags the mean toward itself but hardly moves the median.",
+      "learnMore": "modules/00-foundations/#concept-ratios", "uses": ["mean","median"], "looseUse": null
+    },
+    {
+      "id": "radian", "term": "radian", "aliases": ["radians"], "kind": "math",
+      "plain": "An angle unit based on a circle of radius 1: the angle equals the length of arc it cuts. A full turn is 2π ≈ 6.283 radians.",
+      "math": "360^{\\circ} = 2\\pi\\ \\text{rad}",
+      "learnMore": "modules/00-foundations/#concept-trig", "uses": [], "looseUse": null
+    },
+    {
+      "id": "angle", "term": "angle", "aliases": ["angles"], "kind": "math",
+      "plain": "How far one direction is turned away from another. Measured in degrees (a full turn is 360) or radians (a full turn is 2π).",
+      "math": "\\theta",
+      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["radian"], "looseUse": null
+    },
+    {
+      "id": "unit-circle", "term": "unit circle", "aliases": [], "kind": "math",
+      "plain": "A circle of radius 1 centred at the origin. A point on it is found by turning through an angle from the positive x-direction.",
+      "math": "x^2 + y^2 = 1",
+      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["angle"], "looseUse": null
+    },
+    {
+      "id": "cosine", "term": "cosine", "aliases": ["cos"], "kind": "math",
+      "plain": "For a turn through an angle, how far across the point on the unit circle lands: the horizontal shadow of a length-1 arrow. It is 1 at 0°, 0 at 90° and −1 at 180°.",
+      "math": "\\cos\\theta",
+      "llm": "Cosine similarity of two vectors is the cosine of the angle between them.",
+      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["unit-circle","angle"], "looseUse": null
+    },
+    {
+      "id": "sine", "term": "sine", "aliases": ["sin"], "kind": "math",
+      "plain": "For a turn through an angle, how far up the point on the unit circle lands: the vertical shadow of a length-1 arrow. It is 0 at 0°, 1 at 90° and 0 at 180°.",
+      "math": "\\sin\\theta",
+      "llm": "The original Transformer's position encodings are built from sines and cosines.",
+      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["unit-circle","angle"], "looseUse": null
+    },
+    {
+      "id": "vector", "term": "vector", "aliases": ["vectors"], "kind": "math",
+      "plain": "An ordered list of numbers, such as (4, 7, 1), that can also be drawn as an arrow. In print it is often shown in bold.",
+      "math": "\\mathbf{x} = (x_1, \\dots, x_n)",
+      "llm": "A piece of text is represented inside a model as vectors of numbers.",
+      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+    },
+    {
+      "id": "hat", "term": "hat", "aliases": ["hats"], "kind": "math",
+      "plain": "A small ^ on top of a symbol. By convention it marks a value that is estimated or predicted, as opposed to the true one.",
+      "math": "\\hat{y}",
+      "llm": "ŷ is conventionally a model's prediction and y the true value.",
+      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+    },
+    {
+      "id": "element-of", "term": "element of", "aliases": ["∈","is in","belongs to"], "kind": "math",
+      "plain": "The symbol ∈ says “is a member of”. x ∈ S reads “x is one of the things in the set S”.",
+      "math": "x \\in S",
+      "learnMore": "modules/00-foundations/#concept-notation", "uses": ["set"], "looseUse": null
+    },
+    {
+      "id": "for-all", "term": "for all", "aliases": ["∀","for every"], "kind": "math",
+      "plain": "The symbol ∀ says “for every”. A statement that begins with ∀ must hold for each item, with no exceptions.",
+      "math": "\\forall\\, i",
+      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+    },
+    {
+      "id": "set", "term": "set", "aliases": ["sets"], "kind": "math",
+      "plain": "A collection of distinct things, written in curly braces, such as {1, 2, 3}. Only membership matters, not order.",
+      "math": "\\{1, 2, 3\\}",
+      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+    },
+    {
+      "id": "real-numbers", "term": "real numbers", "aliases": ["ℝ","real number"], "kind": "math",
+      "plain": "Every number that sits somewhere on the number line: whole numbers, fractions, decimals, π and the rest. Written ℝ.",
+      "math": "\\mathbb{R}",
+      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+    },
+    {
+      "id": "loss", "term": "loss", "aliases": ["losses","loss function"], "kind": "ml",
+      "plain": "A single number that says how wrong a model's predictions are on the data. Training tries to make it smaller.",
+      "math": "L",
+      "llm": "For next-token prediction the loss is the average surprise of the tokens that actually came next.",
+      "learnMore": "modules/00-foundations/#concept-sigma", "uses": [], "looseUse": null
+    },
+    {
+      "id": "dot-product", "term": "dot product", "aliases": ["dot products"], "kind": "math",
+      "plain": "Multiply two lists entry by entry, then add the results into a single sum. It is large when the two lists agree and zero when they are perpendicular as arrows.",
+      "math": "\\mathbf{a}\\cdot\\mathbf{b} = \\sum_i a_i b_i = \\|\\mathbf{a}\\|\\|\\mathbf{b}\\|\\cos\\theta",
+      "llm": "Attention scores are dot products of query and key vectors.",
+      "learnMore": "modules/00-foundations/#concept-sigma", "uses": ["sum","vector"], "looseUse": null
+    },
+    {
+      "id": "cosine-similarity", "term": "cosine similarity", "aliases": [], "kind": "ml",
+      "plain": "The cosine of the angle between two vectors: 1 when they point the same way, 0 when perpendicular, −1 when opposite.",
+      "math": "\\dfrac{\\mathbf{a}\\cdot\\mathbf{b}}{\\|\\mathbf{a}\\|\\|\\mathbf{b}\\|}",
+      "llm": "Often used to compare the vectors that represent two pieces of text.",
+      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["cosine","vector"], "looseUse": null
+    },
+    {
+      "id": "positional-encoding", "term": "positional encoding", "aliases": ["position encoding","position encodings"], "kind": "llm",
+      "plain": "Numbers added to a token's vector to tell the model where in the sequence the token sits. The original Transformer built them from sines and cosines of different frequencies.",
+      "llm": "Later models often use other schemes, so this is one design, not the only one.",
+      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["token","sine","cosine","vector"], "looseUse": null
     }
   ],
   "symbols": {
@@ -189,6 +391,16 @@
     "b": { "meaning": "The intercept: the value of y when x is zero.", "color": "ochre" },
     "r": { "meaning": "The factor you multiply by at each step.", "color": "burgundy" },
     "n": { "meaning": "The number of steps, or the exponent.", "color": "blue" },
-    "a": { "meaning": "The starting amount before any multiplying happens.", "color": "teal" }
+    "a": { "meaning": "The starting amount before any multiplying happens.", "color": "teal" },
+    "k": { "meaning": "The result of the logarithm: how many multiplications by the base.", "color": "burgundy" },
+    "bs": { "meaning": "The base: the number multiplied at each step.", "color": "ochre" },
+    "i": { "meaning": "The counter, or index: which term of the sum we are on.", "color": "blue" },
+    "lo": { "meaning": "Where the counter starts.", "color": "ochre" },
+    "hi": { "meaning": "Where the counter stops.", "color": "teal" },
+    "theta": { "meaning": "The angle, turned anticlockwise from the positive x-direction.", "color": "burgundy" },
+    "cos": { "meaning": "Cosine of the angle: the horizontal position on the unit circle.", "color": "blue" },
+    "sin": { "meaning": "Sine of the angle: the vertical position on the unit circle.", "color": "teal" },
+    "yhat": { "meaning": "The predicted value of y; the hat marks an estimate.", "color": "burgundy" },
+    "w": { "meaning": "A weight: how strongly the input counts.", "color": "teal" }
   }
 }
