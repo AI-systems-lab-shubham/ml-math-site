@@ -609,9 +609,9 @@
     <section data-stage="real-life">
       <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
       <ul>
-        <li><strong>Earthquake magnitude.</strong> Each whole step up the scale means the ground moves about <span data-calc="eqAmp">…</span> times as far (amplitude on a seismograph), but releases about <span data-calc="eqEnergy">…</span> times as much energy (roughly <span data-calc="eqEnergyRounded">…</span>, not 10). Two steps: <span data-calc="eqAmp2">…</span> times the amplitude and about <span data-calc="eqEnergy2">…</span> times the energy.</li>
+        <li><strong>Earthquake magnitude.</strong> Each whole step up the scale means the ground moves about <span data-calc="eqAmp">…</span> times as far (amplitude on a seismograph), but releases roughly 30 times as much energy (about <span data-calc="eqEnergyRounded">…</span> under the classic 1.5 relation; USGS also gives a newer estimate near 27), not 10. Two steps: <span data-calc="eqAmp2">…</span> times the amplitude and about <span data-calc="eqEnergy2">…</span> times the energy under the classic relation.</li>
         <li><strong>Decibels.</strong> A rise of 10 <span class="term" data-term="decibel">dB</span> is <span data-calc="db10Power">…</span> times the <em>power</em>. A rise of 20 dB is <span data-calc="db20Amp">…</span> times the <span class="term" data-term="amplitude">amplitude</span> (of pressure or voltage), because power goes as amplitude squared, which makes 20 dB also <span data-calc="db20Power">…</span> times the power. Power doubling is about <span data-calc="db3Power">…</span> dB.</li>
-        <li><strong><span class="term" data-term="ph">pH</span>.</strong> Each step down is ten times as many hydrogen ions per litre. Pure water at room temperature sits near pH <span data-calc="ph7">…</span>.</li>
+        <li><strong><span class="term" data-term="ph">pH</span>.</strong> Each step down is roughly ten times the effective concentration of hydrogen ions (strictly, their activity). Pure water at room temperature sits near pH <span data-calc="ph7">…</span>.</li>
         <li><strong><span class="term" data-term="octave">Octaves</span>.</strong> Each octave doubles the frequency. From a note at 110 Hz to one at 880 Hz is <span data-calc="octaves">…</span> octaves.</li>
         <li><strong>Bits.</strong> Picking one of 8 equally likely options takes <span data-calc="bits8">…</span> yes-or-no questions.</li>
       </ul>
@@ -622,7 +622,7 @@
           <legend>Spot it. A news report says a magnitude 7 earthquake struck, after a magnitude 6 earlier in the week. Compared with the magnitude 6, how much larger is the ground motion (amplitude) of the magnitude 7?</legend>
           <label class="radio-row"><input type="radio" name="spot-log" data-correct data-why="One whole step up the scale multiplies the amplitude by about ten, because the scale counts multiplications by ten. Energy is a different quantity and grows faster."><span>About <span data-calc="eqAmp">…</span> times larger</span></label>
           <label class="radio-row"><input type="radio" name="spot-log" data-why="That treats the scale as ordinary numbers. On a logarithmic scale a step is a multiplication, not an addition, so the gap is far bigger than the two numbers suggest."><span>About 7/6 as large (a little bigger)</span></label>
-          <label class="radio-row"><input type="radio" name="spot-log" data-why="That figure is the energy ratio, not the amplitude ratio. Energy grows by about 32 times per step while the shaking amplitude grows by about 10 times per step."><span>About <span data-calc="eqEnergyRounded">…</span> times larger</span></label>
+          <label class="radio-row"><input type="radio" name="spot-log" data-why="That figure is the energy ratio, not the amplitude ratio. Energy grows by roughly 30 times per step while the shaking amplitude grows by about 10 times per step."><span>About 30 times larger</span></label>
         </fieldset>
       </div>
     </section>
@@ -640,7 +640,7 @@
 
     <section data-stage="why-when">
       <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
-      <p>Numbers made by repeated multiplication span enormous ranges: the quietest and loudest sounds people can comfortably hear differ by roughly 120 dB, a power ratio of about <span data-calc="db120">…</span>. Logarithms squeeze that range into small, evenly spaced numbers and turn multiplying into adding, which is far easier to handle.</p>
+      <p>Numbers made by repeated multiplication span enormous ranges: the quietest and loudest sounds people can comfortably hear span about 120–130 dB SPL (decibels of sound pressure level, relative to 20 µPa). At 120 dB that is a power ratio of about <span data-calc="db120">…</span>. Logarithms squeeze that range into small, evenly spaced numbers and turn multiplying into adding, which is far easier to handle.</p>
       <p>They fit quantities that grow or shrink by ratios. They do not fit zero or negative numbers (no number of multiplications gives them), and they are the wrong tool when changes are additive.</p>
     </section>
 
@@ -684,7 +684,7 @@
       <h4>Questions learners ask</h4>
       <p><strong>Is a logarithm of 1 always 0?</strong> Yes: zero multiplications leave you at 1.</p>
       <p><strong>Why is there no log of 0?</strong> No amount of multiplying 1 by a positive number ever lands on 0.</p>
-      <p><strong>Why does an earthquake step differ for amplitude and energy?</strong> They are different quantities. Measured amplitude is defined to grow tenfold per step, while an empirical relation between magnitude and energy says energy grows by 10<sup>1.5</sup> per step. Both are multiplications; the sizes differ.</p>
+      <p><strong>Why does an earthquake step differ for amplitude and energy?</strong> They are different quantities. Measured amplitude is defined to grow tenfold per step, while an empirical relation between magnitude and energy says energy grows by roughly 30 times per step (10<sup>1.5</sup> ≈ 32 under the classic relation; USGS also gives a newer estimate near 27). Both are multiplications; the sizes differ.</p>
       <h4>Common misconception</h4>
       <p>“A 20 dB sound is twice as powerful as a 10 dB sound.” It is 10 times the power. Equal steps on a log scale are equal multiplications, not equal additions.</p>
     </details>
@@ -928,7 +928,7 @@
     <section data-stage="in-an-llm">
       <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
       <p>Cosine is how we compare vectors: <span class="term" data-term="cosine-similarity">cosine similarity</span> of two vectors is the cosine of the angle between them, built from the dot product (Module 2).</p>
-      <p>Sine and cosine also appear directly. The original Transformer added fixed <span class="term" data-term="positional-encoding">positional encodings</span> made of sines and cosines to its token vectors, so the model can tell positions apart; for position 1 at the lowest frequency the pair is (sin 1, cos 1) = (<span data-calc="posSin">…</span>, <span data-calc="posCos">…</span>) (Vaswani et al., 2017). The paper also tried learned position vectors and reported nearly identical results.</p>
+      <p>Sine and cosine also appear directly. The original Transformer added fixed <span class="term" data-term="positional-encoding">positional encodings</span> made of sines and cosines to its token vectors, so the model can tell positions apart; for position 1, the first pair (the highest frequency, with a wavelength of 2π) is (sin 1, cos 1) = (<span data-calc="posSin">…</span>, <span data-calc="posCos">…</span>) (Vaswani et al., 2017). The paper also tried learned position vectors and reported nearly identical results.</p>
       <div class="callout simplified"><p><strong>Simplified.</strong> The full encoding uses many frequencies across the vector (with d_model = 512 in the base model). Many later models use other ways of encoding position.</p></div>
     </section>
 

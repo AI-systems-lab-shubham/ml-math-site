@@ -21,13 +21,14 @@ Format: `page · claim · basis`
 - Logs · log₂ 8 = 3, log₁₀ 1000 = 3, log₂ 32 = 5, log₁₀ 50 ≈ 1.70 · Test: `logSteps`.
 - Logs · log(ab) = log a + log b, shown for 100 × 1000 · Test: "log of a product is the sum of logs".
 - Earthquake · one magnitude step ≈ 10× amplitude · Convention of the Richter-style definition (log₁₀ of measured amplitude). Test: `magnitudeAmplitudeRatio`. Verify wording against USGS.
-- Earthquake · one magnitude step ≈ 31.6× (about 32×) energy; two steps = 1,000× · Source: empirical energy–magnitude relation log₁₀E = 1.5M + const (Gutenberg–Richter; USGS). Test: `magnitudeEnergyRatio`. Verify.
+- Earthquake · one magnitude step is roughly 30× energy: about 32× (10^1.5 ≈ 31.6) under the classic 1.5 relation, and USGS also gives a newer estimate near 27× · Source: USGS magnitude/energy explanations; the 27× figure is quoted as supplied and not re-checked. The 32× is Test: `magnitudeEnergyRatio`. Verify.
+- Earthquake · two steps is about 1,000× energy (classic relation only; about 730× at 27× per step) · Test: `magnitudeEnergyRatio(2)`; the 27× arithmetic is not on the page.
 - Earthquake · "amplitude and energy per step differ because they are different quantities" · Same sources; no mechanism is claimed beyond the stated relations.
 - Decibels · +10 dB = 10× power; +20 dB = 10× amplitude (pressure or voltage) = 100× power · Test: `powerRatioFromDecibels`, `amplitudeRatioFromDecibels`, `decibelsFromAmplitudeRatio`.
 - Decibels · doubling power ≈ 3.01 dB · Test: `decibelsFromPowerRatio`.
 - Decibels · power ∝ amplitude² · Source: standard physics for sound intensity and electrical power. The test "doubling amplitude quadruples power" checks the two dB formulas agree.
-- Decibels · human hearing spans roughly 120 dB (a power ratio of 10¹²) · Source: commonly quoted approximate range from threshold of hearing to the threshold of pain; the 10¹² is Test: `powerRatioFromDecibels(120)`. Approximate; Verify.
-- pH · pH = −log₁₀[H⁺]; each step is 10× concentration; pH 7 for 10⁻⁷ mol/L · Test: `pH`. Neutral water near pH 7 at room temperature: standard chemistry.
+- Decibels · the range from the quietest to the loudest comfortably heard sounds is about 120–130 dB SPL, relative to 20 µPa · Source: commonly quoted approximate range; SPL reference pressure 20 µPa is the standard in air. At 120 dB the power (intensity) ratio is 10¹², Test: `powerRatioFromDecibels(120)`. Approximate; Verify.
+- pH · pH = −log₁₀[H⁺]; each step is roughly 10× the effective concentration (strictly, activity) of hydrogen ions; pH 7 for 10⁻⁷ mol/L · Test: `pH` (arithmetic only). Neutral water near pH 7 at room temperature: standard chemistry.
 - Octaves · an octave doubles frequency; 110 Hz to 880 Hz is 3 octaves · Test: `octavesBetween`.
 - Bits · picking one of 8 equally likely options takes 3 yes/no questions · Test: `bitsToChoose`.
 - Perception · "perception is logarithmic" is only approximate; power laws fit some senses better · Source: Weber–Fechner vs Stevens' power law (S. S. Stevens, 1957, Psychological Review). Stated as a caution, no numbers. Verify.
@@ -58,7 +59,7 @@ Format: `page · claim · basis`
 - Pendulum position is approximately sinusoidal for small swings · Source: standard small-angle approximation in physics.
 - Pure tone pressure follows a sine over time · Source: standard acoustics.
 - LLM · cosine similarity is the cosine of the angle between two vectors · Definition (Module 2).
-- LLM · original Transformer used fixed sinusoidal positional encodings; for position 1, lowest frequency, (sin 1, cos 1) = (0.841, 0.540) · Source: Vaswani et al., 2017, §3.5. Test: `positionEncodingPair`.
+- LLM · original Transformer used fixed sinusoidal positional encodings; for position 1, the first pair (i = 0) is the highest-frequency pair (wavelength 2π), with wavelengths growing geometrically to 10000·2π; (sin 1, cos 1) = (0.841, 0.540) · Source: Vaswani et al., 2017, §3.5. Test: `positionEncodingPair`.
 - LLM · the paper also tried learned position vectors with nearly identical results · Source: Vaswani et al., 2017, §3.5 and Table 3. Verify.
 - LLM · the base model has d_model = 512 · Source: Vaswani et al., 2017, Table 3. Verify.
 - LLM · many later models use other position schemes · Source: general public knowledge (e.g. learned positions in GPT-style models); stated loosely without naming a model.
@@ -67,3 +68,4 @@ Format: `page · claim · basis`
 - x = (4, 7, 1, 9, 5): x₃ = 1, x₄ = 9; ŷ₃ = 2·1 + 1 = 3 · Test: `entryAt`, `affine`.
 - Conventions for ŷ, bold vectors, ∈, ∀ · Convention; "books differ" is stated on the page.
 - LLM · papers use this notation · Conceptual link, stated as such.
+- LLM · positional-encoding wavelengths run geometrically from 2π (first pair) up to 10000·2π · Test: "position encoding: pair 0 is the fastest".

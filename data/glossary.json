@@ -207,7 +207,7 @@
     },
     {
       "id": "ph", "term": "pH", "aliases": ["pH scale"], "kind": "math",
-      "plain": "A chemistry scale for acidity on a logarithmic scale: pH 7 is neutral, and each step down means ten times as many hydrogen ions per litre.",
+      "plain": "A chemistry scale for acidity on a logarithmic scale: pH 7 is neutral, and each step down means roughly ten times the effective concentration of hydrogen ions.",
       "math": "\\mathrm{pH} = -\\log_{10}[\\mathrm{H^{+}}]",
       "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["logarithm"], "looseUse": null
     },

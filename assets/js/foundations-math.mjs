@@ -264,3 +264,8 @@ export function entryAt(list, i) {
   if (!Number.isInteger(i) || i < 1 || i > list.length) return undefined;
   return list[i - 1];
 }
+
+/** Wavelength (in positions) of the sin/cos pair with index i; i = 0 is the highest frequency. */
+export function positionWavelength(i, dModel) {
+  return 2 * Math.PI * Math.pow(10000, (2 * i) / dModel);
+}

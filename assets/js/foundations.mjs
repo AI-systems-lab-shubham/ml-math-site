@@ -594,7 +594,6 @@ const calcs = {
   log50: () => fmt(logSteps(10, 50), 2),
   db120: () => powerRatioFromDecibels(120).toLocaleString("en-US"),
   eqAmp: () => String(magnitudeAmplitudeRatio(1)),
-  eqEnergy: () => fmt(magnitudeEnergyRatio(1), 1),
   eqEnergyRounded: () => String(Math.round(magnitudeEnergyRatio(1))),
   eqAmp2: () => String(magnitudeAmplitudeRatio(2)),
   eqEnergy2: () => String(Math.round(magnitudeEnergyRatio(2))),

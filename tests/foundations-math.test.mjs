@@ -220,3 +220,21 @@ test("entryAt is one-based", () => {
   assert.equal(entryAt([4, 7, 1], 1), 4);
   assert.equal(entryAt([4, 7, 1], 4), undefined);
 });
+
+import { positionWavelength } from "../assets/js/foundations-math.mjs";
+
+test("position encoding: pair 0 is the fastest (wavelength 2π); wavelengths grow toward 10000·2π", () => {
+  close(positionWavelength(0, 512), 2 * Math.PI);
+  const a = positionEncodingPair(1, 0, 512);
+  const b = positionEncodingPair(1 + 2 * Math.PI, 0, 512);
+  close(a.sin, b.sin);
+  close(a.cos, b.cos);
+  let prev = 0;
+  for (let i = 0; i < 256; i += 1) {
+    const w = positionWavelength(i, 512);
+    assert.ok(w > prev);
+    prev = w;
+  }
+  assert.ok(prev < 10000 * 2 * Math.PI);
+  close(positionWavelength(256, 512), 10000 * 2 * Math.PI, 1e-6);
+});
