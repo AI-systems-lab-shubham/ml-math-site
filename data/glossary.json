@@ -1,0 +1,194 @@
+{
+  "entries": [
+    {
+      "id": "variable", "term": "variable", "aliases": ["variables"], "kind": "math",
+      "plain": "A letter that stands for a number that can change or is not yet known, like an empty box you can put different numbers into.",
+      "math": "x \\in \\mathbb{R}",
+      "llm": "Every number a model learns is held in a variable until training fixes its value.",
+      "learnMore": "modules/00-foundations/#concept-variables", "uses": [], "looseUse": null
+    },
+    {
+      "id": "expression", "term": "expression", "aliases": ["expressions"], "kind": "math",
+      "plain": "A recipe of numbers, variables and operations that becomes a single number once every variable is filled in, such as 3x + 2.",
+      "math": "3x+2",
+      "learnMore": "modules/00-foundations/#concept-variables", "uses": ["variable"], "looseUse": null
+    },
+    {
+      "id": "parameter", "term": "parameter", "aliases": ["parameters"], "kind": "ml",
+      "plain": "A variable inside a model that is adjusted while the model learns, then held fixed when the model is used.",
+      "math": "\\theta",
+      "llm": "Large language models are described by their parameter count; GPT-3 has 175 billion (Brown et al., 2020).",
+      "learnMore": "modules/00-foundations/#concept-variables", "uses": ["variable"], "looseUse": null
+    },
+    {
+      "id": "equation", "term": "equation", "aliases": ["equations"], "kind": "math",
+      "plain": "A statement that two expressions have the same value. It is a rule linking quantities, not an instruction to calculate.",
+      "math": "x+y=4",
+      "learnMore": "modules/00-foundations/#concept-equations", "uses": ["expression"], "looseUse": null
+    },
+    {
+      "id": "unknown", "term": "unknown", "aliases": ["unknowns"], "kind": "math",
+      "plain": "A variable in an equation whose value we are trying to find.",
+      "learnMore": "modules/00-foundations/#concept-equations", "uses": ["variable", "equation"], "looseUse": null
+    },
+    {
+      "id": "solution", "term": "solution", "aliases": ["solutions"], "kind": "math",
+      "plain": "A choice of values for the unknowns that makes the equation true.",
+      "math": "(x, y) = (1, 3) \\text{ solves } x+y=4",
+      "learnMore": "modules/00-foundations/#concept-equations", "uses": ["equation", "unknown"], "looseUse": null
+    },
+    {
+      "id": "coordinate", "term": "coordinates", "aliases": ["coordinate"], "kind": "math",
+      "plain": "A pair of numbers that pins down a spot on a flat sheet: how far across, then how far up.",
+      "math": "(x, y)",
+      "learnMore": "modules/00-foundations/#concept-equations", "uses": [], "looseUse": null
+    },
+    {
+      "id": "line", "term": "line", "aliases": ["straight line", "lines"], "kind": "math",
+      "plain": "A perfectly straight path with no bends that goes on forever in both directions. Every point on it has coordinates that fit one rule.",
+      "math": "ax+by=c",
+      "learnMore": "modules/00-foundations/#concept-equations", "uses": ["coordinate"], "looseUse": null
+    },
+    {
+      "id": "input", "term": "input", "aliases": ["inputs"], "kind": "math",
+      "plain": "The number you feed into a rule or machine.",
+      "math": "x",
+      "learnMore": "modules/00-foundations/#concept-functions", "uses": [], "looseUse": null
+    },
+    {
+      "id": "output", "term": "output", "aliases": ["outputs"], "kind": "math",
+      "plain": "The number that comes out of a rule or machine after you feed it an input.",
+      "math": "f(x)",
+      "learnMore": "modules/00-foundations/#concept-functions", "uses": [], "looseUse": null
+    },
+    {
+      "id": "function", "term": "function", "aliases": ["functions"], "kind": "math",
+      "plain": "A rule that turns each allowed input into exactly one output, like a vending machine that always gives the same snack for the same button.",
+      "math": "f : x \\mapsto f(x)",
+      "llm": "Seen from outside, a language model is a function from a piece of text to a probability for each possible next token.",
+      "learnMore": "modules/00-foundations/#concept-functions", "uses": ["input", "output"], "looseUse": null
+    },
+    {
+      "id": "graph", "term": "graph", "aliases": ["graphs"], "kind": "math",
+      "plain": "A picture of a function: for every input, mark a point whose coordinates are the input and its output.",
+      "math": "\\{(x, f(x))\\}",
+      "learnMore": "modules/00-foundations/#concept-functions", "uses": ["function", "coordinate"], "looseUse": null
+    },
+    {
+      "id": "rate-of-change", "term": "rate of change", "aliases": [], "kind": "math",
+      "plain": "How much one quantity changes for each one-unit change in another, such as kilometres per hour.",
+      "math": "\\dfrac{\\Delta y}{\\Delta x}",
+      "learnMore": "modules/00-foundations/#concept-slope", "uses": [], "looseUse": null
+    },
+    {
+      "id": "slope", "term": "slope", "aliases": ["gradient (of a line)"], "kind": "math",
+      "plain": "How steeply a line climbs: the rise for each step across. A steady rate of change.",
+      "math": "m=\\dfrac{y_2-y_1}{x_2-x_1}",
+      "learnMore": "modules/00-foundations/#concept-slope", "uses": ["line", "rate-of-change"], "looseUse": null
+    },
+    {
+      "id": "intercept", "term": "intercept", "aliases": ["y-intercept"], "kind": "math",
+      "plain": "The place where a line crosses the vertical axis: the point whose coordinates have x equal to zero, so the output when the input is zero.",
+      "math": "b = f(0)",
+      "learnMore": "modules/00-foundations/#concept-slope", "uses": ["line", "coordinate"], "looseUse": null
+    },
+    {
+      "id": "linear-function", "term": "linear function", "aliases": ["linear functions"], "kind": "math",
+      "plain": "A function whose graph is a straight line: every equal step in the input changes the output by the same amount, called its slope.",
+      "math": "f(x)=mx+b",
+      "llm": "A single artificial neuron computes a linear function of its inputs before any activation is applied.",
+      "learnMore": "modules/00-foundations/#concept-slope", "uses": ["function", "slope", "line"], "looseUse": null
+    },
+    {
+      "id": "base", "term": "base", "aliases": [], "kind": "math",
+      "plain": "The number that is multiplied by itself in a power.",
+      "math": "b \\text{ in } b^{n}",
+      "learnMore": "modules/00-foundations/#concept-exponents", "uses": [], "looseUse": null
+    },
+    {
+      "id": "exponent", "term": "exponent", "aliases": ["exponents", "power"], "kind": "math",
+      "plain": "A small raised number saying how many copies of the base are multiplied together.",
+      "math": "b^{n}=\\underbrace{b\\times\\cdots\\times b}_{n}",
+      "learnMore": "modules/00-foundations/#concept-exponents", "uses": ["base"], "looseUse": null
+    },
+    {
+      "id": "factor", "term": "factor", "aliases": ["growth factor", "factors"], "kind": "math",
+      "plain": "The number you multiply by at each step.",
+      "math": "r \\text{ in } a r^{n}",
+      "learnMore": "modules/00-foundations/#concept-exponents", "uses": [], "looseUse": null
+    },
+    {
+      "id": "growth", "term": "growth", "aliases": ["exponential growth"], "kind": "math",
+      "plain": "Repeated multiplication by a factor bigger than 1, so the amount gets bigger by a larger and larger step each time.",
+      "math": "a r^{n},\\ r>1",
+      "learnMore": "modules/00-foundations/#concept-exponents", "uses": ["factor"], "looseUse": null
+    },
+    {
+      "id": "decay", "term": "decay", "aliases": ["exponential decay"], "kind": "math",
+      "plain": "Repeated multiplication by a factor between 0 and 1, so the amount shrinks by a smaller and smaller step each time without ever reaching zero.",
+      "math": "a r^{n},\\ 0<r<1",
+      "learnMore": "modules/00-foundations/#concept-exponents", "uses": ["factor"], "looseUse": null
+    },
+    {
+      "id": "probability", "term": "probability", "aliases": ["probabilities"], "kind": "math",
+      "plain": "A number from 0 to 1 saying how likely something is: 0 means it cannot happen, 1 means it surely will.",
+      "math": "0 \\le p \\le 1",
+      "learnMore": "modules/00-foundations/#concept-equations", "uses": [], "looseUse": null
+    },
+    {
+      "id": "token", "term": "token", "aliases": ["tokens"], "kind": "llm",
+      "plain": "A small chunk of text, often a word or part of a word, that a language model reads and writes one at a time.",
+      "llm": "Tokens, not letters or words, are the units a language model counts and predicts.",
+      "learnMore": "modules/00-foundations/#concept-equations", "uses": [], "looseUse": null
+    },
+    {
+      "id": "vocabulary", "term": "vocabulary", "aliases": [], "kind": "llm",
+      "plain": "The complete list of tokens a language model can read or write.",
+      "math": "V = |\\text{vocabulary}|",
+      "llm": "The original Transformer paper used a shared vocabulary of about 37,000 tokens for English-German translation (Vaswani et al., 2017).",
+      "learnMore": "modules/00-foundations/#concept-exponents", "uses": ["token"], "looseUse": null
+    },
+    {
+      "id": "context-window", "term": "context window", "aliases": ["context length"], "kind": "llm",
+      "plain": "The largest number of tokens a language model can take in at once, prompt and reply together.",
+      "llm": "GPT-3 had a context window of 2,048 tokens (Brown et al., 2020).",
+      "learnMore": "modules/00-foundations/#concept-equations", "uses": ["token"], "looseUse": null
+    },
+    {
+      "id": "language-model", "term": "language model", "aliases": ["language models", "LLM"], "kind": "llm",
+      "plain": "A function that reads some tokens and gives a probability for each token that might come next.",
+      "math": "P(t_{n+1}\\mid t_1,\\dots,t_n)",
+      "learnMore": "modules/00-foundations/#concept-functions", "uses": ["function", "token", "probability"], "looseUse": null
+    },
+    {
+      "id": "weight", "term": "weight", "aliases": ["weights"], "kind": "ml",
+      "plain": "A number that sets how strongly one input counts in a calculation. A large weight makes that input matter more.",
+      "math": "w",
+      "llm": "The learned weights are most of a model's parameters.",
+      "learnMore": "modules/00-foundations/#concept-slope", "uses": ["input", "parameter"], "looseUse": null
+    },
+    {
+      "id": "bias", "term": "bias", "aliases": ["bias term"], "kind": "ml",
+      "plain": "A number added at the end of a calculation that shifts the whole result up or down, whatever the inputs are.",
+      "math": "b",
+      "learnMore": "modules/00-foundations/#concept-slope", "uses": [], "looseUse": null
+    },
+    {
+      "id": "neuron", "term": "neuron", "aliases": ["artificial neuron", "neurons"], "kind": "ml",
+      "plain": "The basic unit of a neural network: it multiplies each input by a weight, adds the results and a bias, then (usually) bends the answer with an activation.",
+      "math": "z = w\\,x + b",
+      "llm": "Transformer layers contain many such units working side by side.",
+      "learnMore": "modules/00-foundations/#concept-slope", "uses": ["weight", "bias", "input"], "looseUse": "Called a neuron by analogy; it is a small formula, not a model of a brain cell."
+    }
+  ],
+  "symbols": {
+    "x": { "meaning": "The input or first unknown: how far across.", "color": "blue" },
+    "y": { "meaning": "The output or second unknown: how far up.", "color": "teal" },
+    "total": { "meaning": "The fixed total that the two parts must add up to.", "color": "ochre" },
+    "m": { "meaning": "The slope: how much y rises for each one-step increase in x.", "color": "burgundy" },
+    "b": { "meaning": "The intercept: the value of y when x is zero.", "color": "ochre" },
+    "r": { "meaning": "The factor you multiply by at each step.", "color": "burgundy" },
+    "n": { "meaning": "The number of steps, or the exponent.", "color": "blue" },
+    "a": { "meaning": "The starting amount before any multiplying happens.", "color": "teal" }
+  }
+}

@@ -43,7 +43,7 @@ An interactive static website that teaches the maths behind machine learning and
 2. Plan first: list the module's concepts and widgets, then wait for my OK before building.
 3. Write the maths code and its tests first, then the page.
 4. Verify once per module, not after every edit:
-   - `node --test tests/`
+   - `node --test tests/*.test.mjs`
    - glossary check: `node tools/check-glossary.mjs`
    - Playwright screenshots at 375, 768 and 1280 px wide; look for overlap, clipping and horizontal scroll
    - keyboard-only pass over popovers, sliders and collapsibles

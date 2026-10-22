@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="site-root" content="../../">
+  <title>Module 0: Foundations · ML Math</title>
+  <meta name="description" content="A high-school refresher: variables, equations, functions, slope and exponents, taught from pictures first.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <script src="../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../assets/js/foundations.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar">
+  <button class="button-secondary button-small" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false">Menu</button>
+  <a class="brand" href="../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Highlight terms</span></button>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Modules">
+  <h2>Modules</h2>
+  <ol>
+    <li>
+      <a href="./" aria-current="page">0 · Foundations</a>
+      <ul class="sub">
+        <li><a href="#concept-variables">Variables and expressions</a></li>
+        <li><a href="#concept-equations">Equations</a></li>
+        <li><a href="#concept-functions">Functions and graphs</a></li>
+        <li><a href="#concept-slope">Slope and lines</a></li>
+        <li><a href="#concept-exponents">Exponents</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">1 · Linear algebra</span></li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability</span></li>
+    <li><span class="soon">6 · Optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · Models meet data</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <div class="column page-hero">
+    <p class="eyebrow">Module 0 · First half</p>
+    <h1>Foundations</h1>
+    <p class="lede">The high-school maths everything else rests on. Five ideas, each taught from a picture first, then the symbols, then where it shows up inside a language model.</p>
+    <p>Terms with a dotted underline are a tap or hover away from a plain-language and a mathematical definition.</p>
+  </div>
+
+  <section class="column progress-panel" data-progress-module="m00" aria-labelledby="progress-title">
+    <h2 id="progress-title">Your progress</h2>
+    <p class="muted">Ticks are saved only in this browser. Nothing is locked; use them as a quiet checklist.</p>
+    <ul class="progress-checks">
+      <li data-progress-concept="variables"><label><input type="checkbox"> Variables and expressions</label></li>
+      <li data-progress-concept="equations"><label><input type="checkbox"> Equations</label></li>
+      <li data-progress-concept="functions"><label><input type="checkbox"> Functions and graphs</label></li>
+      <li data-progress-concept="slope"><label><input type="checkbox"> Slope and lines</label></li>
+      <li data-progress-concept="exponents"><label><input type="checkbox"> Exponents, growth and decay</label></li>
+    </ul>
+    <p class="progress-summary" data-progress-summary aria-live="polite"></p>
+    <p class="muted">Still to come in this module: logarithms, Σ notation, ratios and averages, sine and cosine, and reading notation.</p>
+  </section>
+
+  <!-- ===================== 1. VARIABLES ===================== -->
+  <article class="concept-card" id="concept-variables" data-size="compact">
+    <header>
+      <p class="eyebrow">Compact card · 1 of 5</p>
+      <h2>Variables and expressions</h2>
+      <p class="muted">A letter is a labelled empty box that a number can go into.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Imagine a box with a label on it and nothing inside yet. That is a <span class="term" data-term="variable">variable</span>: a name for a number we have not picked. Put 4 in the box and every place the label appears means 4. Put 10 in and it means 10.</p>
+      <p>An <span class="term" data-term="expression">expression</span> is a recipe that uses the box. Our example is “three copies of the box, plus 2”. We write it <span class="math" data-tex="3x+2">3x+2</span>. When a number sits next to a letter, the multiplication sign is hidden: <span class="math" data-tex="3x">3x</span> means <span class="math" data-tex="3\times x">3 × x</span>.</p>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Drag the slider to change the number in the box. The three blue bars and the ochre block are the recipe; the navy bar is the answer.</p>
+      <div data-widget="variables"></div>
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A taxi that charges a $2 pick-up fee plus $3 per kilometre: the fare depends on the kilometres, so kilometres get a letter.</li>
+        <li>A recipe that lists three eggs per guest plus two spare: the guest count is the empty box.</li>
+        <li>A phone plan with a fixed fee plus a price per gigabyte.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If a quantity depends on something you can change, give that something a letter.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A gym charges a $20 sign-up fee plus $15 for each month you stay. Which part is the variable?</legend>
+          <label class="radio-row"><input type="radio" name="spot-var" data-correct data-why="The number of months can change from person to person, so it needs a label. That is the empty box."><span>The number of months</span></label>
+          <label class="radio-row"><input type="radio" name="spot-var" data-why="The $20 fee is the same for everyone. A number that never changes is a constant, not a variable."><span>The $20 sign-up fee</span></label>
+          <label class="radio-row"><input type="radio" name="spot-var" data-why="The $15 is fixed by the gym. It multiplies the variable, but it does not change itself."><span>The $15 per month</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="variables"></div>
+      <div class="check" data-predict="variables">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-var">Put 5 in the box. What does 3x + 2 come to?</label></p>
+        <div class="row"><input id="p-var" type="number" inputmode="decimal"><button class="button button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Replace x with 5, do the multiplication first, then the addition.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Without variables you would write a separate sentence for every case: “3 times 4, plus 2”, “3 times 5, plus 2”, and so on. A variable lets one statement cover every case at once.</p>
+      <p>Use one whenever a rule should hold for many numbers. If you only ever need one specific number, just write the number.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-convention">◆ Convention</span></p>
+      <p>Any mark could stand for the box: a square, a star, the letter k. We could have chosen differently, and the maths would not change. The habit is to use letters from the end of the alphabet (x, y, z) for quantities that vary and letters from the start (a, b, c) for fixed numbers we have not specified.</p>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>Every number a language model learns is a variable, called a <span class="term" data-term="parameter">parameter</span>, until training fixes its value. The model is a very large expression made of those variables. GPT-3 has 175 billion of them (Brown et al., 2020).</p>
+      <div class="callout simplified"><p><strong>Simplified.</strong> A real model's expression is enormously bigger than 3x + 2, but it is built from the same pieces: numbers, variables, multiplication and addition (plus a few other operations we meet later).</p></div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>Everyday analogy</h4>
+      <p>A form with blanks: “Dear ____”. The blank stands for whatever name you fill in. <em>Where it breaks down:</em> a blank on a form is filled once, but a letter in maths can be filled with different numbers to see what happens, and the same letter means the same number everywhere in one problem.</p>
+      <h4>Common misconception</h4>
+      <p>“x always means the same number.” It does not. x is a placeholder; its value is whatever the problem says or whatever we choose for the moment.</p>
+    </details>
+    <footer>Further reading: MML Ch 1 (motivation) for how these pieces become machine learning.</footer>
+  </article>
+
+  <!-- ===================== 2. EQUATIONS ===================== -->
+  <article class="concept-card" id="concept-equations" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 2 of 5</p>
+      <h2>Equations</h2>
+      <p class="muted">An equation links quantities. It is a rule that must stay true, not an instruction to calculate from left to right.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Pour 4 litres of water into two glasses. However you split it, what is in the first glass plus what is in the second glass is 4 litres. That sentence is an <span class="term" data-term="equation">equation</span>: a statement that two expressions have the same value.</p>
+      <p>Give the amounts letters, <span class="math" data-tex="\htmlData{sym=x}{x}">x</span> and <span class="math" data-tex="\htmlData{sym=y}{y}">y</span>, and the rule becomes</p>
+      <div class="math-display" data-tex-display="\htmlData{sym=x}{x}+\htmlData{sym=y}{y}=4">x + y = 4</div>
+      <p>Here x and y are <span class="term" data-term="unknown">unknowns</span>. Notice what the equation does not say: it does not tell you x or y. It only says how they are tied together. Many pairs work, such as 1 and 3, or 0 and 4. Each pair that makes it true is a <span class="term" data-term="solution">solution</span>.</p>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>A pair (x, y) is a point on a sheet, described by its <span class="term" data-term="coordinate">coordinates</span>. Plot every solution of x + y = 4 and the points fall on a straight <span class="term" data-term="line">line</span>. Slide x to walk along it. Then add a second equation and watch where the two lines meet.</p>
+      <div data-widget="equations"></div>
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>Splitting 4 litres of water between two glasses (volume is conserved).</li>
+        <li>A 24-hour day divided between sleep and everything else.</li>
+        <li>A fixed budget shared between two purchases: spend more on one and you must spend less on the other.</li>
+        <li>Mass in a sealed box: the mass of the gas plus the mass of the liquid stays the same while one turns into the other.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If something is fixed in total while its parts can trade off against each other, think “x + y = total”. If a second, independent fact is also known, you can pin the parts down.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A 60-minute class is split between listening (t minutes) and practising (p minutes). Which equation captures the split?</legend>
+          <label class="radio-row"><input type="radio" name="spot-eq" data-correct data-why="The two parts must fill the whole hour, so they add to 60. Trading minutes from one to the other keeps the total fixed."><span>t + p = 60</span></label>
+          <label class="radio-row"><input type="radio" name="spot-eq" data-why="Multiplying the minutes does not give the length of the class. The parts add up to the whole; they do not multiply."><span>t × p = 60</span></label>
+          <label class="radio-row"><input type="radio" name="spot-eq" data-why="That would force equal halves. The scenario allows any split, as long as the total is 60."><span>t = p</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <p>Two facts about the same pair: they add to 4, and the first exceeds the second by 2. Find the pair.</p>
+      <div data-stepper="equations"></div>
+      <div class="check" data-predict="equations">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-eq">x + y = 4, and x is 1. What is y?</label></p>
+        <div class="row"><input id="p-eq" type="number" inputmode="decimal"><button class="button button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Put 1 where x is, then ask what must be added to 1 to reach 4.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>An equation lets you state a relationship before you know the numbers, then use it to find the missing ones. Without it you would be guessing pairs one after another.</p>
+      <p><strong>The counting rule.</strong> One equation with two unknowns leaves a whole line of solutions. A second equation usually pins down a single point. Two things can go wrong, and the widget shows both: the second line can be parallel, so nothing satisfies both, or it can be the first line rescaled, so it adds no new information.</p>
+      <p>An equation does not fit a relationship that is “at most” or “at least”. Those describe a region, not a line.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> Say “the two parts always total 4” without choosing numbers.</li>
+        <li><strong>Obvious candidates.</strong> List the pairs (0 and 4, 1 and 3, …). Or describe it in a sentence.</li>
+        <li><strong>Why they fail.</strong> A list never ends once fractions are allowed, and a sentence cannot be calculated with.</li>
+      </ol>
+      <p>Before you open the next part, predict: how many equations do you think you need to pin down both x and y?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>Each equation removes one degree of freedom. Two unknowns start with two free choices. One equation ties them, leaving one free choice (slide x and y follows). A second independent equation removes the last one. So you need as many independent equations as unknowns. That count is forced by the requirement, which is why this card is tagged Derived. The symbol “=” itself is notation we agree on.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Probabilities add to 1.</strong> A language model gives every <span class="term" data-term="token">token</span> in its <span class="term" data-term="vocabulary">vocabulary</span> a <span class="term" data-term="probability">probability</span>, and together they total 1. If three tokens have 0.5, 0.25 and 0.125, the rest of the vocabulary shares the remaining <span data-calc="missingProbability">…</span>. This is the same “parts of a fixed total” idea as x + y = 4. The softmax function that produces the probabilities is built so that they add to 1.</li>
+        <li><strong>The context window is a total.</strong> The prompt plus the reply must fit within the <span class="term" data-term="context-window">context window</span>. GPT-3 had a window of 2,048 tokens (Brown et al., 2020); with a 1,500-token prompt, <span data-calc="contextLeft">…</span> tokens remain for the reply.</li>
+        <li><strong>A neuron's boundary is a line.</strong> For a single unit with two inputs, the set where its weighted sum equals zero, <span class="math" data-tex="w_1x_1+w_2x_2+b=0">w₁x₁ + w₂x₂ + b = 0</span>, is a line. See the slope card for the pieces.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> The third point describes a single unit in a small classifier. A real layer has thousands of inputs, so its boundary is a flat sheet in a very high-dimensional space, and the units in a transformer are not read as individual boundaries.</p></div>
+
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-eq">In your own words: why does one equation with two unknowns have many solutions, and what does a second equation do?</label></p>
+        <textarea id="e-eq"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>One equation only ties x and y together, so choosing x leaves y fixed but x free: a whole line of pairs works. A second independent equation is another tie, which leaves no free choice and picks out a single pair.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“An equation is a promise that two things are equal. Say two glasses hold 4 litres together. If I tell you the first glass has 1 litre, you know the second has 3. But if I only tell you the total, there are endless ways to split it. Draw them all and you get a straight line. A second fact, like ‘the first has 2 more than the second’, draws a second line, and the glasses can only be where the lines cross.”</p>
+      <h4>Everyday analogy</h4>
+      <p>A balanced see-saw: whatever you do to one side, you must do to the other. <em>Where it breaks down:</em> a see-saw has two sides to balance, but an equation can have unknowns on both sides, and a see-saw does not show you the whole family of solutions.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw two glasses and write 4 L above them.</li><li>Write x and y under the glasses, then x + y = 4.</li><li>List three pairs that work.</li><li>Plot the pairs and join them into a line.</li><li>Draw a second line and circle the crossing.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Is “=” an instruction to calculate?</strong> No. It states that both sides are the same value. Calculating is one way to use it.</p>
+      <p><strong>Can x and y be negative or fractions?</strong> Yes, unless the problem says otherwise. That is why the line continues past the axes.</p>
+      <p><strong>Why do two equations sometimes fail?</strong> If they say contradictory things (parallel lines) there is no pair; if one repeats the other, there is no new information.</p>
+      <h4>Common misconception</h4>
+      <p>“The answer must be on the right of the equals sign.” The equals sign only says both sides match; the unknown can be anywhere.</p>
+    </details>
+    <footer>Further reading: MML Ch 2.3 (solving systems of linear equations) for the full treatment, coming in Module 1.</footer>
+  </article>
+
+  <!-- ===================== 3. FUNCTIONS ===================== -->
+  <article class="concept-card" id="concept-functions" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 3 of 5</p>
+      <h2>Functions and graphs</h2>
+      <p class="muted">A function is a rule that gives exactly one output for each allowed input. A graph makes the rule visible.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Think of a vending machine. Press the same button and you always get the same snack. The button you press is the <span class="term" data-term="input">input</span>; the snack that drops is the <span class="term" data-term="output">output</span>. A <span class="term" data-term="function">function</span> is any rule that behaves like that: one input in, exactly one output out, the same every time.</p>
+      <p>We write the machine as a name and a recipe. For “double it, then add 1”:</p>
+      <div class="math-display" data-tex-display="f(\htmlData{sym=x}{x})=2\htmlData{sym=x}{x}+1">f(x) = 2x + 1</div>
+      <p>Read f(x) as “the output of f when the input is x”. The letter f is just the machine's name.</p>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>A <span class="term" data-term="graph">graph</span> draws the machine's whole behaviour: for each input, mark a point at the height of its output. Choose a rule, then slide the input and watch the point trace the curve.</p>
+      <div data-widget="functions"></div>
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A price list: item in, price out.</li>
+        <li>A speedometer: moment in time in, speed out.</li>
+        <li>A taxi meter: distance in, fare out.</li>
+        <li>A thermostat dial: setting in, target temperature out.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If asking the same question twice must give the same answer, and the answer depends on something you can vary, think “function”. If the same input could give different outputs, it is not one.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. Which of these is a function from the first thing to the second?</legend>
+          <label class="radio-row"><input type="radio" name="spot-fn" data-why="One student can have several friends, so one input would give many outputs. That breaks the “exactly one” rule."><span>A student → their friends</span></label>
+          <label class="radio-row"><input type="radio" name="spot-fn" data-correct data-why="Each student has exactly one ID number. Two students never share one input, but it would not matter if they shared an output; the rule only needs one output per input."><span>A student → their student ID</span></label>
+          <label class="radio-row"><input type="radio" name="spot-fn" data-why="One phone number can be called by many people, so one input would give many outputs."><span>A phone number → the people who have called it</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="functions"></div>
+      <div class="check" data-predict="functions">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-fn">Using f(x) = 2x + 1, what is f(5)?</label></p>
+        <div class="row"><input id="p-fn" type="number" inputmode="decimal"><button class="button button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Replace x with 5 and follow the recipe: double, then add 1.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Naming a rule lets us treat “how the output depends on the input” as one object that we can draw, compare, combine and improve. Without the idea you would have only a pile of separate facts.</p>
+      <p>It fits whenever each input has a single predictable output. It does not fit a rule where the same input can give different outcomes, such as a dice roll. For that you describe a spread of possible outputs with probabilities (Module 5).</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-motivated">● Motivated</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> A machine you can rely on: tell it what you put in and know what comes out.</li>
+        <li><strong>Obvious candidates.</strong> A complete list of pairs; a formula; a drawing.</li>
+        <li><strong>The catch.</strong> What if an input was allowed to give two different outputs?</li>
+      </ol>
+      <p>Predict: what goes wrong if one input can produce two outputs?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>You could no longer say what “the” output is, so you could not calculate with it or draw a single curve. Requiring exactly one output per input is what keeps the machine dependable. It is tagged Motivated because it is a very good fit for that need, but other notions (relations that allow several outputs) exist and are useful elsewhere.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>Seen from outside, a <span class="term" data-term="language-model">language model</span> is a function. Its input is the sequence of tokens so far; its output is a probability for every token in the vocabulary being the next one. Feed it the same tokens and the same settings, and the function gives the same probabilities.</p>
+      <div class="callout simplified"><p><strong>Simplified.</strong> When you chat, the system then <em>samples</em> a token from those probabilities. That random step happens outside the function, which is why the same prompt can produce different replies. Sampling comes in Module 5.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-fn">In your own words: what makes something a function, and why is “exactly one output” important?</label></p>
+        <textarea id="e-fn"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>A function is a rule that takes an input and gives one definite output, the same every time. If an input could give two outputs we could not say what the output is, so we could not calculate or draw it as one curve.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“A function is a vending machine for numbers. You press a button, the machine follows its rule, and out comes one result. Press the same button again, same result. The graph is just a picture of every button and what it gives: left to right the input, up and down the output.”</p>
+      <h4>Everyday analogy</h4>
+      <p>A recipe: ingredients in, dish out. <em>Where it breaks down:</em> a real recipe can turn out differently each time; a function never does.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw a box with an arrow in and an arrow out.</li><li>Write the rule inside: double, then add 1.</li><li>Feed in 0, 1, 2 and write the outputs.</li><li>Draw axes and plot the three points.</li><li>Join them; ask what happens between the points.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Is f(x) the same as f times x?</strong> No. f(x) means “the output of f at x”. The brackets mean “apply”.</p>
+      <p><strong>Can two inputs give the same output?</strong> Yes. Both 2 and −2 give 4 under “multiply it by itself”. A function only forbids one input giving two outputs.</p>
+      <p><strong>Why draw a graph at all?</strong> Because patterns such as steepness or turning points are easier to see than to read from a table.</p>
+      <h4>Common misconception</h4>
+      <p>“A function must have a formula.” A lookup table or a learned model is a function too, as long as each input has one output.</p>
+    </details>
+    <footer>Further reading: MML Ch 2 and Ch 5 introduce functions on vectors; Module 4 returns to them.</footer>
+  </article>
+
+  <!-- ===================== 4. SLOPE ===================== -->
+  <article class="concept-card" id="concept-slope" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 4 of 5</p>
+      <h2>Slope and linear functions</h2>
+      <p class="muted">A straight line changes by the same amount for every equal step across.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Walk up a ramp. For every step you take forward, you rise by the same amount. How steep the ramp is, how much you go up per step forward, is its <span class="term" data-term="slope">slope</span>: a steady <span class="term" data-term="rate-of-change">rate of change</span>. Where the ramp starts, its height at the very beginning, is the <span class="term" data-term="intercept">intercept</span>.</p>
+      <p>A <span class="term" data-term="linear-function">linear function</span> packs both facts into one rule:</p>
+      <div class="math-display" data-tex-display="\htmlData{sym=y}{y}=\htmlData{sym=m}{m}\,\htmlData{sym=x}{x}+\htmlData{sym=b}{b}">y = mx + b</div>
+      <p>Here m is the slope (rise per step across), b is the intercept (the height at x = 0), x is the step count and y the height.</p>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Change the slope and the line tilts; change the intercept and it slides up or down. The small burgundy triangle shows “run 1, rise m” at the start. The ochre dot is the intercept.</p>
+      <div data-widget="slope"></div>
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A tank that starts with some water and fills at a steady number of litres per minute.</li>
+        <li>A cyclist at constant speed who starts some distance down the road.</li>
+        <li>A taxi fare: a fixed pick-up fee plus a steady price per kilometre.</li>
+        <li>A road gradient: metres climbed for each hundred metres travelled.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If the same step in one quantity always changes the other by the same amount, it is linear. The slope is that amount; the intercept is where you start.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A candle is 20 cm tall and burns down 2 cm every hour. Which rule gives its height h after t hours?</legend>
+          <label class="radio-row"><input type="radio" name="spot-slope" data-correct data-why="It starts at 20 (the intercept) and loses 2 per hour, so the slope is negative: −2. The line slopes downwards."><span>h = 20 − 2t</span></label>
+          <label class="radio-row"><input type="radio" name="spot-slope" data-why="That starts at zero and grows. The candle starts at 20 and shrinks."><span>h = 2t</span></label>
+          <label class="radio-row"><input type="radio" name="spot-slope" data-why="That has the numbers swapped: it would start at 2 cm and grow 20 cm per hour."><span>h = 2 + 20t</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="slope"></div>
+      <div class="check" data-predict="slope">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-sl">A line passes through (0, 1) and (2, 5). What is its slope?</label></p>
+        <div class="row"><input id="p-sl" type="number" inputmode="decimal"><button class="button button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>How far up does it go, and how far across? Divide the first by the second.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>A straight line is the simplest relationship that still has a direction and a size. It is the baseline we compare other shapes to. Zoom in far enough on almost any smooth curve and it looks like a line, which is the idea behind derivatives (Module 4).</p>
+      <p>It does not fit processes where the step depends on the current size (next card), or where an effect levels off.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> Each equal step across changes the height by the same amount, m.</li>
+        <li><strong>Start.</strong> At x = 0 the height is b.</li>
+        <li><strong>Take steps.</strong> After 1 step: b + m. After 2 steps: b + m + m.</li>
+      </ol>
+      <p>Predict: what is the height after x steps?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>After x steps you have added m exactly x times to b, so the height is b + x copies of m, which is mx + b. Nothing else is possible if every step adds the same amount, so the formula is forced: it is Derived.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>A single artificial <span class="term" data-term="neuron">neuron</span> computes a weighted sum plus a bias. With one input it is exactly this line:</p>
+      <div class="math-display" data-tex-display="z=w\,x+b">z = w x + b</div>
+      <p>The <span class="term" data-term="weight">weight</span> w plays the role of the slope and the <span class="term" data-term="bias">bias</span> b plays the role of the intercept. With many inputs the same pattern becomes a sum of weight times input over all the inputs, plus the bias. Transformer layers are built from such weighted sums (Vaswani et al., 2017).</p>
+      <div class="callout simplified"><p><strong>Simplified.</strong> Most units apply an activation function after this step, which bends the output. We meet that in Module 10. “Neuron” is a metaphor; the unit is just this formula.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-sl">In your own words: what do m and b each tell you about a line?</label></p>
+        <textarea id="e-sl"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>m is how much the output rises for each one-step increase in the input: the steepness and direction. b is where the line starts, the output when the input is zero.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“Imagine a ramp. How far up it starts is b. How steep it is is m: each step forward lifts you by m. After x steps forward you have gone up x times m, plus the b you started with. That is y = mx + b. A neuron in an AI is the same recipe with weights and a bias.”</p>
+      <h4>Everyday analogy</h4>
+      <p>A taxi fare: pick-up fee plus a price per kilometre. <em>Where it breaks down:</em> real fares often have minimums or caps, which bend the line.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw axes and mark a dot at height b on the vertical axis.</li><li>Draw one step across and one rise of m.</li><li>Repeat the step three times.</li><li>Join the points into a line.</li><li>Write y = mx + b and label each part.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>What if the slope is negative?</strong> The line goes down as you move right.</p>
+      <p><strong>What if the slope is zero?</strong> A flat line: the output never changes.</p>
+      <p><strong>Why is it called linear?</strong> Because the graph is a line.</p>
+      <h4>Common misconception</h4>
+      <p>“Slope is the angle.” Slope is rise over run, a ratio. Doubling the slope does not double the angle.</p>
+    </details>
+    <footer>Further reading: MML Ch 2.7 (linear mappings) for the generalisation to many inputs.</footer>
+  </article>
+
+  <!-- ===================== 5. EXPONENTS ===================== -->
+  <article class="concept-card" id="concept-exponents" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 5 of 5</p>
+      <h2>Exponents, growth and decay</h2>
+      <p class="muted">Repeated multiplication by the same number describes change proportional to size.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Fold a sheet of paper in half, then in half again. Each fold doubles the thickness. Adding the same amount each time makes steady progress; multiplying by the same number each time makes progress that speeds up (or slows down) with the size.</p>
+      <p>Writing “2 × 2 × 2 × 2 × 2” gets tiresome, so we count the copies with a small raised number, the <span class="term" data-term="exponent">exponent</span>. The number being multiplied is the <span class="term" data-term="base">base</span>:</p>
+      <div class="math-display" data-tex-display="2^{5}=2\times2\times2\times2\times2">2⁵ = 2 × 2 × 2 × 2 × 2</div>
+      <p>If a quantity starts at <span class="math" data-tex="\htmlData{sym=a}{a}">a</span> and is multiplied by a <span class="term" data-term="factor">factor</span> <span class="math" data-tex="\htmlData{sym=r}{r}">r</span> at every step, after <span class="math" data-tex="\htmlData{sym=n}{n}">n</span> steps it is</p>
+      <div class="math-display" data-tex-display="\htmlData{sym=a}{a}\,\htmlData{sym=r}{r}^{\htmlData{sym=n}{n}}">a rⁿ</div>
+      <p>When r is bigger than 1 this is <span class="term" data-term="growth">growth</span>. When r is between 0 and 1 it is <span class="term" data-term="decay">decay</span>.</p>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Burgundy bars multiply by the factor at every step. Ochre diamonds show what you would get by adding the first step's change every time instead. Raise the number of steps and watch which one runs away.</p>
+      <div data-widget="exponents"></div>
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A lily patch that doubles its coverage of a pond each day.</li>
+        <li>Savings with compound interest: each year's interest is added to the base for next year's.</li>
+        <li>A hot drink cooling toward room temperature: the gap shrinks by about the same fraction each minute.</li>
+        <li>A radioactive material halving over each half-life.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If each step <em>multiplies</em> by the same factor, think exponent. If each step <em>adds</em> the same amount, think line. A curve that gets steeper as it grows, or flatter as it shrinks, is a sign of multiplying.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A pond's lily patch covers twice as much surface each day. How does the coverage change?</legend>
+          <label class="radio-row"><input type="radio" name="spot-exp" data-correct data-why="Each day the area is multiplied by 2, so the daily increase gets bigger as the patch grows. That is exponential growth."><span>It is multiplied by 2 each day (growth)</span></label>
+          <label class="radio-row"><input type="radio" name="spot-exp" data-why="Adding the same area every day is linear. Here the added area itself keeps doubling."><span>The same area is added each day</span></label>
+          <label class="radio-row"><input type="radio" name="spot-exp" data-why="Multiplying by one half would shrink the patch. The coverage here gets bigger."><span>It is multiplied by ½ each day (decay)</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="exponents"></div>
+      <div class="check" data-predict="exponents">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-ex">Start with 1 and double five times. What do you reach?</label></p>
+        <div class="row"><input id="p-ex" type="number" inputmode="decimal"><button class="button button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Write the sequence one step at a time: 1, then double it, then double again, and so on.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>The exponent compresses “multiply this many times” into one symbol and exposes how startlingly fast repeated multiplication runs away, or fades. Without it, long products are error-prone and the speed is hidden.</p>
+      <p>It fits changes proportional to current size. It does not fit steady changes (use a line) or processes that level off (those need other curves).</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> The change at each step should be in proportion to the current amount.</li>
+        <li><strong>Obvious candidate.</strong> Add a fixed amount each step.</li>
+        <li><strong>Why it fails.</strong> A fixed addition ignores the size: 10 and 10,000 would grow by the same amount.</li>
+      </ol>
+      <p>Predict: what operation makes the change scale with the size?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>Multiplying by a fixed factor r changes an amount of size A by A × (r − 1), which is proportional to A. Repeating that n times from a start of a gives a·r·r·…·r, which we abbreviate a·rⁿ. The form is forced by the requirement, so it is Derived.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>With a vocabulary of V tokens, the number of possible sequences of n tokens is Vⁿ. The original Transformer's English–German translation model used a shared vocabulary of about 37,000 tokens (Vaswani et al., 2017). Even a sequence of just two tokens already has <span data-calc="pairCount">…</span> possibilities.</p>
+      <p>That explosion is why a language model cannot store a table of answers for every sequence. It computes a probability from a formula instead.</p>
+      <div class="callout simplified"><p><strong>Simplified.</strong> This is a counting argument, not a description of how any particular model works. Many sequences are nonsense, and models never visit most of them.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-ex">In your own words: how is multiplying by a factor different from adding, and what does the exponent count?</label></p>
+        <textarea id="e-ex"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>Adding a fixed amount changes everything by the same step, so the graph is a line. Multiplying by a factor changes things in proportion to their size, so the steps get bigger as the amount grows (or smaller as it shrinks). The exponent counts how many times the factor has been multiplied in.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“Adding is like walking: the same distance every step. Multiplying is like a snowball rolling downhill: the bigger it gets, the more snow it picks up. We write ‘multiply 5 times’ as a small 5 above the number. Doubling just ten times from 1 gets you past a thousand.”</p>
+      <h4>Everyday analogy</h4>
+      <p>Folding paper. <em>Where it breaks down:</em> real paper cannot be folded more than a handful of times, so the pattern stops being physical long before the formula does.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Write 1, 2, 4, 8, 16 in a row and arrows labelled ×2.</li><li>Below it write 1, 2, 3, 4, 5 with arrows labelled +1.</li><li>Draw both as bars.</li><li>Label the doubling bars 2⁰ … 2⁴.</li><li>Ask: which one is ahead after 10 steps?</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>What is 2⁰?</strong> 1: zero multiplications leaves the start untouched.</p>
+      <p><strong>Can an exponent be negative?</strong> Yes; it means dividing instead of multiplying. We meet that with logarithms.</p>
+      <p><strong>Why does decay never reach zero?</strong> Halving leaves half of what remains, which is never nothing.</p>
+      <h4>Common misconception</h4>
+      <p>“2⁵ means 2 × 5.” It means 2 multiplied by itself five times: 32, not 10.</p>
+    </details>
+    <footer>Further reading: MML Ch 1 and the opening of Ch 5; logarithms (the inverse of this idea) come next in this module.</footer>
+  </article>
+</main>
+</div>
+</body>
+</html>
