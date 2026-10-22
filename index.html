@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="site-root" content="./">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="description" content="A calm, interactive path through the mathematics behind machine learning and language models.">
+  <title>ML Math — understand the ideas under the models</title>
+  <link rel="preload" href="vendor/fonts/Inter-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="vendor/fonts/Fraunces-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script defer src="vendor/katex/katex.min.js"></script>
+  <script type="module" src="assets/js/glossary.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="site-frame">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="ML Math home">
+        <span class="brand-mark" aria-hidden="true">∑</span>
+        <span class="brand-label"><span class="brand-full">Mathematics for machine learning</span><span class="brand-short" aria-hidden="true">ML Math</span></span>
+      </a>
+      <div class="topbar-actions">
+        <details class="mobile-drawer">
+          <summary aria-label="Open module navigation">☰</summary>
+          <nav class="drawer-content" aria-label="Modules">
+            <h2>Learning path</h2>
+            <ul class="module-nav">
+              <li><a href="modules/00-foundations/"><span class="module-number">00</span> Foundations</a></li>
+              <li><a href="#future-modules"><span class="module-number">01–10</span> More modules, coming next</a></li>
+            </ul>
+          </nav>
+        </details>
+      </div>
+    </header>
+    <aside class="sidebar" aria-label="Learning path">
+      <h2>Learning path</h2>
+      <nav>
+        <ul class="module-nav">
+          <li><a href="modules/00-foundations/"><span class="module-number">00</span> Foundations</a></li>
+          <li><a href="#future-modules"><span class="module-number">01–10</span> More modules, coming next</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="main-content" id="main-content">
+      <div class="reading-column" data-page="home">
+        <p class="eyebrow">A guided mathematics path</p>
+        <h1>Understand the ideas under the models.</h1>
+        <p class="lede">Start with familiar quantities and pictures. Build toward the mathematics used in <span class="term" data-term="machine-learning">machine learning</span> and large <span class="term" data-term="language-model">language models</span>, one clear idea at a time.</p>
+        <div class="page-tools">
+          <button class="button-secondary" type="button" data-highlight-toggle aria-pressed="false">Highlight all terms</button>
+          <a class="button" href="modules/00-foundations/">Begin with Foundations</a>
+        </div>
+        <section class="callout" aria-labelledby="approach-title">
+          <h2 id="approach-title">A way to learn, not just a list of formulas</h2>
+          <p>Each concept begins with what it means, gives you a picture to explore, and ends with a precise connection—or a clearly labelled conceptual connection—to machine learning.</p>
+          <p>Worked examples and widget values are calculated by tested code. You can use the glossary at any point to unpack a term.</p>
+        </section>
+        <section class="home-module-list" id="future-modules" aria-label="Modules">
+          <article class="home-module">
+            <div>
+              <p class="eyebrow">Module 00 · ready to explore</p>
+              <h2>Foundations</h2>
+              <p>Equations, functions, growth, logarithms, sums, and the notation that helps make later ideas readable.</p>
+            </div>
+            <a class="button-secondary" href="modules/00-foundations/">Open Module 0</a>
+          </article>
+          <article class="home-module">
+            <div>
+              <p class="eyebrow">Phase 2</p>
+              <h2>Linear algebra and geometry</h2>
+              <p>Vectors, matrices, transformations, and the geometry of similarity will follow this foundations slice.</p>
+            </div>
+            <span class="muted">In the learning path</span>
+          </article>
+        </section>
+        <p class="footer-note">An offline-friendly static learning site. Mathematics for Machine Learning chapter references are included for further reading.</p>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

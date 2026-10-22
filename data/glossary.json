@@ -1,0 +1,643 @@
+[
+  {
+    "id": "variable",
+    "term": "variable",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A symbol that stands for a quantity whose value may vary or is not yet known.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-variables",
+    "uses": []
+  },
+  {
+    "id": "expression",
+    "term": "expression",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A mathematical phrase made from numbers, symbols and operations; unlike an equation, it does not assert that two sides are equal.",
+    "math": "2x+1",
+    "learnMore": "modules/00-foundations/#concept-variables",
+    "uses": ["variable"]
+  },
+  {
+    "id": "equation",
+    "term": "equation",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A statement that two expressions have the same value.",
+    "math": "x+y=4",
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": ["expression"]
+  },
+  {
+    "id": "unknown",
+    "term": "unknown",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A quantity represented by a symbol when its value has not yet been determined.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": ["variable"]
+  },
+  {
+    "id": "solution",
+    "term": "solution",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A value, or set of values, that makes a statement such as an equation true.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": ["equation"]
+  },
+  {
+    "id": "line",
+    "term": "line",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A straight path that continues in both directions; in a coordinate graph, a linear equation in two variables can describe one.",
+    "math": "y=mx+b",
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": []
+  },
+  {
+    "id": "system-of-equations",
+    "term": "system of equations",
+    "aliases": ["simultaneous equations"],
+    "kind": "math",
+    "plain": "Two or more equations considered together; a shared solution must make every equation true.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": ["equation", "solution"]
+  },
+  {
+    "id": "function",
+    "term": "function",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A rule that assigns exactly one output to each allowed input.",
+    "math": "y=f(x)",
+    "learnMore": "modules/00-foundations/#concept-functions",
+    "uses": ["input", "output"]
+  },
+  {
+    "id": "input",
+    "term": "input",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A value supplied to a rule or process.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-functions",
+    "uses": []
+  },
+  {
+    "id": "output",
+    "term": "output",
+    "aliases": [],
+    "kind": "math",
+    "plain": "The value produced by applying a rule to an input.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-functions",
+    "uses": ["input"]
+  },
+  {
+    "id": "graph",
+    "term": "graph",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A visual display of values or relationships, often using points on coordinate axes.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-functions",
+    "uses": []
+  },
+  {
+    "id": "slope",
+    "term": "slope",
+    "aliases": ["gradient (of a line)"],
+    "kind": "math",
+    "plain": "The change in vertical position divided by the change in horizontal position along a straight line.",
+    "math": "m=\\frac{y_2-y_1}{x_2-x_1}",
+    "learnMore": "modules/00-foundations/#concept-slope",
+    "uses": []
+  },
+  {
+    "id": "intercept",
+    "term": "intercept",
+    "aliases": ["y-intercept"],
+    "kind": "math",
+    "plain": "The point where a graph meets an axis; in y=mx+b, b is where the line crosses the vertical axis.",
+    "math": "y=mx+b",
+    "learnMore": "modules/00-foundations/#concept-slope",
+    "uses": ["slope"]
+  },
+  {
+    "id": "linear-function",
+    "term": "linear function",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A function whose graph is a straight line.",
+    "math": "f(x)=mx+b",
+    "learnMore": "modules/00-foundations/#concept-slope",
+    "uses": ["function", "line"]
+  },
+  {
+    "id": "exponent",
+    "term": "exponent",
+    "aliases": ["power"],
+    "kind": "math",
+    "plain": "The small raised number that tells how many times a base is used as a factor.",
+    "math": "a^n",
+    "learnMore": "modules/00-foundations/#concept-exponents",
+    "uses": ["base"]
+  },
+  {
+    "id": "base",
+    "term": "base",
+    "aliases": [],
+    "kind": "math",
+    "plain": "The number repeatedly multiplied in a power; in 2³, the base is 2.",
+    "math": "a^n",
+    "learnMore": "modules/00-foundations/#concept-exponents",
+    "uses": []
+  },
+  {
+    "id": "growth",
+    "term": "growth",
+    "aliases": ["exponential growth"],
+    "kind": "math",
+    "plain": "A change where the amount increases by the same factor over equal steps, rather than by the same added amount.",
+    "math": "A(t)=A_0r^t,\\quad r>1",
+    "learnMore": "modules/00-foundations/#concept-exponents",
+    "uses": ["exponent", "base"]
+  },
+  {
+    "id": "decay",
+    "term": "decay",
+    "aliases": ["exponential decay"],
+    "kind": "math",
+    "plain": "A change where the amount is multiplied by the same fraction over equal steps.",
+    "math": "A(t)=A_0r^t,\\quad 0<r<1",
+    "learnMore": "modules/00-foundations/#concept-exponents",
+    "uses": ["exponent", "base"]
+  },
+  {
+    "id": "logarithm",
+    "term": "logarithm",
+    "aliases": ["log"],
+    "kind": "math",
+    "plain": "A count of how many times a base must be multiplied by itself to reach a positive value.",
+    "math": "\\log_b(x)=n\\iff b^n=x",
+    "learnMore": "modules/00-foundations/#concept-logarithms",
+    "uses": ["base", "exponent"]
+  },
+  {
+    "id": "log-base",
+    "term": "log base",
+    "aliases": ["base of a logarithm"],
+    "kind": "math",
+    "plain": "The number whose repeated multiplication is counted by a logarithm.",
+    "math": "\\log_b(x)",
+    "learnMore": "modules/00-foundations/#concept-logarithms",
+    "uses": ["logarithm", "base"]
+  },
+  {
+    "id": "sigma-notation",
+    "term": "sigma notation",
+    "aliases": ["summation notation"],
+    "kind": "math",
+    "plain": "A compact way to say that a sequence of terms should be added.",
+    "math": "\\sum_{i=1}^{n}a_i",
+    "learnMore": "modules/00-foundations/#concept-sigma",
+    "uses": ["summation", "weight"]
+  },
+  {
+    "id": "summation",
+    "term": "summation",
+    "aliases": [],
+    "kind": "math",
+    "plain": "The operation of adding several values together.",
+    "math": "\\sum_i a_i",
+    "learnMore": "modules/00-foundations/#concept-sigma",
+    "uses": []
+  },
+  {
+    "id": "ratio",
+    "term": "ratio",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A comparison of two quantities by division.",
+    "math": "a:b=\\frac{a}{b}",
+    "learnMore": "modules/00-foundations/#concept-ratios",
+    "uses": []
+  },
+  {
+    "id": "percentage",
+    "term": "percentage",
+    "aliases": ["percent"],
+    "kind": "math",
+    "plain": "A ratio expressed as a number of parts per hundred.",
+    "math": "p\\%=\\frac{p}{100}",
+    "learnMore": "modules/00-foundations/#concept-ratios",
+    "uses": ["ratio"]
+  },
+  {
+    "id": "average",
+    "term": "average",
+    "aliases": ["arithmetic mean", "mean"],
+    "kind": "math",
+    "plain": "The total of a list divided equally among the number of values in the list.",
+    "math": "\\bar{x}=\\frac{1}{n}\\sum_{i=1}^{n}x_i",
+    "learnMore": "modules/00-foundations/#concept-ratios",
+    "uses": ["summation"]
+  },
+  {
+    "id": "sine",
+    "term": "sine",
+    "aliases": [],
+    "kind": "math",
+    "plain": "For a point on the unit circle, the sine of its angle is the point's vertical coordinate.",
+    "math": "\\sin(\\theta)=y",
+    "learnMore": "modules/00-foundations/#concept-trigonometry",
+    "uses": ["unit-circle", "angle"]
+  },
+  {
+    "id": "cosine",
+    "term": "cosine",
+    "aliases": [],
+    "kind": "math",
+    "plain": "For a point on the unit circle, the cosine of its angle is the point's horizontal coordinate.",
+    "math": "\\cos(\\theta)=x",
+    "learnMore": "modules/00-foundations/#concept-trigonometry",
+    "uses": ["unit-circle", "angle"]
+  },
+  {
+    "id": "angle",
+    "term": "angle",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A measure of rotation or the opening between two directions.",
+    "math": "\\theta",
+    "learnMore": "modules/00-foundations/#concept-trigonometry",
+    "uses": []
+  },
+  {
+    "id": "unit-circle",
+    "term": "unit circle",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A circle of radius one centered at the origin of a coordinate plane.",
+    "math": "x^2+y^2=1",
+    "learnMore": "modules/00-foundations/#concept-trigonometry",
+    "uses": []
+  },
+  {
+    "id": "radian",
+    "term": "radian",
+    "aliases": ["radians"],
+    "kind": "math",
+    "plain": "An angle unit based on how much arc length is swept out on a circle.",
+    "math": "\\theta=\\frac{s}{r}",
+    "learnMore": "modules/00-foundations/#concept-trigonometry",
+    "uses": ["angle"]
+  },
+  {
+    "id": "degree",
+    "term": "degree",
+    "aliases": ["degrees"],
+    "kind": "math",
+    "plain": "A unit for angles where one complete turn is divided into 360 equal parts.",
+    "math": "360^\\circ",
+    "learnMore": "modules/00-foundations/#concept-trigonometry",
+    "uses": ["angle"]
+  },
+  {
+    "id": "subscript",
+    "term": "subscript",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A small character written below a symbol to label it or distinguish it from related symbols.",
+    "math": "x_1",
+    "learnMore": "modules/00-foundations/#concept-notation",
+    "uses": []
+  },
+  {
+    "id": "superscript",
+    "term": "superscript",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A small character written above a symbol; it may indicate a power, but context matters.",
+    "math": "x^2",
+    "learnMore": "modules/00-foundations/#concept-notation",
+    "uses": []
+  },
+  {
+    "id": "vector",
+    "term": "vector",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A quantity with components; depending on context, it can represent direction and magnitude or simply an ordered list.",
+    "math": "\\mathbf{x}=(x_1,x_2)",
+    "learnMore": "modules/00-foundations/#concept-notation",
+    "uses": ["subscript"]
+  },
+  {
+    "id": "set-membership",
+    "term": "set membership",
+    "aliases": [],
+    "kind": "math",
+    "plain": "The relation that says an object belongs to a collection.",
+    "math": "x\\in S",
+    "learnMore": "modules/00-foundations/#concept-notation",
+    "uses": []
+  },
+  {
+    "id": "quantifier",
+    "term": "quantifier",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A symbol such as 'for every' or 'there exists' that tells how broadly a statement applies.",
+    "math": "\\forall x\\in S",
+    "learnMore": "modules/00-foundations/#concept-notation",
+    "uses": ["set-membership"]
+  },
+  {
+    "id": "probability",
+    "term": "probability",
+    "aliases": [],
+    "kind": "math",
+    "plain": "A number from zero to one used to describe uncertainty under a stated model.",
+    "math": "0\\leq p\\leq1",
+    "llm": "A language model represents a next-token distribution with probabilities over its vocabulary.",
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": []
+  },
+  {
+    "id": "vocabulary",
+    "term": "vocabulary",
+    "aliases": [],
+    "kind": "llm",
+    "plain": "The set of token IDs a particular language model can predict as its next output.",
+    "math": null,
+    "llm": "The next-token probabilities sum to one over the model's output vocabulary.",
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": []
+  },
+  {
+    "id": "context-window",
+    "term": "context window",
+    "aliases": [],
+    "kind": "llm",
+    "plain": "The limit on how much tokenized input and generated text a model can use in one context.",
+    "math": null,
+    "llm": "Prompt and generated tokens are subject to a model's context-window limit.",
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": []
+  },
+  {
+    "id": "neuron",
+    "term": "neuron",
+    "aliases": ["artificial neuron"],
+    "kind": "ml",
+    "plain": "A simplified computational unit that combines inputs using weights and a bias, then may apply an activation.",
+    "math": "\\mathbf{w}\\cdot\\mathbf{x}+b",
+    "llm": "A feed-forward network can be described as layers of learned transformations and nonlinear activations; a single weighted sum is only a simplified piece.",
+    "learnMore": "modules/00-foundations/#concept-slope",
+    "uses": ["vector", "weighted-sum", "bias", "weight", "activation", "feed-forward-network"]
+  },
+  {
+    "id": "weighted-sum",
+    "term": "weighted sum",
+    "aliases": [],
+    "kind": "ml",
+    "plain": "A sum in which each input is multiplied by its own weight before the results are added.",
+    "math": "\\sum_i w_i x_i",
+    "learnMore": "modules/00-foundations/#concept-sigma",
+    "uses": ["summation", "weight"]
+  },
+  {
+    "id": "bias",
+    "term": "bias",
+    "aliases": [],
+    "kind": "ml",
+    "plain": "A learned offset added to a weighted sum.",
+    "math": "z=\\sum_i w_i x_i+b",
+    "llm": "Some neural-network layers include a learned bias term; architectures may omit biases in particular layers.",
+    "learnMore": "modules/00-foundations/#concept-slope",
+    "uses": ["weighted-sum"]
+  },
+  {
+    "id": "log-probability",
+    "term": "log-probability",
+    "aliases": ["log probability", "log probabilities"],
+    "kind": "llm",
+    "plain": "The logarithm of a probability; it is often used because multiplying probabilities becomes adding their logarithms.",
+    "math": "\\log p",
+    "llm": "Language-model sequence scores and training objectives commonly use log probabilities.",
+    "learnMore": "modules/00-foundations/#concept-logarithms",
+    "uses": ["logarithm", "probability"]
+  },
+  {
+    "id": "cross-entropy",
+    "term": "cross-entropy",
+    "aliases": ["cross entropy"],
+    "kind": "ml",
+    "plain": "A measure of how well one probability distribution assigns probability to outcomes drawn from another distribution.",
+    "math": "H(p,q)=-\\sum_x p(x)\\log q(x)",
+    "llm": "Next-token prediction is commonly trained by minimizing cross-entropy, equivalently maximizing token likelihood under the usual setup.",
+    "learnMore": "modules/00-foundations/#concept-logarithms",
+    "uses": ["summation", "logarithm", "probability", "probability-distribution"]
+  },
+  {
+    "id": "bit",
+    "term": "bit",
+    "aliases": ["bits"],
+    "kind": "math",
+    "plain": "A unit of information corresponding to a choice between two equally likely possibilities.",
+    "math": "\\log_2(2)=1",
+    "llm": "Bits per token can describe average information or coding cost; the exact measure depends on the evaluation setup.",
+    "learnMore": "modules/00-foundations/#concept-logarithms",
+    "uses": ["logarithm"]
+  },
+  {
+    "id": "perplexity",
+    "term": "perplexity",
+    "aliases": [],
+    "kind": "llm",
+    "plain": "A language-model evaluation quantity obtained by exponentiating average cross-entropy in nats; lower values indicate better predictions on the evaluated data.",
+    "math": "\\operatorname{PPL}=e^{H}",
+    "llm": "Perplexity is defined from average token cross-entropy, but comparisons depend on tokenization and evaluation data.",
+    "learnMore": "modules/00-foundations/#concept-logarithms",
+    "uses": ["cross-entropy", "nat"]
+  },
+  {
+    "id": "weight",
+    "term": "weight",
+    "aliases": ["weights"],
+    "kind": "ml",
+    "plain": "A learned number that scales the contribution of an input in a calculation.",
+    "math": "w_i x_i",
+    "learnMore": "modules/00-foundations/#concept-variables",
+    "uses": []
+  },
+  {
+    "id": "neural-network",
+    "term": "neural network",
+    "aliases": [],
+    "kind": "ml",
+    "plain": "A model made from connected layers of computations whose weights are learned from data.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-variables",
+    "uses": ["function", "weight"]
+  },
+  {
+    "id": "feed-forward-network",
+    "term": "feed-forward network",
+    "aliases": ["feed-forward calculation"],
+    "kind": "ml",
+    "plain": "A neural-network component that applies successive transformations to its input, with data flowing in one direction through that component.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-variables",
+    "uses": ["neural-network"]
+  },
+  {
+    "id": "language-model",
+    "term": "language model",
+    "aliases": ["language models"],
+    "kind": "llm",
+    "plain": "A model that assigns probabilities to text sequences or predicts text units from context.",
+    "math": null,
+    "llm": "Autoregressive language models commonly predict a distribution over the next token given prior tokens.",
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": ["token", "probability"]
+  },
+  {
+    "id": "token",
+    "term": "token",
+    "aliases": ["tokens"],
+    "kind": "llm",
+    "plain": "A unit in a model's text representation; it may correspond to a word, part of a word, punctuation, or another piece.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": []
+  },
+  {
+    "id": "tokenization",
+    "term": "tokenization",
+    "aliases": ["tokenized"],
+    "kind": "llm",
+    "plain": "The process of converting text into the token units used by a model.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": ["token"]
+  },
+  {
+    "id": "probability-distribution",
+    "term": "probability distribution",
+    "aliases": ["next-token distribution", "distribution"],
+    "kind": "math",
+    "plain": "A rule assigning probabilities to possible outcomes, with the total probability equal to one.",
+    "math": "\\sum_x p(x)=1",
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": ["probability", "summation"]
+  },
+  {
+    "id": "softmax",
+    "term": "softmax",
+    "aliases": [],
+    "kind": "ml",
+    "plain": "A function that converts a finite list of scores into positive values that sum to one.",
+    "math": "\\operatorname{softmax}(z_i)=\\frac{e^{z_i}}{\\sum_j e^{z_j}}",
+    "learnMore": "modules/00-foundations/#concept-exponents",
+    "uses": ["function", "exponent", "summation", "probability"]
+  },
+  {
+    "id": "transformer",
+    "term": "transformer",
+    "aliases": ["Transformer"],
+    "kind": "ml",
+    "plain": "A neural-network architecture for sequences built from layers of learned transformations; many language models use this architecture.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-functions",
+    "uses": ["neural-network", "language-model"]
+  },
+  {
+    "id": "dot-product",
+    "term": "dot product",
+    "aliases": ["dot products"],
+    "kind": "math",
+    "plain": "A number found by multiplying corresponding vector components and adding those products; geometrically it also reflects alignment.",
+    "math": "\\mathbf{a}\\cdot\\mathbf{b}=\\sum_i a_i b_i",
+    "learnMore": "modules/00-foundations/#concept-trigonometry",
+    "uses": ["vector", "summation", "angle"]
+  },
+  {
+    "id": "positional-encoding",
+    "term": "positional encoding",
+    "aliases": ["positional encodings"],
+    "kind": "ml",
+    "plain": "A representation added or applied so a sequence model can use information about token positions.",
+    "math": null,
+    "llm": "The original Transformer paper introduced sinusoidal positional encodings as one option; later models use varied approaches.",
+    "learnMore": "modules/00-foundations/#concept-trigonometry",
+    "uses": ["sine", "cosine"]
+  },
+  {
+    "id": "activation",
+    "term": "activation",
+    "aliases": [],
+    "kind": "ml",
+    "plain": "A function applied to a computation in a neural network, often to provide a nonlinear transformation.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-variables",
+    "uses": ["function", "neural-network"]
+  },
+  {
+    "id": "loss",
+    "term": "loss",
+    "aliases": ["losses"],
+    "kind": "ml",
+    "plain": "A number measuring how poorly a model's predictions match a chosen target under a specified objective.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-sigma",
+    "uses": ["cross-entropy"]
+  },
+  {
+    "id": "nat",
+    "term": "nat",
+    "aliases": ["nats"],
+    "kind": "math",
+    "plain": "A unit of information associated with natural logarithms.",
+    "math": "\\ln(e)=1",
+    "learnMore": "modules/00-foundations/#concept-logarithms",
+    "uses": ["logarithm"]
+  },
+  {
+    "id": "decision-boundary",
+    "term": "decision boundary",
+    "aliases": [],
+    "kind": "ml",
+    "plain": "A boundary in an input space where a classifier changes its predicted category.",
+    "math": "\\mathbf{w}\\cdot\\mathbf{x}+b=0",
+    "learnMore": "modules/00-foundations/#concept-equations",
+    "uses": ["dot-product", "bias"]
+  },
+  {
+    "id": "embedding",
+    "term": "embedding",
+    "aliases": ["embeddings"],
+    "kind": "ml",
+    "plain": "A representation that maps an item, such as a token, to a vector of numbers.",
+    "math": "\\mathbf{x}\\in\\mathbb{R}^d",
+    "learnMore": "modules/00-foundations/#concept-notation",
+    "uses": ["vector", "token"]
+  },
+  {
+    "id": "machine-learning",
+    "term": "machine learning",
+    "aliases": [],
+    "kind": "ml",
+    "plain": "A field focused on methods that let computer systems learn patterns or useful behavior from data.",
+    "math": null,
+    "learnMore": "modules/00-foundations/#concept-variables",
+    "uses": []
+  }
+]
