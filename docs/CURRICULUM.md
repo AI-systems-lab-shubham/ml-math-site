@@ -26,14 +26,15 @@ _All ten cards built and verified. Claims are logged in `docs/CLAIMS.md`; items 
 - Reading mathematical notation: subscripts, hats, ∈, ∀, vectors in bold (C)
 
 ## [ ] Module 1: Linear algebra. MML Ch 2
+_Part 1 built (vectors, adding and scaling, matrices, matrix multiplication; page `modules/01-linear-algebra/`). Tick this module only when part 2 meets the definition of done. Part 1's matrix-multiplication card already links forward to the systems-of-equations idea as plain text and back to Module 0's x + y = 4; part 2 must link back too._
 - Vectors as arrows and as lists (F). *LLM:* an embedding is a vector (the original Transformer base model uses d_model = 512).
 - Vector addition, scaling, linear combinations (F)
 - Matrices as tables and as machines (F). *LLM:* weights are matrices.
 - Matrix-vector and matrix-matrix multiplication (F). *LLM:* most of a transformer's computation is matrix multiplication (Q, K, V projections, feed-forward layers); GPUs are built for it.
 - Transpose, identity, inverse (C)
-- Systems of linear equations (F), linking back to x + y = 4
+- Systems of linear equations (F), linking back to x + y = 4. **Add a real link to `modules/00-foundations/index.html#concept-equations` from this card.** Part 1 shows [1 1](x, y) = x + y as the first row.
 - Span, linear independence, basis, rank (C)
-- Linear transformations: rotate, scale, shear, project (F)
+- Linear transformations: rotate, scale, shear, project (F). Part 1 refers to this as plain text, “(explored fully in the next part)”. Turn those references into links when this card exists (matrices card, picture and Real life stages).
 
 ## [ ] Module 2: Analytic geometry. MML Ch 3
 - Norms: L1 and L2 (F). *LLM:* weight decay penalises the L2 norm.

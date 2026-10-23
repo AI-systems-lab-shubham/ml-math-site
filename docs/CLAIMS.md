@@ -1,6 +1,6 @@
 # Claims register
 
-One line per factual or numeric claim made on the site. **Test** means the number is computed by code in `assets/js/foundations-math.mjs` and covered by `tests/foundations-math.test.mjs`. **Source** means a publicly documented external fact. **Verify** marks a source I have cited from memory and could not re-check offline; confirm it before the site is published.
+One line per factual or numeric claim made on the site. **Test** means the number is computed by code in `assets/js/foundations-math.mjs` (Module 0) or `assets/js/linalg-math.mjs` (Module 1) and covered by `tests/foundations-math.test.mjs` or `tests/linalg-math.test.mjs`. **Source** means a publicly documented external fact. **Verify** marks a source I have cited from memory and could not re-check offline; confirm it before the site is published.
 
 Format: `page · claim · basis`
 
@@ -69,3 +69,37 @@ Format: `page · claim · basis`
 - Conventions for ŷ, bold vectors, ∈, ∀ · Convention; "books differ" is stated on the page.
 - LLM · papers use this notation · Conceptual link, stated as such.
 - LLM · positional-encoding wavelengths run geometrically from 2π (first pair) up to 10000·2π · Test: "position encoding: pair 0 is the fastest".
+
+## Module 1, part 1 (linear algebra: vectors to matrix multiplication)
+- Vectors · (3, 2, 7) has dimension 3 and v₃ = 7; entries count from 1 · Test: `dimension`, `entryOf`.
+- Vectors · "walk 3 east, 2 north" as the list (3, 2); the drone example (30, 40) · Illustrative scenario; no model claim.
+- Vectors · more than three entries cannot be drawn; addition, scaling and dot products work entry by entry in any dimension · Maths: definitions; `add` is tested for 2 and 3 entries, `scale` and `matVec` for 2 and 3, and `dotProduct` in Module 0. Stated in the page hero and the vectors card.
+- Vectors · an embedding is a vector, and the original Transformer base model uses 512 entries (d_model) · Source: Vaswani et al., 2017, §3.4 (learned embeddings of dimension d_model) and Table 3. Test: `transformerBase`. Verify.
+- Vectors · "cat" as (0.2, −1.1, 0.7, 0.4) · **Made-up illustration numbers, not model weights**; labelled as such on the page. Test: `illustrativeEmbedding` (shape only).
+- Vectors · learned embedding entries have no readable meaning on their own · Conceptual caution, stated as Simplified on the page.
+- Adding and scaling · 2a − b = (5, 0) for a = (2, 1), b = (−1, 2); tip-to-tail path (0, 0) → (4, 2) → (5, 0) · Test: `linearCombination`, `tipToTailPath`. The widget's largest reachable results stay inside the drawing (tested).
+- Adding and scaling · doing the same walk twice is (6, 4) = scaling (3, 2) by 2 · Test: "scale multiplies every entry" and the distributive test (the page quotes the arithmetic only).
+- Adding and scaling · two arrows at an angle give a total shorter than the sum of their lengths · Maths: triangle inequality, stated without numbers. Module 2 develops lengths.
+- Adding and scaling · the original Transformer adds a position vector to each token's embedding because both have dimension d_model · Source: Vaswani et al., 2017, §3.5. Verify.
+- Adding and scaling · each sub-layer's output is added to its input, then layer-normalised: LayerNorm(x + Sublayer(x)) · Source: Vaswani et al., 2017, §3.1. Verify.
+- Adding and scaling · illustration: (0.2, −1.1, 0.7, 0.4) + (0.1, 0.3, −0.2, 0) = (0.3, −0.8, 0.5, 0.4) · **Made-up illustration numbers**; the sum is computed by `add`.
+- Matrices · M = [[2, 1], [0, 3]], v = (3, 2): Mv = (8, 6) by rows (8, 6) and by columns 3·(2, 0) + 2·(1, 3) · Test: `matVec`, `matVecByColumns`, "worked example matrices".
+- Matrices · a 3×2 matrix [[1,0],[0,1],[1,1]] takes (3, 2) to (3, 2, 5) · Test: "matVec changes the number of entries".
+- Matrices · the columns of M are the images of (1, 0) and (0, 1); the widget default M = [[2, −1], [1, 1]] sends (1, 2) to (0, 3) · Test: "the columns of M are where the unit vectors go", "the matrix widget's default".
+- Matrices · a matrix machine obeys M(cv) = c·Mv and M(a + b) = Ma + Mb, so it cannot square or take a maximum · Test: "a matrix machine is linear". The "cannot square or maximum" line is a direct consequence, no numbers.
+- Matrices · the bakery table (flour and sugar per loaf and cake) · Illustrative scenario with no numbers on the page.
+- Matrices · each attention head's query, key and value projections map a 512-entry vector to a 64-entry one: 64×512 in the column convention, 32,768 entries · Source: Vaswani et al., 2017, §3.2.2 (d_k = d_v = d_model/h = 64 with h = 8) and Table 3. Test: `entryCount`, `transformerBase`. Verify.
+- Matrices · the feed-forward layer widens 512 to 2048 and back; each matrix has 1,048,576 entries · Source: Vaswani et al., 2017, §3.3 (d_ff = 2048). Test: `entryCount`. Verify.
+- Matrices · the paper writes row vectors times matrices (x W), so its matrices are the transposes of the column-convention ones here; the entry counts are equal · Source: Vaswani et al., 2017, §3.2.2 and §3.3 formulas. Verify.
+- Matrix multiplication · AB entries: [[1,2,3],[4,5,6]] times [[7,8],[9,10],[11,12]] is [[58,64],[139,154]]; entry (1, 2): 8 + 20 + 36 = 64; entry (2, 1): 28 + 45 + 66 = 139 · Test: `matMul`, `entryStep`.
+- Matrix multiplication · (m×n)(n×p) = m×p, with m·n·p multiplications; 12 for the 2×3 times 3×2 example · Test: `canMultiply`, `resultShape`, `multiplyCount`.
+- Matrix multiplication · swap matrix: PS swaps columns, SP swaps rows, and PS ≠ SP · Test: "AB is not BA".
+- Matrix multiplication · (AB)v = A(Bv) is what forces the row-by-column rule; entry-by-entry multiplication fails it (P·Q example gives (2, 4) vs (0, 3)) · Test: "applying B then A equals applying AB", "entrywise product … does not compose machines".
+- Matrix multiplication · the one-row matrix [1 1] times (1, 3) is 4, so (1, 3) solves x + y = 4 · Test: "the 1×2 matrix [1 1] times (x, y) is x + y". Links back to Module 0, Equations (`#concept-equations`).
+- Matrix multiplication · cost-by-shop example: with A (3×2, kg per dish) and B (2×3, price per kg), B·A is 2×2 and A·B is 3×3 · Test: "three-way pricing example" (shapes only on the page).
+- Matrix multiplication · a 2048×512 matrix times one 512-entry vector takes 1,048,576 multiplications · Test: `multiplyCountFromShapes`.
+- LLM · much of a transformer's computation is matrix multiplication (projections, feed-forward layers, attention scores); no percentage is claimed because it depends on model and sequence size · Source: Vaswani et al., 2017 §3.2–3.3 describe these operations; the "much of" is a general statement, not measured here. Verify.
+- LLM · GPUs suit matrix products because they do many independent multiplications and additions at once · General public knowledge, not tied to any company's systems. Verify if a citation is added.
+- LLM · "attention" is a calculation of dot products and weighted sums, not attention in the human sense · Glossary `looseUse`; Vaswani et al., 2017, §3.2.1.
+- LLM · real systems process many tokens at once, so the right-hand matrix has many columns · General description of batched computation; stated as a simplification.
+

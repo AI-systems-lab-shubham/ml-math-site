@@ -134,6 +134,9 @@ export function mountStepper(host, steps) {
     count.textContent = `Step ${i + 1} of ${steps.length}`;
     back.disabled = i === 0;
     next.disabled = i === steps.length - 1;
+    // A disabled button cannot keep keyboard focus, so hand it to the other one.
+    if (next.disabled && document.activeElement === next) back.focus();
+    if (back.disabled && document.activeElement === back) next.focus();
   };
   back.addEventListener("click", () => { i = Math.max(0, i - 1); show(); });
   next.addEventListener("click", () => { i = Math.min(steps.length - 1, i + 1); show(); });

@@ -231,3 +231,18 @@ a.module-item:hover { border-color: var(--burgundy); }
 .table-scroll table { border-collapse: collapse; min-width: 480px; width: 100%; }
 .table-scroll th, .table-scroll td { text-align: left; padding: var(--s2) var(--s3); border-bottom: 1px solid var(--rule); vertical-align: top; }
 .table-scroll th { font-weight: 600; }
+
+/* ---------- Module 1: number fields and button rows inside widgets ---------- */
+.field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--s3); }
+.field-grid .control label { font-weight: 500; font-size: .9375rem; }
+.field-grid input[type="number"] { width: 100%; }
+.control fieldset legend { padding: 0; margin-bottom: var(--s2); }
+.button-row { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.bridge { border-left: 4px solid var(--c-teal); background: #E1F0EE; padding: var(--s3) var(--s4); border-radius: 0 8px 8px 0; margin: 0 0 var(--s4); max-width: 68ch; }
+.bridge p:last-child { margin-bottom: 0; }
+.illustration { border: 1px dashed var(--line-strong); border-radius: 8px; padding: var(--s3) var(--s4); background: var(--bone); max-width: 68ch; margin-bottom: var(--s4); }
+.illustration p:last-child { margin-bottom: 0; }
+
+/* ---------- audit follow-ups (web interface guidelines) ---------- */
+h1, h2, h3, h4 { text-wrap: balance; }
+button, input, select, summary, .radio-row, .progress-checks label { touch-action: manipulation; }

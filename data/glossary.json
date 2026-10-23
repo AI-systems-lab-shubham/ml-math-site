@@ -322,7 +322,7 @@
       "plain": "An ordered list of numbers, such as (4, 7, 1), that can also be drawn as an arrow. In print it is often shown in bold.",
       "math": "\\mathbf{x} = (x_1, \\dots, x_n)",
       "llm": "A piece of text is represented inside a model as vectors of numbers.",
-      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/#concept-vectors", "uses": [], "looseUse": null
     },
     {
       "id": "hat", "term": "hat", "aliases": ["hats"], "kind": "math",
@@ -381,6 +381,133 @@
       "plain": "Numbers added to a token's vector to tell the model where in the sequence the token sits. The original Transformer built them from sines and cosines of different frequencies.",
       "llm": "Later models often use other schemes, so this is one design, not the only one.",
       "learnMore": "modules/00-foundations/#concept-trig", "uses": ["token","sine","cosine","vector"], "looseUse": null
+    },
+    {
+      "id": "scalar", "term": "scalar", "aliases": ["scalars"], "kind": "math",
+      "plain": "An ordinary single number (a real number), used to stretch or shrink a vector. The word tells a lone number apart from a list of numbers.",
+      "math": "c \\in \\mathbb{R}",
+      "learnMore": "modules/01-linear-algebra/#concept-combine", "uses": ["vector","real-numbers"], "looseUse": null
+    },
+    {
+      "id": "component", "term": "component", "aliases": ["components","entry","entries"], "kind": "math",
+      "plain": "One number in a vector's list, picked out by its position with a subscript: v₂ is the second component. In (3, 2) the first component is 3 and the second is 2.",
+      "math": "v_i",
+      "learnMore": "modules/01-linear-algebra/#concept-vectors", "uses": ["vector","subscript"], "looseUse": null
+    },
+    {
+      "id": "dimension", "term": "dimension", "aliases": ["dimensions","dimensional"], "kind": "math",
+      "plain": "How many numbers a vector holds. (3, 2) has dimension 2 and (3, 2, 7) has dimension 3. It is the number of independent directions the vector can point in.",
+      "math": "\\mathbf{v}\\in\\mathbb{R}^{n}",
+      "llm": "The base Transformer model's token vectors have 512 entries (Vaswani et al., 2017).",
+      "learnMore": "modules/01-linear-algebra/#concept-vectors", "uses": ["vector"], "looseUse": null
+    },
+    {
+      "id": "origin", "term": "origin", "aliases": [], "kind": "math",
+      "plain": "The starting point (0, 0) of a coordinate picture, where the axes cross. An arrow for a vector begins here.",
+      "math": "(0,0)",
+      "learnMore": "modules/01-linear-algebra/#concept-vectors", "uses": ["coordinate"], "looseUse": null
+    },
+    {
+      "id": "unit-vector", "term": "unit arrow", "aliases": ["unit arrows","unit vector","unit vectors"], "kind": "math",
+      "plain": "An arrow of length 1 along one axis, such as (1, 0) across or (0, 1) up. Every vector in the plane can be built from the two of them.",
+      "math": "\\mathbf{e}_1=(1,0),\\ \\mathbf{e}_2=(0,1)",
+      "learnMore": "modules/01-linear-algebra/#concept-matrices", "uses": ["vector"], "looseUse": null
+    },
+    {
+      "id": "vector-addition", "term": "vector addition", "aliases": ["adding vectors","add vectors"], "kind": "math",
+      "plain": "Add two vectors entry by entry. As arrows: draw the second arrow starting where the first one ends, and the sum goes from the very start to the very end.",
+      "math": "(\\mathbf{a}+\\mathbf{b})_i=a_i+b_i",
+      "llm": "A transformer layer's output is added to its input vector (Vaswani et al., 2017).",
+      "learnMore": "modules/01-linear-algebra/#concept-combine", "uses": ["vector","component"], "looseUse": null
+    },
+    {
+      "id": "scaling", "term": "scaling", "aliases": ["scale a vector","scaled"], "kind": "math",
+      "plain": "Multiply every entry of a vector by the same number (a scalar). The arrow keeps its line and stretches, shrinks, or flips round if the number is negative.",
+      "math": "(c\\,\\mathbf{v})_i=c\\,v_i",
+      "learnMore": "modules/01-linear-algebra/#concept-combine", "uses": ["vector","scalar","component"], "looseUse": null
+    },
+    {
+      "id": "linear-combination", "term": "linear combination", "aliases": ["linear combinations"], "kind": "math",
+      "plain": "A recipe that combines scaling and vector addition, such as 2a − b: scale some vectors, then add them. The result is another vector of the same dimension.",
+      "math": "c_1\\mathbf{v}_1+c_2\\mathbf{v}_2+\\cdots+c_k\\mathbf{v}_k",
+      "learnMore": "modules/01-linear-algebra/#concept-combine", "uses": ["vector-addition","scaling","dimension"], "looseUse": null
+    },
+    {
+      "id": "matrix", "term": "matrix", "aliases": ["matrices"], "kind": "math",
+      "plain": "A rectangular table of numbers in rows and columns. It can be read as a table of data, or as a machine that turns one vector into another.",
+      "math": "A\\in\\mathbb{R}^{m\\times n}",
+      "llm": "A model's learned weights are stored as matrices.",
+      "learnMore": "modules/01-linear-algebra/#concept-matrices", "uses": ["row","column"], "looseUse": null
+    },
+    {
+      "id": "row", "term": "row", "aliases": ["rows"], "kind": "math",
+      "plain": "One horizontal line of numbers in a table of numbers, read left to right.",
+      "math": "A_{i,:}",
+      "learnMore": "modules/01-linear-algebra/#concept-matrices", "uses": [], "looseUse": null
+    },
+    {
+      "id": "column", "term": "column", "aliases": ["columns"], "kind": "math",
+      "plain": "One vertical line of numbers in a table of numbers, read top to bottom. A column can be read as a vector, which is to say an arrow.",
+      "math": "A_{:,j}",
+      "learnMore": "modules/01-linear-algebra/#concept-matrices", "uses": ["vector"], "looseUse": null
+    },
+    {
+      "id": "shape", "term": "shape", "aliases": ["shapes","size of a matrix"], "kind": "math",
+      "plain": "The number of rows by the number of columns of a matrix, written rows × columns. A 2×3 matrix has 2 rows and 3 columns.",
+      "math": "m\\times n",
+      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["matrix","row","column"], "looseUse": null
+    },
+    {
+      "id": "matrix-vector-product", "term": "matrix-vector product", "aliases": ["matrix times a vector","matrix-vector multiplication"], "kind": "math",
+      "plain": "Feed a vector into a matrix and get a new vector out. Each output entry is the dot product of one row of the matrix with the input vector.",
+      "math": "(A\\mathbf{v})_i=\\sum_j A_{ij}v_j",
+      "llm": "A layer of a neural network multiplies its input vector by a weight matrix.",
+      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["matrix","vector","row","dot-product"], "looseUse": null
+    },
+    {
+      "id": "matrix-multiplication", "term": "matrix multiplication", "aliases": ["matrix product","matrix products","matrix-matrix multiplication"], "kind": "math",
+      "plain": "Combine two matrices into one. Each entry of the result is the dot product of a row of the left matrix with a column of the right matrix, so the shapes must fit: the left matrix needs as many columns as the right one has rows.",
+      "math": "(AB)_{ij}=\\sum_k A_{ik}B_{kj}",
+      "llm": "Most of the arithmetic in a transformer's layers is matrix multiplication, which is why hardware for it matters.",
+      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["matrix","row","column","dot-product","shape"], "looseUse": null
+    },
+    {
+      "id": "embedding", "term": "embedding", "aliases": ["embeddings"], "kind": "llm",
+      "plain": "A vector of numbers, with a fixed dimension, that a model uses to stand for a token. The numbers are learned during training. Each entry has no meaning you can read off alone.",
+      "math": "\\mathbf{e}\\in\\mathbb{R}^{d_{\\text{model}}}",
+      "llm": "In the original Transformer base model each token is represented by a 512-entry vector (Vaswani et al., 2017).",
+      "learnMore": "modules/01-linear-algebra/#concept-vectors", "uses": ["vector","token","dimension"], "looseUse": null
+    },
+    {
+      "id": "layer", "term": "layer", "aliases": ["layers"], "kind": "ml",
+      "plain": "One stage of a neural network: it takes a vector in and gives a vector out. A model is a stack of layers, each feeding the next.",
+      "llm": "A transformer is built from a stack of identical layers (Vaswani et al., 2017).",
+      "learnMore": "modules/01-linear-algebra/#concept-matrices", "uses": ["vector"], "looseUse": null
+    },
+    {
+      "id": "learned-projection", "term": "learned projection", "aliases": ["learned projections","linear projection"], "kind": "ml",
+      "plain": "A matrix of learned weights, used to turn one vector into another vector. Here 'projection' means a learned matrix map, not the shadow-style projection of Module 2.",
+      "math": "\\mathbf{q}=W^{Q}\\mathbf{x}",
+      "llm": "Attention builds its query, key and value vectors by multiplying by learned matrices (Vaswani et al., 2017).",
+      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["matrix","vector","weight"], "looseUse": null
+    },
+    {
+      "id": "feed-forward-layer", "term": "feed-forward layer", "aliases": ["feed-forward layers","feed-forward network"], "kind": "ml",
+      "plain": "A layer that multiplies a vector by one weight matrix, applies a simple non-linear step, then multiplies by a second weight matrix.",
+      "llm": "Each layer of the original Transformer contains one, applied to every token's vector separately (Vaswani et al., 2017).",
+      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["layer","matrix","vector","weight"], "looseUse": null
+    },
+    {
+      "id": "attention", "term": "attention", "aliases": [], "kind": "llm",
+      "plain": "A step where each token's vector is updated using the other tokens' vectors, weighted by how relevant a score says they are.",
+      "llm": "Scaled dot-product attention (Vaswani et al., 2017) compares query vectors with key vectors using dot products.",
+      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["token","vector","dot-product"], "looseUse": "The word 'attention' names a calculation made of dot products and weighted sums. It does not mean the model attends in the human sense."
+    },
+    {
+      "id": "gpu", "term": "GPU", "aliases": ["GPUs","graphics processor"], "kind": "ml",
+      "plain": "A chip with thousands of small calculators that work at the same time. It was built for graphics and is also good at the many multiplications and additions inside matrix products.",
+      "llm": "Large models are commonly trained and run on GPUs and similar accelerators.",
+      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["matrix-multiplication"], "looseUse": null
     }
   ],
   "symbols": {
@@ -401,6 +528,16 @@
     "cos": { "meaning": "Cosine of the angle: the horizontal position on the unit circle.", "color": "blue" },
     "sin": { "meaning": "Sine of the angle: the vertical position on the unit circle.", "color": "teal" },
     "yhat": { "meaning": "The predicted value of y; the hat marks an estimate.", "color": "burgundy" },
-    "w": { "meaning": "A weight: how strongly the input counts.", "color": "teal" }
+    "w": { "meaning": "A weight: how strongly the input counts.", "color": "teal" },
+    "vecv": { "meaning": "A vector: a list of numbers, drawn as an arrow from the origin.", "color": "burgundy" },
+    "veca": { "meaning": "The first arrow, a.", "color": "teal" },
+    "vecb": { "meaning": "The second arrow, b.", "color": "blue" },
+    "scalarc": { "meaning": "A scalar: an ordinary number that scales a vector.", "color": "ochre" },
+    "matM": { "meaning": "A matrix: a table of numbers that turns an input vector into an output vector.", "color": "navy" },
+    "matA": { "meaning": "The left matrix in a product.", "color": "navy" },
+    "matB": { "meaning": "The right matrix in a product.", "color": "teal" },
+    "rowsm": { "meaning": "The number of rows of the left matrix.", "color": "blue" },
+    "innern": { "meaning": "The number of columns of A, which must equal the number of rows of B.", "color": "burgundy" },
+    "colsp": { "meaning": "The number of columns of the right matrix.", "color": "ochre" }
   }
 }
