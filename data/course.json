@@ -1,0 +1,85 @@
+{
+  "title": "The maths behind machine learning",
+  "promise": "Learn it alone, then explain it to someone else.",
+  "modules": [
+    {
+      "id": "m00", "title": "Foundations", "path": "modules/00-foundations/", "status": "built",
+      "summary": "The high-school maths everything else rests on, taught from pictures first.",
+      "minutes": 107, "prerequisites": [],
+      "outcomes": [
+        "Read and rearrange simple equations, and explain why one equation with two unknowns has many solutions",
+        "Explain what a logarithm counts and why it squeezes huge ranges",
+        "Read Σ notation and the common symbols used in machine-learning papers"
+      ],
+      "concepts": [
+        { "id": "m00-variables", "title": "Variables and expressions", "anchor": "concept-variables", "size": "compact", "minutes": 8, "status": "built",
+          "objectives": ["Explain a variable as a labelled box that holds a number", "Evaluate a simple expression for a given value"],
+          "takeaways": ["A letter stands for a number that can change or is not yet known.", "An expression is a recipe that turns the numbers in the boxes into a new number.", "Naming things lets us state a rule once and use it for every value."] },
+        { "id": "m00-equations", "title": "Equations", "anchor": "concept-equations", "size": "full", "minutes": 15, "status": "built",
+          "objectives": ["Explain an equation as a rule linking quantities, not an instruction", "Describe why one equation with two unknowns gives a line of solutions", "Solve two equations for two unknowns"],
+          "takeaways": ["An equation states that two things are equal; it is a rule, not a command.", "One equation with two unknowns leaves a whole line of answers.", "A second independent equation usually pins the answer down to one point."] },
+        { "id": "m00-functions", "title": "Functions and graphs", "anchor": "concept-functions", "size": "full", "minutes": 12, "status": "built",
+          "objectives": ["Describe a function as a machine with one output per input", "Read a value from a graph"],
+          "takeaways": ["A function turns each input into exactly one output.", "A graph draws every input-output pair at once.", "Reading a graph is how you see what a function does."] },
+        { "id": "m00-slope", "title": "Slope and linear functions", "anchor": "concept-slope", "size": "full", "minutes": 12, "status": "built",
+          "objectives": ["Compute the slope between two points", "Explain what m and b mean in y = mx + b"],
+          "takeaways": ["Slope is how much the output changes for one step in the input.", "In y = mx + b, m is the slope and b is the starting value.", "A neuron's weighted sum plus a bias has this same shape."] },
+        { "id": "m00-exponents", "title": "Exponents, growth and decay", "anchor": "concept-exponents", "size": "full", "minutes": 12, "status": "built",
+          "objectives": ["Explain an exponent as repeated multiplication", "Tell growth from decay by the size of the base"],
+          "takeaways": ["An exponent counts how many times to multiply by the base.", "A base above one grows; a base between zero and one decays.", "Repeated multiplication gets large or small much faster than repeated addition."] },
+        { "id": "m00-logarithms", "title": "Logarithms", "anchor": "concept-logarithms", "size": "full", "minutes": 14, "status": "built",
+          "objectives": ["Explain a logarithm as a count of multiplication steps", "Use log(ab) = log a + log b", "Name two everyday scales that are logarithmic"],
+          "takeaways": ["A logarithm counts how many times you multiply by the base to reach a number.", "It turns multiplication into addition.", "It squeezes huge ranges into manageable ones."] },
+        { "id": "m00-sigma", "title": "Σ notation", "anchor": "concept-sigma", "size": "full", "minutes": 10, "status": "built",
+          "objectives": ["Expand a Σ sum into its terms", "Write a short sum using Σ"],
+          "takeaways": ["Σ means add up a list of terms.", "The small marks below and above say where the list starts and stops.", "Dot products and loss totals are sums written this way."] },
+        { "id": "m00-ratios", "title": "Ratios, percentages and averages", "anchor": "concept-ratios", "size": "compact", "minutes": 8, "status": "built",
+          "objectives": ["Convert between a ratio, a fraction and a percentage", "Compute a mean"],
+          "takeaways": ["A ratio compares two amounts by division.", "A percentage is a ratio out of one hundred.", "A mean is the total shared out equally."] },
+        { "id": "m00-trig", "title": "Sine and cosine", "anchor": "concept-trig", "size": "compact", "minutes": 8, "status": "built",
+          "objectives": ["Describe sine and cosine as the two coordinates of a point on a circle", "Say which one is the horizontal part"],
+          "takeaways": ["Cosine and sine are the horizontal and vertical positions of a point going round a circle.", "They repeat as the angle keeps turning.", "Cosine of the angle between two arrows will reappear in the dot product."] },
+        { "id": "m00-notation", "title": "Reading mathematical notation", "anchor": "concept-notation", "size": "compact", "minutes": 8, "status": "built",
+          "objectives": ["Read subscripts, hats and the symbols ∈ and ∀", "Recognise a bold letter as a vector"],
+          "takeaways": ["Notation is shorthand; each mark has a plain-language reading.", "Subscripts pick one item from a list.", "Bold letters usually mean a vector."] }
+      ]
+    },
+    {
+      "id": "m01", "title": "Linear algebra", "path": "modules/01-linear-algebra/", "status": "built",
+      "summary": "Vectors, matrices and what they do to space. Part 1 is built; part 2 is on its way.",
+      "minutes": 58, "prerequisites": ["m00"],
+      "outcomes": [
+        "Multiply a matrix by a vector and explain what it does to space",
+        "Describe a vector both as an arrow and as a list of numbers",
+        "Build new vectors from linear combinations of old ones"
+      ],
+      "concepts": [
+        { "id": "m01-vectors", "title": "Vectors: arrows and lists", "anchor": "concept-vectors", "size": "full", "minutes": 14, "status": "built",
+          "objectives": ["Describe a vector as an arrow and as a list"], "takeaways": [] },
+        { "id": "m01-combine", "title": "Adding, scaling and combining vectors", "anchor": "concept-combine", "size": "full", "minutes": 14, "status": "built",
+          "objectives": ["Add and scale vectors"], "takeaways": [] },
+        { "id": "m01-matrices", "title": "Matrices: tables and machines", "anchor": "concept-matrices", "size": "full", "minutes": 14, "status": "built",
+          "objectives": ["Read a matrix as a table and as a machine"], "takeaways": [] },
+        { "id": "m01-matmul", "title": "Matrix-vector and matrix-matrix multiplication", "anchor": "concept-matmul", "size": "full", "minutes": 16, "status": "built",
+          "objectives": ["Multiply a matrix by a vector"], "takeaways": [] },
+        { "id": "m01-transpose", "title": "Transpose, identity, inverse", "anchor": "concept-transpose", "size": "compact", "minutes": 10, "status": "planned",
+          "objectives": [], "takeaways": [] },
+        { "id": "m01-systems", "title": "Systems of linear equations", "anchor": "concept-systems", "size": "full", "minutes": 14, "status": "planned",
+          "objectives": [], "takeaways": [] },
+        { "id": "m01-span", "title": "Span, linear independence, basis, rank", "anchor": "concept-span", "size": "compact", "minutes": 10, "status": "planned",
+          "objectives": [], "takeaways": [] },
+        { "id": "m01-transformations", "title": "Linear transformations: rotate, scale, shear, project", "anchor": "concept-transformations", "size": "full", "minutes": 14, "status": "planned",
+          "objectives": [], "takeaways": [] }
+      ]
+    },
+    { "id": "m02", "title": "Analytic geometry", "path": "modules/02-analytic-geometry/", "status": "planned", "summary": "Norms, distance, the dot product, angles and projections.", "minutes": 0, "prerequisites": ["m01"], "outcomes": [], "concepts": [] },
+    { "id": "m03", "title": "Matrix decompositions", "path": "modules/03-matrix-decompositions/", "status": "planned", "summary": "Determinants, eigenvectors, SVD and low-rank approximation.", "minutes": 0, "prerequisites": ["m01", "m02"], "outcomes": [], "concepts": [] },
+    { "id": "m04", "title": "Vector calculus", "path": "modules/04-vector-calculus/", "status": "planned", "summary": "Derivatives, gradients, the chain rule and backpropagation.", "minutes": 0, "prerequisites": ["m00", "m01"], "outcomes": [], "concepts": [] },
+    { "id": "m05", "title": "Probability and distributions", "path": "modules/05-probability/", "status": "planned", "summary": "Probability rules, Bayes' theorem, random variables and common distributions.", "minutes": 0, "prerequisites": ["m00"], "outcomes": [], "concepts": [] },
+    { "id": "m06", "title": "Continuous optimisation", "path": "modules/06-optimisation/", "status": "planned", "summary": "Gradient descent, learning rate, momentum and Adam.", "minutes": 0, "prerequisites": ["m04"], "outcomes": [], "concepts": [] },
+    { "id": "m07", "title": "Information theory", "path": "modules/07-information-theory/", "status": "planned", "summary": "Surprise, entropy, cross-entropy and KL divergence.", "minutes": 0, "prerequisites": ["m05"], "outcomes": [], "concepts": [] },
+    { "id": "m08", "title": "When models meet data", "path": "modules/08-models-meet-data/", "status": "planned", "summary": "Loss, maximum likelihood, overfitting and validation.", "minutes": 0, "prerequisites": ["m05", "m06", "m07"], "outcomes": [], "concepts": [] },
+    { "id": "m09", "title": "Models", "path": "modules/09-models/", "status": "planned", "summary": "Linear regression, PCA, mixtures and classifiers.", "minutes": 0, "prerequisites": ["m08"], "outcomes": [], "concepts": [] },
+    { "id": "m10", "title": "Capstone: a tiny language model", "path": "modules/10-capstone/", "status": "planned", "summary": "Neurons, backpropagation, attention and a tiny next-token predictor.", "minutes": 0, "prerequisites": ["m09"], "outcomes": [], "concepts": [] }
+  ]
+}
