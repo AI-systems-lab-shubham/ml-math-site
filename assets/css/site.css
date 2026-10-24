@@ -1,11 +1,11 @@
 /* ML Math Site: tokens and components follow DESIGN.md */
 
-@font-face { font-family: "Fraunces"; src: url("../../vendor/fonts/Fraunces-SemiBold.ttf") format("truetype"); font-weight: 600; font-display: swap; }
-@font-face { font-family: "Inter"; src: url("../../vendor/fonts/Inter-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "Inter"; src: url("../../vendor/fonts/Inter-Medium.ttf") format("truetype"); font-weight: 500; font-display: swap; }
-@font-face { font-family: "Inter"; src: url("../../vendor/fonts/Inter-SemiBold.ttf") format("truetype"); font-weight: 600; font-display: swap; }
-@font-face { font-family: "JetBrains Mono"; src: url("../../vendor/fonts/JetBrainsMono-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "JetBrains Mono"; src: url("../../vendor/fonts/JetBrainsMono-Medium.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Fraunces"; src: url("../../vendor/fonts/Fraunces-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("../../vendor/fonts/Inter-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("../../vendor/fonts/Inter-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("../../vendor/fonts/Inter-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("../../vendor/fonts/JetBrainsMono-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("../../vendor/fonts/JetBrainsMono-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
 
 :root {
   --bone: #F6F1E7; --paper: #FBF8F1; --navy: #14213D; --burgundy: #7A1F3D;

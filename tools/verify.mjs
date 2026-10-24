@@ -12,6 +12,7 @@ const STEPS = [
   { name: "unit", cmd: ["node", "--test", ...readdirSync(join(root, "tests")).filter((f) => f.endsWith(".test.mjs")).map((f) => `tests/${f}`)] },
   { name: "course", cmd: ["node", "tools/check-course.mjs"] },
   { name: "glossary", cmd: ["node", "tools/check-glossary.mjs"] },
+  { name: "fonts", cmd: ["node", "tools/check-fonts.mjs"] },
   { name: "claims", cmd: ["node", "tools/check-claims.mjs"] },
   { name: "e2e-nav", cmd: ["node", "tests/e2e/nav-reachable.mjs"], browser: true },
   { name: "e2e-symbols", cmd: ["node", "tests/e2e/symbols.mjs"], browser: true },
