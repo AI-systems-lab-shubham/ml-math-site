@@ -15,6 +15,7 @@
   <link rel="preload" href="../../vendor/fonts/Inter-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="../../vendor/katex/katex.min.css">
   <link rel="stylesheet" href="../../assets/css/site.css">
+  <link rel="stylesheet" href="../../assets/css/widget-reserve.css">
   <noscript><style>[data-nav-toggle], [data-highlight-toggle] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
   <script src="../../assets/js/rail-init.js"></script>
   <script src="../../vendor/katex/katex.min.js"></script>
@@ -55,7 +56,7 @@
   </ol>
 </nav>
 
-<main id="main" style="--widget-chrome: 337px; --widget-chrome-narrow: 484px">
+<main id="main">
   <div class="column page-hero">
     <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
       <li><a href="../../index.html">Course</a></li>
@@ -100,7 +101,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>Change the entries, or drag the tip of the arrow. The blue dots show how far across, the teal dots how far up. Then switch to 3 or 5 entries and see what stays and what has to go.</p>
-      <div data-widget="vectors"></div>
+      <div data-widget="vectors">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">One vector, two pictures</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">With two entries, a flat grid shows an arrow from the origin to the point given by the entries. With more entries, a row of labelled boxes shows the list. The values are repeated in the text below the drawing.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">
@@ -199,7 +206,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>The dashed arrows are a (teal) and b (blue). Choose c₁ and c₂. The thick teal arrow is c₁a, the thick blue arrow starts at its tip, and the burgundy arrow from the origin to the very end is the sum. Use the “Build it up” choice to see one piece at a time.</p>
-      <div data-widget="combine"></div>
+      <div data-widget="combine">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Scale two arrows, then add them tip to tail</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Two fixed arrows, a and b, drawn from the origin. Each is multiplied by a number the learner chooses. The scaled a is drawn from the origin, the scaled b starts at its tip, and a third arrow from the origin to the end is their sum.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">
@@ -311,7 +324,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>Edit the six numbers. The dashed arrows are the two columns of M. The thick teal arrow is v₁ times column 1, the thick blue arrow starts at its tip and is v₂ times column 2, and the burgundy arrow is the output Mv. Change a matrix entry and watch the column arrows, and Mv, move together.</p>
-      <div data-widget="matrix"></div>
+      <div data-widget="matrix">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">A matrix as a machine: its columns are where the unit arrows land</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A two-by-two table of numbers. Its first column is drawn as an arrow in teal, its second column in blue. The input vector v scales each column arrow, the scaled arrows are placed tip to tail, and the burgundy arrow from the origin to the end is the output, Mv.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
       <p class="muted">What a matrix does to the whole plane at once (rotating, stretching, shearing) is explored fully in the next part.</p>
     </section>
 
@@ -425,7 +444,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>Pick an example, then step through the output entries. The outlined row of the left matrix and the outlined column of the right matrix pair up to fill one cell of the answer (burgundy). Try the two swap examples: the same two matrices in the opposite order give different answers. Try “shapes that do not fit” too.</p>
-      <div data-widget="multiply"></div>
+      <div data-widget="multiply">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Multiply, one output entry at a time</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Two tables of numbers side by side with their product on the right. For the chosen output entry, the matching row of the left table and column of the right table are outlined, and the output entry is filled in from their dot product. The working is repeated in the text below.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">

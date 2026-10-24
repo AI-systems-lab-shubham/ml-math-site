@@ -5,7 +5,7 @@ import {
   multiplyCountFromShapes, entrywiseProduct, transformerBase, illustrativeEmbedding,
 } from "./linalg-math.mjs";
 import {
-  svg, html, slider, radios, widgetShell, fmt, nextId, mountStepper, mountPredict, mountSpotIt, mountExplain,
+  svg, html, slider, radios, widgetShell, fmt, nextId, mountStepper, mountWhenNeeded, mountPredict, mountSpotIt, mountExplain,
 } from "./widgets.mjs";
 import { renderMath } from "./math-render.mjs";
 import { initGlossary } from "./glossary.mjs";
@@ -537,7 +537,7 @@ const texCalcs = {
 const widgetMounts = { vectors: vectorsWidget, combine: combineWidget, matrix: matrixWidget, multiply: multiplyWidget };
 
 async function boot() {
-  document.querySelectorAll("[data-widget]").forEach((h) => widgetMounts[h.dataset.widget]?.(h));
+  document.querySelectorAll("[data-widget]").forEach((h) => mountWhenNeeded(h, widgetMounts[h.dataset.widget]));
   document.querySelectorAll("[data-stepper]").forEach((h) => mountStepper(h, stepperData[h.dataset.stepper]()));
   document.querySelectorAll("[data-predict]").forEach((h) => mountPredict(h, predictions[h.dataset.predict]));
   document.querySelectorAll(".spot-it").forEach(mountSpotIt);

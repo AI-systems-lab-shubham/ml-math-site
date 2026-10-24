@@ -96,6 +96,13 @@ Injected by `assets/js/shell.mjs` from `course.json` so there is no duplicated m
 - Report each page's HTML and JS size and flag anything unusually large. Run Lighthouse only if it can be run locally; ask before installing anything.
 - Tests: progress store, `check-course`, search index, plus the existing math and glossary tests.
 
+## 11a. Lazy widgets (added in polish session P2)
+Every interactive widget mounts through one function, `mountWhenNeeded(el, mountFn)` in `assets/js/widgets.mjs`. **Session B (four-state progress) and every later module must use it; never call a widget's mount function directly.**
+- `mountFn(el)` runs once, when `el` nears the viewport, when focus moves (the next and previous unmounted widget mount, so Tab never skips one), when the URL hash or a click on an in-page link names `el`, an ancestor or a descendant (mounted before the browser scrolls), on `beforeprint` and in print media, and when the placeholder is clicked. Calling it again for the same element does nothing.
+- The host in the HTML is `<div data-widget="name">` and holds a static placeholder: the title and description as visible text (so find-in-page works), no focusable children, and a reserved height. `node tools/measure-widgets.mjs --write` mounts the real widget at every width, then writes the placeholder into the page and `assets/css/widget-reserve.css`. Run it after adding or changing any widget; `tests/e2e/widgets-lazy.mjs` fails on a stale placeholder or a layout shift.
+- Steppers, predict, spot-it and explain-it blocks are cheap and stay eager.
+- Anything Session B adds that is not part of a widget's own markup (progress controls, state icons) must not sit inside a pending placeholder.
+
 ## 12. Session plan
 - **Session A:** `course.json`, progress store and tests, shell (header, outline, footer), lesson template, course home. Retrofit Module 0 only, as the proof.
 - **Session B:** retrofit Module 1; add accordions, on-this-page, Mark complete, Resume, Previous/Next.

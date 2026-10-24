@@ -71,6 +71,107 @@ export function widgetShell({ title, description, viewBox = "0 0 640 400" }) {
   return { root, canvas, controls, readout, figure };
 }
 
+/* ---------- lazy mounting ----------
+ * One API for every heavy widget: mountWhenNeeded(el, mountFn). `el` holds a static placeholder
+ * (title and description as plain text, nothing focusable, a reserved height). mountFn(el) runs
+ * once, when any of these happens:
+ *   - el comes within NEAR_VIEWPORT of the viewport (IntersectionObserver);
+ *   - focus moves anywhere: the next unmounted widget after the focused element, and the one
+ *     before it, mount at once, so Tab and Shift+Tab never skip a widget;
+ *   - the URL hash (on load, hashchange, or a click on a link to this page) names el, an
+ *     ancestor of el, or something inside el; mounting happens before the browser scrolls;
+ *   - the page is about to print, or print media is active;
+ *   - the placeholder is clicked or tapped.
+ * Calling it again for the same element does nothing. Session B (four-state progress) and any
+ * later module must mount widgets through this function, never directly.
+ */
+const NEAR_VIEWPORT = "600px 0px";
+const lazy = new Map(); // host element -> { mountFn, done }
+let lazyObserver = null;
+let lazyReady = false;
+
+function mountNow(el) {
+  const entry = lazy.get(el);
+  if (!entry || entry.done) return;
+  entry.done = true;
+  lazyObserver?.unobserve(el);
+  const placeholder = [...el.childNodes];
+  el.replaceChildren();
+  try {
+    entry.mountFn(el);
+    el.dataset.lazy = "mounted";
+  } catch (err) {
+    console.error("widget failed to mount", err);
+    el.replaceChildren(...placeholder); // keep the title and description readable
+    el.dataset.lazy = "failed";
+  }
+}
+
+export const mountAllLazy = () => [...lazy.keys()].forEach(mountNow);
+
+const byId = (hash) => {
+  if (!hash || hash.length < 2) return null;
+  try { return document.getElementById(decodeURIComponent(hash.slice(1))); } catch { return null; }
+};
+
+/** Mount every lazy widget that is, contains, or sits inside the element a hash names. */
+export function mountForHash(hash) {
+  const target = byId(hash);
+  if (!target) return false;
+  for (const el of lazy.keys()) if (el === target || el.contains(target) || target.contains(el)) mountNow(el);
+  return true;
+}
+
+function initLazy() {
+  if (lazyReady) return;
+  lazyReady = true;
+  if (typeof IntersectionObserver !== "undefined") {
+    lazyObserver = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) mountNow(e.target);
+    }, { rootMargin: NEAR_VIEWPORT });
+  }
+  document.addEventListener("focusin", (e) => {
+    const t = e.target;
+    let before = null;
+    let after = null;
+    for (const el of lazy.keys()) {
+      if (lazy.get(el).done) continue;
+      if (el.contains(t)) { mountNow(el); continue; }
+      const pos = t.compareDocumentPosition(el);
+      if (pos & Node.DOCUMENT_POSITION_FOLLOWING) { if (!after || (after.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_PRECEDING)) after = el; }
+      else if (pos & Node.DOCUMENT_POSITION_PRECEDING) { if (!before || (before.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)) before = el; }
+    }
+    if (after) mountNow(after);
+    if (before) mountNow(before);
+  });
+  document.addEventListener("click", (e) => {
+    const host = e.target.closest?.("[data-lazy=pending]");
+    if (host && lazy.has(host)) mountNow(host);
+    const a = e.target.closest?.("a[href]");
+    if (!a || !a.hash || a.target) return;
+    const here = new URL(location.href);
+    const there = new URL(a.href, document.baseURI);
+    if (there.origin === here.origin && there.pathname === here.pathname && there.search === here.search) mountForHash(a.hash);
+  }, true);
+  const afterHash = () => { if (mountForHash(location.hash)) byId(location.hash)?.scrollIntoView(); };
+  window.addEventListener("hashchange", afterHash);
+  window.addEventListener("beforeprint", mountAllLazy);
+  const print = window.matchMedia?.("print");
+  print?.addEventListener?.("change", (e) => { if (e.matches) mountAllLazy(); });
+  if (print?.matches) mountAllLazy();
+}
+
+export function mountWhenNeeded(el, mountFn) {
+  if (lazy.has(el)) return;
+  initLazy();
+  lazy.set(el, { mountFn, done: false });
+  el.dataset.lazy = "pending";
+  if (!lazyObserver) { mountNow(el); return; } // no IntersectionObserver: mount everything
+  lazyObserver.observe(el);
+  // Registration runs after the browser has already honoured a hash in the URL: mount, then scroll again.
+  if (location.hash && mountForHash(location.hash)) requestAnimationFrame(() => byId(location.hash)?.scrollIntoView());
+}
+
 /** Linear map from a data window onto an SVG box. */
 export function makeScale(domain, range) {
   const [d0, d1] = domain;

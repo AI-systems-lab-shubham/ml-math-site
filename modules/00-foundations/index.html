@@ -14,6 +14,7 @@
   <link rel="preload" href="../../vendor/fonts/Inter-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="../../vendor/katex/katex.min.css">
   <link rel="stylesheet" href="../../assets/css/site.css">
+  <link rel="stylesheet" href="../../assets/css/widget-reserve.css">
   <noscript><style>[data-nav-toggle], [data-highlight-toggle] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
   <script src="../../assets/js/rail-init.js"></script>
   <script src="../../vendor/katex/katex.min.js"></script>
@@ -61,7 +62,7 @@
   </ol>
 </nav>
 
-<main id="main" style="--widget-chrome: 221px; --widget-chrome-narrow: 244px">
+<main id="main">
   <div class="column page-hero">
     <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
       <li><a href="../../index.html">Course</a></li>
@@ -91,7 +92,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>Drag the slider to change the number in the box. The three blue bars and the ochre block are the recipe; the navy bar is the answer.</p>
-      <div data-widget="variables"></div>
+      <div data-widget="variables">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Fill the box: 3x + 2</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Three bars of length x and a block of length 2 are laid end to end. Their combined length is the value of 3x + 2.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">
@@ -170,7 +177,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>A pair (x, y) is a point on a sheet, described by its <span class="term" data-term="coordinate">coordinates</span>. Plot every solution of x + y = 4 and the points fall on a straight <span class="term" data-term="line">line</span>. Slide x to walk along it. Then add a second equation and watch where the two lines meet.</p>
-      <div data-widget="equations"></div>
+      <div data-widget="equations">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Solutions of x + y = 4</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A plot of the straight line x + y = 4. Every point on the line is a solution. A second equation can be added to see where its line meets the first.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">
@@ -281,7 +294,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>A <span class="term" data-term="graph">graph</span> draws the machine's whole behaviour: for each input, mark a point at the height of its output. Choose a rule, then slide the input and watch the point trace the curve.</p>
-      <div data-widget="functions"></div>
+      <div data-widget="functions">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">A function as a machine and as a graph</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A curve showing the chosen rule's output for every input from minus three to three, with a marker at the chosen input.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">
@@ -385,7 +404,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>Change the slope and the line tilts; change the intercept and it slides up or down. The small burgundy triangle shows “run 1, rise m” at the start. The ochre dot is the intercept.</p>
-      <div data-widget="slope"></div>
+      <div data-widget="slope">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Draw the line y = m·x + b</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A straight line with adjustable slope and intercept. A small triangle shows the rise for a run of one.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">
@@ -493,7 +518,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>Burgundy bars multiply by the factor at every step. Ochre diamonds show what you would get by adding the first step's change every time instead. Raise the number of steps and watch which one runs away.</p>
-      <div data-widget="exponents"></div>
+      <div data-widget="exponents">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Multiplying versus adding</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Bars show a quantity after each step when it is multiplied by a fixed factor. Diamonds show the quantity if the same first-step change were added every time instead.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">
@@ -599,7 +630,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>Move the slider to multiply more times. The boxes show 1 multiplied by the base again and again (k means thousand, M million). On the ordinary ruler, position is proportional to the number, so the dot barely leaves the start. On the log ruler, position is proportional to the number of steps, so every multiplication moves the dot the same distance and one picture holds numbers of very different sizes.</p>
-      <div data-widget="logs"></div>
+      <div data-widget="logs">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Count the multiplications</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A row of boxes shows 1 multiplied by the base again and again. Two rulers below place the current number: on an ordinary ruler it sits very close to the start, on a log ruler each multiplication moves it the same distance.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">
@@ -706,7 +743,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>Each bar is one term. Filled bars are inside the range and are added; outlined bars are skipped. Change where the counter starts and stops, or the recipe, and watch the expanded sum below.</p>
-      <div data-widget="sigma"></div>
+      <div data-widget="sigma">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Expand a sum</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Bars show the terms of a sum for counter values one to six. The bars inside the chosen range are filled and are the ones added up; the rest are outlined.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">
@@ -800,7 +843,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>Four values stay fixed. Drag the fifth outward: the mean ▲ chases it, while the median ■ stays put.</p>
-      <div data-widget="average"></div>
+      <div data-widget="average">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Mean versus median</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Five values on a number line. Four stay put; one can be dragged out to the right. The mean marker follows it; the median marker stays near the middle of the group.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">
@@ -876,7 +925,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>Turn the arrow with the slider. Blue is the cosine, teal dots the sine. Watch them change sign as the arrow crosses an axis.</p>
-      <div data-widget="circle"></div>
+      <div data-widget="circle">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Turn around the unit circle</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A circle of radius one with an arrow from the centre. Dropping straight down to the horizontal axis gives the cosine; going across to the vertical axis gives the sine.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">
@@ -967,7 +1022,13 @@
     <section data-stage="picture">
       <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
       <p>The list x has five entries (in print, a list like this is often set in bold). The small number below each is a subscript: a position label that says which entry. Move the slider to point at a different box.</p>
-      <div data-widget="notation"></div>
+      <div data-widget="notation">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">x with a subscript picks one entry</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A list of five boxes, each labelled with its position as a subscript. The chosen box is highlighted.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
     </section>
 
     <section data-stage="real-life">

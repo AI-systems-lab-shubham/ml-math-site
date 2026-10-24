@@ -33,6 +33,15 @@ const glossary = await getJson("data/glossary.json");
 const termIds = new Set(glossary.entries.map((e) => e.id));
 const symIds = new Set(Object.keys(glossary.symbols ?? {}));
 
+// Pages with lazy widgets (assets/js/widgets.mjs) keep placeholders until needed; mount them all before checking.
+async function mountWidgets(page) {
+  const lazy = await page.evaluate(() => document.querySelectorAll("[data-widget]").length);
+  if (!lazy) return;
+  await page.evaluate(async () => { (await import(new URL("assets/js/widgets.mjs", document.querySelector('meta[name="site-root"]')?.content ? new URL(document.querySelector('meta[name="site-root"]').content, document.baseURI) : location.href))).mountAllLazy(); });
+  await page.waitForFunction(() => [...document.querySelectorAll("[data-widget]")].every((h) => h.dataset.lazy === "mounted"), null, { timeout: 5000 });
+  await page.waitForTimeout(200);
+}
+
 const pages = [{ key: "home", label: "Home", url: "", expectModule: null }];
 for (const m of course.modules.filter((x) => x.status === "built")) pages.push({ key: m.id, label: `${m.id} ${m.title}`, url: m.path, expectModule: m });
 const has404 = process.env.BASE_URL ? true : fs.existsSync(path.join(process.env.SITE_DIR ?? siteRoot, "404.html"));
@@ -330,6 +339,9 @@ for (const pg of selected) {
 
     await page.goto(new URL(pg.url, base).href, { waitUntil: "networkidle" });
     await page.waitForTimeout(600);
+    // Layout shift is read for the page as loaded; then every lazy widget is mounted so the checks below see the real widgets.
+    const loadCls = await page.evaluate(() => window.__cls);
+    await mountWidgets(page);
     await injectProbes(page);
 
     if (want("console")) { for (const e of [...new Set(consoleErrors)].slice(0, 6)) add("console", pg, width, e); ran.add("console"); }
@@ -345,7 +357,7 @@ for (const pg of selected) {
       ran.add("rail-content");
     }
     if (want("layout-shift")) {
-      const cls = await page.evaluate(() => window.__cls);
+      const cls = loadCls;
       if (cls > CLS_BUDGET) add("layout-shift", pg, width, `cumulative layout shift ${cls.toFixed(3)} (budget ${CLS_BUDGET})`);
       ran.add("layout-shift");
     }
@@ -384,6 +396,7 @@ for (const pg of selected) {
       const page = await ctx.newPage();
       await page.goto(new URL(pg.url, base).href, { waitUntil: "networkidle" });
       await page.waitForTimeout(400);
+      await mountWidgets(page);
       await injectProbes(page);
       const coarse = await page.evaluate(() => matchMedia("(pointer: coarse)").matches);
       if (!coarse) add("tap-target", pg, width, "touch pass: the browser did not report a coarse pointer, so the 44px rail rule was not tested", "touch pass");
@@ -398,6 +411,7 @@ for (const pg of selected) {
     const ctx = await browser.newContext({ viewport: { width, height: 800 }, reducedMotion: "reduce" });
     const page = await ctx.newPage();
     await page.goto(new URL(pg.url, base).href, { waitUntil: "networkidle" });
+    await mountWidgets(page);
     await injectProbes(page);
     const m = await run(page, "motion");
     if (m.running.length) add("reduced-motion", pg, width, `${m.running.length} animation(s) still running with reduced motion`);

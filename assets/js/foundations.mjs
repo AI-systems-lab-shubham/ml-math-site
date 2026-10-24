@@ -9,7 +9,7 @@ import {
   cosSinDegrees, forceComponents, positionEncodingPair, entryAt, pH,
 } from "./foundations-math.mjs";
 import {
-  svg, slider, radios, widgetShell, drawAxes, axisNames, makeScale, fmt, mountStepper, mountPredict, mountSpotIt, mountExplain,
+  svg, slider, radios, widgetShell, drawAxes, axisNames, makeScale, fmt, mountStepper, mountWhenNeeded, mountPredict, mountSpotIt, mountExplain,
 } from "./widgets.mjs";
 import { renderMath } from "./math-render.mjs";
 import { initGlossary, prepare } from "./glossary.mjs";
@@ -628,7 +628,7 @@ const widgetMounts = { variables: variablesWidget, equations: equationsWidget, f
   logs: logsWidget, sigma: sigmaWidget, average: averageWidget, circle: circleWidget, notation: notationWidget };
 
 async function boot() {
-  document.querySelectorAll("[data-widget]").forEach((h) => widgetMounts[h.dataset.widget]?.(h));
+  document.querySelectorAll("[data-widget]").forEach((h) => mountWhenNeeded(h, widgetMounts[h.dataset.widget]));
   document.querySelectorAll("[data-stepper]").forEach((h) => mountStepper(h, stepperData[h.dataset.stepper]()));
   document.querySelectorAll("[data-predict]").forEach((h) => mountPredict(h, predictions[h.dataset.predict]));
   document.querySelectorAll(".spot-it").forEach(mountSpotIt);
