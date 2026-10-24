@@ -1,51 +1,12 @@
 // E2E check (not part of `node --test`): every page must show the outline rail or a visible Menu / Show outline button.
 // Run: node tests/e2e/nav-reachable.mjs [--shots <dir>]
 // Needs Playwright importable. If it is not, this prints SKIPPED and exits 1 (a skipped check is not a pass).
-import http from "node:http";
-import fs from "node:fs";
 import path from "node:path";
-import { createRequire } from "node:module";
-import { execFileSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
+import { requirePlaywright, serveStatic } from "../../tools/lib/playwright.mjs";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const shotsDir = process.argv.includes("--shots") ? process.argv[process.argv.indexOf("--shots") + 1] : null;
-
-async function loadPlaywright() {
-  for (const name of ["playwright", "playwright-core"]) {
-    try { return await import(name); } catch { /* try the next */ }
-  }
-  try {
-    // Fall back to the copy bundled with the globally installed @playwright/cli (nothing is installed by this test).
-    const globalRoot = execFileSync("npm", ["root", "-g"], { encoding: "utf8" }).trim();
-    const req = createRequire(path.join(globalRoot, "@playwright/cli/package.json"));
-    return req("playwright");
-  } catch {
-    return null;
-  }
-}
-
-const pw = await loadPlaywright();
-if (!pw?.chromium) {
-  console.error("\n########################################################");
-  console.error("# SKIPPED: nav-reachable e2e did NOT run.");
-  console.error("# Playwright is not importable from Node here.");
-  console.error("# This is not a pass. Exiting with status 1.");
-  console.error("########################################################\n");
-  process.exit(1);
-}
-
-const TYPES = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".mjs": "text/javascript", ".json": "application/json", ".ttf": "font/ttf", ".woff2": "font/woff2", ".svg": "image/svg+xml", ".txt": "text/plain" };
-const server = http.createServer((req, res) => {
-  let p = decodeURIComponent(new URL(req.url, "http://x").pathname);
-  if (p.endsWith("/")) p += "index.html";
-  const file = path.join(root, p);
-  if (!file.startsWith(root) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404).end("not found"); return; }
-  res.writeHead(200, { "content-type": TYPES[path.extname(file)] ?? "application/octet-stream" });
-  fs.createReadStream(file).pipe(res);
-});
-await new Promise((r) => server.listen(0, "127.0.0.1", r));
-const base = `http://127.0.0.1:${server.address().port}/`;
+const pw = await requirePlaywright("nav-reachable e2e");
+const { base, close } = await serveStatic();
 
 const PAGES = [["home", "index.html"], ["module-0", "modules/00-foundations/"], ["module-1", "modules/01-linear-algebra/"]];
 const WIDTHS = [375, 768, 899, 900, 1000, 1100, 1280];
@@ -188,6 +149,6 @@ for (const [name, url] of PAGES) {
 }
 
 await browser.close();
-server.close();
+await close();
 console.log(`${checks} checks, ${failures} failed`);
 process.exit(failures ? 1 : 0);
