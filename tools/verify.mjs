@@ -14,6 +14,7 @@ const STEPS = [
   { name: "glossary", cmd: ["node", "tools/check-glossary.mjs"] },
   { name: "claims", cmd: ["node", "tools/check-claims.mjs"] },
   { name: "e2e-nav", cmd: ["node", "tests/e2e/nav-reachable.mjs"], browser: true },
+  { name: "e2e-symbols", cmd: ["node", "tests/e2e/symbols.mjs"], browser: true },
   { name: "email", cmd: ["node", "tools/check-email.mjs"], skipWhen: (out) => /^skipped:/m.test(out) },
 ];
 const only = process.argv.includes("--only") ? process.argv[process.argv.indexOf("--only") + 1] : null;

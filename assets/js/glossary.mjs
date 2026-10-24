@@ -45,6 +45,11 @@ export async function initGlossary() {
   wireToggle();
   document.addEventListener("keydown", onKeydown);
   document.addEventListener("pointerdown", onOutside);
+  // Tabbing on to something that is not a term, symbol or the popover itself must not leave the popover covering it.
+  document.addEventListener("focusin", (ev) => {
+    if (pop.hidden || pop.contains(ev.target) || ev.target.closest?.("[data-ready]")) return;
+    close(false);
+  });
   pop.addEventListener("pointerenter", () => clearTimeout(leaveTimer));
   pop.addEventListener("pointerleave", () => { if (!pinned) scheduleClose(); });
 }
@@ -56,17 +61,61 @@ export function prepare(root) {
     el.dataset.ready = "1";
     bind(el, () => ({ kind: "term", id: el.dataset.term }));
   });
-  root.querySelectorAll("[data-sym]:not([data-ready])").forEach((el) => {
+  // Symbols drawn by KaTeX sit in an aria-hidden layer, so they are pointer-only: no tab stop, no role.
+  // The "Symbols in this equation" list below each equation gives keyboard and screen-reader users the same popovers.
+  root.querySelectorAll("[data-sym]:not([data-ready]):not(.sym-term)").forEach((el) => {
     const s = symbols[el.dataset.sym];
     if (!s) return;
     el.dataset.ready = "1";
     el.classList.add("sym");
-    el.tabIndex = 0;
-    el.setAttribute("role", "button");
-    el.setAttribute("aria-haspopup", "dialog");
     if (s.color) el.style.color = colorVar(s.color);
     bind(el, () => ({ kind: "sym", id: el.dataset.sym, text: el.textContent.trim() }));
+    el.removeAttribute("aria-haspopup");
   });
+  addSymbolLists(root);
+}
+
+// One collapsed <details> under each equation that has symbols (a paragraph, for symbols in inline maths).
+// Each symbol is a real button that opens the same popover as the symbol in the equation.
+function addSymbolLists(root) {
+  const groups = new Map();
+  root.querySelectorAll(".katex [data-sym][data-ready]").forEach((el) => {
+    if (el.closest(".glossary-popover")) return;
+    const display = el.closest(".math-display");
+    const anchor = display ?? el.closest("p, li, td, th, dd, figcaption");
+    if (!anchor) return;
+    const g = groups.get(anchor) ?? { display: !!display, syms: new Map() };
+    if (!g.syms.has(el.dataset.sym)) g.syms.set(el.dataset.sym, el.textContent.trim());
+    groups.set(anchor, g);
+  });
+  for (const [anchor, g] of groups) {
+    if (anchor.dataset.symbolList) continue;
+    anchor.dataset.symbolList = "1";
+    const details = document.createElement("details");
+    details.className = "eq-symbols";
+    const sum = document.createElement("summary");
+    sum.textContent = g.display ? "Symbols in this equation" : "Symbols in this paragraph";
+    const ul = document.createElement("ul");
+    for (const [id, text] of g.syms) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "sym-term";
+      b.dataset.sym = id;
+      b.dataset.ready = "1";
+      b.setAttribute("aria-haspopup", "dialog");
+      b.setAttribute("aria-label", `Symbol ${text}`);
+      b.textContent = text;
+      const color = symbols[id]?.color;
+      if (color) b.style.color = colorVar(color);
+      bind(b, () => ({ kind: "sym", id, text }));
+      const li = document.createElement("li");
+      li.append(b);
+      ul.append(li);
+    }
+    details.append(sum, ul);
+    if (anchor.matches("p, .math-display")) anchor.after(details);
+    else anchor.append(details);
+  }
 }
 
 function markFirstUses(root) {

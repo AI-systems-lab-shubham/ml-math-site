@@ -10,14 +10,20 @@
   <link rel="icon" href="data:,">
   <link rel="preload" href="vendor/fonts/Inter-Regular.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="vendor/fonts/Fraunces-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="vendor/fonts/Inter-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="assets/css/site.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
   <script src="assets/js/rail-init.js"></script>
   <script type="module" src="assets/js/home.mjs"></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="topbar" id="site-header">
-  <a class="brand" href="index.html">ML Math</a>
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+  </div>
 </header>
 <noscript><p class="notice">The syllabus, progress and widgets need JavaScript. The module links below still work.</p></noscript>
 <div class="layout">
@@ -42,7 +48,11 @@
     <h2 id="learn-title">What you’ll learn</h2>
     <ul data-outcomes>
       <li>Read and rearrange simple equations, and explain why one equation with two unknowns has many solutions</li>
+      <li>Explain what a logarithm counts and why it squeezes huge ranges</li>
+      <li>Read Σ notation and the common symbols used in machine-learning papers</li>
       <li>Multiply a matrix by a vector and explain what it does to space</li>
+      <li>Describe a vector both as an arrow and as a list of numbers</li>
+      <li>Build new vectors from linear combinations of old ones</li>
     </ul>
   </section>
 

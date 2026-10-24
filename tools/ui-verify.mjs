@@ -117,6 +117,8 @@ const probes = {
 
   targets(sel, min) {
     const out = [];
+    // Documented exception (DESIGN.md section 8): outline rows may be 40px for a fine pointer on a screen 900px or wider.
+    const finePointer = matchMedia("(min-width: 900px) and (hover: hover) and (pointer: fine)").matches;
     for (const el of document.querySelectorAll(sel)) {
       if (!el.checkVisibility?.({ checkVisibilityCSS: true }) || el.matches(".sr-only, .skip-link") || el.closest(".sr-only, .katex")) continue;
       let box = el;
@@ -126,7 +128,8 @@ const probes = {
       if ((cs.display === "inline" || cs.display === "inline-block") && el.parentElement && [...el.parentElement.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) continue;
       const r = box.getBoundingClientRect();
       if (r.width === 0 || r.height === 0) continue;
-      if (r.width < min - 0.5 || r.height < min - 0.5) out.push(`${probes.describe(el)} is ${Math.round(r.width)}x${Math.round(r.height)}px`);
+      const need = finePointer && el.closest("#site-nav ul.sub") ? 40 : min;
+      if (r.width < need - 0.5 || r.height < need - 0.5) out.push(`${probes.describe(el)} is ${Math.round(r.width)}x${Math.round(r.height)}px`);
     }
     return out.slice(0, 12);
   },
@@ -163,6 +166,35 @@ const probes = {
       if (!c.querySelector("footer")) out.push(`#${c.id}: no further-reading footer`);
     }
     return out.slice(0, 12);
+  },
+
+  // Every landmark on the page (all cards, not just the first) must have a name no other landmark of its kind shares.
+  landmarks() {
+    const roleOf = (el) => {
+      const r = el.getAttribute("role");
+      if (r) return r === "region" && !(el.getAttribute("aria-label") || el.getAttribute("aria-labelledby")) ? null : r;
+      const t = el.tagName.toLowerCase();
+      if (t === "nav") return "navigation";
+      if (t === "aside") return "complementary";
+      if (t === "main") return "main";
+      if (t === "section") return el.getAttribute("aria-label") || el.getAttribute("aria-labelledby") ? "region" : null;
+      if ((t === "header" || t === "footer") && el.parentElement === document.body) return t === "header" ? "banner" : "contentinfo";
+      return null;
+    };
+    const nameOf = (el) => {
+      const ids = el.getAttribute("aria-labelledby");
+      if (ids) return ids.split(/\s+/).map((i) => document.getElementById(i)?.textContent.trim() ?? "").join(" ");
+      return el.getAttribute("aria-label") ?? "";
+    };
+    const seen = new Map();
+    for (const el of document.querySelectorAll("nav, aside, main, section, header, footer, [role]")) {
+      if (!el.checkVisibility?.({ checkVisibilityCSS: true }) && !el.matches("main")) continue;
+      const role = roleOf(el);
+      if (!role || ["button", "dialog", "status", "img", "region"].includes(role) && el.matches("[role=button], [role=dialog], [role=status], [role=img], .math-display")) continue;
+      const key = `${role}|${nameOf(el)}`;
+      seen.set(key, (seen.get(key) ?? 0) + 1);
+    }
+    return [...seen].filter(([, n]) => n > 1).map(([k, n]) => `${n} ${k.split("|")[0]} landmarks share the name "${k.split("|")[1]}"`);
   },
 
   glossaryRefs() {
@@ -238,7 +270,7 @@ async function tabWalk(page, pg, width) {
 
 async function escapeChecks(page, pg, width) {
   // Popover: open a term from the keyboard, then Esc must close it and return focus.
-  const trigger = page.locator("[data-term][data-ready], [data-sym][data-ready]").first();
+  const trigger = page.locator("[data-term][data-ready], .sym-term[data-ready]").first();
   if (await trigger.count()) {
     await trigger.scrollIntoViewIfNeeded().catch(() => {});
     await trigger.focus();
@@ -306,6 +338,12 @@ for (const pg of selected) {
     if (want("clipped")) { for (const e of await run(page, "clipped")) add("clipped", pg, width, e); ran.add("clipped"); }
     if (want("tap-target")) { for (const e of await run(page, "targets", probes.interactiveSel, MIN_TARGET)) add("tap-target", pg, width, e); ran.add("tap-target"); }
     if (want("small-text")) { for (const e of await run(page, "smallText", MIN_TEXT)) add("small-text", pg, width, e); ran.add("small-text"); }
+    if (want("landmark-unique") && width === WIDTHS[WIDTHS.length - 1]) { for (const e of await run(page, "landmarks")) add("landmark-unique", pg, "all", e, e.replace(/\d+ /, "")); ran.add("landmark-unique"); }
+    if (want("rail-content") && width >= 900 && (await page.locator("#site-nav").isVisible())) {
+      const w = await page.evaluate(() => document.querySelector("main").getBoundingClientRect().width);
+      if (w < 640 - 0.5) add("rail-content", pg, width, `content column is ${Math.round(w)}px with the rail shown (minimum 640px)`, "main");
+      ran.add("rail-content");
+    }
     if (want("layout-shift")) {
       const cls = await page.evaluate(() => window.__cls);
       if (cls > CLS_BUDGET) add("layout-shift", pg, width, `cumulative layout shift ${cls.toFixed(3)} (budget ${CLS_BUDGET})`);
@@ -337,6 +375,21 @@ for (const pg of selected) {
     if (want("esc-popover")) { await page.goto(new URL(pg.url, base).href, { waitUntil: "networkidle" }); await page.waitForTimeout(400); await escapeChecks(page, pg, width); }
     if (SHOTS) await page.screenshot({ path: path.join(REPORT_DIR, "shots", `${pg.key}-${width}.png`), fullPage: true });
     await ctx.close();
+  }
+
+  // Touch pass at the widths where the rail shows: with a coarse pointer every outline row must be 44px.
+  if (want("tap-target")) {
+    for (const width of WIDTHS.filter((w) => w >= 900)) {
+      const ctx = await browser.newContext({ viewport: { width, height: 800 }, hasTouch: true });
+      const page = await ctx.newPage();
+      await page.goto(new URL(pg.url, base).href, { waitUntil: "networkidle" });
+      await page.waitForTimeout(400);
+      await injectProbes(page);
+      const coarse = await page.evaluate(() => matchMedia("(pointer: coarse)").matches);
+      if (!coarse) add("tap-target", pg, width, "touch pass: the browser did not report a coarse pointer, so the 44px rail rule was not tested", "touch pass");
+      for (const e of await run(page, "targets", probes.interactiveSel, MIN_TARGET)) add("tap-target", pg, width, `touch: ${e}`);
+      await ctx.close();
+    }
   }
 
   // Reduced motion: no running animation and no transition longer than a blink.

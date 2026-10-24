@@ -61,9 +61,10 @@ export function widgetShell({ title, description, viewBox = "0 0 640 400" }) {
   const readout = html("p", { class: "readout", "aria-live": "polite" });
   root.append(figure, controls, readout);
   // Keep drawn text readable when the 640-unit drawing is squeezed onto a phone.
-  const viewWidth = Number(viewBox.split(" ")[2]);
+  const [, , viewWidth, viewHeight] = viewBox.split(" ").map(Number);
   const rescale = () => {
-    const scale = figure.clientWidth / viewWidth;
+    // preserveAspectRatio "meet" scales by the tighter of the two axes.
+    const scale = Math.min(figure.clientWidth / viewWidth, figure.clientHeight / viewHeight);
     figure.style.setProperty("--ts", scale > 0 ? String(Math.max(1, 1 / scale)) : "1");
   };
   if (typeof ResizeObserver !== "undefined") new ResizeObserver(rescale).observe(figure);

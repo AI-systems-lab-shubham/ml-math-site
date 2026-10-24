@@ -1,4 +1,6 @@
-// E2E check (not part of `node --test`): every page must show the outline rail or a visible Menu / Show outline button.
+// E2E check (not part of `node --test`): one header toggle (icon + "Outline" from 900px, icon only below) that shows or hides the
+// outline, with aria-expanded and a Hide / Show name; rail width; outline state (current module open, others collapsed, remembered
+// on mlmath:ui:v1 and not in the progress store); legend; numbered modules; current concept scrolled into view; row heights.
 // Run: node tests/e2e/nav-reachable.mjs [--shots <dir>]
 // Needs Playwright importable. If it is not, this prints SKIPPED and exits 1 (a skipped check is not a pass).
 import path from "node:path";
@@ -37,7 +39,7 @@ const state = (page) => page.evaluate(() => {
   return {
     scrollW: document.documentElement.scrollWidth, clientW: document.documentElement.clientWidth,
     nav: r(nav), main: r(document.querySelector("main")), col: r(col), header,
-    active: a ? (a.matches("[data-nav-toggle]") ? "toggle" : a.matches("[data-rail-hide]") ? "hide" : nav.contains(a) ? "in-nav" : "other") : "none",
+    active: a ? (a.matches("[data-nav-toggle]") ? "toggle" : nav.contains(a) ? "in-nav" : "other") : "none",
     stored: (() => { try { return localStorage.getItem("mlmath:ui:v1"); } catch { return "blocked"; } })(),
   };
 });
@@ -52,65 +54,69 @@ function common(label, s, width) {
   if (width >= 900 && s.nav && s.main && s.nav.w > 0) check(s.nav.r <= s.main.l + 0.5, `${label}: rail overlaps main`);
 }
 
+const T = "#site-header [data-nav-toggle]";
+const toggleState = (page) => page.evaluate((sel) => {
+  const t = document.querySelector(sel);
+  const txt = t.querySelector(".outline-toggle-text");
+  return { expanded: t.getAttribute("aria-expanded"), name: t.getAttribute("aria-label"), textShown: !!txt && txt.getClientRects().length > 0, w: t.getBoundingClientRect().width, h: t.getBoundingClientRect().height };
+}, T);
+
 for (const [name, url] of PAGES) {
   for (const width of WIDTHS) {
     const wide = width >= 900;
     const { ctx, page } = await open(name, url, width);
     const L = `${name} @${width}`;
+    let ts = await toggleState(page);
+    check(await vis(page, T), `${L}: header toggle not visible`);
+    check(ts.w >= 44 && ts.h >= 44, `${L}: header toggle is ${ts.w}x${ts.h}, under 44px`);
+    check(ts.textShown === wide, `${L}: "Outline" text should be ${wide ? "shown" : "hidden"} (icon-only below 900px)`);
 
     if (wide) {
-      // Rail shown.
       check(await vis(page, "#site-nav"), `${L}: rail not visible`);
-      check(await vis(page, "[data-rail-hide]"), `${L}: Hide outline button not visible`);
-      check(!(await vis(page, "#site-header [data-nav-toggle]")), `${L}: header toggle should be hidden while the rail shows`);
+      check(ts.expanded === "true" && ts.name === "Hide outline", `${L}: toggle should read expanded=true "Hide outline" (got ${ts.expanded} "${ts.name}")`);
       let s = await state(page);
-      const wantW = Math.min(520, Math.max(320, width * 0.4));
+      const wantW = Math.min(340, Math.max(260, width * 0.24));
       check(Math.abs(s.nav.w - wantW) < 1, `${L}: rail width ${s.nav.w}, want ${wantW}`);
+      check(s.main.w >= 640 - 0.5, `${L}: content column ${Math.round(s.main.w)}px, under 640px`);
       common(`${L} rail shown`, s, width);
       if (shotsDir) await page.screenshot({ path: path.join(shotsDir, `${name}-${width}-rail.png`) });
 
-      // Hide with a real key press.
-      await page.locator("[data-rail-hide]").focus();
+      await page.locator(T).focus();
       await page.keyboard.press("Enter");
       s = await state(page);
+      ts = await toggleState(page);
       check(!(await vis(page, "#site-nav")), `${L}: rail still visible after Enter`);
-      check(await vis(page, "#site-header [data-nav-toggle]"), `${L}: no Show outline button after hiding`);
-      check(s.active === "toggle", `${L}: focus did not move to Show outline (got ${s.active})`);
+      check(ts.expanded === "false" && ts.name === "Show outline", `${L}: toggle should read expanded=false "Show outline" (got ${ts.expanded} "${ts.name}")`);
+      check(s.active === "toggle", `${L}: focus should stay on the toggle (got ${s.active})`);
       check(JSON.parse(s.stored)?.railHidden === true, `${L}: state not saved (${s.stored})`);
       check(Math.abs(s.main.w - width) < 1 && Math.abs(s.main.l) < 1, `${L}: content not full width after hide (${s.main.l}, ${s.main.w})`);
       check(Math.abs(s.col.l - (width - s.col.r)) < 2, `${L}: content not centred (${s.col.l} vs ${width - s.col.r})`);
       common(`${L} rail hidden`, s, width);
-      const label = await page.locator("#site-header [data-nav-toggle]").textContent();
-      check(label.trim() === "Show outline" && (await page.locator("#site-header [data-nav-toggle]").getAttribute("aria-expanded")) === "false", `${L}: Show outline label/aria wrong`);
-      // Tab through the whole page: focus must never land inside the hidden rail.
       let landed = false;
       for (let i = 0; i < 40; i++) { await page.keyboard.press("Tab"); if ((await state(page)).active === "in-nav") landed = true; }
       check(!landed, `${L}: Tab reached the hidden rail`);
       if (shotsDir) { await page.evaluate(() => scrollTo(0, 0)); await page.screenshot({ path: path.join(shotsDir, `${name}-${width}-hidden.png`) }); }
 
-      // Reload keeps it hidden.
       await page.reload({ waitUntil: "networkidle" });
-      await page.waitForSelector("#site-header [data-nav-toggle]", { state: "attached" });
-      check(!(await vis(page, "#site-nav")) && (await vis(page, "#site-header [data-nav-toggle]")), `${L}: hidden state not restored after reload`);
+      await page.waitForSelector(T, { state: "attached" });
+      check(!(await vis(page, "#site-nav")) && (await toggleState(page)).name === "Show outline", `${L}: hidden state not restored after reload`);
 
-      // Show again with Space.
-      await page.locator("#site-header [data-nav-toggle]").focus();
+      await page.locator(T).focus();
       await page.keyboard.press("Space");
       s = await state(page);
       check(await vis(page, "#site-nav"), `${L}: rail not back after Space`);
-      check(s.active === "hide", `${L}: focus did not move to Hide outline (got ${s.active})`);
       check(JSON.parse(s.stored)?.railHidden === false, `${L}: shown state not saved`);
-      check((await page.locator("[data-rail-hide]").getAttribute("aria-expanded")) === "true", `${L}: Hide outline aria-expanded should be true`);
+      check((await toggleState(page)).expanded === "true", `${L}: toggle aria-expanded should be true again`);
       common(`${L} rail re-shown`, await state(page), width);
     } else {
-      check(await vis(page, "#site-header [data-nav-toggle]"), `${L}: Menu button not visible`);
       check(!(await vis(page, "#site-nav")), `${L}: drawer should start closed`);
+      check(ts.expanded === "false" && ts.name === "Show outline", `${L}: toggle should read expanded=false "Show outline"`);
       common(`${L} drawer closed`, await state(page), width);
-      await page.locator("#site-header [data-nav-toggle]").focus();
+      await page.locator(T).focus();
       await page.keyboard.press("Enter");
+      ts = await toggleState(page);
       check(await vis(page, "#site-nav"), `${L}: drawer did not open on Enter`);
-      check((await page.locator("#site-header [data-nav-toggle]").getAttribute("aria-expanded")) === "true", `${L}: Menu aria-expanded should be true`);
-      check(!(await vis(page, "[data-rail-hide]")), `${L}: Hide outline should not show in the drawer`);
+      check(ts.expanded === "true" && ts.name === "Hide outline", `${L}: toggle should read expanded=true "Hide outline" with the drawer open`);
       common(`${L} drawer open`, await state(page), width);
       if (shotsDir) await page.screenshot({ path: path.join(shotsDir, `${name}-${width}-drawer.png`) });
       await page.keyboard.press("Escape");
@@ -120,29 +126,66 @@ for (const [name, url] of PAGES) {
   }
 }
 
-// A saved "hidden" preference must not hide the Menu button below 900px.
+// A saved "hidden" preference must not hide the toggle below 900px, and must not stop the drawer working.
 {
   const { ctx, page } = await open("home", "index.html", 1280);
-  await page.locator("[data-rail-hide]").focus();
+  await page.locator(T).focus();
   await page.keyboard.press("Enter");
   await page.setViewportSize({ width: 768, height: 800 });
-  check(await vis(page, "#site-header [data-nav-toggle]"), "saved-hidden then narrow: Menu button missing");
+  check(await vis(page, T), "saved-hidden then narrow: toggle missing");
   await page.setViewportSize({ width: 1280, height: 800 });
-  check(await vis(page, "#site-header [data-nav-toggle]") && !(await vis(page, "#site-nav")), "resize back to wide: still hidden with Show outline");
+  check(await vis(page, T) && !(await vis(page, "#site-nav")), "resize back to wide: still hidden with Show outline");
   await ctx.close();
+}
+
+// Outline content: numbered modules, legend, current module open and the rest collapsed, state on the UI key only.
+{
+  const { ctx, page } = await open("module-0", "modules/00-foundations/#concept-logarithms", 1280);
+  await page.waitForSelector("#site-nav a[data-cid]");
+  await page.waitForTimeout(500);
+  const o = await page.evaluate(() => {
+    const nav = document.getElementById("site-nav");
+    const mods = [...nav.querySelectorAll("details[data-module]")].map((d) => ({ id: d.dataset.module, open: d.open, num: d.querySelector(".outline-mod-num")?.textContent }));
+    const cur = nav.querySelector('a[aria-current="page"]');
+    const nr = nav.getBoundingClientRect(), cr = cur?.getBoundingClientRect();
+    return { mods, legend: [...nav.querySelectorAll(".outline-legend li")].map((l) => l.textContent.trim()), cur: cur?.dataset.cid, curVisible: !!cr && cr.top >= nr.top && cr.bottom <= nr.bottom, planned: nav.querySelectorAll(".is-planned .outline-mod-num").length, rowH: Math.round(nav.querySelector("ul.sub a").getBoundingClientRect().height) };
+  });
+  check(o.mods.find((m) => m.id === "m00")?.open === true, "module 0 page: module 0 should be open");
+  check(o.mods.filter((m) => m.id !== "m00").every((m) => !m.open), "module 0 page: other modules should be collapsed");
+  check(o.mods.map((m) => m.num).join() === "0,1", `module numbers should read 0,1 (got ${o.mods.map((m) => m.num)})`);
+  check(o.planned >= 1, "planned modules should be numbered too");
+  check(o.legend.join("|") === "Not started|Visited|Complete", `legend should list the three states (got ${o.legend.join("|")})`);
+  check(o.cur === "m00-logarithms" && o.curVisible, `current concept should be marked and scrolled into view in the rail (got ${o.cur}, visible ${o.curVisible})`);
+  check(o.rowH >= 40 && o.rowH < 44, `fine pointer at 1280: rail rows should be 40px (got ${o.rowH})`);
+  // Open module 1 by hand: remembered on the UI key, absent from the progress store.
+  await page.locator('#site-nav details[data-module="m01"] > summary').click();
+  await page.waitForTimeout(150); // the details toggle event is queued
+  const st = await page.evaluate(() => ({ ui: localStorage.getItem("mlmath:ui:v1"), progress: localStorage.getItem("mlmath:progress:v1") }));
+  check(JSON.parse(st.ui)?.outlineOpen?.m01 === true, `opening a module should be saved on mlmath:ui:v1 (got ${st.ui})`);
+  check(!(st.progress ?? "").includes("outline:"), "outline open state should not be written to the progress store");
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector("#site-nav a[data-cid]");
+  check(await page.evaluate(() => document.querySelector('#site-nav details[data-module="m01"]').open), "module 1 should stay open after reload");
+  await ctx.close();
+  // Phone-class pointer: 44px rows.
+  const t = await browser.newContext({ viewport: { width: 1100, height: 800 }, hasTouch: true });
+  const tp = await t.newPage();
+  await tp.goto(base + "modules/00-foundations/", { waitUntil: "networkidle" });
+  await tp.waitForSelector("#site-nav a[data-cid]");
+  const rh = await tp.evaluate(() => Math.round(document.querySelector("#site-nav ul.sub a").getBoundingClientRect().height));
+  check(rh >= 44, `coarse pointer at 1100: rail rows should be at least 44px (got ${rh})`);
+  await t.close();
 }
 
 // Blocked storage: the page still has navigation.
 for (const [name, url] of PAGES) {
   for (const width of [768, 1280]) {
     const { ctx, page } = await open(name, url, width, { blockStorage: true });
-    const nav = await vis(page, "#site-nav");
-    const btn = await vis(page, "#site-header [data-nav-toggle]");
-    check(nav || btn, `${name} @${width} with storage blocked: neither rail nor Menu visible`);
+    check((await vis(page, "#site-nav")) || (await vis(page, T)), `${name} @${width} with storage blocked: neither rail nor toggle visible`);
     if (width === 1280) {
-      await page.locator("[data-rail-hide]").focus();
+      await page.locator(T).focus();
       await page.keyboard.press("Enter");
-      check(await vis(page, "#site-header [data-nav-toggle]"), `${name} blocked storage: Show outline missing after hide`);
+      check(await vis(page, T), `${name} blocked storage: toggle missing after hide`);
     }
     await ctx.close();
   }

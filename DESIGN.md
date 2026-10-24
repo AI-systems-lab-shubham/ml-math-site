@@ -37,7 +37,7 @@ Contrast ratios were computed against the page background (WCAG 2 formula).
 - 4px base: 4, 8, 12, 16, 24, 32, 48, 64, 96.
 - Sections separated by 64px (48px on mobile). Card padding 24px (16px on mobile).
 - Reading column 720px. Widgets and wide figures may use up to 1040px.
-- Desktop (900px and up): persistent left rail (`--rail-w`: 40vw clamped to 320–520px, so 520px from 1300px up) with the course outline, on every page including the home page. A **Hide outline** button at the top of the rail collapses it; the content then reflows and centres in the full width, the rail leaves the tab order, and focus moves to the header's **Show outline** button. The choice is saved in `localStorage` under `mlmath:ui:v1` (separate from progress). Below 900px: a top bar with a **Menu** button and a drawer. Rule: whenever the rail is not visible, a Menu or Show outline button is.
+- Desktop (900px and up): persistent left rail (`--rail-w`: `clamp(260px, 24vw, 340px)`) with the course outline, on every page including the home page. The content column is at least 640px wide while the rail shows (at 900px: 260px rail, 640px content). One **Outline** button in the header works at every width: an icon plus the text "Outline" from 900px, icon only below, always at least 44px square. It carries `aria-expanded`, and its accessible name switches between **Hide outline** and **Show outline**. On wide screens it shows or hides the rail (content reflows and centres in the full width, the hidden rail leaves the tab order, focus stays on the button) and the choice is saved in `localStorage` under `mlmath:ui:v1`, separate from progress. Below 900px it opens and closes the drawer (Esc closes it and returns focus to the button). The header, with this button, ships in each page's static HTML at its final size, so nothing moves when scripts run.
 - **Widget panel**: a fixed-aspect drawing area (`aspect-ratio: 16/10`, min-height 280px) with controls *below* it in a grid (`auto-fit, minmax(220px, 1fr)`). Controls never overlay the drawing. Every slider shows its label above and its live value beside it.
 
 ## 5. Components
@@ -62,6 +62,7 @@ Flat. 1px borders, no card shadows. Only popovers elevate: `0 8px 24px rgba(20,3
 ## 8. Responsive and accessibility
 - Breakpoints: 480, 768, 900px.
 - Touch targets at least 44px. Visible 3px burgundy focus ring on everything focusable.
+- **One exception, pointer-only:** the outline rail's concept rows are 40px high when the screen is 900px or wider *and* the primary pointer is fine (`(min-width: 900px) and (hover: hover) and (pointer: fine)`). Every touch device, and the phone drawer, gets 44px. `tools/ui-verify.mjs` applies the same rule and also checks the 44px rows with a touch context at 900 and above.
 - Everything operable by keyboard. Popovers use proper roles; Esc closes them; focus returns to the trigger.
 - Wide tables and equations scroll inside their own container. The page body never scrolls sideways.
 - Every diagram has a text description or `aria-label` summarising what it shows.
@@ -89,8 +90,10 @@ Contrast ratios below were computed with the WCAG 2 formula against `--paper` (t
 - Open state is remembered per module. In print, every section opens.
 
 **Outline rows** (left rail from 900px, drawer below)
-- Module row: chevron, title (Inter 600), ring and "n of m" below the title.
-- Concept row: 44px high (40px in the rail), state icon, title. Hover tint `rgba(20,33,61,.06)`.
+- Under the "Course outline" heading, a **legend** lists the three states with their icons: Not started, Visited, Complete.
+- Module row: chevron, module number (JetBrains Mono, burgundy; read as "Module n:" by screen readers), title (Inter 600), ring and "n of m" below the title. Planned modules are numbered too.
+- The **current module is open and the others are collapsed**. A learner's own opening of another module is remembered on `mlmath:ui:v1` (`outlineOpen`), never in the progress store; the current module always opens on load. The current concept is scrolled into view inside the outline (the outline scrolls, not the page).
+- Concept row: **44px high in the phone drawer and on touch devices, 40px in the rail for a fine pointer on a screen 900px or wider** (the exception in section 8), state icon, title (wraps to two lines when the rail is narrow). Hover tint `rgba(20,33,61,.06)`.
 - **Current**: tint `rgba(122,31,61,.08)`, 3px burgundy bar on the left, weight 600, `aria-current="page"` (navy text 13.14:1 on the tint).
 - **Disabled / planned**: `--muted` text, `cursor: not-allowed`, no link, plus a "Coming soon" pill (1px `--line-strong` border, 999px radius). Planned modules sit in the outline as plain rows, not dead links.
 
@@ -106,7 +109,13 @@ Contrast ratios below were computed with the WCAG 2 formula against `--paper` (t
 - Input: 44px high, 8px radius, label or `aria-label`, placeholder ending in "…". Results: group labels in 0.875rem `--muted`, rows 44px high, active row uses the outline "current" style.
 - Focus is trapped inside; Esc closes; focus returns to the opener; `overscroll-behavior: contain`. At most a 150ms fade, none under reduced motion.
 
-**Header**: height 61px (`--topbar-h`), holding Menu, brand, overall progress (ring and "n of m complete", text hidden below 768px) and the Highlight terms toggle (shortened to "Terms" below 480px).
+**Header**: height 61px (`--topbar-h`), holding the Outline toggle (section 4), the brand link (44px high), overall progress (ring and "n of m complete", text hidden below 768px, link at least 44px wide) and the Highlight terms toggle (shortened to "Terms" below 480px). Shipped in the static HTML of every page.
+
+**Symbols in equations**: KaTeX draws symbols in an `aria-hidden` layer, so they are pointer-only (hover or tap opens the popover; no tab stop, no role). Under each display equation that has symbols sits a collapsed `<details>` "Symbols in this equation" listing each symbol as a real button that opens the same popover; symbols inside inline maths are listed under their paragraph ("Symbols in this paragraph"). Equations without symbols get no list. A display equation that scrolls sideways becomes a focusable region (`tabindex="0"`, `role="region"`, a unique `aria-label` such as "Equation 3, scrolls sideways"); one that fits is plain content.
+
+**Landmarks**: one breadcrumb per page (in the module hero). The outcomes and takeaways boxes are plain headed blocks, not landmarks. Each per-card pager is named with its concept ("Previous and next concept for Equations").
+
+**Drawing text**: 14.5px in the drawing's own units, scaled up by `--ts` when the drawing is squeezed, so rendered text is never under 14px.
 
 ## Prompt for Claude Code
 "Build this page following DESIGN.md. Use the tokens exactly. Check screenshots at 375, 768 and 1280px for overlap before calling it done."

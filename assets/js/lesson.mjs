@@ -25,11 +25,6 @@ export function initLesson(shell) {
     const header = card.querySelector(":scope > header");
     const { prev, next } = neighbours(course, c.id);
 
-    header.prepend(el(`<nav class="breadcrumb" aria-label="Breadcrumb"><ol>
-      <li><a href="${hrefTo("index.html")}">Course</a></li>
-      <li><a href="${hrefTo(mod.path)}">${esc(mod.title)}</a></li>
-      <li><span aria-current="page">${esc(c.title)}</span></li></ol></nav>`));
-
     const needs = (c.requires ?? []).map((id) => findConcept(course, id)).filter(Boolean);
     const builds = needs.length
       ? `Builds on: ${needs.map((n) => `<a href="${linkTo(n.concept, n.module)}">${esc(n.concept.title)}</a>`).join(", ")} (a suggestion, not a lock)`
@@ -37,20 +32,20 @@ export function initLesson(shell) {
     header.append(el(`<p class="lesson-meta"><span>About ${c.minutes} min</span><span>${c.size === "full" ? "Full card" : "Compact card"}</span><span>${builds}</span></p>`));
 
     if (c.objectives.length) {
-      header.append(el(`<aside class="outcomes" aria-labelledby="out-${card.id}"><h3 class="box-title" id="out-${card.id}">By the end of this card you’ll be able to…</h3>
-        <ul>${c.objectives.map((o) => `<li>${renderInline(o)}</li>`).join("")}</ul></aside>`));
+      header.append(el(`<div class="outcomes"><h3 class="box-title">By the end of this card you’ll be able to…</h3>
+        <ul>${c.objectives.map((o) => `<li>${renderInline(o)}</li>`).join("")}</ul></div>`));
     }
 
     const teach = card.querySelector(":scope > details.teach-it");
     const footer = card.querySelector(":scope > footer");
     if (c.takeaways.length) {
-      (teach ?? footer).before(el(`<aside class="takeaways" aria-labelledby="key-${card.id}"><h3 class="box-title" id="key-${card.id}">Key takeaways</h3>
-        <ul>${c.takeaways.map((t) => `<li>${renderInline(t)}</li>`).join("")}</ul></aside>`));
+      (teach ?? footer).before(el(`<div class="takeaways"><h3 class="box-title">Key takeaways</h3>
+        <ul>${c.takeaways.map((t) => `<li>${renderInline(t)}</li>`).join("")}</ul></div>`));
     }
 
     const done = el(`<div class="lesson-done"><button class="button" type="button" data-complete="${c.id}"></button><p class="complete-status" role="status"></p></div>`);
     const nextHref = next ? linkTo(next, mod) : null;
-    const pager = el(`<nav class="pager" aria-label="Previous and next concept">
+    const pager = el(`<nav class="pager" aria-label="Previous and next concept for ${esc(c.title)}">
       ${prev ? `<a class="pager-prev" href="${linkTo(prev, mod)}" rel="prev"><span class="pager-label">Previous</span><span class="pager-title">${esc(prev.title)}</span></a>` : "<span></span>"}
       ${next ? `<a class="pager-next" href="${nextHref}" rel="next"><span class="pager-label">Up next · about ${next.minutes} min</span><span class="pager-title">${esc(next.title)}</span></a>`
              : `<p class="pager-end">That is everything available so far. More modules are on the way.</p>`}</nav>`);

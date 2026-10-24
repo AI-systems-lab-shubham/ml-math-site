@@ -65,11 +65,13 @@ export async function initShell({ moduleId = null } = {}) {
   // The header, Menu button and rail toggle come first so navigation works even if course.json fails to load.
   const nav = prepareNav();
   const header = mountHeader(moduleId);
-  if (nav && header) wireRail(header, nav);
+  const shell = { course: null, progress: null, moduleId, setCurrent: () => {}, revealCurrent: () => {} };
+  if (nav && header) wireRail(header, nav, shell);
   const course = await loadCourse();
   if (!course) return null;
-  const progress = createProgress({ course });
-  const shell = { course, progress, moduleId, setCurrent: () => {} };
+  shell.course = course;
+  shell.progress = createProgress({ course });
+  const { progress } = shell;
 
   fillProgress(shell);
   buildOutline(shell);
@@ -100,34 +102,33 @@ function writeUi(patch) {
   } catch { /* storage blocked: the preference lasts for this visit only */ }
 }
 
-// Wraps whatever the page ships in the nav (the no-script fallback list) and adds the Hide outline button above it.
+// Wraps whatever the page ships in the nav (the no-script fallback list) so the outline can replace it.
 function prepareNav() {
   const nav = document.getElementById("site-nav");
   if (!nav) return null;
   const body = document.createElement("div");
   body.className = "outline-body";
   body.append(...nav.childNodes);
-  const hide = document.createElement("button");
-  hide.type = "button";
-  hide.className = "button-secondary button-small rail-toggle";
-  hide.setAttribute("data-rail-hide", "");
-  hide.setAttribute("aria-controls", "site-nav");
-  hide.setAttribute("aria-expanded", "true");
-  hide.textContent = "Hide outline";
-  nav.append(hide, body);
+  nav.append(body);
   return nav;
 }
 
+const OUTLINE_ICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+// Pages ship this header in their static HTML at its final size, so nothing moves when scripts run.
+// It is rebuilt here only for a page that does not ship it.
 function mountHeader(moduleId) {
   const header = document.getElementById("site-header");
   if (!header) return null;
-  header.innerHTML = `
-    <button class="button-secondary button-small" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false">Menu</button>
+  if (!header.querySelector("[data-nav-toggle]")) {
+    header.innerHTML = `
+    <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline">${OUTLINE_ICON}<span class="outline-toggle-text">Outline</span></button>
     <a class="brand" translate="no" href="${hrefTo("index.html")}">ML Math</a>
     <div class="topbar-actions">
-      <a class="topbar-progress" href="${hrefTo("index.html#syllabus")}" data-course-progress></a>
+      <a class="topbar-progress" href="${hrefTo("index.html#syllabus")}" data-course-progress aria-label="Course progress">${ringSvg(0)}<span class="topbar-progress-text">– of – complete</span></a>
       ${moduleId ? '<button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>' : ""}
     </div>`;
+  }
   return header;
 }
 
@@ -144,11 +145,11 @@ function fillProgress({ progress }) {
 }
 
 // Two states: a saved preference for the rail (wide screens) and a transient drawer (narrow screens).
-// The header button is "Menu" in the drawer layout and "Show outline" when the rail is hidden; CSS hides it while the rail shows.
-function wireRail(header, nav) {
+// One header button serves both. It is always visible; its accessible name switches between "Hide outline" and
+// "Show outline" and aria-expanded tells whether the outline is showing.
+function wireRail(header, nav, shell) {
   const root = document.documentElement;
   const toggle = header.querySelector("[data-nav-toggle]");
-  const hide = nav.querySelector("[data-rail-hide]");
   const wide = window.matchMedia(RAIL_MIN);
   let railHidden = readUi().railHidden === true;
   let drawerOpen = false;
@@ -156,33 +157,22 @@ function wireRail(header, nav) {
   const render = () => {
     root.classList.toggle("rail-collapsed", railHidden);
     nav.classList.toggle("is-open", !wide.matches && drawerOpen);
-    if (wide.matches) {
-      toggle.textContent = "Show outline";
-      toggle.setAttribute("aria-expanded", String(!railHidden));
-    } else {
-      toggle.textContent = "Menu";
-      toggle.setAttribute("aria-expanded", String(drawerOpen));
-    }
-    hide.setAttribute("aria-expanded", String(!railHidden));
+    const showing = wide.matches ? !railHidden : drawerOpen;
+    toggle.setAttribute("aria-expanded", String(showing));
+    toggle.setAttribute("aria-label", showing ? "Hide outline" : "Show outline");
+    if (showing) shell.revealCurrent();
   };
 
   toggle.addEventListener("click", () => {
     if (wide.matches) {
-      railHidden = false;
+      railHidden = !railHidden;
       writeUi({ railHidden });
       render();
-      hide.focus();
     } else {
       drawerOpen = !drawerOpen;
       render();
       if (drawerOpen) nav.querySelector("summary, a")?.focus();
     }
-  });
-  hide.addEventListener("click", () => {
-    railHidden = true;
-    writeUi({ railHidden });
-    render();
-    toggle.focus();
   });
   wide.addEventListener("change", () => { drawerOpen = false; render(); });
   document.addEventListener("keydown", (ev) => {
@@ -193,28 +183,36 @@ function wireRail(header, nav) {
   render();
 }
 
+// Current module open, the others collapsed. A learner's own opening of another module is remembered
+// on the UI key (mlmath:ui:v1), not in the progress store; the current module always opens.
 function buildOutline(shell) {
   const { course, progress, moduleId } = shell;
   const nav = document.getElementById("site-nav");
   const body = nav?.querySelector(".outline-body");
   if (!body) return;
+  const saved = readUi().outlineOpen ?? {};
   const link = (m, c) => (m.id === moduleId ? `#${c.anchor}` : hrefTo(`${m.path}#${c.anchor}`));
-  const modules = course.modules.map((m) => {
+  const modules = course.modules.map((m, i) => {
+    const num = `<span class="outline-mod-num" aria-hidden="true">${i}</span><span class="sr-only">Module ${i}: </span>`;
     if (m.status !== "built") {
-      return `<li class="outline-module is-planned"><div class="outline-planned"><span class="outline-planned-title">${esc(m.title)}</span><span class="outline-soon">Coming soon</span></div></li>`;
+      return `<li class="outline-module is-planned"><div class="outline-planned"><span class="outline-planned-title">${num}${esc(m.title)}</span><span class="outline-soon">Coming soon</span></div></li>`;
     }
-    const open = m.id === moduleId || progress.isOpen(`outline:${m.id}`);
+    const open = m.id === moduleId || saved[m.id] === true;
     const rows = m.concepts.map((c) => c.status === "built"
       ? `<li><a href="${link(m, c)}" data-cid="${c.id}"><span class="outline-state" data-state-of="${c.id}"></span><span class="outline-title">${esc(c.title)}</span></a></li>`
       : `<li><span class="outline-disabled" aria-disabled="true"><span class="outline-state">${stateIcon("new")}</span><span class="outline-title">${esc(c.title)}</span><span class="outline-soon">Coming soon</span></span></li>`).join("");
     return `<li class="outline-module"><details data-module="${m.id}"${open ? " open" : ""}>
-      <summary><span class="chev" aria-hidden="true"></span><span class="outline-mod-title">${esc(m.title)}</span><span class="outline-mod-progress" data-mod-progress="${m.id}"></span></summary>
+      <summary><span class="chev" aria-hidden="true"></span><span class="outline-mod-title">${num}${esc(m.title)}</span><span class="outline-mod-progress" data-mod-progress="${m.id}"></span></summary>
       <ul class="sub">${rows}</ul></details></li>`;
   }).join("");
-  body.innerHTML = `<p class="outline-heading" id="outline-title">Course outline</p><ol aria-labelledby="outline-title">${modules}</ol>`;
+  const legend = ["new", "visited", "done"].map((st) => `<li><span class="outline-state state-${st}">${stateIcon(st)}</span>${STATE_LABEL[st]}</li>`).join("");
+  body.innerHTML = `<p class="outline-heading" id="outline-title">Course outline</p><ul class="outline-legend" aria-label="Legend">${legend}</ul><ol aria-labelledby="outline-title">${modules}</ol>`;
   nav.setAttribute("aria-label", "Course outline");
 
-  nav.querySelectorAll("details[data-module]").forEach((d) => d.addEventListener("toggle", () => progress.setOpen(`outline:${d.dataset.module}`, d.open)));
+  nav.querySelectorAll("details[data-module]").forEach((d) => d.addEventListener("toggle", () => {
+    if (d.dataset.module === moduleId) return;
+    writeUi({ outlineOpen: { ...(readUi().outlineOpen ?? {}), [d.dataset.module]: d.open } });
+  }));
 
   const paint = () => {
     nav.querySelectorAll("[data-state-of]").forEach((el) => {
@@ -230,9 +228,20 @@ function buildOutline(shell) {
   paint();
   progress.subscribe(paint);
 
+  // Scroll the outline itself (not the page) so the current concept is inside its visible area.
+  shell.revealCurrent = () => {
+    const a = nav.querySelector("a[aria-current]");
+    if (!a || nav.clientHeight === 0) return;
+    const n = nav.getBoundingClientRect();
+    const r = a.getBoundingClientRect();
+    const pad = 16;
+    if (r.top < n.top + pad) nav.scrollTop -= n.top + pad - r.top;
+    else if (r.bottom > n.bottom - pad) nav.scrollTop += r.bottom - (n.bottom - pad);
+  };
   shell.setCurrent = (id) => {
     nav.querySelectorAll("[aria-current]").forEach((a) => a.removeAttribute("aria-current"));
     nav.querySelector(`a[data-cid="${id}"]`)?.setAttribute("aria-current", "page");
+    shell.revealCurrent();
   };
 }
 

@@ -110,3 +110,25 @@ Run on the local copy of the repo, three built pages (home, Module 0, Module 1) 
 ### Notes
 - axe lists the same selector at 375 and 1280px as separate nodes, hence the counts of 2.
 - Selectors for KaTeX symbols are long; truncated with "…" above. Full text is in `reports/report.md` (regenerate with `AXE_PATH=/tmp/axe/node_modules/axe-core/axe.min.js node tools/ui-verify.mjs`).
+
+## Polish session, part 1 (outline and findings): before and after
+
+Same pages, widths and checks as above; `AXE_PATH` set. **Before: 132 findings. After: 0** (`node tools/ui-verify.mjs`). Two checks were added, both at 0: `landmark-unique` (every landmark on the page, so every card, not only the first) and `rail-content` (content column at least 640px while the rail shows).
+
+| Group (selector) | Before | After | Fix |
+|---|---|---|---|
+| layout-shift `page load` | 5 | 0 | Header with Outline toggle, brand and progress ships in the static HTML; empty progress text and widget/stepper placeholders reserve their height; home outcomes in the static HTML match `course.json`; Inter SemiBold preloaded on all three pages (a late SemiBold swap in a callout caused the Module 1 shift) |
+| small-text `text.tick-label` | 12 | 0 | 14.5px base in drawing units; `--ts` now uses the tighter axis (width or height) of the `meet` scale |
+| small-text `text.label` | 2 | 0 | same |
+| tap-target `nav#site-nav a` | 40 | 0 | 44px rows by default; 40px only for a fine pointer at 900px and up (DESIGN.md section 8); touch context checked at 900 and 1100 |
+| tap-target `a.brand` | 15 | 0 | 44px high, inline-flex |
+| tap-target `a.topbar-progress` | 3 | 0 | `min-width: 44px` |
+| axe A1 `aria-hidden-focus` (22 selectors) | 44 | 0 | KaTeX symbols pointer-only; "Symbols in this equation" list of real buttons |
+| axe A2 `scrollable-region-focusable` | 3 | 0 | scrolling `.math-display` gets tabindex, region role and a unique label |
+| axe A3 `landmark-unique` (4 selectors) | 8 | 0 | one breadcrumb per page; outcomes and takeaways are plain blocks; pager names include the concept title |
+| **Total** | **132** | **0** | |
+
+Notes
+- The popover used to stay open over the next focus stop when Tab moved from a term to a non-term (the new summary rows exposed this as a "covered when focused" finding); it now closes on focus moving to anything that is not a term, symbol or the popover.
+- Widget and stepper space is reserved with CSS measured for the first widget of each module (`--widget-chrome` on `<main>`). This is interim: the lazy-mount API (next session) replaces it with a per-widget reserve.
+- Still not run: a real phone, a real screen reader, the live Pages site.

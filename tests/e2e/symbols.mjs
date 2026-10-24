@@ -1,0 +1,67 @@
+// E2E check: symbols drawn by KaTeX are pointer-only; each equation that has symbols gets a collapsed
+// "Symbols in this equation" list whose buttons open the same popovers from the keyboard; scrolling equations are reachable.
+// Run: node tests/e2e/symbols.mjs   (Playwright needed; prints SKIPPED and exits 1 otherwise)
+import { requirePlaywright, serveStatic } from "../../tools/lib/playwright.mjs";
+
+const pw = await requirePlaywright("symbols e2e");
+const { base, close } = await serveStatic();
+let failures = 0, checks = 0;
+const check = (ok, label) => { checks++; if (!ok) { failures++; console.error(`FAIL  ${label}`); } };
+const browser = await pw.chromium.launch();
+
+for (const [name, url] of [["m00", "modules/00-foundations/"], ["m01", "modules/01-linear-algebra/"]]) {
+  const ctx = await browser.newContext({ viewport: { width: 375, height: 800 } });
+  const page = await ctx.newPage();
+  await page.goto(base + url, { waitUntil: "networkidle" });
+  await page.waitForSelector(".eq-symbols");
+  const info = await page.evaluate(() => {
+    const syms = [...document.querySelectorAll(".katex [data-sym]")];
+    const lists = [...document.querySelectorAll(".eq-symbols")];
+    const displays = [...document.querySelectorAll(".math-display")];
+    const regions = displays.filter((d) => d.getAttribute("role") === "region");
+    const labels = regions.map((r) => r.getAttribute("aria-label"));
+    return {
+      focusableSyms: syms.filter((e) => e.hasAttribute("tabindex") || e.hasAttribute("role")).length,
+      symCount: syms.length,
+      openLists: lists.filter((d) => d.open).length,
+      lists: lists.length,
+      displaysWithSyms: displays.filter((d) => d.querySelector("[data-sym]")).length,
+      displaysWithList: displays.filter((d) => d.nextElementSibling?.matches(".eq-symbols")).length,
+      listsOnSymless: lists.filter((d) => { const a = d.previousElementSibling; return !a?.querySelector("[data-sym]"); }).length,
+      missing: syms.filter((e) => { const list = e.closest(".math-display")?.nextElementSibling ?? e.closest("p, li, td")?.nextElementSibling; return !list?.matches?.(".eq-symbols") && !e.closest("p, li, td")?.querySelector(".eq-symbols"); }).length,
+      unscrollable: displays.filter((d) => d.scrollWidth > d.clientWidth + 1 && d.tabIndex !== 0).length,
+      scrollOk: regions.every((r) => r.tabIndex === 0),
+      uniqueLabels: new Set(labels).size === labels.length,
+      fitting: displays.filter((d) => d.scrollWidth <= d.clientWidth + 1 && d.hasAttribute("tabindex")).length,
+    };
+  });
+  check(info.symCount > 0 && info.lists > 0, `${name}: expected symbols and symbol lists`);
+  check(info.focusableSyms === 0, `${name}: ${info.focusableSyms} KaTeX symbols still have tabindex or a role`);
+  check(info.openLists === 0, `${name}: symbol lists should start collapsed`);
+  check(info.displaysWithSyms === info.displaysWithList, `${name}: ${info.displaysWithSyms} display equations have symbols but ${info.displaysWithList} have a list`);
+  check(info.listsOnSymless === 0, `${name}: a symbol list sits under something with no symbols`);
+  check(info.missing === 0, `${name}: ${info.missing} symbols have no list`);
+  check(info.unscrollable === 0 && info.scrollOk && info.fitting === 0, `${name}: scrolling equations must be focusable regions, fitting ones must not be`);
+  check(info.uniqueLabels, `${name}: scrolling-equation labels must be unique`);
+
+  // Keyboard path: summary opens the list, Tab reaches a symbol button, the popover opens, Esc closes it and returns focus.
+  const summary = page.locator(".eq-symbols > summary").first();
+  await summary.scrollIntoViewIfNeeded();
+  await summary.focus();
+  await page.keyboard.press("Enter");
+  check(await page.evaluate(() => document.querySelector(".eq-symbols").open), `${name}: Enter on the summary should open the list`);
+  await page.keyboard.press("Tab");
+  const onButton = await page.evaluate(() => document.activeElement.matches(".sym-term"));
+  check(onButton, `${name}: Tab from the summary should reach a symbol button`);
+  await page.keyboard.press("Enter");
+  check(await page.locator(".glossary-popover:not([hidden])").count() === 1, `${name}: Enter on a symbol button should open its popover`);
+  await page.keyboard.press("Escape");
+  check(await page.locator(".glossary-popover:not([hidden])").count() === 0, `${name}: Esc should close the popover`);
+  check(await page.evaluate(() => document.activeElement.matches(".sym-term")), `${name}: focus should return to the symbol button`);
+  await ctx.close();
+}
+
+await browser.close();
+await close();
+console.log(`${checks} checks, ${failures} failed`);
+process.exit(failures ? 1 : 0);

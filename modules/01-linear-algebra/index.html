@@ -10,8 +10,12 @@
   <title>Module 1: Linear algebra, part 1 · ML Math</title>
   <meta name="description" content="Vectors as arrows and as lists, adding and scaling them, matrices as tables and machines, and matrix multiplication, taught from pictures first.">
   <link rel="icon" href="data:,">
+  <link rel="preload" href="../../vendor/fonts/Inter-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../../vendor/fonts/Fraunces-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="../../vendor/fonts/Inter-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="../../vendor/katex/katex.min.css">
   <link rel="stylesheet" href="../../assets/css/site.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
   <script src="../../assets/js/rail-init.js"></script>
   <script src="../../vendor/katex/katex.min.js"></script>
   <script type="module" src="../../assets/js/linalg.mjs"></script>
@@ -19,7 +23,12 @@
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="topbar" id="site-header">
-  <a class="brand" href="../../index.html">ML Math</a>
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
 </header>
 
 <div class="layout">
@@ -46,8 +55,11 @@
   </ol>
 </nav>
 
-<main id="main">
+<main id="main" style="--widget-chrome: 337px; --widget-chrome-narrow: 484px">
   <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../index.html">Course</a></li>
+      <li><span aria-current="page">Module 1: Linear algebra</span></li></ol></nav>
     <p class="eyebrow">Module 1 · part 1 of 2</p>
     <h1>Linear algebra</h1>
     <p class="lede">Lists of numbers that can also be arrows, and tables of numbers that act as machines. Four ideas, each from a picture first, then the symbols, then where it shows up inside a language model.</p>
