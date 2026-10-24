@@ -1,3 +1,4 @@
 # Playwright CLI output (may contain credentials)
 .playwright-cli/
 .DS_Store
+reports/
