@@ -1,8 +1,9 @@
 // One command for the module checklist: unit tests, course, glossary, claims, e2e nav, email hygiene.
-// Usage: node tools/verify.mjs [--only <name>] [--skip-e2e]
+// Usage: node tools/verify.mjs [--only <name>] [--skip-e2e] [--skip-ui]
 // Exit 0 only if nothing failed. Browser and email steps that could not run are listed as SKIPPED.
 import { spawnSync } from "node:child_process";
-import { readdirSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
+import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -17,15 +18,21 @@ const STEPS = [
   { name: "e2e-nav", cmd: ["node", "tests/e2e/nav-reachable.mjs"], browser: true },
   { name: "e2e-symbols", cmd: ["node", "tests/e2e/symbols.mjs"], browser: true },
   { name: "e2e-widgets", cmd: ["node", "tests/e2e/widgets-lazy.mjs"], browser: true },
+  { name: "e2e-404", cmd: ["node", "tests/e2e/404.mjs"], browser: true },
+  { name: "ui", cmd: ["node", "tools/ui-verify.mjs"], browser: true, ui: true },
   { name: "email", cmd: ["node", "tools/check-email.mjs"], skipWhen: (out) => /^skipped:/m.test(out) },
 ];
 const only = process.argv.includes("--only") ? process.argv[process.argv.indexOf("--only") + 1] : null;
+
+// axe-core for ui-verify: AXE_PATH if set, else the copy in ~/.dev-tools/axe, else /tmp/axe. Missing means ui-verify reports SKIPPED, which fails.
+const axePath = [process.env.AXE_PATH, join(homedir(), ".dev-tools/axe/node_modules/axe-core/axe.min.js"), "/tmp/axe/node_modules/axe-core/axe.min.js"].find((p) => p && existsSync(p));
 
 const results = [];
 for (const step of STEPS) {
   if (only && step.name !== only) continue;
   if (process.argv.includes("--skip-e2e") && step.browser) { results.push({ name: step.name, status: "SKIPPED", note: "--skip-e2e" }); continue; }
-  const r = spawnSync(step.cmd[0], step.cmd.slice(1), { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  if (process.argv.includes("--skip-ui") && step.ui) { results.push({ name: step.name, status: "SKIPPED", note: "--skip-ui (counts as a failure)" }); continue; }
+  const r = spawnSync(step.cmd[0], step.cmd.slice(1), { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024, env: step.ui && axePath ? { ...process.env, AXE_PATH: axePath } : process.env });
   const out = `${r.stdout}${r.stderr}`;
   let status = r.status === 0 ? "PASS" : "FAIL";
   let note = "";

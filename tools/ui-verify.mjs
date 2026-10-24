@@ -16,6 +16,7 @@ const ONLY_CHECKS = arg("--checks")?.split(",") ?? null;
 const SHOTS = !process.argv.includes("--no-shots");
 const REPORT_DIR = path.resolve(process.env.REPORT_DIR ?? path.join(siteRoot, "reports"));
 const AXE_PATH = process.env.AXE_PATH ?? "";
+const AXE_WIDTHS = [375, 768, 900, 1280]; // axe runs at these widths (those that are also in --widths)
 const CLS_BUDGET = 0.1;
 const MIN_TARGET = 44;
 const MIN_TEXT = 14;
@@ -159,6 +160,21 @@ const probes = {
       }
     }
     return [...groups].slice(0, 10).map(([k, c]) => `${k} (${c} text run${c > 1 ? "s" : ""})`);
+  },
+
+  meta() {
+    const out = [];
+    const d = document.querySelector('meta[name="description"]')?.content?.trim() ?? "";
+    if (!document.title.trim()) out.push("page has no <title>");
+    if (d.length < 40 || d.length > 200) out.push(`meta description is ${d.length} characters (want 40 to 200)`);
+    if (document.documentElement.lang !== "en") out.push(`<html lang> is "${document.documentElement.lang}", expected "en"`);
+    const icon = document.querySelector('link[rel="icon"]')?.getAttribute("href") ?? "";
+    if (!icon || icon.startsWith("data:,")) out.push("no favicon link");
+    const mains = document.querySelectorAll("main").length;
+    if (mains !== 1) out.push(`${mains} <main> landmarks (want exactly 1)`);
+    const bare = [...document.querySelectorAll("a[href]")].filter((a) => !(a.textContent.trim() || a.getAttribute("aria-label") || a.querySelector("[aria-label]"))).length;
+    if (bare) out.push(`${bare} link(s) without visible text or a label`);
+    return out;
   },
 
   structure(expectedIds, stages) {
@@ -361,6 +377,7 @@ for (const pg of selected) {
       if (cls > CLS_BUDGET) add("layout-shift", pg, width, `cumulative layout shift ${cls.toFixed(3)} (budget ${CLS_BUDGET})`);
       ran.add("layout-shift");
     }
+    if (want("meta") && width === WIDTHS[WIDTHS.length - 1]) { for (const e of await run(page, "meta")) add("meta", pg, "all", e); ran.add("meta"); }
     if (want("structure") && pg.expectModule && width === WIDTHS[WIDTHS.length - 1]) {
       const ids = pg.expectModule.concepts.filter((c) => c.status === "built").map((c) => c.anchor);
       for (const e of await run(page, "structure", ids, STAGES)) add("structure", pg, "all", e);
@@ -377,7 +394,7 @@ for (const pg of selected) {
       if (m.running.length) add("motion", pg, "all", `autoplay: ${m.running.length} animation(s) running on load (${[...new Set(m.running)].join(", ")})`);
       ran.add("motion");
     }
-    if (axeSource && want("axe") && (width === WIDTHS[0] || width === WIDTHS[WIDTHS.length - 1])) {
+    if (axeSource && want("axe") && AXE_WIDTHS.includes(width)) {
       await page.evaluate(axeSource);
       const res = await page.evaluate(() => axe.run(document, { runOnly: ["wcag2a", "wcag2aa", "wcag21aa", "best-practice"] }));
       for (const v of res.violations) for (const n of v.nodes) add("axe", pg, width, `${v.id} (${v.impact}): ${v.help}`, n.target.join(" "));
@@ -467,4 +484,5 @@ fs.writeFileSync(path.join(REPORT_DIR, "report.md"), lines.join("\n") + "\n");
 fs.writeFileSync(path.join(REPORT_DIR, "results.json"), JSON.stringify({ checks, findings }, null, 1));
 const counts = Object.fromEntries(checks.map((c) => [c, findings.filter((f) => f.check === c).length]));
 console.log(`ui-verify: ${findings.length} finding(s) ${JSON.stringify(counts)}; report in ${path.relative(process.cwd(), REPORT_DIR) || "."}/report.md`);
-process.exit(findings.length ? 1 : 0);
+if (want("axe") && !axeSource) console.error("SKIPPED: axe-core did NOT run (AXE_PATH missing). This is not a pass.");
+process.exit(findings.length || (want("axe") && !axeSource) ? 1 : 0);

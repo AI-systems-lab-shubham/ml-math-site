@@ -61,6 +61,26 @@ for (const [name, url] of [["m00", "modules/00-foundations/"], ["m01", "modules/
   await ctx.close();
 }
 
+// Touch: every "Symbols in this equation" button is at least 44 x 44 CSS px, at phone and tablet widths.
+for (const [name, url] of [["m00", "modules/00-foundations/"], ["m01", "modules/01-linear-algebra/"]]) {
+  for (const width of [375, 768]) {
+    const ctx = await browser.newContext({ viewport: { width, height: 800 }, hasTouch: true });
+    const page = await ctx.newPage();
+    await page.goto(base + url, { waitUntil: "networkidle" });
+    await page.waitForSelector(".eq-symbols");
+    const r = await page.evaluate(() => {
+      const coarse = matchMedia("(pointer: coarse)").matches;
+      document.querySelectorAll(".eq-symbols").forEach((d) => { d.open = true; });
+      const small = [...document.querySelectorAll(".eq-symbols .sym-term")].map((b) => b.getBoundingClientRect()).filter((b) => b.width < 43.5 || b.height < 43.5);
+      return { coarse, total: document.querySelectorAll(".eq-symbols .sym-term").length, small: small.map((b) => `${Math.round(b.width)}x${Math.round(b.height)}`).slice(0, 4) };
+    });
+    check(r.coarse, `${name}@${width}: the browser did not report a coarse pointer, so the touch test is not valid`);
+    check(r.total > 0, `${name}@${width}: no symbol buttons found`);
+    check(r.small.length === 0, `${name}@${width}: symbol buttons under 44px on touch: ${r.small.join(", ")}`);
+    await ctx.close();
+  }
+}
+
 await browser.close();
 await close();
 console.log(`${checks} checks, ${failures} failed`);

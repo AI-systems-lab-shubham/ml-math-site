@@ -68,7 +68,7 @@ Flat. 1px borders, no card shadows. Only popovers elevate: `0 8px 24px rgba(20,3
 - Every diagram has a text description or `aria-label` summarising what it shows.
 
 ## 9. Do and don't
-**Do:** one idea per section, plenty of whitespace, labels next to the things they describe, consistent colours per concept across the whole site.
+**Do:** one idea per section, plenty of whitespace, labels next to the things they describe, consistent colours per concept across the whole site, one primary action per screen (one filled button; everything else is a secondary button or a plain link).
 **Don't:** squash controls against diagrams, use red for wrong answers, rely on colour alone, autoplay, stack more than one animation, put long text in all caps, use decorative motion.
 
 ## 10. Course shell and learning components (added in Session A; see `docs/LEARNING-UX.md`)

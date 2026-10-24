@@ -132,3 +132,7 @@ Notes
 - The popover used to stay open over the next focus stop when Tab moved from a term to a non-term (the new summary rows exposed this as a "covered when focused" finding); it now closes on focus moving to anything that is not a term, symbol or the popover.
 - Widget and stepper space is reserved with CSS measured for the first widget of each module (`--widget-chrome` on `<main>`). This is interim: the lazy-mount API (next session) replaces it with a per-widget reserve.
 - Still not run: a real phone, a real screen reader, the live Pages site.
+
+## Polish session P2: before and after
+
+`node tools/ui-verify.mjs` with axe-core 4.10.2 at 375, 768, 900 and 1280px (now on home, Module 0, Module 1 and 404.html; a new `meta` check covers title, description, lang, favicon, one main, links with text). **Before: 0 findings. After: 0.** The 404 page was mutation-tested (no lang, no main, low contrast): 18 findings, so the checks bite. Widgets are mounted before the checks run, so the real widgets are still audited.
