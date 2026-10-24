@@ -14,7 +14,7 @@ Contrast ratios were computed against the page background (WCAG 2 formula).
 | `--burgundy` | `#7A1F3D` | links, glossary underline, primary buttons, focus ring | 8.9:1 |
 | `--muted` | `#4A5568` | secondary text | 6.7:1 |
 | `--rule` | `#D9D0BE` | decorative hairlines only | 1.4:1 (never carries meaning) |
-| `--line-strong` | `#7D7565` | input and control borders (must be at least 3:1 against its background; verify) | verify |
+| `--line-strong` | `#7D7565` | input and control borders (must be at least 3:1 against its background) | 4.05:1 on bone, 4.30:1 on paper (computed) |
 
 **Concept colours** (diagrams and equation symbols; text-safe versions)
 `--c-navy #14213D`, `--c-burgundy #7A1F3D`, `--c-teal #166A65` (5.7:1), `--c-blue #2F5F99` (5.8:1), `--c-ochre #8A5A12` (5.3:1). Ochre fills may use `#B7791F`, but never for text.
@@ -69,6 +69,44 @@ Flat. 1px borders, no card shadows. Only popovers elevate: `0 8px 24px rgba(20,3
 ## 9. Do and don't
 **Do:** one idea per section, plenty of whitespace, labels next to the things they describe, consistent colours per concept across the whole site.
 **Don't:** squash controls against diagrams, use red for wrong answers, rely on colour alone, autoplay, stack more than one animation, put long text in all caps, use decorative motion.
+
+## 10. Course shell and learning components (added in Session A; see `docs/LEARNING-UX.md`)
+Contrast ratios below were computed with the WCAG 2 formula against `--paper` (the rail and cards).
+
+**Progress states** (icon shape *and* colour *and* text, never colour alone)
+| State | Icon | Colour | On paper | Screen-reader text |
+|---|---|---|---|---|
+| Not started | empty circle | `--muted` | 7.10:1 | "Not started" |
+| Visited | half-filled circle | `--c-blue` | 6.15:1 | "Visited" |
+| Complete | filled circle with tick | `--ok` | 6.01:1 | "Complete" |
+
+- **Progress ring**: 24px, 3px stroke. Track `--rule` (decorative; the "n of m" text carries the meaning), arc `--ok`, starting at 12 o'clock. Always paired with text such as "3 of 10".
+- Visited is automatic (heading reaches the top 30% of the viewport, or stays in view about 2 seconds). Complete only happens when the learner presses **Mark complete**, which can be undone.
+
+**Accordion and chevron** (native `<details>`/`<summary>`)
+- Summary row at least 44px high, hover tint `rgba(20,33,61,.06)`, 3px burgundy focus ring. No browser marker.
+- Chevron is a 10px corner drawn with borders in the text colour, pointing right when closed and down when open (a 90° turn, 180ms ease-out; none under reduced motion).
+- Open state is remembered per module. In print, every section opens.
+
+**Outline rows** (left rail, drawer below 1100px)
+- Module row: chevron, title (Inter 600), ring and "n of m" below the title.
+- Concept row: 44px high (40px in the rail), state icon, title. Hover tint `rgba(20,33,61,.06)`.
+- **Current**: tint `rgba(122,31,61,.08)`, 3px burgundy bar on the left, weight 600, `aria-current="page"` (navy text 13.14:1 on the tint).
+- **Disabled / planned**: `--muted` text, `cursor: not-allowed`, no link, plus a "Coming soon" pill (1px `--line-strong` border, 999px radius). Planned modules sit in the outline as plain rows, not dead links.
+
+**Key takeaways box**: `--paper` fill, 1px `--line-strong` border, 4px `--burgundy` left border, 12px radius, 16px / 24px padding. Title Inter 600 at 1.0625rem. Three or four short lines.
+**Outcomes box** ("By the end of this card you’ll be able to…"): `--info-tint` fill, 4px `--c-blue` left border, same radius and padding.
+
+**Lesson end**: **Mark complete** is the one primary button (burgundy pill). After pressing it becomes the secondary style, "✓ Completed · undo", and a polite status line says what happened. **Previous** and **Up next** are white 12px-radius cards with a small label and the concept title (and minutes for Up next).
+
+**Notice bar**: `--try-tint` fill with a 1px `--try` bottom border, used for storage problems ("could not be read", "storage is blocked"). Never red.
+
+**Dialog and search styles** (to be built in Session C)
+- Panel: `--paper` fill, 1px `--line-strong` border, 12px radius, the popover shadow `0 8px 24px rgba(20,33,61,.14)`, width `min(640px, 100vw - 32px)`, placed in the upper third. Backdrop `rgba(20,33,61,.4)`.
+- Input: 44px high, 8px radius, label or `aria-label`, placeholder ending in "…". Results: group labels in 0.875rem `--muted`, rows 44px high, active row uses the outline "current" style.
+- Focus is trapped inside; Esc closes; focus returns to the opener; `overscroll-behavior: contain`. At most a 150ms fade, none under reduced motion.
+
+**Header**: height 61px (`--topbar-h`), holding Menu, brand, overall progress (ring and "n of m complete", text hidden below 768px) and the Highlight terms toggle (shortened to "Terms" below 480px).
 
 ## Prompt for Claude Code
 "Build this page following DESIGN.md. Use the tokens exactly. Check screenshots at 375, 768 and 1280px for overlap before calling it done."

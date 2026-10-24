@@ -8,6 +8,7 @@ An interactive static website that teaches the maths behind machine learning and
 - `docs/CURRICULUM.md`: module order, concept lists, status. Read at session start.
 - `docs/CONCEPT-CARD.md`: the template every concept follows. Read before writing lesson content.
 - `docs/GLOSSARY.md`: glossary and popover spec. Read before adding terms.
+- `docs/LEARNING-UX.md`: course shell, progress, lesson template and home page patterns. Read before touching the shell or any page chrome.
 
 ## Hard constraints
 - Static site for GitHub Pages: plain HTML, CSS and JavaScript (ES modules are fine). No framework, no build step, no bundler, no runtime CDN.

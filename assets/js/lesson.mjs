@@ -34,7 +34,7 @@ export function initLesson(shell) {
     const builds = needs.length
       ? `Builds on: ${needs.map((n) => `<a href="${linkTo(n.concept, n.module)}">${esc(n.concept.title)}</a>`).join(", ")} (a suggestion, not a lock)`
       : "Needs only high-school maths";
-    header.append(el(`<p class="lesson-meta"><span>About ${c.minutes} min</span><span>${c.size === "full" ? "Full card" : "Compact card"}</span><span>${builds}</span></p>`));
+    header.append(el(`<p class="lesson-meta"><span>About ${c.minutes} min</span><span>${c.size === "full" ? "Full card" : "Compact card"}</span><span>${builds}</span></p>`));
 
     if (c.objectives.length) {
       header.append(el(`<aside class="outcomes" aria-labelledby="out-${card.id}"><h3 class="box-title" id="out-${card.id}">By the end of this card you’ll be able to…</h3>
@@ -52,7 +52,7 @@ export function initLesson(shell) {
     const nextHref = next ? linkTo(next, mod) : null;
     const pager = el(`<nav class="pager" aria-label="Previous and next concept">
       ${prev ? `<a class="pager-prev" href="${linkTo(prev, mod)}" rel="prev"><span class="pager-label">Previous</span><span class="pager-title">${esc(prev.title)}</span></a>` : "<span></span>"}
-      ${next ? `<a class="pager-next" href="${nextHref}" rel="next"><span class="pager-label">Up next · about ${next.minutes} min</span><span class="pager-title">${esc(next.title)}</span></a>`
+      ${next ? `<a class="pager-next" href="${nextHref}" rel="next"><span class="pager-label">Up next · about ${next.minutes} min</span><span class="pager-title">${esc(next.title)}</span></a>`
              : `<p class="pager-end">That is everything available so far. More modules are on the way.</p>`}</nav>`);
     (footer ?? card).before(done, pager);
 

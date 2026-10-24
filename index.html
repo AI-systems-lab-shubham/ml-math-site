@@ -6,30 +6,68 @@
   <meta name="site-root" content="./">
   <title>ML Math: the maths behind machine learning</title>
   <meta name="description" content="An interactive course on the maths behind machine learning and large language models, for learners who know high-school maths.">
+  <meta name="theme-color" content="#F6F1E7">
   <link rel="icon" href="data:,">
+  <link rel="preload" href="vendor/fonts/Inter-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="vendor/fonts/Fraunces-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="assets/css/site.css">
+  <script type="module" src="assets/js/home.mjs"></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="topbar">
+<header class="topbar" id="site-header">
   <a class="brand" href="index.html">ML Math</a>
 </header>
+<noscript><p class="notice">The syllabus, progress and widgets need JavaScript. The module links below still work.</p></noscript>
 <main id="main">
   <div class="column page-hero">
     <p class="eyebrow">An interactive course</p>
     <h1>The maths behind machine learning</h1>
     <p class="lede">Learn it alone, then explain it to someone else. Each idea starts from a picture, adds the notation, and ends with where it shows up in a large language model.</p>
-    <p>You need high-school maths. Nothing is too simple to explain.</p>
+    <div class="hero-action" data-hero-action><a class="button" href="modules/00-foundations/">Start the course</a></div>
+    <p class="muted" data-total-time></p>
   </div>
-  <div class="column">
-    <h2>Modules</h2>
-    <ol class="module-list">
-      <li><a class="module-item" href="modules/00-foundations/"><span class="num">Module 0 · in progress</span><strong>Foundations</strong>Variables, equations, functions, slope and exponents. Logarithms and more to follow.</a></li>
-      <li><a class="module-item" href="modules/01-linear-algebra/"><span class="num">Module 1 · part 1 of 2</span><strong>Linear algebra</strong>Vectors, adding and scaling, matrices, and matrix multiplication. Systems of equations and transformations to follow.</a></li>
-      <li><span class="module-item soon"><span class="num">Module 2</span><strong>Analytic geometry</strong>Coming later</span></li>
-      <li><span class="module-item soon"><span class="num">Modules 3 to 10</span><strong>Matrix decompositions to a tiny language model</strong>Coming later</span></li>
+
+  <section class="column home-section" aria-labelledby="learn-title">
+    <h2 id="learn-title">What you’ll learn</h2>
+    <ul data-outcomes>
+      <li>Read and rearrange simple equations, and explain why one equation with two unknowns has many solutions</li>
+      <li>Multiply a matrix by a vector and explain what it does to space</li>
+    </ul>
+  </section>
+
+  <section class="column home-section" aria-labelledby="who-title">
+    <h2 id="who-title">Who it’s for</h2>
+    <p>You need high-school maths and curiosity. Nothing is too simple to explain, and nothing is locked: suggestions about what to read first are signposts, never gates.</p>
+  </section>
+
+  <section class="column home-section" id="syllabus" aria-labelledby="syllabus-title">
+    <h2 id="syllabus-title">Syllabus</h2>
+    <ol class="syllabus" data-syllabus>
+      <li><a class="module-item" href="modules/00-foundations/"><span class="num">Module 0</span><strong>Foundations</strong></a></li>
+      <li><a class="module-item" href="modules/01-linear-algebra/"><span class="num">Module 1</span><strong>Linear algebra</strong></a></li>
     </ol>
-  </div>
+  </section>
+
+  <section class="column home-section" id="how" aria-labelledby="how-title">
+    <h2 id="how-title">How this course works</h2>
+    <ol class="how-list">
+      <li><strong>7 stages per idea.</strong> Meaning, picture, real life, a worked example, why and when, how to arrive at it, and where it appears in a language model.</li>
+      <li><strong>Hover or tap any underlined term</strong> for a plain-language and a mathematical definition.</li>
+      <li><strong>Mark complete when you could teach it.</strong> Progress stays in this browser only, so you can carry it between devices with the file below.</li>
+    </ol>
+    <div class="transfer">
+      <h3 class="box-title">Your progress file</h3>
+      <p>Export saves your progress as a small file. Import loads one and replaces what this browser has saved.</p>
+      <div class="transfer-buttons">
+        <button class="button-secondary" type="button" data-export>Export progress</button>
+        <button class="button-secondary" type="button" data-import>Import progress</button>
+        <input type="file" accept="application/json,.json" data-import-file hidden>
+      </div>
+      <p class="complete-status" role="status" data-transfer-status></p>
+    </div>
+  </section>
 </main>
+<footer class="site-footer" id="site-footer"></footer>
 </body>
 </html>

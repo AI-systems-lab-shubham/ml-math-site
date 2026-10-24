@@ -89,7 +89,7 @@
           "takeaways": [
             "Slope is how much the [[output|output]] changes for one step in the [[input|input]].",
             "In y = mx + b, m is the [[slope|slope]] and b is the starting value.",
-            "A [[neuron|neuron]]'s weighted [[sum|sum]] plus a [[bias|bias]] has this same shape."
+            "A [[neuron|neuron]]’s weighted [[sum|sum]] plus a [[bias|bias]] has this same shape."
           ],
           "requires": [
             "m00-functions"
@@ -366,7 +366,7 @@
       "title": "Probability and distributions",
       "path": "modules/05-probability/",
       "status": "planned",
-      "summary": "Probability rules, Bayes' theorem, random variables and common distributions.",
+      "summary": "Probability rules, Bayes’ theorem, random variables and common distributions.",
       "minutes": 0,
       "prerequisites": [
         "m00"

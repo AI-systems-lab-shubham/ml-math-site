@@ -103,10 +103,10 @@ function buildHeader({ course, progress, moduleId }) {
   if (!header) return;
   header.innerHTML = `
     ${moduleId ? '<button class="button-secondary button-small" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false">Menu</button>' : ""}
-    <a class="brand" href="${hrefTo("index.html")}">ML Math</a>
+    <a class="brand" translate="no" href="${hrefTo("index.html")}">ML Math</a>
     <div class="topbar-actions">
       <a class="topbar-progress" href="${hrefTo("index.html#syllabus")}" data-course-progress></a>
-      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+      ${moduleId ? '<button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>' : ""}
     </div>`;
   const slot = header.querySelector("[data-course-progress]");
   const paint = () => {
@@ -157,7 +157,7 @@ function buildOutline(shell) {
       <summary><span class="chev" aria-hidden="true"></span><span class="outline-mod-title">${esc(m.title)}</span><span class="outline-mod-progress" data-mod-progress="${m.id}"></span></summary>
       <ul class="sub">${rows}</ul></details></li>`;
   }).join("");
-  nav.innerHTML = `<h2 id="outline-title">Course outline</h2><ol aria-labelledby="outline-title">${modules}</ol>`;
+  nav.innerHTML = `<p class="outline-heading" id="outline-title">Course outline</p><ol aria-labelledby="outline-title">${modules}</ol>`;
   nav.setAttribute("aria-label", "Course outline");
 
   nav.querySelectorAll("details[data-module]").forEach((d) => d.addEventListener("toggle", () => progress.setOpen(`outline:${d.dataset.module}`, d.open)));
@@ -170,7 +170,7 @@ function buildOutline(shell) {
     });
     nav.querySelectorAll("[data-mod-progress]").forEach((el) => {
       const p = progress.moduleProgress(el.dataset.modProgress);
-      el.innerHTML = `${ringSvg(p.percent)}<span class="outline-count">${p.done} of ${p.total}<span class="sr-only"> concepts complete</span></span>`;
+      el.innerHTML = `${ringSvg(p.percent)}<span class="outline-count"><span class="sr-only">: </span>${p.done} of ${p.total}<span class="sr-only"> concepts complete</span></span>`;
     });
   };
   paint();
