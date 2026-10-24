@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="site-root" content="../../">
+  <meta name="module-id" content="m00">
   <title>Module 0: Foundations · ML Math</title>
   <meta name="description" content="A high-school refresher: variables, equations, functions, slope, exponents, logarithms, sums, averages, sine and cosine, and notation, taught from pictures first.">
   <link rel="icon" href="data:,">
@@ -14,16 +15,13 @@
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="topbar">
-  <button class="button-secondary button-small" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false">Menu</button>
+<header class="topbar" id="site-header">
   <a class="brand" href="../../index.html">ML Math</a>
-  <div class="topbar-actions">
-    <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Highlight terms</span></button>
-  </div>
 </header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../index.html">Course home</a></p></noscript>
 
 <div class="layout">
-<nav class="site-nav" id="site-nav" aria-label="Modules">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
   <h2>Modules</h2>
   <ol>
     <li>
@@ -60,23 +58,7 @@
     <p>Terms with a dotted underline are a tap or hover away from a plain-language and a mathematical definition.</p>
   </div>
 
-  <section class="column progress-panel" data-progress-module="m00" aria-labelledby="progress-title">
-    <h2 id="progress-title">Your progress</h2>
-    <p class="muted">Ticks are saved only in this browser. Nothing is locked; use them as a quiet checklist.</p>
-    <ul class="progress-checks">
-      <li data-progress-concept="variables"><label><input type="checkbox"> Variables and expressions</label></li>
-      <li data-progress-concept="equations"><label><input type="checkbox"> Equations</label></li>
-      <li data-progress-concept="functions"><label><input type="checkbox"> Functions and graphs</label></li>
-      <li data-progress-concept="slope"><label><input type="checkbox"> Slope and lines</label></li>
-      <li data-progress-concept="exponents"><label><input type="checkbox"> Exponents, growth and decay</label></li>
-      <li data-progress-concept="logarithms"><label><input type="checkbox"> Logarithms</label></li>
-      <li data-progress-concept="sigma"><label><input type="checkbox"> Σ notation</label></li>
-      <li data-progress-concept="ratios"><label><input type="checkbox"> Ratios, percentages and averages</label></li>
-      <li data-progress-concept="trig"><label><input type="checkbox"> Sine and cosine</label></li>
-      <li data-progress-concept="notation"><label><input type="checkbox"> Reading notation</label></li>
-    </ul>
-    <p class="progress-summary" data-progress-summary aria-live="polite"></p>
-  </section>
+  <p class="column module-progress muted" data-module-progress aria-live="polite"></p>
 
   <!-- ===================== 1. VARIABLES ===================== -->
   <article class="concept-card" id="concept-variables" data-size="compact">
@@ -1031,5 +1013,6 @@
   </article>
 </main>
 </div>
+<footer class="site-footer" id="site-footer"></footer>
 </body>
 </html>

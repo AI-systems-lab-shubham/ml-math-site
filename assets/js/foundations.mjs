@@ -13,7 +13,8 @@ import {
 } from "./widgets.mjs";
 import { renderMath } from "./math-render.mjs";
 import { initGlossary, prepare } from "./glossary.mjs";
-import { initNav, initProgress } from "./shell.mjs";
+import { initShell } from "./shell.mjs";
+import { initLesson } from "./lesson.mjs";
 
 const stroke = (color, width = 3, extra = "") => `stroke:var(--c-${color});stroke-width:${width};fill:none;${extra}`;
 const fill = (color) => `fill:var(--${color === "ochre" ? "fill-ochre" : "c-" + color})`;
@@ -626,7 +627,7 @@ const calcs = {
 const widgetMounts = { variables: variablesWidget, equations: equationsWidget, functions: functionsWidget, slope: slopeWidget, exponents: exponentsWidget,
   logs: logsWidget, sigma: sigmaWidget, average: averageWidget, circle: circleWidget, notation: notationWidget };
 
-function boot() {
+async function boot() {
   document.querySelectorAll("[data-widget]").forEach((h) => widgetMounts[h.dataset.widget]?.(h));
   document.querySelectorAll("[data-stepper]").forEach((h) => mountStepper(h, stepperData[h.dataset.stepper]()));
   document.querySelectorAll("[data-predict]").forEach((h) => mountPredict(h, predictions[h.dataset.predict]));
@@ -634,8 +635,9 @@ function boot() {
   document.querySelectorAll(".explain-back").forEach(mountExplain);
   document.querySelectorAll("[data-calc]").forEach((el) => { el.textContent = calcs[el.dataset.calc](); });
   renderMath();
-  initNav();
-  initProgress();
-  initGlossary();
+  const shell = await initShell({ moduleId: document.querySelector('meta[name="module-id"]')?.content });
+  initLesson(shell);
+  renderMath();
+  await initGlossary();
 }
 boot();

@@ -5,7 +5,8 @@ import { checkCourse } from "../tools/check-course.mjs";
 
 const root = new URL("../", import.meta.url);
 const real = JSON.parse(readFileSync(new URL("data/course.json", root), "utf8"));
-const realFs = { read: (p) => (existsSync(new URL(p, root)) ? readFileSync(new URL(p, root), "utf8") : null) };
+const termIds = new Set(JSON.parse(readFileSync(new URL("data/glossary.json", root), "utf8")).entries.map((e) => e.id));
+const realFs = { read: (p) => (existsSync(new URL(p, root)) ? readFileSync(new URL(p, root), "utf8") : null), termIds };
 
 const concept = (id, extra = {}) => ({ id, title: id, anchor: `concept-${id}`, size: "full", minutes: 5, status: "built", objectives: ["x"], takeaways: [], ...extra });
 const good = () => ({ modules: [{ id: "m1", status: "built", path: "m/", minutes: 10, prerequisites: [], concepts: [concept("c1"), concept("c2"), concept("c3", { status: "planned" })] }, { id: "m2", status: "planned", path: "n/", prerequisites: ["m1"], concepts: [] }] });
@@ -62,4 +63,11 @@ test("built module with no built concept fails (the chain would have a hole)", (
 test("module minutes must equal the sum of its built concepts (5 + 5 = 10)", () => {
   const c = good(); c.modules[0].minutes = 11;
   assert.ok(checkCourse(c, fs).some((e) => e.includes("sum to 10")));
+});
+
+test("unknown glossary term in objectives and unknown requires both fail", () => {
+  const c = good(); c.modules[0].concepts[0].objectives = ["Explain a [[thing|no-such-term]]"];
+  assert.ok(checkCourse(c, { ...fs, termIds: new Set(["variable"]) }).some((e) => e.includes("no-such-term")));
+  const d = good(); d.modules[0].concepts[0].requires = ["ghost"];
+  assert.ok(checkCourse(d, fs).some((e) => e.includes("requires unknown")));
 });

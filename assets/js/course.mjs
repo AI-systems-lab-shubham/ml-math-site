@@ -35,3 +35,19 @@ export function findConcept(course, id) {
 export function totalMinutes(course) {
   return builtModules(course).reduce((sum, m) => sum + builtConcepts(m).reduce((s, c) => s + c.minutes, 0), 0);
 }
+
+// Text in course.json may mark glossary terms as [[shown text|term-id]].
+const MARK = /\[\[([^\]|]+)\|([a-z0-9-]+)\]\]/g;
+const escapeHtml = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+export function renderInline(text) {
+  return escapeHtml(text).replace(MARK, '<span class="term" data-term="$2">$1</span>');
+}
+
+export function termIdsIn(text) {
+  return [...text.matchAll(MARK)].map((m) => m[2]);
+}
+
+export function plainText(text) {
+  return text.replace(MARK, "$1");
+}

@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createProgress, STORAGE_KEY } from "../assets/js/progress.mjs";
-import { chain, neighbours, totalMinutes } from "../assets/js/course.mjs";
+import { chain, neighbours, totalMinutes, renderInline, termIdsIn, plainText } from "../assets/js/course.mjs";
 
 const real = JSON.parse(readFileSync(new URL("../data/course.json", import.meta.url), "utf8"));
 
@@ -234,4 +234,10 @@ test("real course: chain is m00 (10) then m01 built (4); neighbours link across 
   assert.equal(neighbours(real, "m00-notation").next.id, "m01-vectors");
   assert.equal(neighbours(real, "m01-matmul").next, null, "planned concepts are not in the chain");
   assert.equal(totalMinutes(real), 8 + 15 + 12 + 12 + 12 + 14 + 10 + 8 + 8 + 8 + 14 + 14 + 14 + 16);
+});
+
+test("renderInline escapes HTML and turns [[text|id]] into glossary spans", () => {
+  assert.equal(renderInline("a <b> [[slope|slope]]"), 'a &lt;b&gt; <span class="term" data-term="slope">slope</span>');
+  assert.deepEqual(termIdsIn("[[x|a]] and [[y|b-c]]"), ["a", "b-c"]);
+  assert.equal(plainText("a [[slope|slope]]"), "a slope");
 });

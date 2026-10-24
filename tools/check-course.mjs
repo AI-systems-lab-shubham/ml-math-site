@@ -3,11 +3,11 @@
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { chain, neighbours } from "../assets/js/course.mjs";
+import { chain, neighbours, termIdsIn } from "../assets/js/course.mjs";
 
 const STATUSES = new Set(["built", "planned"]);
 
-// `fs` is injectable so tests can run without touching the disk.
+// `fs` is injectable so tests can run without touching the disk. fs.termIds (optional) is the set of glossary ids.
 export function checkCourse(course, fs) {
   const errors = [];
   const seen = new Set();
@@ -34,6 +34,8 @@ export function checkCourse(course, fs) {
       if (c.status === "built") {
         if (!(c.minutes > 0)) errors.push(`${c.id}: minutes must be positive`);
         if (!Array.isArray(c.objectives) || c.objectives.length === 0) errors.push(`${c.id}: needs at least one objective`);
+        for (const r of c.requires ?? []) if (!course.modules.some((x) => x.concepts.some((y) => y.id === r))) errors.push(`${c.id}: requires unknown concept ${r}`);
+        if (fs.termIds) for (const text of [...c.objectives, ...(c.takeaways ?? [])]) for (const t of termIdsIn(text)) if (!fs.termIds.has(t)) errors.push(`${c.id}: unknown glossary term "${t}"`);
         if (html !== null && !html.includes(`id="${c.anchor}"`)) errors.push(`${c.id}: anchor #${c.anchor} not found in ${m.path}index.html`);
       }
     }
@@ -55,7 +57,8 @@ export function checkCourse(course, fs) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = join(dirname(fileURLToPath(import.meta.url)), "..");
   const course = JSON.parse(readFileSync(join(root, "data/course.json"), "utf8"));
-  const fs = { read: (p) => (existsSync(join(root, p)) ? readFileSync(join(root, p), "utf8") : null) };
+  const termIds = new Set(JSON.parse(readFileSync(join(root, "data/glossary.json"), "utf8")).entries.map((e) => e.id));
+  const fs = { read: (p) => (existsSync(join(root, p)) ? readFileSync(join(root, p), "utf8") : null), termIds };
   const errors = checkCourse(course, fs);
   if (errors.length) { console.error(errors.map((e) => `✗ ${e}`).join("\n")); process.exit(1); }
   console.log(`course.json OK: ${course.modules.length} modules, ${chain(course).length} built concepts`);
