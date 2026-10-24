@@ -192,3 +192,15 @@ export function entrywiseProduct(A, B) {
   if (a.rows !== b.rows || a.cols !== b.cols) throw new RangeError("shapes differ");
   return A.map((r, i) => r.map((x, j) => x * B[i][j]));
 }
+
+/**
+ * Everything the home-page teaser shows for one matrix and one vector: the
+ * output Mv, the same output built as v₁·(column 1) + v₂·(column 2), and the
+ * row-by-row dot products as text. The two routes always agree.
+ */
+export function teaserMatVec(A, v) {
+  const out = matVec(A, v);
+  const byColumns = matVecByColumns(A, v);
+  const rowText = A.map((r, i) => `${r.map((a, j) => `${a}×${v[j]}`).join(" + ")} = ${out[i]}`);
+  return { out, byColumns, rowText, agree: sameMatrix(out.map((x) => [x]), byColumns.map((x) => [x])) };
+}

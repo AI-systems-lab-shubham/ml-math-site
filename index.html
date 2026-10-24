@@ -44,6 +44,21 @@
     <p class="muted" data-total-time></p>
   </div>
 
+  <section class="column home-section" aria-labelledby="teaser-title">
+    <h2 id="teaser-title">Try one idea now</h2>
+    <p>Module 1 starts with a machine that turns one list of numbers into another. The grid of numbers <strong>M</strong> below is fixed. Slide the first input and watch both outputs change.</p>
+    <div class="widget teaser" data-teaser>
+      <div class="teaser-grid">
+        <div class="teaser-matrix" role="img" aria-label="The fixed grid M: first row 2, 0; second row 1, 3"><span>2</span><span>0</span><span>1</span><span>3</span></div>
+      </div>
+      <div class="control">
+        <div class="control-head"><label for="teaser-v1">First input (v₁)</label><output for="teaser-v1" data-teaser-value>1</output></div>
+        <input type="range" id="teaser-v1" min="-3" max="3" step="1" value="1">
+      </div>
+      <p class="readout" data-teaser-readout aria-live="polite">Second input (v₂) is fixed at 2.</p>
+    </div>
+  </section>
+
   <section class="column home-section" aria-labelledby="learn-title">
     <h2 id="learn-title">What you’ll learn</h2>
     <ul data-outcomes>
@@ -51,14 +66,36 @@
       <li>Explain what a logarithm counts and why it squeezes huge ranges</li>
       <li>Read Σ notation and the common symbols used in machine-learning papers</li>
       <li>Multiply a matrix by a vector and explain what it does to space</li>
+    </ul>
+    <details class="more-outcomes">
+      <summary>More outcomes (2)</summary>
+      <ul data-outcomes-more>
       <li>Describe a vector both as an arrow and as a list of numbers</li>
       <li>Build new vectors from linear combinations of old ones</li>
-    </ul>
+      </ul>
+    </details>
   </section>
 
   <section class="column home-section" aria-labelledby="who-title">
     <h2 id="who-title">Who it’s for</h2>
     <p>You need high-school maths and curiosity. Nothing is too simple to explain, and nothing is locked: suggestions about what to read first are signposts, never gates.</p>
+  </section>
+
+  <section class="column home-section" aria-labelledby="modules-title">
+    <h2 id="modules-title">Modules</h2>
+    <ol class="module-grid" data-modules>
+      <li><a class="module-card" href="modules/00-foundations/"><span class="num">Module 0</span><strong>Foundations</strong><span class="module-card-sum">The high-school maths everything else rests on, taught from pictures first.</span><span class="module-card-meta">About 107 min</span></a></li>
+      <li><a class="module-card" href="modules/01-linear-algebra/"><span class="num">Module 1</span><strong>Linear algebra</strong><span class="module-card-sum">Vectors, matrices and what they do to space. Part 1 is built; part 2 is on its way.</span><span class="module-card-meta">About 58 min</span></a></li>
+      <li><div class="module-card soon"><span class="num">Module 2</span><strong>Analytic geometry</strong><span class="module-card-sum">Norms, distance, the dot product, angles and projections.</span><span class="module-card-meta">Coming soon</span></div></li>
+      <li><div class="module-card soon"><span class="num">Module 3</span><strong>Matrix decompositions</strong><span class="module-card-sum">Determinants, eigenvectors, SVD and low-rank approximation.</span><span class="module-card-meta">Coming soon</span></div></li>
+      <li><div class="module-card soon"><span class="num">Module 4</span><strong>Vector calculus</strong><span class="module-card-sum">Derivatives, gradients, the chain rule and backpropagation.</span><span class="module-card-meta">Coming soon</span></div></li>
+      <li><div class="module-card soon"><span class="num">Module 5</span><strong>Probability and distributions</strong><span class="module-card-sum">Probability rules, Bayes’ theorem, random variables and common distributions.</span><span class="module-card-meta">Coming soon</span></div></li>
+      <li><div class="module-card soon"><span class="num">Module 6</span><strong>Continuous optimisation</strong><span class="module-card-sum">Gradient descent, learning rate, momentum and Adam.</span><span class="module-card-meta">Coming soon</span></div></li>
+      <li><div class="module-card soon"><span class="num">Module 7</span><strong>Information theory</strong><span class="module-card-sum">Surprise, entropy, cross-entropy and KL divergence.</span><span class="module-card-meta">Coming soon</span></div></li>
+      <li><div class="module-card soon"><span class="num">Module 8</span><strong>When models meet data</strong><span class="module-card-sum">Loss, maximum likelihood, overfitting and validation.</span><span class="module-card-meta">Coming soon</span></div></li>
+      <li><div class="module-card soon"><span class="num">Module 9</span><strong>Models</strong><span class="module-card-sum">Linear regression, PCA, mixtures and classifiers.</span><span class="module-card-meta">Coming soon</span></div></li>
+      <li><div class="module-card soon"><span class="num">Module 10</span><strong>Capstone: a tiny language model</strong><span class="module-card-sum">Neurons, backpropagation, attention and a tiny next-token predictor.</span><span class="module-card-meta">Coming soon</span></div></li>
+    </ol>
   </section>
 
   <section class="column home-section" id="syllabus" aria-labelledby="syllabus-title">

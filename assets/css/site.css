@@ -381,3 +381,19 @@ html { -webkit-tap-highlight-color: rgba(122, 31, 61, .12); }
 .progress-summary, [data-module-progress] { min-height: 1.65em; }
 .sym-term:hover { background: rgba(20, 33, 61, .06); border-color: var(--burgundy); }
 .eq-symbols > summary:hover { background: rgba(20, 33, 61, .04); border-radius: 8px; }
+
+/* Home: module cards, teaser, extra outcomes */
+.module-grid { list-style: none; padding: 0; margin: 0; max-width: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: var(--s3); }
+.module-grid > li { margin: 0; display: flex; }
+.module-card { display: flex; flex-direction: column; gap: var(--s1); width: 100%; border: 1px solid var(--line-strong); background: var(--paper); border-radius: 12px; padding: var(--s4); text-decoration: none; color: var(--navy); }
+a.module-card:hover { border-color: var(--burgundy); }
+.module-card .num { font: 500 .875rem var(--font-mono); color: var(--burgundy); }
+.module-card strong { font-family: var(--font-head); font-size: 1.125rem; font-weight: 600; }
+.module-card-sum { font-size: .9375rem; color: var(--muted); }
+.module-card-meta { margin-top: auto; padding-top: var(--s2); font-size: .875rem; font-weight: 600; color: var(--burgundy); }
+.module-card.soon { border-style: dashed; background: transparent; color: var(--muted); }
+.module-card.soon .num, .module-card.soon strong { color: var(--muted); }
+.module-card.soon .module-card-meta { color: var(--muted); }
+.teaser-matrix { display: inline-grid; grid-template-columns: repeat(2, 3rem); gap: var(--s1); padding: var(--s2) var(--s4); margin-bottom: var(--s3); border-left: 3px solid var(--navy); border-right: 3px solid var(--navy); font: 500 1.25rem var(--font-mono); text-align: center; font-variant-numeric: tabular-nums; }
+.teaser .readout { min-height: 4.5rem; }
+.more-outcomes { margin-top: var(--s2); }

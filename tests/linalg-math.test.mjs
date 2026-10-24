@@ -4,7 +4,7 @@ import {
   dimension, entryOf, add, subtract, scale, linearCombination, tipToTailPath,
   shape, entryCount, row, column, fromColumns, canMultiply, resultShape,
   matVec, matVecByColumns, matMul, entryStep, multiplyCount,
-  multiplyCountFromShapes, sameMatrix, transformerBase, illustrativeEmbedding, entrywiseProduct,
+  multiplyCountFromShapes, sameMatrix, teaserMatVec, transformerBase, illustrativeEmbedding, entrywiseProduct,
 } from "../assets/js/linalg-math.mjs";
 
 // ---- Vectors ----
@@ -284,4 +284,19 @@ test("the widget's three-way pricing example: B·A has the right shape, A·B has
   assert.deepEqual(resultShape(Bcost, Akg), { rows: 2, cols: 2 });
   assert.deepEqual(resultShape(Akg, Bcost), { rows: 3, cols: 3 });
   assert.deepEqual(matMul(Bcost, Akg), [[5, 7], [9, 7]]);
+});
+
+// ---- Home-page teaser ----
+
+test("teaserMatVec gives the output, the column route and the row text", () => {
+  const t = teaserMatVec([[2, 0], [1, 3]], [1, 2]);
+  assert.deepEqual(t.out, [2, 7]);
+  assert.deepEqual(t.byColumns, [2, 7]);
+  assert.deepEqual(t.rowText, ["2\u00d71 + 0\u00d72 = 2", "1\u00d71 + 3\u00d72 = 7"]);
+  assert.equal(t.agree, true);
+});
+
+test("teaserMatVec agrees across the slider range and rejects a wrong-length vector", () => {
+  for (let x = -3; x <= 3; x++) assert.equal(teaserMatVec([[2, 0], [1, 3]], [x, 1]).agree, true);
+  assert.throws(() => teaserMatVec([[2, 0], [1, 3]], [1]), RangeError);
 });

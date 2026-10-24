@@ -41,6 +41,19 @@ export function checkCourse(course, fs) {
     }
   }
 
+  // Home page: module cards and outcomes are static HTML and must match course.json.
+  const home = fs.read("index.html");
+  if (home !== null) {
+    const esc = (t) => t.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    course.modules.forEach((m, i) => {
+      const card = `<span class="num">Module ${i}</span><strong>${esc(m.title)}</strong>`;
+      if (!home.includes(card)) errors.push(`index.html: module card for ${m.id} is missing or out of date`);
+      if (m.status === "built" && !home.includes(`<a class="module-card" href="${m.path}">`)) errors.push(`index.html: built module ${m.id} card is not a link`);
+      if (m.status !== "built" && home.includes(`href="${m.path}"`)) errors.push(`index.html: planned module ${m.id} must not be linked`);
+      if (m.status === "built") for (const o of m.outcomes) if (!home.includes(`<li>${esc(o)}</li>`)) errors.push(`index.html: outcome not listed: ${o}`);
+    });
+  }
+
   // Previous/Next chain: reciprocal and covering every built concept exactly once.
   const list = chain(course);
   const builtCount = course.modules.reduce((n, m) => n + (m.status === "built" ? m.concepts.filter((c) => c.status === "built").length : 0), 0);

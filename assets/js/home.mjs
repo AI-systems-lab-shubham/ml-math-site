@@ -1,6 +1,7 @@
 // Course home page: hero with Start / Resume, outcomes, syllabus accordion, how it works, Export / Import.
 import { initShell, hrefTo, stateIcon, ringSvg } from "./shell.mjs";
 import { builtConcepts, findConcept, totalMinutes } from "./course.mjs";
+import { teaserMatVec } from "./linalg-math.mjs";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const STATE_LABEL = { new: "Not started", visited: "Visited", done: "Complete" };
@@ -33,16 +34,30 @@ if (shell) {
   const total = totalMinutes(course);
   document.querySelector("[data-total-time]").textContent = `${duration(total)} of lessons available now, in ${built.length} modules. More are planned.`;
 
-  // What you'll learn: the outcomes of the built modules
-  document.querySelector("[data-outcomes]").innerHTML = built.flatMap((m) => m.outcomes).map((o) => `<li>${esc(o)}</li>`).join("");
+  // Outcomes and module cards are static HTML (tools/check-course.mjs keeps them in step with course.json).
+
+  // Teaser: the exact helper tested in tests/linalg-math.test.mjs. No animation; the slider only rewrites text.
+  const teaser = document.querySelector("[data-teaser]");
+  if (teaser) {
+    const M = [[2, 0], [1, 3]];
+    const slide = teaser.querySelector("input");
+    const shown = teaser.querySelector("[data-teaser-value]");
+    const readout = teaser.querySelector("[data-teaser-readout]");
+    const paintTeaser = () => {
+      const v1 = Number(slide.value);
+      const t = teaserMatVec(M, [v1, 2]);
+      shown.textContent = String(v1);
+      readout.innerHTML = `<span class="k">Row by row:</span> ${t.rowText.map(esc).join("; ")}<br><span class="k">Output:</span> (${t.out.join(", ")}) with v₂ = 2`;
+    };
+    slide.addEventListener("input", paintTeaser);
+    paintTeaser();
+  }
 
   // Syllabus accordion
   const syllabus = document.querySelector("[data-syllabus]");
   const paintSyllabus = () => {
     syllabus.innerHTML = course.modules.map((m, i) => {
-      if (m.status !== "built") {
-        return `<li class="syllabus-planned"><span class="syllabus-name">Module ${i}: ${esc(m.title)}</span><span class="outline-soon">Coming soon</span><span class="syllabus-note">${esc(m.summary)}</span></li>`;
-      }
+      if (m.status !== "built") return ""; // planned modules are shown, unlinked, in the module cards above
       const p = progress.moduleProgress(m.id);
       const open = progress.isOpen(`syllabus:${m.id}`) ? " open" : "";
       const avail = p.planned ? `${p.total} of ${p.all} concepts available` : `${p.total} concepts`;
