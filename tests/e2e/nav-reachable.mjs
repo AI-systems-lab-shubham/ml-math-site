@@ -103,7 +103,8 @@ for (const [name, url] of PAGES) {
       check(await vis(page, "[data-rail-hide]"), `${L}: Hide outline button not visible`);
       check(!(await vis(page, "#site-header [data-nav-toggle]")), `${L}: header toggle should be hidden while the rail shows`);
       let s = await state(page);
-      check(Math.abs(s.nav.w - 260) < 1, `${L}: rail width ${s.nav.w}`);
+      const wantW = Math.min(520, Math.max(320, width * 0.4));
+      check(Math.abs(s.nav.w - wantW) < 1, `${L}: rail width ${s.nav.w}, want ${wantW}`);
       common(`${L} rail shown`, s, width);
       if (shotsDir) await page.screenshot({ path: path.join(shotsDir, `${name}-${width}-rail.png`) });
 

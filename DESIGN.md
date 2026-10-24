@@ -37,7 +37,7 @@ Contrast ratios were computed against the page background (WCAG 2 formula).
 - 4px base: 4, 8, 12, 16, 24, 32, 48, 64, 96.
 - Sections separated by 64px (48px on mobile). Card padding 24px (16px on mobile).
 - Reading column 720px. Widgets and wide figures may use up to 1040px.
-- Desktop (900px and up): persistent left rail (260px) with the course outline, on every page including the home page. A **Hide outline** button at the top of the rail collapses it; the content then reflows and centres in the full width, the rail leaves the tab order, and focus moves to the header's **Show outline** button. The choice is saved in `localStorage` under `mlmath:ui:v1` (separate from progress). Below 900px: a top bar with a **Menu** button and a drawer. Rule: whenever the rail is not visible, a Menu or Show outline button is.
+- Desktop (900px and up): persistent left rail (`--rail-w`: 40vw clamped to 320–520px, so 520px from 1300px up) with the course outline, on every page including the home page. A **Hide outline** button at the top of the rail collapses it; the content then reflows and centres in the full width, the rail leaves the tab order, and focus moves to the header's **Show outline** button. The choice is saved in `localStorage` under `mlmath:ui:v1` (separate from progress). Below 900px: a top bar with a **Menu** button and a drawer. Rule: whenever the rail is not visible, a Menu or Show outline button is.
 - **Widget panel**: a fixed-aspect drawing area (`aspect-ratio: 16/10`, min-height 280px) with controls *below* it in a grid (`auto-fit, minmax(220px, 1fr)`). Controls never overlay the drawing. Every slider shows its label above and its live value beside it.
 
 ## 5. Components

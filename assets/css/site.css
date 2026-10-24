@@ -17,6 +17,7 @@
   --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px;
   --section-gap: 64px; --card-pad: 24px; --topbar-h: 61px;
+  --rail-w: clamp(320px, 40vw, 520px); /* 520px from 1300px up; narrower between 900 and 1300 so the content keeps room */
   --focus: 0 0 0 3px var(--burgundy);
 }
 @media (max-width: 767px) { :root { --section-gap: 48px; --card-pad: 16px; } }
@@ -81,7 +82,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 /* Rail from 900px: persistent column, or hidden (html.rail-collapsed) with the content centred in the full width. */
 .rail-toggle { display: none; }
 @media (min-width: 900px) {
-  .layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); }
+  .layout { display: grid; grid-template-columns: var(--rail-w) minmax(0, 1fr); }
   .rail-collapsed .layout { grid-template-columns: minmax(0, 1fr); }
   .site-nav { display: block; position: sticky; top: var(--topbar-h); align-self: start; height: calc(100vh - var(--topbar-h)); overflow-y: auto; }
   .site-nav.is-open { position: sticky; inset: auto; width: auto; top: var(--topbar-h); }
