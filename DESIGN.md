@@ -37,7 +37,7 @@ Contrast ratios were computed against the page background (WCAG 2 formula).
 - 4px base: 4, 8, 12, 16, 24, 32, 48, 64, 96.
 - Sections separated by 64px (48px on mobile). Card padding 24px (16px on mobile).
 - Reading column 720px. Widgets and wide figures may use up to 1040px.
-- Desktop (1100px and up): collapsible left rail (260px) with the module map. Below that: a top bar with a drawer.
+- Desktop (900px and up): persistent left rail (260px) with the course outline, on every page including the home page. A **Hide outline** button at the top of the rail collapses it; the content then reflows and centres in the full width, the rail leaves the tab order, and focus moves to the header's **Show outline** button. The choice is saved in `localStorage` under `mlmath:ui:v1` (separate from progress). Below 900px: a top bar with a **Menu** button and a drawer. Rule: whenever the rail is not visible, a Menu or Show outline button is.
 - **Widget panel**: a fixed-aspect drawing area (`aspect-ratio: 16/10`, min-height 280px) with controls *below* it in a grid (`auto-fit, minmax(220px, 1fr)`). Controls never overlay the drawing. Every slider shows its label above and its live value beside it.
 
 ## 5. Components
@@ -60,7 +60,7 @@ Flat. 1px borders, no card shadows. Only popovers elevate: `0 8px 24px rgba(20,3
 - `prefers-reduced-motion`: replace animation with step buttons or instant changes.
 
 ## 8. Responsive and accessibility
-- Breakpoints: 480, 768, 1100px.
+- Breakpoints: 480, 768, 900px.
 - Touch targets at least 44px. Visible 3px burgundy focus ring on everything focusable.
 - Everything operable by keyboard. Popovers use proper roles; Esc closes them; focus returns to the trigger.
 - Wide tables and equations scroll inside their own container. The page body never scrolls sideways.
@@ -88,7 +88,7 @@ Contrast ratios below were computed with the WCAG 2 formula against `--paper` (t
 - Chevron is a 10px corner drawn with borders in the text colour, pointing right when closed and down when open (a 90° turn, 180ms ease-out; none under reduced motion).
 - Open state is remembered per module. In print, every section opens.
 
-**Outline rows** (left rail, drawer below 1100px)
+**Outline rows** (left rail from 900px, drawer below)
 - Module row: chevron, title (Inter 600), ring and "n of m" below the title.
 - Concept row: 44px high (40px in the rail), state icon, title. Hover tint `rgba(20,33,61,.06)`.
 - **Current**: tint `rgba(122,31,61,.08)`, 3px burgundy bar on the left, weight 600, `aria-current="page"` (navy text 13.14:1 on the tint).

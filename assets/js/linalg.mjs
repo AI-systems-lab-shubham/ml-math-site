@@ -9,7 +9,7 @@ import {
 } from "./widgets.mjs";
 import { renderMath } from "./math-render.mjs";
 import { initGlossary } from "./glossary.mjs";
-import { initNav, initProgress } from "./shell.mjs";
+import { initShell, initProgress } from "./shell.mjs";
 
 /* ---------- small helpers ---------- */
 const n = (v) => fmt(v).replace("-", "−");
@@ -536,7 +536,7 @@ const texCalcs = {
 /* ---------- boot ---------- */
 const widgetMounts = { vectors: vectorsWidget, combine: combineWidget, matrix: matrixWidget, multiply: multiplyWidget };
 
-function boot() {
+async function boot() {
   document.querySelectorAll("[data-widget]").forEach((h) => widgetMounts[h.dataset.widget]?.(h));
   document.querySelectorAll("[data-stepper]").forEach((h) => mountStepper(h, stepperData[h.dataset.stepper]()));
   document.querySelectorAll("[data-predict]").forEach((h) => mountPredict(h, predictions[h.dataset.predict]));
@@ -545,8 +545,8 @@ function boot() {
   document.querySelectorAll("[data-calc]").forEach((el) => { el.textContent = calcs[el.dataset.calc](); });
   document.querySelectorAll("[data-tex-calc]").forEach((el) => { el.dataset.tex = texCalcs[el.dataset.texCalc](); });
   renderMath();
-  initNav();
   initProgress();
+  await initShell({ moduleId: document.querySelector('meta[name="module-id"]')?.content });
   initGlossary();
 }
 boot();

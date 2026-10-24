@@ -48,6 +48,7 @@ An interactive static website that teaches the maths behind machine learning and
    - glossary check: `node tools/check-glossary.mjs`
    - Playwright screenshots at 375, 768 and 1280 px wide; look for overlap, clipping and horizontal scroll
    - keyboard-only pass over popovers, sliders and collapsibles
+   - `node tests/e2e/nav-reachable.mjs` (rail/Menu reachable at 375, 768, 899, 900, 1000, 1100 and 1280 px; exits non-zero, with a loud SKIPPED message, if Playwright is not importable)
    - run the `web-design-guidelines` skill on the files changed
 5. Fix what you find, commit as `Module N: <summary>`, and tick the module in `docs/CURRICULUM.md`.
 6. Keep replies short. No recaps of files already read.
