@@ -2,6 +2,11 @@
 import { readStore, writeStore } from "./store.mjs";
 import { createProgress } from "./progress.mjs";
 import { chain, builtConcepts, totalMinutes } from "./course.mjs";
+import { STATUSES } from "./progress.mjs";
+import { stateIcon, stateLabel, statusButtonName } from "./state-icons.mjs";
+import { createStatusMenu } from "./status-menu.mjs";
+
+export { stateIcon };
 
 export function initProgress() {
   document.querySelectorAll("[data-progress-module]").forEach((panel) => {
@@ -33,18 +38,9 @@ export function initProgress() {
 const siteRoot = new URL(document.querySelector('meta[name="site-root"]')?.content ?? "./", document.baseURI);
 export const hrefTo = (path) => new URL(path, siteRoot).href;
 
-const STATE_LABEL = { new: "Not started", visited: "Visited", done: "Complete" };
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const RING_R = 9;
 const RING_C = 2 * Math.PI * RING_R;
-
-// Icon shapes differ as well as colour: empty circle, half-filled circle, tick in a circle.
-export function stateIcon(status) {
-  const base = '<svg class="state-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">';
-  if (status === "done") return `${base}<circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M7 12.5l3.2 3.2L17 8.8" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-  if (status === "visited") return `${base}<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>`;
-  return `${base}<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/></svg>`;
-}
 
 export function ringSvg(percent) {
   const dash = (RING_C * percent) / 100;
@@ -65,7 +61,7 @@ export async function initShell({ moduleId = null } = {}) {
   // The header, Menu button and rail toggle come first so navigation works even if course.json fails to load.
   const nav = prepareNav();
   const header = mountHeader(moduleId);
-  const shell = { course: null, progress: null, moduleId, setCurrent: () => {}, revealCurrent: () => {} };
+  const shell = { course: null, progress: null, moduleId, setCurrent: () => {}, revealCurrent: () => {}, closeStatusMenu: () => {} };
   if (nav && header) wireRail(header, nav, shell);
   const course = await loadCourse();
   if (!course) return null;
@@ -157,6 +153,7 @@ function wireRail(header, nav, shell) {
   const render = () => {
     root.classList.toggle("rail-collapsed", railHidden);
     nav.classList.toggle("is-open", !wide.matches && drawerOpen);
+    shell.closeStatusMenu();
     const showing = wide.matches ? !railHidden : drawerOpen;
     toggle.setAttribute("aria-expanded", String(showing));
     toggle.setAttribute("aria-label", showing ? "Hide outline" : "Show outline");
@@ -199,13 +196,13 @@ function buildOutline(shell) {
     }
     const open = m.id === moduleId || saved[m.id] === true;
     const rows = m.concepts.map((c) => c.status === "built"
-      ? `<li><a href="${link(m, c)}" data-cid="${c.id}"><span class="outline-state" data-state-of="${c.id}"></span><span class="outline-title">${esc(c.title)}</span></a></li>`
-      : `<li><span class="outline-disabled" aria-disabled="true"><span class="outline-state">${stateIcon("new")}</span><span class="outline-title">${esc(c.title)}</span><span class="outline-soon">Coming soon</span></span></li>`).join("");
+      ? `<li class="outline-row"><button type="button" class="outline-state-btn" data-status-of="${c.id}" aria-haspopup="menu" aria-expanded="false" aria-describedby="ol-${c.id}"></button><a id="ol-${c.id}" href="${link(m, c)}" data-cid="${c.id}"><span class="outline-title">${esc(c.title)}</span></a></li>`
+      : `<li><span class="outline-disabled" aria-disabled="true"><span class="outline-state">${stateIcon("not-started")}</span><span class="outline-title">${esc(c.title)}</span><span class="outline-soon">Coming soon</span></span></li>`).join("");
     return `<li class="outline-module"><details data-module="${m.id}"${open ? " open" : ""}>
       <summary><span class="chev" aria-hidden="true"></span><span class="outline-mod-title">${num}${esc(m.title)}</span><span class="outline-mod-progress" data-mod-progress="${m.id}"></span></summary>
       <ul class="sub">${rows}</ul></details></li>`;
   }).join("");
-  const legend = ["new", "visited", "done"].map((st) => `<li><span class="outline-state state-${st}">${stateIcon(st)}</span>${STATE_LABEL[st]}</li>`).join("");
+  const legend = STATUSES.map((st) => `<li><span class="outline-state state-${st}">${stateIcon(st)}</span>${stateLabel(st)}</li>`).join("");
   body.innerHTML = `<p class="outline-heading" id="outline-title">Course outline</p><ul class="outline-legend" aria-label="Legend">${legend}</ul><ol aria-labelledby="outline-title">${modules}</ol>`;
   nav.setAttribute("aria-label", "Course outline");
 
@@ -215,10 +212,14 @@ function buildOutline(shell) {
   }));
 
   const paint = () => {
-    nav.querySelectorAll("[data-state-of]").forEach((el) => {
-      const st = progress.status(el.dataset.stateOf);
-      el.className = `outline-state state-${st}`;
-      el.innerHTML = `${stateIcon(st)}<span class="sr-only">${STATE_LABEL[st]}: </span>`;
+    // Updated in place, never rebuilt, so a focused status button keeps focus when another tab changes a status.
+    nav.querySelectorAll("[data-status-of]").forEach((el) => {
+      const st = progress.status(el.dataset.statusOf);
+      if (el.dataset.status === st) return;
+      el.dataset.status = st;
+      el.className = `outline-state-btn outline-state state-${st}`;
+      el.setAttribute("aria-label", statusButtonName(st));
+      el.innerHTML = stateIcon(st);
     });
     nav.querySelectorAll("[data-mod-progress]").forEach((el) => {
       const p = progress.moduleProgress(el.dataset.modProgress);
@@ -227,6 +228,9 @@ function buildOutline(shell) {
   };
   paint();
   progress.subscribe(paint);
+  const titleOf = (id) => nav.querySelector(`a[data-cid="${id}"] .outline-title`)?.textContent ?? "this concept";
+  const menu = createStatusMenu({ nav, progress, titleOf });
+  shell.closeStatusMenu = () => menu.close();
 
   // Scroll the outline itself (not the page) so the current concept is inside its visible area.
   shell.revealCurrent = () => {
@@ -254,7 +258,7 @@ function buildFooter({ course }) {
         <p>Topic order follows <em>Mathematics for Machine Learning</em> by Deisenroth, Faisal and Ong (Cambridge University Press, 2020). Each concept points to the relevant chapter by number. The explanations and figures here are original.</p>
         <p>The interface follows ideas from <em>The Design of Everyday Things</em> by Don Norman.</p></section>
       <section aria-labelledby="f-use"><h2 id="f-use">How to use the site</h2>
-        <p>Terms with a dotted underline open a plain-language and a mathematical definition on hover, focus or tap. Nothing is locked: the checklist is yours. Press <strong>Mark complete</strong> when you could explain the idea to someone else.</p>
+        <p>Terms with a dotted underline open a plain-language and a mathematical definition on hover, focus or tap. Nothing is locked: the checklist is yours. Set a card to <strong>Complete</strong> when you could explain the idea to someone else, or to <strong>Revisit</strong> if you want to come back to it.</p>
         <p>Progress is saved only in this browser. Use Export and Import on the <a href="${hrefTo("index.html#how")}">course home page</a> to move it between devices.</p></section>
       <section aria-labelledby="f-a11y"><h2 id="f-a11y">Accessibility</h2>
         <p>Everything works from the keyboard. Animations start only when you press a button, and they stay still if your system asks for reduced motion. Every diagram has a text description.</p></section>
@@ -276,7 +280,13 @@ function buildNotice({ progress }) {
     const msgs = [];
     if (progress.recovered) msgs.push("Saved progress could not be read, so it was reset to empty.");
     if (!progress.persistent) msgs.push("This browser is blocking storage, so progress will be lost when you close the tab.");
+    if (progress.needsReload) msgs.push("Your saved progress was written by a newer version of this site. It has been left untouched and changes will not be saved. Reload to update.");
     box.textContent = msgs.join(" ");
+    if (progress.needsReload) {
+      const btn = Object.assign(document.createElement("button"), { type: "button", className: "button-secondary button-small notice-reload", textContent: "Reload" });
+      btn.addEventListener("click", () => location.reload());
+      box.append(" ", btn);
+    }
     box.hidden = msgs.length === 0;
   };
   paint();

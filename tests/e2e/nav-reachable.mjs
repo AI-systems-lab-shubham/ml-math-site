@@ -154,7 +154,7 @@ for (const [name, url] of PAGES) {
   check(o.mods.filter((m) => m.id !== "m00").every((m) => !m.open), "module 0 page: other modules should be collapsed");
   check(o.mods.map((m) => m.num).join() === "0,1", `module numbers should read 0,1 (got ${o.mods.map((m) => m.num)})`);
   check(o.planned >= 1, "planned modules should be numbered too");
-  check(o.legend.join("|") === "Not started|Visited|Complete", `legend should list the three states (got ${o.legend.join("|")})`);
+  check(o.legend.join("|") === "Not started|In progress|Complete|Revisit", `legend should list the four states (got ${o.legend.join("|")})`);
   check(o.cur === "m00-logarithms" && o.curVisible, `current concept should be marked and scrolled into view in the rail (got ${o.cur}, visible ${o.curVisible})`);
   check(o.rowH >= 40 && o.rowH < 44, `fine pointer at 1280: rail rows should be 40px (got ${o.rowH})`);
   // Open module 1 by hand: remembered on the UI key, absent from the progress store.

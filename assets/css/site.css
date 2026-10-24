@@ -278,11 +278,32 @@ button, input, select, summary, .radio-row, .progress-checks label { touch-actio
 details[open] > summary > .chev { transform: rotate(45deg); }
 .outline-mod-title { grid-column: 2; min-width: 0; }
 .outline-mod-progress { grid-column: 2; display: inline-flex; align-items: center; gap: var(--s2); font: 500 .875rem var(--font-mono); color: var(--muted); }
-.site-nav ul.sub a { gap: var(--s2); }
+.site-nav ul.sub a { gap: var(--s2); flex: 1; min-width: 0; }
+/* Each row: a status button (its own control, never inside the link) then the link. 44px by default. */
+.outline-row { display: flex; align-items: stretch; }
+.outline-state-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 8px; background: transparent; cursor: pointer; }
+.outline-state-btn:hover { background: rgba(20, 33, 61, .06); }
+.status-menu { position: fixed; z-index: 60; min-width: 200px; padding: var(--s1); background: var(--paper); border: 1px solid var(--line-strong); border-radius: 12px; box-shadow: 0 8px 24px rgba(20, 33, 61, .14); animation: status-menu-in 150ms ease-out; }
+.status-menu[hidden] { display: none; }
+.status-item { display: flex; align-items: center; gap: var(--s2); width: 100%; min-height: 44px; padding: var(--s1) var(--s3); border: 0; border-radius: 8px; background: transparent; color: var(--navy); font: 500 1rem var(--font-body); text-align: left; cursor: pointer; }
+.status-item:hover { background: rgba(20, 33, 61, .06); }
+.status-item[aria-checked="true"] { background: rgba(122, 31, 61, .08); font-weight: 600; }
+.status-item[aria-checked="true"]::after { content: "Current"; margin-left: auto; font-size: .875rem; font-weight: 500; color: var(--muted); }
+.status-item .state-icon { flex: none; }
+.status-item.state-in-progress .state-icon { color: var(--c-blue); }
+.status-item.state-complete .state-icon { color: var(--ok); }
+.status-item.state-revisit .state-icon { color: var(--try); }
+.status-item.state-not-started .state-icon { color: var(--muted); }
+@keyframes status-menu-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .status-menu { animation: none; transition: none; } }
+.notice-reload { margin-left: var(--s2); }
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) { .outline-state-btn { width: 40px; min-height: 40px; } }
 .outline-state { display: inline-flex; flex: none; color: var(--muted); }
-.outline-state.state-visited { color: var(--c-blue); }
-.outline-state.state-done { color: var(--ok); }
-.site-nav ul.sub a[aria-current="page"] { color: var(--navy); font-weight: 600; background: rgba(122, 31, 61, .08); box-shadow: inset 3px 0 0 var(--burgundy); }
+.outline-state.state-in-progress { color: var(--c-blue); }
+.outline-state.state-complete { color: var(--ok); }
+.outline-state.state-revisit { color: var(--try); }
+.site-nav ul.sub a[aria-current="page"] { color: var(--navy); font-weight: 600; }
+.outline-row:has(> a[aria-current="page"]) { background: rgba(122, 31, 61, .08); box-shadow: inset 3px 0 0 var(--burgundy); border-radius: 8px; }
 .outline-disabled, .outline-planned { display: flex; align-items: center; gap: var(--s2); min-height: 44px; padding: var(--s1) var(--s3); color: var(--muted); font-size: .9375rem; cursor: not-allowed; }
 .outline-planned { min-height: 44px; font-size: 1rem; flex-wrap: wrap; justify-content: flex-start; gap: var(--s1) var(--s2); }
 .outline-soon { font-size: .875rem; border: 1px solid var(--line-strong); border-radius: 999px; padding: 0 var(--s2); margin-left: auto; white-space: nowrap; }
@@ -357,8 +378,9 @@ html { -webkit-tap-highlight-color: rgba(122, 31, 61, .12); }
 .outline-legend { list-style: none; display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); padding: 0; margin: 0 0 var(--s3); font-size: .875rem; color: var(--muted); max-width: none; }
 .outline-legend li { display: inline-flex; align-items: center; gap: var(--s1); margin: 0; }
 .outline-legend .state-icon { width: 16px; height: 16px; }
-.outline-legend .state-visited { color: var(--c-blue); }
-.outline-legend .state-done { color: var(--ok); }
+.outline-legend .state-in-progress { color: var(--c-blue); }
+.outline-legend .state-complete { color: var(--ok); }
+.outline-legend .state-revisit { color: var(--try); }
 .outline-mod-num { font: 500 .875rem var(--font-mono); color: var(--burgundy); margin-right: var(--s2); }
 .outline-planned .outline-mod-num { color: var(--muted); }
 .site-nav .outline-mod-title, .site-nav .outline-mod-progress { grid-column: 2; }

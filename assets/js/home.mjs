@@ -4,7 +4,8 @@ import { builtConcepts, findConcept, totalMinutes } from "./course.mjs";
 import { teaserMatVec } from "./linalg-math.mjs";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-const STATE_LABEL = { new: "Not started", visited: "Visited", done: "Complete" };
+import { stateLabel } from "./state-icons.mjs";
+const STATE_LABEL = new Proxy({}, { get: (_, k) => stateLabel(k) });
 
 function duration(min) {
   const h = Math.floor(min / 60);

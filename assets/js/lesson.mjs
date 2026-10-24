@@ -54,7 +54,7 @@ export function initLesson(shell) {
     const btn = done.querySelector("button");
     const status = done.querySelector(".complete-status");
     const paint = () => {
-      const isDone = progress.status(c.id) === "done";
+      const isDone = progress.status(c.id) === "complete";
       btn.textContent = isDone ? "✓ Completed · undo" : "Mark complete";
       btn.classList.toggle("button-secondary", isDone);
       btn.classList.toggle("button", !isDone);
@@ -62,8 +62,8 @@ export function initLesson(shell) {
     paint();
     progress.subscribe(paint);
     btn.addEventListener("click", () => {
-      const nowDone = progress.status(c.id) !== "done";
-      progress.setDone(c.id, nowDone);
+      const nowDone = progress.status(c.id) !== "complete";
+      progress.setStatus(c.id, nowDone ? "complete" : "in-progress");
       status.textContent = nowDone ? "Marked complete. Press the button again to undo." : "Completion undone. This card is still marked visited.";
     });
   }
@@ -79,7 +79,7 @@ function track({ progress, setCurrent }, cards, byAnchor) {
   const visit = (card) => {
     const c = byAnchor.get(card.id);
     if (!c || c.status !== "built") return;
-    progress.markVisited(c.id);
+    progress.markOpened(c.id);
   };
   const band = new IntersectionObserver((entries) => {
     for (const e of entries) {
