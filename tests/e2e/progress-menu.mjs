@@ -225,6 +225,73 @@ async function open(width, { url = M0, ctxOpts = {}, init } = {}) {
   }
 }
 
+// 11. Lesson control: four options tied to the same state, eager (outside any lazy placeholder), keyboard-operable, with undo.
+{
+  const { ctx, page } = await open(1280);
+  const info = await page.evaluate(() => ({
+    controls: document.querySelectorAll("article.concept-card .status-control").length,
+    cards: document.querySelectorAll("article.concept-card[id]").length,
+    inWidget: document.querySelectorAll("[data-widget] .status-control, .status-control [data-widget]").length,
+    pending: [...document.querySelectorAll("[data-widget]")].filter((h) => h.dataset.lazy !== "mounted").length,
+    markComplete: [...document.querySelectorAll("button")].filter((b) => /mark complete/i.test(b.textContent)).length,
+    options: [...document.querySelectorAll("#concept-equations .status-control label")].map((l) => l.textContent.trim()),
+  }));
+  check(info.controls === info.cards && info.cards > 0, `every card has a status control, built eagerly (${info.controls} of ${info.cards})`);
+  check(info.pending > 0, "some widgets are still unmounted placeholders while the controls already exist");
+  check(info.inWidget === 0, "no status control sits inside a lazy widget placeholder");
+  check(info.markComplete === 0, "the old Mark complete button is gone");
+  check(info.options.join("|") === "Not started|In progress|Complete|Revisit", `four options in order (got ${info.options})`);
+  const group = page.locator("#concept-equations .status-control");
+  check((await group.locator("legend").innerText()) === "Your progress on this card", "control has a legend");
+  await group.locator('input[value="not-started"]').focus();
+  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("ArrowRight");
+  check(await group.locator('input[value="complete"]').isChecked(), "arrow keys move the choice (Not started -> Complete)");
+  check(await label(page, "m00-equations") === "Status: Complete. Change status.", "outline follows the lesson control");
+  check((await page.locator("#concept-equations .complete-status").innerText()) === "Marked complete.", "a polite status line says what changed");
+  await page.locator("#concept-equations .status-feedback button").click();
+  // Two arrow presses made two changes (not started -> in progress -> complete), so Undo goes back one step.
+  check(await group.locator('input[value="in-progress"]').isChecked() && await label(page, "m00-equations") === "Status: In progress. Change status.", "Undo restores the previous status, in both places");
+  // From the outline menu to the lesson control.
+  await btn(page, "m00-equations").click(); await page.keyboard.press("End"); await page.keyboard.press("Enter");
+  check(await group.locator('input[value="revisit"]').isChecked(), "lesson control follows the outline menu");
+  // Revisit does not count toward complete.
+  const hdr = await page.locator("[data-course-progress]").innerText();
+  check(/^0 of 14 complete/.test(hdr), `header: revisit is not complete (got "${hdr}")`);
+  await ctx.close();
+}
+
+// 12. Home: "n of 14 complete", the To revisit list, and Resume.
+{
+  const { ctx, page } = await open(1280, { url: "index.html" });
+  await page.waitForFunction(() => /of 14 complete/.test(document.querySelector("[data-hero-count]").textContent));
+  check((await page.locator("[data-hero-count]").innerText()) === "0 of 14 complete", "home: 0 of 14 complete on a clean browser");
+  check((await page.locator("[data-revisit-title]").innerText()) === "To revisit (0)", "home: To revisit (0)");
+  check((await page.locator("[data-hero-action] a").innerText()) === "Start the course", "home: Start on a clean browser");
+  await ctx.close();
+  const seeded = JSON.stringify({ v: 2, concepts: {
+    "m00-variables": { status: "complete", statusAt: "2026-01-01T00:00:01.000Z" },
+    "m00-equations": { status: "in-progress", statusAt: "2026-01-01T00:00:02.000Z" },
+    "m00-slope": { status: "revisit", statusAt: "2026-01-01T00:00:03.000Z" },
+    "m00-sigma": { status: "revisit", statusAt: "2026-01-01T00:00:04.000Z" },
+  }, last: { id: "m00-sigma", at: "2026-01-01T00:00:04.000Z" }, open: {}, quiz: {} });
+  const init = `if (!localStorage.getItem(${JSON.stringify(KEY)})) localStorage.setItem(${JSON.stringify(KEY)}, ${JSON.stringify(seeded)});`;
+  const h = await open(1280, { url: "index.html", init });
+  await h.page.waitForFunction(() => /of 14 complete/.test(document.querySelector("[data-hero-count]").textContent));
+  check((await h.page.locator("[data-hero-count]").innerText()) === "1 of 14 complete", "home: revisit concepts are not counted (1 complete)");
+  check((await h.page.locator("[data-revisit-title]").innerText()) === "To revisit (2)", "home: To revisit (2)");
+  const rows = await h.page.locator("[data-revisit-list] .syllabus-concept").allInnerTexts();
+  check(rows.length === 2 && /Slope/.test(rows[0]) && /Σ notation/.test(rows[1]), `home: revisit list in course order (got ${rows})`);
+  check(/Resume: Equations/.test(await h.page.locator("[data-hero-action] a").innerText()), "home: Resume goes to the in-progress concept");
+  await h.ctx.close();
+  const seeded2 = JSON.parse(seeded); seeded2.concepts["m00-equations"].status = "complete";
+  const init2 = `if (!localStorage.getItem(${JSON.stringify(KEY)})) localStorage.setItem(${JSON.stringify(KEY)}, ${JSON.stringify(JSON.stringify(seeded2))});`;
+  const h2 = await open(1280, { url: "index.html", init: init2 });
+  await h2.page.waitForFunction(() => /of 14 complete/.test(document.querySelector("[data-hero-count]").textContent));
+  check(/Continue: /.test(await h2.page.locator("[data-hero-action] a").innerText()), "home: with nothing in progress, the next not-started concept");
+  await h2.ctx.close();
+}
+
 await browser.close();
 await close();
 console.log(`progress-menu e2e: ${checks} checks, ${failures} failed`);

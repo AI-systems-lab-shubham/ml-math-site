@@ -5,7 +5,7 @@ Goal: the site should feel like a professional course (Coursera, edX, Khan Acade
 **Out of scope (cannot be done on a static site):** accounts, progress that syncs across devices, video hosting, graded certificates, forums and comments. Progress lives in the browser only, so offer **Export / Import progress** (a JSON file) as the cross-device workaround.
 
 ## Priorities (cut from the bottom if usage is tight)
-- **P1:** `data/course.json`, progress store, outline with progress, lesson template, Mark complete, Resume, accordions
+- **P1:** `data/course.json`, progress store, outline with progress, lesson template, status control, Resume, accordions
 - **P2:** course home page, Previous / Up next, "On this page" mini-nav
 - **P3:** search (Cmd/Ctrl+K)
 - **P4:** end-of-module quizzes
@@ -31,15 +31,19 @@ Everything structural reads from it: home page, outline, Previous/Next, search i
 
 ## 2. Progress store (`assets/js/progress.mjs`)
 - `localStorage` key `mlmath:progress:v1`, always inside try/catch. It works when storage is empty, blocked or corrupted (reset to empty and say so).
-- Shape: `{ concepts: { "<id>": { visited: ISO, done: ISO|null } }, last: { id, at }, open: { "<id>": true }, quiz: {…} }`.
-- **Visited** (automatic) and **Complete** (explicit, via a "Mark complete" button) are different states and look different. Never auto-complete.
-- Functions: `markVisited`, `setDone`, `resume()`, `moduleProgress(id)`, `exportJSON()`, `importJSON()` (validates shape and version before accepting).
-- Unit tests cover: blocked storage, corrupted JSON, unknown ids, import of a bad file, completion toggling.
+- Shape (inner `v: 2`): `{ v, concepts: { "<id>": { status, statusAt: ISO } }, last: { id, at }, open: { "<id>": true }, quiz: {…} }`. `status` is `not-started`, `in-progress`, `complete` or `revisit`. A concept the learner set back to Not started keeps its record, so a merge can tell that apart from "never touched".
+- **Rules:** opening a concept promotes only Not started to In progress. Complete and Revisit are set by the learner only. Revisit does not count toward complete. Never auto-complete.
+- **Migration** (on load and on import): old `{ visited, done }` records become `complete` (at `done`) or `in-progress` (at `visited`).
+- **Several tabs:** every change first re-reads storage and merges per concept by the **latest `statusAt`** (a tie goes to the stored copy), then writes. A `storage` event merges and repaints. A learner's own change is stamped at least 1 ms after the concept's saved time, so it wins even if the clock was set back.
+- **Newer data:** if storage holds data with a higher `v` than this code knows, it is kept byte for byte and never written to; the page works in memory and shows a "reload to update" notice. (A tab still running the *previous* release cannot be changed after the fact: it treats `v: 2` as unreadable and may reset it. A reload fixes that tab.)
+- Functions: `markOpened`, `setStatus` (returns `{ previous }`), `undo`, `status`, `resume()`, `revisitList()`, `moduleProgress(id)`, `courseProgress()`, `exportJSON()` (file version 2), `importJSON()` (accepts file versions 1 and 2; refuses anything else, including newer files, and leaves progress unchanged).
+- **Resume:** the last-touched concept if it is In progress, else the most recently changed In-progress one, else the next Not started concept after the last-touched one (wrapping), else "all done" (Revisit concepts are listed on the home page, not resumed).
+- Unit tests (`tests/progress.test.mjs`) use an injectable clock and cover: blocked storage, corrupted JSON, unknown ids, all 16 transitions, undo, v1 migration, two stores with timestamps, the storage event, newer-version data, export and import (old, new, bad).
 
 ## 3. Shell: header, outline, footer
 Injected by `assets/js/shell.mjs` from `course.json` so there is no duplicated markup. A `<noscript>` message and a plain fallback link list keep the page usable if scripts fail.
 - **Header:** site name (links to course home), Search button (visible, not shortcut-only), overall progress, Menu. The "Highlight all terms" toggle moves into a consistent place here.
-- **Course outline (left rail on desktop, drawer on phones):** modules collapse and expand; each concept shows not-started, visited or complete as a distinct icon *and* text for screen readers; the current concept has `aria-current="page"`; each module shows a small progress ring. `<nav aria-label="Course outline">`.
+- **Course outline (left rail on desktop, drawer on phones):** modules collapse and expand; each concept row is a **status button** (its own control, never nested in the link) showing not started, in progress, complete or revisit as a distinct icon shape, colour *and* accessible text, which opens a four-option menu (arrows, Esc, Tab; focus returns to the button); only the open module's rows are in the tab order; the current concept has `aria-current="page"`; each module shows a small progress ring. `<nav aria-label="Course outline">`.
 - **Footer:** sources and further reading, how to use the site, accessibility notes, licences. No personal information.
 - A **skip-to-content** link is first in tab order.
 
@@ -50,7 +54,7 @@ Injected by `assets/js/shell.mjs` from `course.json` so there is no duplicated m
 4. The seven Concept Card stages (see `docs/CONCEPT-CARD.md`).
 5. **Key takeaways** box: three or four lines.
 6. Teach it panel.
-7. **Mark complete** button, then **Previous** and **Up next** (with the next concept's title and time).
+7. The four-option **status control** (Not started, In progress, Complete, Revisit, with Undo), then **Previous** and **Up next** (with the next concept's title and time).
 - **"On this page" mini-nav:** the stage list, with the current stage highlighted as you scroll (IntersectionObserver). Sticky beside the content on wide screens, a collapsible bar on phones.
 
 ## 5. Collapsibles and accordions
@@ -82,15 +86,15 @@ Injected by `assets/js/shell.mjs` from `course.json` so there is no duplicated m
 ## 10. Norman principles applied
 | Principle | How it shows up |
 |---|---|
-| Visibility of system status | Progress rings, current-concept highlight, visited vs complete |
+| Visibility of system status | Progress rings, current-concept highlight, the four progress states |
 | Recognition over recall | The persistent outline, search, breadcrumb |
 | Signifiers | Chevrons on accordions, visible Search button, "Coming soon" labels |
 | Constraints | Soft prerequisites, validated import, clear disabled states |
-| Error tolerance | Undo "Mark complete", retry quizzes, safe handling of bad storage |
+| Error tolerance | Undo of a status change, retry quizzes, safe handling of bad storage |
 | Consistency | One lesson template and one component set for every module |
 
 ## 11. Quality bars
-- Keyboard-only pass over the outline, accordions, search dialog and Mark complete, using real key presses.
+- Keyboard-only pass over the outline, accordions, search dialog and the status menu and status control, using real key presses.
 - Screenshots at 375, 768 and 1280px: no overlap, clipping or sideways scroll.
 - Audit against the downloaded `docs/web-interface-guidelines.md`.
 - Report each page's HTML and JS size and flag anything unusually large. Run Lighthouse only if it can be run locally; ask before installing anything.
@@ -105,7 +109,7 @@ Every interactive widget mounts through one function, `mountWhenNeeded(el, mount
 
 ## 12. Session plan
 - **Session A:** `course.json`, progress store and tests, shell (header, outline, footer), lesson template, course home. Retrofit Module 0 only, as the proof.
-- **Session B:** retrofit Module 1; add accordions, on-this-page, Mark complete, Resume, Previous/Next.
+- **Session B:** retrofit Module 1; add accordions, on-this-page, Resume, Previous/Next (the four-state status control was built in Session B1).
 - **Session C:** search, quizzes for Modules 0 and 1, cheat sheets, prerequisite map, polish.
 - After each session: push, open the live Pages URL, and test on a real phone.
-- **Additions to `DESIGN.md`** (do these in Session A): progress ring colours (use `--ok` for complete, `--c-blue` for visited, `--muted` for not started), accordion and chevron style, outline row states, dialog and search styles, key-takeaways box style.
+- **Additions to `DESIGN.md`** (do these in Session A): progress ring colours (use `--ok` for complete, `--c-blue` for in progress, `--muted` for not started), accordion and chevron style, outline row states, dialog and search styles, key-takeaways box style.

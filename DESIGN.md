@@ -74,15 +74,16 @@ Flat. 1px borders, no card shadows. Only popovers elevate: `0 8px 24px rgba(20,3
 ## 10. Course shell and learning components (added in Session A; see `docs/LEARNING-UX.md`)
 Contrast ratios below were computed with the WCAG 2 formula against `--paper` (the rail and cards).
 
-**Progress states** (icon shape *and* colour *and* text, never colour alone)
-| State | Icon | Colour | On paper | Screen-reader text |
+**Progress states** (icon shape *and* colour *and* text, never colour alone). Contrast is computed against `--paper` with the WCAG 2 formula and must be at least 3:1 for icons (`tests/state-icons.test.mjs` enforces it).
+| State | Icon (own silhouette) | Colour | On paper | Name |
 |---|---|---|---|---|
-| Not started | empty circle | `--muted` | 7.10:1 | "Not started" |
-| Visited | half-filled circle | `--c-blue` | 6.15:1 | "Visited" |
-| Complete | filled circle with tick | `--ok` | 6.01:1 | "Complete" |
+| Not started | empty ring | `--muted` | 7.10:1 | "Not started" |
+| In progress | ring with the right half filled | `--c-blue` | 6.15:1 | "In progress" |
+| Complete | filled disc with a tick | `--ok` | 6.01:1 | "Complete" |
+| Revisit | open arc with an arrowhead (a "go round again" arrow) | `--try` | 5.57:1 | "Revisit" |
 
+- **Meaning:** Opening a card promotes only Not started to In progress (heading in the top 30% of the viewport, or in view about 2 seconds). Complete and Revisit are set by the learner only, from the outline menu or the lesson control, and either can be changed to any state. **Revisit does not count toward complete** ("n of 14 complete" counts Complete only).
 - **Progress ring**: 24px, 3px stroke. Track `--rule` (decorative; the "n of m" text carries the meaning), arc `--ok`, starting at 12 o'clock. Always paired with text such as "3 of 10".
-- Visited is automatic (heading reaches the top 30% of the viewport, or stays in view about 2 seconds). Complete only happens when the learner presses **Mark complete**, which can be undone.
 
 **Accordion and chevron** (native `<details>`/`<summary>`)
 - Summary row at least 44px high, hover tint `rgba(20,33,61,.06)`, 3px burgundy focus ring. No browser marker.
@@ -90,19 +91,23 @@ Contrast ratios below were computed with the WCAG 2 formula against `--paper` (t
 - Open state is remembered per module. In print, every section opens.
 
 **Outline rows** (left rail from 900px, drawer below)
-- Under the "Course outline" heading, a **legend** lists the three states with their icons: Not started, Visited, Complete.
+- Under the "Course outline" heading, a **legend** lists the four states with their icons: Not started, In progress, Complete, Revisit.
 - Module row: chevron, module number (JetBrains Mono, burgundy; read as "Module n:" by screen readers), title (Inter 600), ring and "n of m" below the title. Planned modules are numbered too.
 - The **current module is open and the others are collapsed**. A learner's own opening of another module is remembered on `mlmath:ui:v1` (`outlineOpen`), never in the progress store; the current module always opens on load. The current concept is scrolled into view inside the outline (the outline scrolls, not the page).
-- Concept row: **44px high in the phone drawer and on touch devices, 40px in the rail for a fine pointer on a screen 900px or wider** (the exception in section 8), state icon, title (wraps to two lines when the rail is narrow). Hover tint `rgba(20,33,61,.06)`.
+- Concept row: **44px high in the phone drawer and on touch devices, 40px in the rail for a fine pointer on a screen 900px or wider** (the exception in section 8), status button, then the title link (wraps to two lines when the rail is narrow). Hover tint `rgba(20,33,61,.06)`.
+- **Status button**: its own `<button>` beside the link, never inside it; the full row height and 44px wide (40px for the fine-pointer exception). Accessible name "Status: In progress. Change status." (it does not repeat the concept title; `aria-describedby` points at the row's link so a screen reader still says which concept). `aria-haspopup="menu"`, `aria-expanded`. Only rows of the open module are rendered, so only they are in the tab order.
+- **Status menu** (one shared element): `role="menu"` of four `menuitemradio` items, 44px each, with the current one checked. Opens on click, Enter, Space, ArrowDown or ArrowUp; arrows wrap, Home and End jump, Enter or Space chooses and focus returns to the button; Esc closes and returns focus; Tab closes it and focus carries on to the row's link. It also closes when its row is removed, its module collapses, the outline scrolls or the window resizes. Panel style as the popover (`--paper`, 1px `--line-strong`, 12px radius, popover shadow). A 150ms fade, **none under reduced motion**.
 - **Current**: tint `rgba(122,31,61,.08)`, 3px burgundy bar on the left, weight 600, `aria-current="page"` (navy text 13.14:1 on the tint).
 - **Disabled / planned**: `--muted` text, `cursor: not-allowed`, no link, plus a "Coming soon" pill (1px `--line-strong` border, 999px radius). Planned modules sit in the outline as plain rows, not dead links.
 
 **Key takeaways box**: `--paper` fill, 1px `--line-strong` border, 4px `--burgundy` left border, 12px radius, 16px / 24px padding. Title Inter 600 at 1.0625rem. Three or four short lines.
 **Outcomes box** ("By the end of this card you’ll be able to…"): `--info-tint` fill, 4px `--c-blue` left border, same radius and padding.
 
-**Lesson end**: **Mark complete** is the one primary button (burgundy pill). After pressing it becomes the secondary style, "✓ Completed · undo", and a polite status line says what happened. **Previous** and **Up next** are white 12px-radius cards with a small label and the concept title (and minutes for Up next).
+**Lesson end**: a **status control** (`<fieldset>` with the legend "Your progress on this card") of four radio options laid out as pills with the state icon and name (2 per row on a phone, 44px high). Arrow keys move the choice and each move is a change. A polite status line says what happened ("Marked complete.") with an **Undo** secondary button that restores the previous status. It is built eagerly, never inside a lazy widget placeholder. There is no primary button here: **Previous** and **Up next** are white 12px-radius cards with a small label and the concept title (and minutes for Up next).
 
-**Notice bar**: `--try-tint` fill with a 1px `--try` bottom border, used for storage problems ("could not be read", "storage is blocked"). Never red.
+**Notice bar**: `--try-tint` fill with a 1px `--try` bottom border, used for storage problems ("could not be read", "storage is blocked") and for progress saved by a newer version of the site (kept untouched, with a Reload button). Never red.
+
+**Home progress**: under the Start / Resume button, "n of 14 complete" (Complete only). A **To revisit (m)** section lists Revisit concepts in course order as 44px rows with the revisit icon, the module name and minutes, with a one-line empty state.
 
 **Dialog and search styles** (to be built in Session C)
 - Panel: `--paper` fill, 1px `--line-strong` border, 12px radius, the popover shadow `0 8px 24px rgba(20,33,61,.14)`, width `min(640px, 100vw - 32px)`, placed in the upper third. Backdrop `rgba(20,33,61,.4)`.

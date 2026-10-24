@@ -418,3 +418,27 @@ a.module-card:hover { border-color: var(--burgundy); }
 .teaser-matrix { display: inline-grid; grid-template-columns: repeat(2, 3rem); gap: var(--s1); padding: var(--s2) var(--s4); margin-bottom: var(--s3); border-left: 3px solid var(--navy); border-right: 3px solid var(--navy); font: 500 1.25rem var(--font-mono); text-align: center; font-variant-numeric: tabular-nums; }
 .teaser .readout { min-height: 4.5rem; }
 .more-outcomes { margin-top: var(--s2); }
+
+/* ---------- four-state progress (Session B1): lesson control, home count, revisit list ---------- */
+.lesson-done { flex-direction: column; align-items: stretch; gap: var(--s3); }
+.status-control { border: 0; margin: 0; padding: 0; min-width: 0; }
+.status-control legend { padding: 0; margin-bottom: var(--s2); font-weight: 600; font-size: 1.0625rem; }
+.status-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s2); }
+.status-opt { position: relative; display: block; }
+.status-opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.status-face { display: flex; align-items: center; gap: var(--s2); min-height: 44px; padding: var(--s2) var(--s3); border: 1px solid var(--line-strong); border-radius: 12px; background: #fff; color: var(--navy); font-weight: 500; transition: background-color 150ms ease-out, border-color 150ms ease-out; }
+.status-opt:hover .status-face { background: rgba(20, 33, 61, .06); }
+.status-opt input:checked + .status-face { border-color: var(--burgundy); box-shadow: inset 0 0 0 1px var(--burgundy); background: rgba(122, 31, 61, .08); font-weight: 600; }
+.status-opt input:focus-visible + .status-face { outline: 3px solid var(--burgundy); outline-offset: 2px; }
+.status-opt .state-icon { flex: none; }
+.status-opt.state-not-started .state-icon { color: var(--muted); }
+.status-opt.state-in-progress .state-icon { color: var(--c-blue); }
+.status-opt.state-complete .state-icon { color: var(--ok); }
+.status-opt.state-revisit .state-icon { color: var(--try); }
+.status-feedback { display: flex; align-items: center; gap: var(--s3); }
+.status-feedback .complete-status:empty { display: none; }
+.status-feedback[hidden], .status-feedback button[hidden] { display: none; }
+.hero-count { margin: 0 0 var(--s2); font-variant-numeric: tabular-nums; font-weight: 600; color: var(--navy); min-height: 1.65em; }
+.revisit-rows { padding-bottom: 0; }
+.revisit-module { color: var(--muted); font-size: .9375rem; }
+@media (prefers-reduced-motion: reduce) { .status-face { transition: none; } }

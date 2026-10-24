@@ -1,7 +1,10 @@
-// Lesson template: breadcrumb, meta, outcomes, takeaways, Mark complete, Previous / Up next,
-// and automatic "visited" tracking. Reads everything from course.json via the shell.
+// Lesson template: breadcrumb, meta, outcomes, takeaways, the four-option status control, Previous / Up next,
+// and automatic "in progress" tracking. Reads everything from course.json via the shell.
+// The status control is cheap, so it is built here, eagerly, and never inside a lazy [data-widget] placeholder.
 import { findConcept, neighbours, renderInline } from "./course.mjs";
 import { hrefTo } from "./shell.mjs";
+import { STATUSES } from "./progress.mjs";
+import { stateIcon, stateLabel } from "./state-icons.mjs";
 
 const VISIT_DWELL_MS = 2000;
 const el = (html) => { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; };
@@ -43,7 +46,10 @@ export function initLesson(shell) {
         <ul>${c.takeaways.map((t) => `<li>${renderInline(t)}</li>`).join("")}</ul></div>`));
     }
 
-    const done = el(`<div class="lesson-done"><button class="button" type="button" data-complete="${c.id}"></button><p class="complete-status" role="status"></p></div>`);
+    const group = `status-${c.id}`;
+    const done = el(`<div class="lesson-done"><fieldset class="status-control"><legend>Your progress on this card</legend>
+      <div class="status-options">${STATUSES.map((st) => `<label class="status-opt state-${st}"><input type="radio" name="${group}" value="${st}"><span class="status-face">${stateIcon(st)}<span>${stateLabel(st)}</span></span></label>`).join("")}</div></fieldset>
+      <div class="status-feedback"><p class="complete-status" role="status"></p><button class="button-secondary button-small" type="button" hidden>Undo</button></div></div>`);
     const nextHref = next ? linkTo(next, mod) : null;
     const pager = el(`<nav class="pager" aria-label="Previous and next concept for ${esc(c.title)}">
       ${prev ? `<a class="pager-prev" href="${linkTo(prev, mod)}" rel="prev"><span class="pager-label">Previous</span><span class="pager-title">${esc(prev.title)}</span></a>` : "<span></span>"}
@@ -51,20 +57,30 @@ export function initLesson(shell) {
              : `<p class="pager-end">That is everything available so far. More modules are on the way.</p>`}</nav>`);
     (footer ?? card).before(done, pager);
 
-    const btn = done.querySelector("button");
-    const status = done.querySelector(".complete-status");
-    const paint = () => {
-      const isDone = progress.status(c.id) === "complete";
-      btn.textContent = isDone ? "✓ Completed · undo" : "Mark complete";
-      btn.classList.toggle("button-secondary", isDone);
-      btn.classList.toggle("button", !isDone);
-    };
+    const undoBtn = done.querySelector(".status-feedback button");
+    const note = done.querySelector(".complete-status");
+    const radios = [...done.querySelectorAll('input[type="radio"]')];
+    const paint = () => { const st = progress.status(c.id); radios.forEach((r) => { r.checked = r.value === st; }); };
     paint();
     progress.subscribe(paint);
-    btn.addEventListener("click", () => {
-      const nowDone = progress.status(c.id) !== "complete";
-      progress.setStatus(c.id, nowDone ? "complete" : "in-progress");
-      status.textContent = nowDone ? "Marked complete. Press the button again to undo." : "Completion undone. This card is still marked visited.";
+    let undoTo = null;
+    for (const r of radios) {
+      r.addEventListener("change", () => {
+        if (!r.checked) return;
+        const res = progress.setStatus(c.id, r.value);
+        if (!res) return;
+        undoTo = res.previous;
+        note.textContent = `Marked ${stateLabel(r.value).toLowerCase()}.`;
+        undoBtn.hidden = false;
+      });
+    }
+    undoBtn.addEventListener("click", () => {
+      if (!undoTo) return;
+      progress.undo(c.id, undoTo);
+      note.textContent = `Back to ${stateLabel(undoTo.status).toLowerCase()}.`;
+      undoTo = null;
+      undoBtn.hidden = true;
+      radios.find((r) => r.checked)?.focus();
     });
   }
 
@@ -72,7 +88,7 @@ export function initLesson(shell) {
   summariseModule(shell, mod);
 }
 
-// Visited: the card heading reaches the top 30% of the viewport, or its heading has stayed in view ~2 s.
+// Opened: the card heading reaches the top 30% of the viewport, or its heading has stayed in view ~2 s.
 function track({ progress, setCurrent }, cards, byAnchor) {
   if (!("IntersectionObserver" in window)) return;
   const timers = new Map();
@@ -110,7 +126,7 @@ function summariseModule({ course, progress }, mod) {
   if (!slot) return;
   const paint = () => {
     const p = progress.moduleProgress(mod.id);
-    slot.textContent = `${p.done} of ${p.total} concepts complete${p.planned ? ` · ${p.total} of ${p.all} concepts available` : ""}`;
+    slot.textContent = `${p.done} of ${p.total} concepts complete${p.revisit ? ` · ${p.revisit} to revisit` : ""}${p.planned ? ` · ${p.total} of ${p.all} concepts available` : ""}`;
   };
   paint();
   progress.subscribe(paint);

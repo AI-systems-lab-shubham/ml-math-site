@@ -2,10 +2,9 @@
 import { initShell, hrefTo, stateIcon, ringSvg } from "./shell.mjs";
 import { builtConcepts, findConcept, totalMinutes } from "./course.mjs";
 import { teaserMatVec } from "./linalg-math.mjs";
+import { stateLabel } from "./state-icons.mjs";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-import { stateLabel } from "./state-icons.mjs";
-const STATE_LABEL = new Proxy({}, { get: (_, k) => stateLabel(k) });
 
 function duration(min) {
   const h = Math.floor(min / 60);
@@ -20,14 +19,22 @@ if (shell) {
 
   // Hero action
   const action = document.querySelector("[data-hero-action]");
+  const count = document.querySelector("[data-hero-count]");
+  let heroKey = "";
   const paintHero = () => {
+    const c = progress.courseProgress();
+    count.textContent = `${c.done} of ${c.total} complete`;
     const r = progress.resume();
     const hit = r?.id ? findConcept(course, r.id) : null;
+    // Rewrite only when the target changed, so a focused Resume link keeps focus.
+    const key = hit ? `${r.kind}:${hit.concept.id}` : `none:${c.revisit}`;
+    if (key === heroKey) return;
+    heroKey = key;
     if (hit) {
       const label = { start: "Start the course", resume: `Resume: ${hit.concept.title}`, next: `Continue: ${hit.concept.title}` }[r.kind];
       action.innerHTML = `<a class="button" href="${hrefTo(`${hit.module.path}#${hit.concept.anchor}`)}">${esc(label)}</a>`;
     } else {
-      action.innerHTML = '<p class="muted">You have completed everything available so far. More modules are on the way.</p>';
+      action.innerHTML = `<p class="muted">You have worked through everything available so far.${c.revisit ? " Your Revisit list is below." : " More modules are on the way."}</p>`;
     }
   };
   paintHero();
@@ -54,6 +61,26 @@ if (shell) {
     paintTeaser();
   }
 
+  // To revisit: concepts the learner set to Revisit, in course order. They do not count as complete.
+  const revisitHead = document.querySelector("[data-revisit-title]");
+  const revisitList = document.querySelector("[data-revisit-list]");
+  const revisitEmpty = document.querySelector("[data-revisit-empty]");
+  let revisitKey = null;
+  const paintRevisit = () => {
+    const items = progress.revisitList();
+    revisitHead.textContent = `To revisit (${items.length})`;
+    const key = items.map((c) => c.id).join();
+    revisitEmpty.hidden = items.length > 0;
+    if (key === revisitKey) return;
+    revisitKey = key;
+    revisitList.innerHTML = items.map((c) => {
+      const hit = findConcept(course, c.id);
+      return `<li><a href="${hrefTo(`${hit.module.path}#${hit.concept.anchor}`)}"><span class="outline-state state-revisit">${stateIcon("revisit")}</span><span class="syllabus-concept">${esc(hit.concept.title)}<span class="revisit-module"> · ${esc(hit.module.title)}</span></span><span class="syllabus-min">${hit.concept.minutes}\u00a0min</span></a></li>`;
+    }).join("");
+  };
+  paintRevisit();
+  progress.subscribe(paintRevisit);
+
   // Syllabus accordion
   const syllabus = document.querySelector("[data-syllabus]");
   const paintSyllabus = () => {
@@ -63,16 +90,31 @@ if (shell) {
       const open = progress.isOpen(`syllabus:${m.id}`) ? " open" : "";
       const avail = p.planned ? `${p.total} of ${p.all} concepts available` : `${p.total} concepts`;
       const rows = m.concepts.map((c) => c.status === "built"
-        ? `<li><a href="${hrefTo(`${m.path}#${c.anchor}`)}"><span class="outline-state state-${progress.status(c.id)}">${stateIcon(progress.status(c.id))}<span class="sr-only">${STATE_LABEL[progress.status(c.id)]}: </span></span><span class="syllabus-concept">${esc(c.title)}</span><span class="syllabus-min">${c.minutes}\u00a0min</span></a></li>`
+        ? `<li><a href="${hrefTo(`${m.path}#${c.anchor}`)}"><span class="outline-state state-${progress.status(c.id)}" data-state-of="${c.id}">${stateIcon(progress.status(c.id))}<span class="sr-only">${stateLabel(progress.status(c.id))}: </span></span><span class="syllabus-concept">${esc(c.title)}</span><span class="syllabus-min">${c.minutes}\u00a0min</span></a></li>`
         : `<li class="syllabus-soon"><span class="outline-state">${stateIcon("new")}</span><span class="syllabus-concept">${esc(c.title)}</span><span class="outline-soon">Coming soon</span></li>`).join("");
       return `<li><details data-module="${m.id}"${open}><summary><span class="chev" aria-hidden="true"></span><span class="syllabus-name">Module ${i}: ${esc(m.title)}</span>
-        <span class="syllabus-meta">${avail} · ${p.done} complete ${ringSvg(p.percent)}</span></summary>
+        <span class="syllabus-meta" data-syl-meta="${m.id}" data-avail="${esc(avail)}">${avail} · ${p.done} complete ${ringSvg(p.percent)}</span></summary>
         <p class="syllabus-summary">${esc(m.summary)}</p><ul class="syllabus-rows">${rows}</ul></details></li>`;
     }).join("");
     syllabus.querySelectorAll("details").forEach((d) => d.addEventListener("toggle", () => progress.setOpen(`syllabus:${d.dataset.module}`, d.open)));
   };
-  // Rebuilding while a learner is interacting would lose focus, so repaint only on load and after import.
+  // Rebuilding while a learner is interacting would lose focus, so the list is built on load and after import;
+  // status icons and counts are updated in place when progress changes (another tab, the outline menu).
+  const updateSyllabus = () => {
+    syllabus.querySelectorAll("[data-state-of]").forEach((el) => {
+      const st = progress.status(el.dataset.stateOf);
+      if (el.dataset.status === st) return;
+      el.dataset.status = st;
+      el.className = `outline-state state-${st}`;
+      el.innerHTML = `${stateIcon(st)}<span class="sr-only">${stateLabel(st)}: </span>`;
+    });
+    syllabus.querySelectorAll("[data-syl-meta]").forEach((el) => {
+      const p = progress.moduleProgress(el.dataset.sylMeta);
+      el.innerHTML = `${esc(el.dataset.avail)} · ${p.done} complete${p.revisit ? ` · ${p.revisit} to revisit` : ""} ${ringSvg(p.percent)}`;
+    });
+  };
   paintSyllabus();
+  progress.subscribe(updateSyllabus);
 
   // Export / Import
   const msg = document.querySelector("[data-transfer-status]");
