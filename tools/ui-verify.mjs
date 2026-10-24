@@ -42,7 +42,8 @@ const selected = pages.filter((p) => !ONLY_PAGES || ONLY_PAGES.includes(p.key));
 // ---------- findings ----------
 const findings = []; // { check, page, width, evidence }
 const ran = new Set();
-const add = (check, page, width, evidence) => findings.push({ check, page: page.key, width, evidence });
+const add = (check, page, width, evidence, selector = null) =>
+  findings.push({ check, page: page.key, width, evidence, selector: selector ?? (check === "layout-shift" ? "page load" : evidence.match(/^(?:[a-z][\w#-]*\s)?[a-z][\w.#-]*/i)?.[0]) ?? "-" });
 
 // ---------- in-page probes (serialised into the browser) ----------
 const probes = {
@@ -68,9 +69,13 @@ const probes = {
 
   describe(el) {
     const id = el.id ? `#${el.id}` : "";
-    const cls = typeof el.className === "string" && el.className.trim() ? "." + el.className.trim().split(/\s+/).slice(0, 2).join(".") : "";
+    const raw = el.getAttribute?.("class") ?? "";
+    const cls = raw.trim() ? "." + raw.trim().split(/\s+/).slice(0, 2).join(".") : "";
+    // Classless elements get their nearest landmark as a prefix, so "a" becomes "nav#site-nav a".
+    const home = !id && !cls ? el.parentElement?.closest("nav, header, footer, aside, main, [id]") : null;
+    const prefix = home ? `${home.tagName.toLowerCase()}${home.id ? `#${home.id}` : ""} ` : "";
     const txt = (el.getAttribute?.("aria-label") || el.textContent || "").trim().replace(/\s+/g, " ").slice(0, 28);
-    return `${el.tagName.toLowerCase()}${id}${cls}${txt ? ` “${txt}”` : ""}`;
+    return `${prefix}${el.tagName.toLowerCase()}${id}${cls}${txt ? ` “${txt}”` : ""}`;
   },
 
   overlap(sel) {
@@ -325,7 +330,7 @@ for (const pg of selected) {
     if (axeSource && want("axe") && (width === WIDTHS[0] || width === WIDTHS[WIDTHS.length - 1])) {
       await page.evaluate(axeSource);
       const res = await page.evaluate(() => axe.run(document, { runOnly: ["wcag2a", "wcag2aa", "wcag21aa", "best-practice"] }));
-      for (const v of res.violations.slice(0, 8)) add("axe", pg, width, `${v.id} (${v.impact}): ${v.help}; ${v.nodes.length} node(s), e.g. ${v.nodes[0].target.join(" ")}`);
+      for (const v of res.violations) for (const n of v.nodes) add("axe", pg, width, `${v.id} (${v.impact}): ${v.help}`, n.target.join(" "));
       ran.add("axe");
     }
     if (want("focus-ring") || want("keyboard-trap") || want("tab-reach")) await tabWalk(page, pg, width);
@@ -370,6 +375,23 @@ for (const c of checks) {
     const w = [...new Set(group.map((g) => g.width))].join(", ");
     lines.push(`- **${group[0].page}** @ ${w}px: ${group[0].evidence}${group.length > 1 ? ` (and ${group.length - 1} similar)` : ""}`);
   }
+  lines.push("");
+}
+lines.push(`## Grouped by selector (count = findings across pages and widths)`, ``);
+for (const c of checks) {
+  const fs_ = findings.filter((f) => f.check === c);
+  if (!fs_.length) continue;
+  const g = new Map();
+  for (const f of fs_) { const k = c === "axe" ? `${f.selector} [${f.evidence.split(":")[0]}]` : f.selector; const e = g.get(k) ?? { n: 0, pages: new Set(), widths: new Set() }; e.n++; e.pages.add(f.page); e.widths.add(f.width); g.set(k, e); }
+  if (c === "axe") {
+    const rules = new Map();
+    for (const f of fs_) { const k = f.evidence; const e = rules.get(k) ?? { n: 0, sel: new Set() }; e.n++; e.sel.add(f.selector); rules.set(k, e); }
+    lines.push(`### axe rules`, ``, `| Rule | Nodes | Distinct selectors |`, `|---|---|---|`);
+    for (const [k, e] of [...rules].sort((a, b) => b[1].n - a[1].n)) lines.push(`| ${k.replace(/\|/g, "\\|")} | ${e.n} | ${e.sel.size} |`);
+    lines.push("");
+  }
+  lines.push(`### ${c}`, ``, `| Selector | Count | Pages | Widths |`, `|---|---|---|---|`);
+  for (const [k, e] of [...g].sort((a, b) => b[1].n - a[1].n)) lines.push(`| \`${k.replace(/\|/g, "\\|")}\` | ${e.n} | ${[...e.pages].join(", ")} | ${[...e.widths].join(", ")} |`);
   lines.push("");
 }
 lines.push(`## Allow-lists (not counted as findings)`, ``, `- overlap: fixed or sticky elements (header, open drawer), the glossary popover, the skip link, screen-reader-only text; ancestors and descendants; line boxes are compared so wrapped inline text is not "overlap".`, `- tap-target: inline links and terms inside a sentence (WCAG 2.5.8), symbols inside KaTeX, screen-reader-only text.`, `- small-text: KaTeX output (its sub- and superscripts are sized by KaTeX); SVG text is measured at its rendered size.`, `- focus-ring: focus covered by another element inside the same KaTeX formula.`, ``);

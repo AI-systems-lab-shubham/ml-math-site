@@ -53,6 +53,10 @@ An interactive static website that teaches the maths behind machine learning and
 5. Fix what you find, commit as `Module N: <summary>`, and tick the module in `docs/CURRICULUM.md`.
 6. Keep replies short. No recaps of files already read.
 
+## Check tools
+- `node tools/verify.mjs`: unit tests, course, glossary, claims lint, e2e nav test and email check in one run (a SKIPPED e2e counts as a failure).
+- `node tools/ui-verify.mjs`: per-page layout, keyboard, console, structure, glossary and motion checks at five widths, plus axe-core if `AXE_PATH` is set; writes `reports/` and exits non-zero on any finding.
+
 ## Definition of done for a module
 - [ ] Every concept in CURRICULUM has its full or compact card
 - [ ] Each has Real life, Spot it, and In an LLM
