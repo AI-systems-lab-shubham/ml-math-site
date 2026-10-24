@@ -238,9 +238,19 @@
           "minutes": 14,
           "status": "built",
           "objectives": [
-            "Describe a vector as an arrow and as a list"
+            "Write a trip such as “3 east, 2 north” as a [[vector|vector]] and draw it as an arrow",
+            "Read any [[component|component]] of a vector by its position, for example the third entry of (3, 2, 7)",
+            "Explain what carries over to many [[dimensions|dimension]] and what can no longer be drawn"
           ],
-          "takeaways": []
+          "takeaways": [
+            "A [[vector|vector]] is a list of numbers in a fixed order; with two or three entries it is also an arrow.",
+            "The order matters: (3, 2) and (2, 3) are different trips.",
+            "Adding, scaling and taking dot products work for any number of entries; only the arrow picture runs out.",
+            "A language model stores each [[token|token]] as an [[embedding|embedding]], which is a vector."
+          ],
+          "requires": [
+            "m00-notation"
+          ]
         },
         {
           "id": "m01-combine",
@@ -250,9 +260,19 @@
           "minutes": 14,
           "status": "built",
           "objectives": [
-            "Add and scale vectors"
+            "Add two vectors tip to tail, and by adding the entries in matching positions",
+            "[[Scale|scaling]] a vector by a [[scalar|scalar]], including a negative one",
+            "Compute a [[linear combination|linear-combination]] such as 2a − b entry by entry"
           ],
-          "takeaways": []
+          "takeaways": [
+            "[[Vector addition|vector-addition]] puts one arrow after another; in numbers, add the entries in the same position.",
+            "[[Scaling|scaling]] multiplies every entry by the same [[scalar|scalar]]; a negative one reverses the arrow.",
+            "A [[linear combination|linear-combination]] scales some vectors and then adds them, like 2a − b.",
+            "Both moves need vectors of the same dimension."
+          ],
+          "requires": [
+            "m01-vectors"
+          ]
         },
         {
           "id": "m01-matrices",
@@ -262,9 +282,19 @@
           "minutes": 14,
           "status": "built",
           "objectives": [
-            "Read a matrix as a table and as a machine"
+            "Read a [[matrix|matrix]] as a table and give its [[shape|shape]] as rows × columns",
+            "Use a matrix as a machine: scale each [[column|column]] by the matching input entry and add",
+            "Say where the unit arrows (1, 0) and (0, 1) land, and why that fixes the output for every input"
           ],
-          "takeaways": []
+          "takeaways": [
+            "A [[matrix|matrix]] is a table of numbers that is also a machine turning one vector into another.",
+            "Each [[column|column]] says what one unit of an input contributes; the output is the columns scaled and added.",
+            "The columns are where the unit arrows land, and that fixes the output for every input.",
+            "A matrix machine only does weighted totals: it cannot square a number or take a maximum."
+          ],
+          "requires": [
+            "m01-combine"
+          ]
         },
         {
           "id": "m01-matmul",
@@ -274,9 +304,20 @@
           "minutes": 16,
           "status": "built",
           "objectives": [
-            "Multiply a matrix by a vector"
+            "Multiply a [[matrix|matrix]] by a vector as one [[dot product|dot-product]] per [[row|row]]",
+            "Decide from their [[shapes|shape]] whether two matrices can be multiplied, and give the shape of the product",
+            "Explain why the order of multiplication matters"
           ],
-          "takeaways": []
+          "takeaways": [
+            "Each entry of a product pairs a [[row|row]] of the left matrix with a [[column|column]] of the right one: a [[dot product|dot-product]].",
+            "Multiplying matrices chains two machines into one: AB means do B first, then A.",
+            "The inner sizes must match: an m×n times an n×p gives m×p.",
+            "Order matters: AB and BA are usually different, and one can exist without the other."
+          ],
+          "requires": [
+            "m01-matrices",
+            "m00-sigma"
+          ]
         },
         {
           "id": "m01-transpose",

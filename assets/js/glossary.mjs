@@ -120,7 +120,7 @@ function addSymbolLists(root) {
 
 function markFirstUses(root) {
   const scopes = root.querySelectorAll
-    ? root.querySelectorAll("[data-stage], .concept-card > header, .page-hero, .progress-panel")
+    ? root.querySelectorAll("[data-stage], .concept-card > header, .page-hero")
     : [];
   scopes.forEach((scope) => {
     const seen = new Set();

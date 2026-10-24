@@ -106,12 +106,6 @@ main { padding: var(--s7) var(--s4) var(--s9); min-width: 0; }
 .page-hero { margin-bottom: var(--section-gap); }
 .page-hero .lede { font-size: 1.25rem; color: var(--muted); }
 
-.progress-panel { border: 1px solid var(--rule); background: var(--paper); border-radius: 12px; padding: var(--card-pad); margin-bottom: var(--section-gap); }
-.progress-panel h2 { font-size: 1.5rem; }
-.progress-checks { list-style: none; padding: 0; margin: 0 0 var(--s3); display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0 var(--s4); }
-.progress-checks label { display: flex; gap: var(--s3); align-items: center; min-height: 44px; cursor: pointer; }
-.progress-checks input { width: 22px; height: 22px; accent-color: var(--burgundy); flex: none; }
-.progress-summary { color: var(--muted); font-size: 1rem; }
 
 /* ---------- concept card ---------- */
 .concept-card { background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: var(--card-pad); margin: 0 auto var(--section-gap); max-width: 1040px; }
@@ -257,7 +251,7 @@ a.module-item:hover { border-color: var(--burgundy); }
 
 /* ---------- audit follow-ups (web interface guidelines) ---------- */
 h1, h2, h3, h4 { text-wrap: balance; }
-button, input, select, summary, .radio-row, .progress-checks label { touch-action: manipulation; }
+button, input, select, summary, .radio-row { touch-action: manipulation; }
 
 /* ---------- course shell (Session A) ---------- */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
@@ -399,7 +393,7 @@ html { -webkit-tap-highlight-color: rgba(122, 31, 61, .12); }
 .widget-placeholder .widget-desc { display: flex; align-items: center; justify-content: center; height: 100%; padding: var(--s4); margin: 0; text-align: center; color: var(--muted); font-size: .9375rem; }
 .widget-placeholder .widget-reserve { margin: 0; }
 [data-stepper]:empty { min-height: 257px; }
-.progress-summary, [data-module-progress] { min-height: 1.65em; }
+[data-module-progress] { min-height: 1.65em; }
 .sym-term:hover { background: rgba(20, 33, 61, .06); border-color: var(--burgundy); }
 .eq-symbols > summary:hover { background: rgba(20, 33, 61, .04); border-radius: 8px; }
 

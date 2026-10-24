@@ -103,3 +103,12 @@ Format: `page · claim · basis`
 - LLM · "attention" is a calculation of dot products and weighted sums, not attention in the human sense · Glossary `looseUse`; Vaswani et al., 2017, §3.2.1.
 - LLM · real systems process many tokens at once, so the right-hand matrix has many columns · General description of batched computation; stated as a simplification.
 
+
+## Module 1 objectives, takeaways and signposts (Session B2)
+Added to `data/course.json` when Module 1 moved onto the lesson template. These restate what the cards already say; no number is new.
+- Vectors · objectives and takeaways: a vector is an ordered list; (3, 2) and (2, 3) are different trips; the third entry of (3, 2, 7) is 7; adding, scaling and dot products work for any number of entries and only the arrow picture runs out · Basis: the card's Meaning, Worked example and Why-and-when stages; the vector (3, 2, 7) is the one tested in `tests/linalg-math.test.mjs`.
+- Vectors · "a language model stores each token as an embedding, which is a vector" · Source: Vaswani et al., 2017, §3.4 (as on the card). Same claim as the card's In an LLM stage.
+- Adding and scaling · addition is tip to tail and entry by entry; scaling multiplies every entry by the same scalar and a negative one reverses the arrow; 2a − b is a linear combination; both moves need equal dimensions · Basis: the card's Meaning and Why-and-when stages; the takeaways state the rules only and add no new numbers (the card's own numbers are covered by `linearCombination`, `add`, `scale` tests).
+- Matrices · a matrix is a table and also a machine; each column says what one unit of an input contributes; the columns are where the unit arrows land; a matrix machine cannot square a number or take a maximum · Basis: the card's Meaning, Picture and Why-and-when stages (the "only weighted totals" limit is the linearity rule, tested by the matrix-vector tests).
+- Matrix multiplication · each product entry is a row of the left matrix paired with a column of the right (a dot product); AB means do B first, then A; (m×n)(n×p) = m×p; AB and BA are usually different · Test: `matMul`, `canMultiply`, `resultShape`, "AB is not BA", "applying B then A equals applying AB" (same tests as the claims above).
+- Signposts · "Builds on" links added: Vectors on Module 0 Notation; Adding and scaling on Vectors; Matrices on Adding and scaling; Matrix multiplication on Matrices and Module 0 Σ notation (the card already uses the dot product from the Σ card) · Basis: the cross-references in the card text; they are suggestions, never locks.

@@ -1,5 +1,4 @@
 // Page shell: course outline (rail from 900px, drawer below), header, and the saved progress checklist.
-import { readStore, writeStore } from "./store.mjs";
 import { createProgress } from "./progress.mjs";
 import { chain, builtConcepts, totalMinutes } from "./course.mjs";
 import { STATUSES } from "./progress.mjs";
@@ -7,29 +6,6 @@ import { stateIcon, stateLabel, statusButtonName } from "./state-icons.mjs";
 import { createStatusMenu } from "./status-menu.mjs";
 
 export { stateIcon };
-
-export function initProgress() {
-  document.querySelectorAll("[data-progress-module]").forEach((panel) => {
-    const key = `progress.${panel.dataset.progressModule}`;
-    const done = new Set(readStore(key, []));
-    const boxes = [...panel.querySelectorAll("[data-progress-concept]")];
-    const summary = panel.querySelector("[data-progress-summary]");
-    const update = () => {
-      if (summary) summary.textContent = `${done.size} of ${boxes.length} concepts explored`;
-    };
-    boxes.forEach((li) => {
-      const id = li.dataset.progressConcept;
-      const input = li.querySelector("input");
-      input.checked = done.has(id);
-      input.addEventListener("change", () => {
-        if (input.checked) done.add(id); else done.delete(id);
-        writeStore(key, [...done]);
-        update();
-      });
-    });
-    update();
-  });
-}
 
 // ---------------------------------------------------------------------------
 // Course shell (header, outline, footer) built from data/course.json.

@@ -9,7 +9,8 @@ import {
 } from "./widgets.mjs";
 import { renderMath } from "./math-render.mjs";
 import { initGlossary } from "./glossary.mjs";
-import { initShell, initProgress } from "./shell.mjs";
+import { initShell } from "./shell.mjs";
+import { initLesson } from "./lesson.mjs";
 
 /* ---------- small helpers ---------- */
 const n = (v) => fmt(v).replace("-", "−");
@@ -545,8 +546,9 @@ async function boot() {
   document.querySelectorAll("[data-calc]").forEach((el) => { el.textContent = calcs[el.dataset.calc](); });
   document.querySelectorAll("[data-tex-calc]").forEach((el) => { el.dataset.tex = texCalcs[el.dataset.texCalc](); });
   renderMath();
-  initProgress();
-  await initShell({ moduleId: document.querySelector('meta[name="module-id"]')?.content });
-  initGlossary();
+  const shell = await initShell({ moduleId: document.querySelector('meta[name="module-id"]')?.content });
+  initLesson(shell);
+  renderMath();
+  await initGlossary();
 }
 boot();
