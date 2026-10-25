@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m00">
+  <meta name="concept-id" content="m00-ratios">
+  <title>Ratios, percentages and averages - Foundations - ML Math</title>
+  <meta name="description" content="Compare by dividing; summarise by averaging.">
+  <meta name="theme-color" content="#F6F1E7">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/foundations.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li>
+      <a href="../">0 · Foundations</a>
+      <ul class="sub">
+        <li><a href="../variables/">Variables and expressions</a></li>
+        <li><a href="../equations/">Equations</a></li>
+        <li><a href="../functions/">Functions and graphs</a></li>
+        <li><a href="../slope/">Slope and linear functions</a></li>
+        <li><a href="../exponents/">Exponents, growth and decay</a></li>
+        <li><a href="../logarithms/">Logarithms</a></li>
+        <li><a href="../sigma/">Σ notation</a></li>
+        <li><a href="./" aria-current="page">Ratios, percentages and averages</a></li>
+        <li><a href="../trig/">Sine and cosine</a></li>
+        <li><a href="../notation/">Reading mathematical notation</a></li>
+      </ul>
+    </li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 0: Foundations</a></li>
+      <li><span aria-current="page">Ratios, percentages and averages</span></li></ol></nav>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-ratios" data-size="compact">
+    <header>
+      <p class="eyebrow">Compact card · 8 of 10</p>
+      <h1>Ratios, percentages and averages</h1>
+      <p class="muted">Compare by dividing; summarise by averaging.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>A <span class="term" data-term="ratio">ratio</span> compares two amounts by dividing: 3 cups of flour to 1 cup of water is a ratio of 3 to 1. A <span class="term" data-term="percentage">percentage</span> is a ratio written out of 100: <span data-calc="percentOf15">…</span>% means 15 out of 60.</p>
+      <p>An <span class="term" data-term="mean">average</span> squeezes a list into one number. The mean shares the total out evenly; the <span class="term" data-term="median">median</span> is the middle value of the sorted list. They answer different questions.</p>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Four values stay fixed. Drag the fifth outward: the mean ▲ chases it, while the median ■ stays put.</p>
+      <div data-widget="average">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Mean versus median</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Five values on a number line. Four stay put; one can be dragged out to the right. The mean marker follows it; the median marker stays near the middle of the group.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A recipe scaled up keeps the same ratio of ingredients.</li>
+        <li>A 20% discount: multiply the price by 0.8.</li>
+        <li>Average house prices in a town: one very expensive sale drags the mean, the median hardly moves.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If a number only makes sense relative to something else, it is a ratio. If one huge value is distorting a summary, check the median.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A savings rate goes from 2% to 3%. How should it be described?</legend>
+          <label class="radio-row"><input type="radio" name="spot-ratio" data-correct data-why="Three minus two is one percentage point, but relative to the old rate it is a rise of half."><span>Up 1 percentage point, a <span data-calc="rise2to3">…</span>% increase</span></label>
+          <label class="radio-row"><input type="radio" name="spot-ratio" data-why="The gap between two percentages is in percentage points. A percent increase is measured against the starting value."><span>Up 1%</span></label>
+          <label class="radio-row"><input type="radio" name="spot-ratio" data-why="3% is the new rate itself, not the size of the change."><span>Up 3%</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="ratios"></div>
+      <div class="check" data-predict="ratios">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-rat">What is the mean of 2, 4 and 9?</label></p>
+        <div class="row"><input id="p-rat" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Add the three values, then divide by how many there are.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Ratios and percentages let you compare things of different sizes: 30 out of 40 and 60 out of 100 can be put side by side. Averages let you describe a pile of numbers with one. Without them, comparing needs the whole raw list.</p>
+      <p>Use the mean for fairly symmetric data and when the total matters; use the median when a few extreme values would mislead. An <span class="term" data-term="outlier">outlier</span> is such a value.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-convention">◆ Convention</span> <span class="badge badge-motivated">● Motivated</span></p>
+      <p>“Out of 100” is a Convention: we could have used out of 10 or 1,000. Choosing the mean or the median is Motivated by the question: the mean when you care about the total, the median when you care about the typical case. There is no single correct average.</p>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>A training or validation loss is a mean: the per-token loss averaged over the tokens (and texts) in a batch. Benchmark scores are usually percentages: correct answers as a share of all questions. The link is direct, but the details of which tokens are averaged and how vary between training setups.</p>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>Everyday analogy</h4>
+      <p>The mean is where a see-saw balances; the median is the person in the middle of a queue. <em>Where it breaks down:</em> a queue has no weights, so a very tall person at the end doesn't tip anything.</p>
+      <h4>Common misconception</h4>
+      <p>“Up from 2% to 3% is a 1% rise.” It is one percentage point, which is a 50% rise relative to the old rate.</p>
+    </details>
+    <footer>Further reading: MML Ch 6 (means and variances arrive properly with probability).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

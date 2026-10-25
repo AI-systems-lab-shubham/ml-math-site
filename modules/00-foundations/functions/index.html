@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m00">
+  <meta name="concept-id" content="m00-functions">
+  <title>Functions and graphs - Foundations - ML Math</title>
+  <meta name="description" content="A function is a rule that gives exactly one output for each allowed input. A graph makes the rule visible.">
+  <meta name="theme-color" content="#F6F1E7">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/foundations.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li>
+      <a href="../">0 · Foundations</a>
+      <ul class="sub">
+        <li><a href="../variables/">Variables and expressions</a></li>
+        <li><a href="../equations/">Equations</a></li>
+        <li><a href="./" aria-current="page">Functions and graphs</a></li>
+        <li><a href="../slope/">Slope and linear functions</a></li>
+        <li><a href="../exponents/">Exponents, growth and decay</a></li>
+        <li><a href="../logarithms/">Logarithms</a></li>
+        <li><a href="../sigma/">Σ notation</a></li>
+        <li><a href="../ratios/">Ratios, percentages and averages</a></li>
+        <li><a href="../trig/">Sine and cosine</a></li>
+        <li><a href="../notation/">Reading mathematical notation</a></li>
+      </ul>
+    </li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 0: Foundations</a></li>
+      <li><span aria-current="page">Functions and graphs</span></li></ol></nav>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-functions" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 3 of 10</p>
+      <h1>Functions and graphs</h1>
+      <p class="muted">A function is a rule that gives exactly one output for each allowed input. A graph makes the rule visible.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Think of a vending machine. Press the same button and you always get the same snack. The button you press is the <span class="term" data-term="input">input</span>; the snack that drops is the <span class="term" data-term="output">output</span>. A <span class="term" data-term="function">function</span> is any rule that behaves like that: one input in, exactly one output out, the same every time.</p>
+      <p>We write the machine as a name and a recipe. For “double it, then add 1”:</p>
+      <div class="math-display" data-tex-display="f(\htmlData{sym=x}{x})=2\htmlData{sym=x}{x}+1">f(x) = 2x + 1</div>
+      <p>Read f(x) as “the output of f when the input is x”. The letter f is just the machine's name.</p>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>A <span class="term" data-term="graph">graph</span> draws the machine's whole behaviour: for each input, mark a point at the height of its output. Choose a rule, then slide the input and watch the point trace the curve.</p>
+      <div data-widget="functions">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">A function as a machine and as a graph</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A curve showing the chosen rule's output for every input from minus three to three, with a marker at the chosen input.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A price list: item in, price out.</li>
+        <li>A speedometer: moment in time in, speed out.</li>
+        <li>A taxi meter: distance in, fare out.</li>
+        <li>A thermostat dial: setting in, target temperature out.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If asking the same question twice must give the same answer, and the answer depends on something you can vary, think “function”. If the same input could give different outputs, it is not one.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. Which of these is a function from the first thing to the second?</legend>
+          <label class="radio-row"><input type="radio" name="spot-fn" data-why="One student can have several friends, so one input would give many outputs. That breaks the “exactly one” rule."><span>A student → their friends</span></label>
+          <label class="radio-row"><input type="radio" name="spot-fn" data-correct data-why="Each student has exactly one ID number. Two students never share one input, but it would not matter if they shared an output; the rule only needs one output per input."><span>A student → their student ID</span></label>
+          <label class="radio-row"><input type="radio" name="spot-fn" data-why="One phone number can be called by many people, so one input would give many outputs."><span>A phone number → the people who have called it</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="functions"></div>
+      <div class="check" data-predict="functions">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-fn">Using f(x) = 2x + 1, what is f(5)?</label></p>
+        <div class="row"><input id="p-fn" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Replace x with 5 and follow the recipe: double, then add 1.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Naming a rule lets us treat “how the output depends on the input” as one object that we can draw, compare, combine and improve. Without the idea you would have only a pile of separate facts.</p>
+      <p>It fits whenever each input has a single predictable output. It does not fit a rule where the same input can give different outcomes, such as a dice roll. For that you describe a spread of possible outputs with probabilities (Module 5).</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-motivated">● Motivated</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> A machine you can rely on: tell it what you put in and know what comes out.</li>
+        <li><strong>Obvious candidates.</strong> A complete list of pairs; a formula; a drawing.</li>
+        <li><strong>The catch.</strong> What if an input was allowed to give two different outputs?</li>
+      </ol>
+      <p>Predict: what goes wrong if one input can produce two outputs?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>You could no longer say what “the” output is, so you could not calculate with it or draw a single curve. Requiring exactly one output per input is what keeps the machine dependable. It is tagged Motivated because it is a very good fit for that need, but other notions (relations that allow several outputs) exist and are useful elsewhere.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>Seen from outside, a <span class="term" data-term="language-model">language model</span> is a function. Its input is the sequence of tokens so far; its output is a probability for every token in the vocabulary being the next one. Feed it the same tokens and the same settings, and the function gives the same probabilities.</p>
+      <div class="callout simplified"><p><strong>Simplified.</strong> When you chat, the system then <em>samples</em> a token from those probabilities. That random step happens outside the function, which is why the same prompt can produce different replies. Sampling comes in Module 5.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-fn">In your own words: what makes something a function, and why is “exactly one output” important?</label></p>
+        <textarea id="e-fn"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>A function is a rule that takes an input and gives one definite output, the same every time. If an input could give two outputs we could not say what the output is, so we could not calculate or draw it as one curve.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“A function is a vending machine for numbers. You press a button, the machine follows its rule, and out comes one result. Press the same button again, same result. The graph is just a picture of every button and what it gives: left to right the input, up and down the output.”</p>
+      <h4>Everyday analogy</h4>
+      <p>A recipe: ingredients in, dish out. <em>Where it breaks down:</em> a real recipe can turn out differently each time; a function never does.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw a box with an arrow in and an arrow out.</li><li>Write the rule inside: double, then add 1.</li><li>Feed in 0, 1, 2 and write the outputs.</li><li>Draw axes and plot the three points.</li><li>Join them; ask what happens between the points.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Is f(x) the same as f times x?</strong> No. f(x) means “the output of f at x”. The brackets mean “apply”.</p>
+      <p><strong>Can two inputs give the same output?</strong> Yes. Both 2 and −2 give 4 under “multiply it by itself”. A function only forbids one input giving two outputs.</p>
+      <p><strong>Why draw a graph at all?</strong> Because patterns such as steepness or turning points are easier to see than to read from a table.</p>
+      <h4>Common misconception</h4>
+      <p>“A function must have a formula.” A lookup table or a learned model is a function too, as long as each input has one output.</p>
+    </details>
+    <footer>Further reading: MML Ch 2 and Ch 5 introduce functions on vectors; Module 4 returns to them.</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

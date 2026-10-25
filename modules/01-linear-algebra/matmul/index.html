@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m01">
+  <meta name="concept-id" content="m01-matmul">
+  <title>Matrix-vector and matrix-matrix multiplication - Linear algebra - ML Math</title>
+  <meta name="description" content="Each entry of a product is a row dotted with a column. Chaining two machines is multiplying their matrices.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/linalg.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li>
+      <a href="../">1 · Linear algebra</a>
+      <ul class="sub">
+        <li><a href="../vectors/">Vectors: arrows and lists</a></li>
+        <li><a href="../combine/">Adding, scaling and combining vectors</a></li>
+        <li><a href="../matrices/">Matrices: tables and machines</a></li>
+        <li><a href="./" aria-current="page">Matrix-vector and matrix-matrix multiplication</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 1: Linear algebra</a></li>
+      <li><span aria-current="page">Matrix-vector and matrix-matrix multiplication</span></li></ol></nav>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-matmul" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 4 of 4</p>
+      <h1>Matrix-vector and matrix-matrix multiplication</h1>
+      <p class="muted">Each entry of a product is a row dotted with a column. Chaining two machines is multiplying their matrices.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>In the last card, each output entry was “a row paired with the input, multiplied entry by entry, then added”. That is the <span class="term" data-term="dot-product">dot product</span> from the Σ card, and the whole recipe is the <span class="term" data-term="matrix-vector-product">matrix-vector product</span>: one dot product per row.</p>
+      <div class="bridge">
+        <p><strong>Back to x + y = 4.</strong> The one-row matrix [1 1] times the vector (x, y) is the single number x + y. For (x, y) = (1, 3) the product is <span data-calc="eqRowCheck">…</span>, so that pair solves the equation. Each equation is one row of weights; stack two equations and you have a two-row matrix. We will solve such systems in the next part. See <a href="../../00-foundations/equations/">Equations in Module 0</a>.</p>
+      </div>
+      <p><span class="term" data-term="matrix-multiplication">Matrix multiplication</span> chains two machines. Feed a vector through B, then through A. The single machine that does both in one go is AB, with vectors written as columns, as in most machine-learning texts. Its entry in row i, column j is the dot product of row i of A with column j of B. Each column of AB is A applied to the matching column of B.</p>
+      <p>For the dot products to exist, A must have as many columns as B has rows. Written with <span class="term" data-term="shape">shapes</span>, an m×n times an n×p gives m×p.</p>
+      <div class="math-display" data-tex-display="(\htmlData{sym=matA}{A}\htmlData{sym=matB}{B})_{ij}=\sum_{k=1}^{\htmlData{sym=innern}{n}}A_{ik}\,B_{kj},\qquad(\htmlData{sym=rowsm}{m}\times\htmlData{sym=innern}{n})(\htmlData{sym=innern}{n}\times\htmlData{sym=colsp}{p})\to \htmlData{sym=rowsm}{m}\times\htmlData{sym=colsp}{p}">(AB)ᵢⱼ = Σₖ AᵢₖBₖⱼ</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Pick an example, then step through the output entries. The outlined row of the left matrix and the outlined column of the right matrix pair up to fill one cell of the answer (burgundy). Try the two swap examples: the same two matrices in the opposite order give different answers. Try “shapes that do not fit” too.</p>
+      <div data-widget="multiply">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Multiply, one output entry at a time</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Two tables of numbers side by side with their product on the right. For the chosen output entry, the matching row of the left table and column of the right table are outlined, and the output entry is filled in from their dot product. The working is repeated in the text below.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>Total cost of a menu: ingredients per dish, then cost per ingredient, combined into cost per dish.</li>
+        <li>Chained unit conversions: kilometres to miles, then miles to something else, folded into one conversion.</li>
+        <li>Two photo filters applied in turn: one combined filter does the same job.</li>
+        <li>Population counts moving between cities each year: two years of moves, folded into one.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If one weighted-total step feeds another, the two together are one matrix product, and the inner sizes must match.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. Table A gives kilograms of 3 ingredients in each of 2 dishes (3×2). Table B gives the price per kilogram of each ingredient in 2 shops (2×3). Which product gives the cost of each dish in each shop?</legend>
+          <label class="radio-row"><input type="radio" name="spot-mul" data-correct data-why="B has 3 columns, one per ingredient, and A has 3 rows, one per ingredient, so the ingredients line up and cancel. The result is 2×2: shops by dishes."><span>B·A</span></label>
+          <label class="radio-row"><input type="radio" name="spot-mul" data-why="A·B is allowed by shape and gives a 3×3 table, but it pairs dishes with shops. The pairing makes no sense even though the sizes allow it."><span>A·B</span></label>
+          <label class="radio-row"><input type="radio" name="spot-mul" data-why="Adding needs the same shape, and A is 3×2 while B is 2×3. Even with matching shapes, adding kilograms to prices would mix unlike things."><span>A + B</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="matmul"></div>
+      <div class="check" data-predict="matmul">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-mul">With A = [[1, 2, 3], [4, 5, 6]] and B = [[7, 8], [9, 10], [11, 12]], what is the entry in row 2, column 1 of AB?</label></p>
+        <div class="row"><input id="p-mul" name="p-mul" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Row 2 of A is (4, 5, 6). Column 1 of B is (7, 9, 11). Pair them up and add.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>It lets you fold many chained steps into one machine, and it lets a computer do all the dot products in one regular pattern. Without the rule, “apply B then A” would need to be spelled out every time.</p>
+      <p><strong>When it does not fit.</strong> The inner sizes must match. The order matters: AB and BA are usually different, and one can exist without the other. Multiplying matching entries of two same-shaped tables is a different operation, so do not confuse the two.</p>
+      <p><strong>Cost.</strong> An m×n times n×p product takes m·n·p multiplications; the widget shows the count for each example.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> The product AB must be the machine that does B first, then A: (AB)v = A(Bv) for every v.</li>
+        <li><strong>Obvious candidate.</strong> Multiply matching entries of A and B.</li>
+        <li><strong>Why it fails.</strong> For P = [[1, 2], [3, 4]] and Q = [[0, 1], [1, 1]], applying Q then P to (1, 0) gives <span data-calc="composedVec">…</span>. The matching-entries table <span class="math" data-tex-calc="entrywiseMatrix"></span> sends (1, 0) to <span data-calc="entrywiseVec">…</span>. They disagree.</li>
+        <li><strong>Why the row-by-column rule remains.</strong> Write out A(Bv). Each entry of the result collects, from each column of B, a weighted sum of A's entries: a row of A paired with a column of B. That rule is forced by the requirement.</li>
+      </ol>
+      <p>Before you open the next part, predict: for P and Q above, is PQ the same as QP?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>PQ is <span class="math" data-tex-calc="productMatrix"></span>. Swapping the order, as the swap example in the widget shows, changes the answer in general: doing B then A is a different journey from doing A then B. Order matters because the first machine's output is the second machine's input.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Projections and feed-forward layers are matrix products.</strong> The query, key and value <span class="term" data-term="learned-projection">projections</span> and the two <span class="term" data-term="feed-forward-layer">feed-forward</span> matrices all work by matrix multiplication (Vaswani et al., 2017, §3.2 and §3.3). A <span data-calc="ffShape">…</span> matrix times one <span data-calc="dModel">…</span>-entry vector takes <span data-calc="ffMults">…</span> multiplications.</li>
+        <li><strong>A large share of the arithmetic.</strong> Much of a transformer's computation is matrix multiplication, including these layers and the attention-score step. We do not give a percentage here, since it depends on the model size and the sequence length.</li>
+        <li><strong>Hardware.</strong> A <span class="term" data-term="gpu">GPU</span> can do many independent multiplications and additions at once, which suits the many independent dot products inside a matrix product. This is general public knowledge about why such chips are used, not a statement about any company's systems.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> Real systems process many tokens at once, so the right-hand matrix has many columns instead of one. The attention scores multiply two matrices built from the same inputs (Module 2 and Module 10 build this up).</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-mul">In your own words: why do the inner sizes have to match, and why does the order of two matrices matter?</label></p>
+        <textarea id="e-mul" name="e-mul" autocomplete="off"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>Each output entry pairs a row of the left matrix with a column of the right one, and pairing needs equal lengths, so the left's column count must equal the right's row count. The order matters because the product means “do the right one first, then the left one”, and the output of the first step is the input of the second.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“Multiplying a matrix by a vector means: take each row, pair it with the vector, multiply matching numbers and add. Multiplying two matrices means chaining two machines into one. To fill each cell of the answer, take a row from the left matrix and a column from the right matrix, pair them off and add. The sizes must fit: columns on the left equal rows on the right. And the order matters, because the right machine runs first.”</p>
+      <h4>Everyday analogy</h4>
+      <p>Two currency converters in a row: euros to pounds, then pounds to dollars. One combined converter does both. <em>Where it breaks down:</em> currency rates are single numbers, and single numbers can be multiplied in either order; matrices cannot.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw A and B side by side and write their shapes under them.</li><li>Check the inner sizes match and circle them.</li><li>Draw the empty answer table of the outer sizes.</li><li>Pick a cell, outline its row in A and column in B.</li><li>Pair, multiply, add, and write the number in the cell.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Why is it not just entry times entry?</strong> That would not chain machines. Row-by-column is what makes “B then A” correct.</p>
+      <p><strong>Is AB always the same as BA?</strong> No. Often one does not even exist.</p>
+      <p><strong>Is a vector a matrix?</strong> It can be treated as a matrix with one column, which is why matrix-vector is a special case.</p>
+      <h4>Common misconception</h4>
+      <p>“Matrix multiplication multiplies matching entries.” That is a different operation. Matrix multiplication pairs a row with a column and adds.</p>
+    </details>
+    <footer>Further reading: MML Ch 2.2 (matrix multiplication), including the shape rule and the failure of commutativity.</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

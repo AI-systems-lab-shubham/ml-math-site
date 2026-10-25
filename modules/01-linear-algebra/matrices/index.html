@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m01">
+  <meta name="concept-id" content="m01-matrices">
+  <title>Matrices: tables and machines - Linear algebra - ML Math</title>
+  <meta name="description" content="A matrix is a table of numbers. It is also a machine that turns one vector into another.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/linalg.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li>
+      <a href="../">1 · Linear algebra</a>
+      <ul class="sub">
+        <li><a href="../vectors/">Vectors: arrows and lists</a></li>
+        <li><a href="../combine/">Adding, scaling and combining vectors</a></li>
+        <li><a href="./" aria-current="page">Matrices: tables and machines</a></li>
+        <li><a href="../matmul/">Matrix-vector and matrix-matrix multiplication</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 1: Linear algebra</a></li>
+      <li><span aria-current="page">Matrices: tables and machines</span></li></ol></nav>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-matrices" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 3 of 4</p>
+      <h1>Matrices: tables and machines</h1>
+      <p class="muted">A matrix is a table of numbers. It is also a machine that turns one vector into another.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>A bakery's recipe card lists grams of flour and sugar in one loaf, and in one cake. That is a small table with two <span class="term" data-term="row">rows</span> (flour, sugar) and two <span class="term" data-term="column">columns</span> (loaf, cake). A table like this is a <span class="term" data-term="matrix">matrix</span>. Its <span class="term" data-term="shape">shape</span> is rows × columns, so this one is 2×2.</p>
+      <p>Now the machine view. Type in how many loaves and cakes you will bake, as the vector (loaves, cakes). Out comes the total flour and sugar. Each column says what <em>one</em> of that product contributes, and you scale it by how many you make. That is exactly “scale some vectors and add”, from the last card.</p>
+      <p>The columns also have a picture. The two <span class="term" data-term="unit-vector">unit arrows</span> (1, 0) and (0, 1) go in; the matrix sends them to its first and second columns. Every other input is a mix of those two unit arrows, so its output is the same mix of the two columns.</p>
+      <div class="math-display" data-tex-display="\htmlData{sym=matM}{M}\,\htmlData{sym=vecv}{\mathbf{v}}=v_1\,(\text{column }1\text{ of }\htmlData{sym=matM}{M})+v_2\,(\text{column }2\text{ of }\htmlData{sym=matM}{M})">Mv = v₁(column 1) + v₂(column 2)</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Edit the six numbers. The dashed arrows are the two columns of M. The thick teal arrow is v₁ times column 1, the thick blue arrow starts at its tip and is v₂ times column 2, and the burgundy arrow is the output Mv. Change a matrix entry and watch the column arrows, and Mv, move together.</p>
+      <div data-widget="matrix">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">A matrix as a machine: its columns are where the unit arrows land</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A two-by-two table of numbers. Its first column is drawn as an arrow in teal, its second column in blue. The input vector v scales each column arrow, the scaled arrows are placed tip to tail, and the burgundy arrow from the origin to the end is the output, Mv.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+      <p class="muted">What a matrix does to the whole plane at once (rotating, stretching, shearing) is explored fully in the next part.</p>
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A recipe table: ingredients in each dish, turned into total ingredients for a menu.</li>
+        <li>A currency table: amounts in euros and pounds in, the total in dollars out.</li>
+        <li>A spreadsheet of monthly sales by region, read as a table.</li>
+        <li>A graphics program that shrinks or turns a picture: every point goes in, a new point comes out.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If each output is a weighted total of the inputs, and the weights never change, think “matrix”.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A table lists grams of flour and sugar in one loaf and in one cake. You type how many loaves and cakes you bake. What does the matrix-machine give back?</legend>
+          <label class="radio-row"><input type="radio" name="spot-mat" data-correct data-why="Each column is what one loaf or one cake needs, scaled by how many you bake, and the scaled columns are added. The result is the total flour and the total sugar."><span>The total grams of flour and of sugar</span></label>
+          <label class="radio-row"><input type="radio" name="spot-mat" data-why="That is what you typed in. The input vector is the number of loaves and cakes; the machine produces something new from it."><span>The number of loaves and cakes</span></label>
+          <label class="radio-row"><input type="radio" name="spot-mat" data-why="The table has no prices, so the machine cannot give a cost. Its output entries are flour and sugar, the table's rows."><span>The price of the baking</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="matrix"></div>
+      <div class="check" data-predict="matrix">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-mat">M = [[2, 1], [0, 3]] and v = (3, 2). What is the first entry of Mv?</label></p>
+        <div class="row"><input id="p-mat" name="p-mat" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Take row 1 of M, which is (2, 1), and pair it with (3, 2): multiply matching entries, then add.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>A matrix packs many weighted totals into one object, and lets one symbol, M, stand for the whole machine. Without it you would write a separate formula for each output.</p>
+      <p>A matrix machine always obeys two rules: doubling the input doubles the output, and the output for a sum is the sum of the outputs. So it cannot square a number, take a maximum or apply a curve. Those need something else, and a neural network adds them between matrices.</p>
+      <p>It also does not need to be square: a 3×2 matrix takes 2 numbers in and gives 3 out.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-motivated">● Motivated</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> A rule where every output is a fixed weighted total of the inputs.</li>
+        <li><strong>Obvious candidates.</strong> A list of formulas, one per output, or a table of the weights.</li>
+        <li><strong>Why the table.</strong> The formulas all have the same shape, so only the weights differ. A table of weights holds everything and is easy to compute with.</li>
+      </ol>
+      <p>Reading the table as columns of arrows comes from the previous card: the input is v₁ copies of one arrow plus v₂ of another. The choice to list rows first, then columns, is a Convention: “2×3” means 2 rows, 3 columns.</p>
+      <p>Before you open the next part, predict: if M sends (1, 0) to (2, 1) and (0, 1) to (−1, 1), where does it send (1, 2)?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>(1, 2) is 1 copy of (1, 0) plus 2 copies of (0, 1). So the output is 1 copy of (2, 1) plus 2 copies of (−1, 1): <span data-calc="matDefaultOut">…</span>. This is the default setting of the widget above.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>A <span class="term" data-term="layer">layer</span> of a language model multiplies its input vector by a matrix of learned numbers, the <span class="term" data-term="weight">weights</span>. Two examples from the original Transformer base model (Vaswani et al., 2017, §3.2 and §3.3):</p>
+      <ul>
+        <li>Each <span class="term" data-term="attention">attention</span> head builds its query, key and value vectors with <span class="term" data-term="learned-projection">learned projections</span>: matrices that turn a <span data-calc="dModel">…</span>-entry vector into a <span data-calc="dK">…</span>-entry one. In our column convention that matrix is <span data-calc="qShape">…</span>, so it has <span data-calc="qEntries">…</span> entries.</li>
+        <li>The <span class="term" data-term="feed-forward-layer">feed-forward layer</span> widens a <span data-calc="dModel">…</span>-entry vector to <span data-calc="dFf">…</span> entries with one matrix (<span data-calc="ffShape">…</span>, <span data-calc="ffEntries">…</span> entries) and narrows it back with another.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> The paper writes row vectors multiplied by matrices on the right (x W), so its matrices are the transposes of the ones here. The entry counts are the same. Biases and the non-linear step between the feed-forward matrices are left out.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-mat">In your own words: why is “the columns are where the unit arrows land” enough to describe the whole machine?</label></p>
+        <textarea id="e-mat" name="e-mat" autocomplete="off"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>Any input is some number of copies of the first unit arrow plus some number of copies of the second. A matrix machine scales and adds consistently, so the output is the same number of copies of the first column plus the same number of copies of the second. The two columns therefore fix the output for every input.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“A matrix is a table of numbers, but think of it as a machine. You put in a list of numbers and out comes another list. The recipe: each column of the table is what one unit of an input contributes. Scale each column by how much of that input you have, add them up, and that is the output. In a language model, the weights between layers are exactly such tables.”</p>
+      <h4>Everyday analogy</h4>
+      <p>A vending machine's price list combined with an order: each item has fixed prices at each shop, you choose quantities, and you read off the totals. <em>Where it breaks down:</em> real prices can change with quantity (discounts); a matrix cannot.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw a 2×2 table and label rows and columns.</li><li>Draw the two unit arrows (1, 0) and (0, 1).</li><li>Draw where they land: the two columns.</li><li>Pick an input, say (1, 2), and scale each column.</li><li>Add the scaled columns to get the output.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Is a matrix just a spreadsheet?</strong> As a table, yes. As a machine, it also says how to combine rows and columns.</p>
+      <p><strong>Why columns, not rows?</strong> With the input as a column vector, each input entry multiplies one column. Rows give the other, equally valid, view.</p>
+      <p><strong>Can the output be longer than the input?</strong> Yes: a 3×2 matrix takes 2 numbers in and gives 3 out.</p>
+      <h4>Common misconception</h4>
+      <p>“A matrix is only a grid of numbers.” The grid is just how we write it down. What defines it is what it does to vectors.</p>
+    </details>
+    <footer>Further reading: MML Ch 2.2 (matrices) and Ch 2.7 (linear mappings, in the next part).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

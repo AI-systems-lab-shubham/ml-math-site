@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m00">
+  <meta name="concept-id" content="m00-slope">
+  <title>Slope and linear functions - Foundations - ML Math</title>
+  <meta name="description" content="A straight line changes by the same amount for every equal step across.">
+  <meta name="theme-color" content="#F6F1E7">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/foundations.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li>
+      <a href="../">0 · Foundations</a>
+      <ul class="sub">
+        <li><a href="../variables/">Variables and expressions</a></li>
+        <li><a href="../equations/">Equations</a></li>
+        <li><a href="../functions/">Functions and graphs</a></li>
+        <li><a href="./" aria-current="page">Slope and linear functions</a></li>
+        <li><a href="../exponents/">Exponents, growth and decay</a></li>
+        <li><a href="../logarithms/">Logarithms</a></li>
+        <li><a href="../sigma/">Σ notation</a></li>
+        <li><a href="../ratios/">Ratios, percentages and averages</a></li>
+        <li><a href="../trig/">Sine and cosine</a></li>
+        <li><a href="../notation/">Reading mathematical notation</a></li>
+      </ul>
+    </li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 0: Foundations</a></li>
+      <li><span aria-current="page">Slope and linear functions</span></li></ol></nav>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-slope" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 4 of 10</p>
+      <h1>Slope and linear functions</h1>
+      <p class="muted">A straight line changes by the same amount for every equal step across.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Walk up a ramp. For every step you take forward, you rise by the same amount. How steep the ramp is, how much you go up per step forward, is its <span class="term" data-term="slope">slope</span>: a steady <span class="term" data-term="rate-of-change">rate of change</span>. Where the ramp starts, its height at the very beginning, is the <span class="term" data-term="intercept">intercept</span>.</p>
+      <p>A <span class="term" data-term="linear-function">linear function</span> packs both facts into one rule:</p>
+      <div class="math-display" data-tex-display="\htmlData{sym=y}{y}=\htmlData{sym=m}{m}\,\htmlData{sym=x}{x}+\htmlData{sym=b}{b}">y = mx + b</div>
+      <p>Here m is the slope (rise per step across), b is the intercept (the height at x = 0), x is the step count and y the height.</p>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Change the slope and the line tilts; change the intercept and it slides up or down. The small burgundy triangle shows “run 1, rise m” at the start. The ochre dot is the intercept.</p>
+      <div data-widget="slope">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Draw the line y = m·x + b</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A straight line with adjustable slope and intercept. A small triangle shows the rise for a run of one.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A tank that starts with some water and fills at a steady number of litres per minute.</li>
+        <li>A cyclist at constant speed who starts some distance down the road.</li>
+        <li>A taxi fare: a fixed pick-up fee plus a steady price per kilometre.</li>
+        <li>A road gradient: metres climbed for each hundred metres travelled.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If the same step in one quantity always changes the other by the same amount, it is linear. The slope is that amount; the intercept is where you start.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A candle is 20 cm tall and burns down 2 cm every hour. Which rule gives its height h after t hours?</legend>
+          <label class="radio-row"><input type="radio" name="spot-slope" data-correct data-why="It starts at 20 (the intercept) and loses 2 per hour, so the slope is negative: −2. The line slopes downwards."><span>h = 20 − 2t</span></label>
+          <label class="radio-row"><input type="radio" name="spot-slope" data-why="That starts at zero and grows. The candle starts at 20 and shrinks."><span>h = 2t</span></label>
+          <label class="radio-row"><input type="radio" name="spot-slope" data-why="That has the numbers swapped: it would start at 2 cm and grow 20 cm per hour."><span>h = 2 + 20t</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="slope"></div>
+      <div class="check" data-predict="slope">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-sl">A line passes through (0, 1) and (2, 5). What is its slope?</label></p>
+        <div class="row"><input id="p-sl" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>How far up does it go, and how far across? Divide the first by the second.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>A straight line is the simplest relationship that still has a direction and a size. It is the baseline we compare other shapes to. Zoom in far enough on almost any smooth curve and it looks like a line, which is the idea behind derivatives (Module 4).</p>
+      <p>It does not fit processes where the step depends on the current size (next card), or where an effect levels off.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> Each equal step across changes the height by the same amount, m.</li>
+        <li><strong>Start.</strong> At x = 0 the height is b.</li>
+        <li><strong>Take steps.</strong> After 1 step: b + m. After 2 steps: b + m + m.</li>
+      </ol>
+      <p>Predict: what is the height after x steps?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>After x steps you have added m exactly x times to b, so the height is b + x copies of m, which is mx + b. Nothing else is possible if every step adds the same amount, so the formula is forced: it is Derived.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>A single artificial <span class="term" data-term="neuron">neuron</span> computes a weighted sum plus a bias. With one input it is exactly this line:</p>
+      <div class="math-display" data-tex-display="z=w\,x+b">z = w x + b</div>
+      <p>The <span class="term" data-term="weight">weight</span> w plays the role of the slope and the <span class="term" data-term="bias">bias</span> b plays the role of the intercept. With many inputs the same pattern becomes a sum of weight times input over all the inputs, plus the bias. Transformer layers are built from such weighted sums (Vaswani et al., 2017).</p>
+      <div class="callout simplified"><p><strong>Simplified.</strong> Most units apply an activation function after this step, which bends the output. We meet that in Module 10. “Neuron” is a metaphor; the unit is just this formula.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-sl">In your own words: what do m and b each tell you about a line?</label></p>
+        <textarea id="e-sl"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>m is how much the output rises for each one-step increase in the input: the steepness and direction. b is where the line starts, the output when the input is zero.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“Imagine a ramp. How far up it starts is b. How steep it is is m: each step forward lifts you by m. After x steps forward you have gone up x times m, plus the b you started with. That is y = mx + b. A neuron in an AI is the same recipe with weights and a bias.”</p>
+      <h4>Everyday analogy</h4>
+      <p>A taxi fare: pick-up fee plus a price per kilometre. <em>Where it breaks down:</em> real fares often have minimums or caps, which bend the line.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw axes and mark a dot at height b on the vertical axis.</li><li>Draw one step across and one rise of m.</li><li>Repeat the step three times.</li><li>Join the points into a line.</li><li>Write y = mx + b and label each part.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>What if the slope is negative?</strong> The line goes down as you move right.</p>
+      <p><strong>What if the slope is zero?</strong> A flat line: the output never changes.</p>
+      <p><strong>Why is it called linear?</strong> Because the graph is a line.</p>
+      <h4>Common misconception</h4>
+      <p>“Slope is the angle.” Slope is rise over run, a ratio. Doubling the slope does not double the angle.</p>
+    </details>
+    <footer>Further reading: MML Ch 2.7 (linear mappings) for the generalisation to many inputs.</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

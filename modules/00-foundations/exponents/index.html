@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m00">
+  <meta name="concept-id" content="m00-exponents">
+  <title>Exponents, growth and decay - Foundations - ML Math</title>
+  <meta name="description" content="Repeated multiplication by the same number describes change proportional to size.">
+  <meta name="theme-color" content="#F6F1E7">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/foundations.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li>
+      <a href="../">0 · Foundations</a>
+      <ul class="sub">
+        <li><a href="../variables/">Variables and expressions</a></li>
+        <li><a href="../equations/">Equations</a></li>
+        <li><a href="../functions/">Functions and graphs</a></li>
+        <li><a href="../slope/">Slope and linear functions</a></li>
+        <li><a href="./" aria-current="page">Exponents, growth and decay</a></li>
+        <li><a href="../logarithms/">Logarithms</a></li>
+        <li><a href="../sigma/">Σ notation</a></li>
+        <li><a href="../ratios/">Ratios, percentages and averages</a></li>
+        <li><a href="../trig/">Sine and cosine</a></li>
+        <li><a href="../notation/">Reading mathematical notation</a></li>
+      </ul>
+    </li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 0: Foundations</a></li>
+      <li><span aria-current="page">Exponents, growth and decay</span></li></ol></nav>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-exponents" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 5 of 10</p>
+      <h1>Exponents, growth and decay</h1>
+      <p class="muted">Repeated multiplication by the same number describes change proportional to size.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Fold a sheet of paper in half, then in half again. Each fold doubles the thickness. Adding the same amount each time makes steady progress; multiplying by the same number each time makes progress that speeds up (or slows down) with the size.</p>
+      <p>Writing “2 × 2 × 2 × 2 × 2” gets tiresome, so we count the copies with a small raised number, the <span class="term" data-term="exponent">exponent</span>. The number being multiplied is the <span class="term" data-term="base">base</span>:</p>
+      <div class="math-display" data-tex-display="2^{5}=2\times2\times2\times2\times2">2⁵ = 2 × 2 × 2 × 2 × 2</div>
+      <p>If a quantity starts at <span class="math" data-tex="\htmlData{sym=a}{a}">a</span> and is multiplied by a <span class="term" data-term="factor">factor</span> <span class="math" data-tex="\htmlData{sym=r}{r}">r</span> at every step, after <span class="math" data-tex="\htmlData{sym=n}{n}">n</span> steps it is</p>
+      <div class="math-display" data-tex-display="\htmlData{sym=a}{a}\,\htmlData{sym=r}{r}^{\htmlData{sym=n}{n}}">a rⁿ</div>
+      <p>When r is bigger than 1 this is <span class="term" data-term="growth">growth</span>. When r is between 0 and 1 it is <span class="term" data-term="decay">decay</span>.</p>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Burgundy bars multiply by the factor at every step. Ochre diamonds show what you would get by adding the first step's change every time instead. Raise the number of steps and watch which one runs away.</p>
+      <div data-widget="exponents">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Multiplying versus adding</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Bars show a quantity after each step when it is multiplied by a fixed factor. Diamonds show the quantity if the same first-step change were added every time instead.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A lily patch that doubles its coverage of a pond each day.</li>
+        <li>Savings with compound interest: each year's interest is added to the base for next year's.</li>
+        <li>A hot drink cooling toward room temperature: the gap shrinks by about the same fraction each minute.</li>
+        <li>A radioactive material halving over each half-life.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If each step <em>multiplies</em> by the same factor, think exponent. If each step <em>adds</em> the same amount, think line. A curve that gets steeper as it grows, or flatter as it shrinks, is a sign of multiplying.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A pond's lily patch covers twice as much surface each day. How does the coverage change?</legend>
+          <label class="radio-row"><input type="radio" name="spot-exp" data-correct data-why="Each day the area is multiplied by 2, so the daily increase gets bigger as the patch grows. That is exponential growth."><span>It is multiplied by 2 each day (growth)</span></label>
+          <label class="radio-row"><input type="radio" name="spot-exp" data-why="Adding the same area every day is linear. Here the added area itself keeps doubling."><span>The same area is added each day</span></label>
+          <label class="radio-row"><input type="radio" name="spot-exp" data-why="Multiplying by one half would shrink the patch. The coverage here gets bigger."><span>It is multiplied by ½ each day (decay)</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="exponents"></div>
+      <div class="check" data-predict="exponents">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-ex">Start with 1 and double five times. What do you reach?</label></p>
+        <div class="row"><input id="p-ex" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Write the sequence one step at a time: 1, then double it, then double again, and so on.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>The exponent compresses “multiply this many times” into one symbol and exposes how startlingly fast repeated multiplication runs away, or fades. Without it, long products are error-prone and the speed is hidden.</p>
+      <p>It fits changes proportional to current size. It does not fit steady changes (use a line) or processes that level off (those need other curves).</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> The change at each step should be in proportion to the current amount.</li>
+        <li><strong>Obvious candidate.</strong> Add a fixed amount each step.</li>
+        <li><strong>Why it fails.</strong> A fixed addition ignores the size: 10 and 10,000 would grow by the same amount.</li>
+      </ol>
+      <p>Predict: what operation makes the change scale with the size?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>Multiplying by a fixed factor r changes an amount of size A by A × (r − 1), which is proportional to A. Repeating that n times from a start of a gives a·r·r·…·r, which we abbreviate a·rⁿ. The form is forced by the requirement, so it is Derived.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>With a vocabulary of V tokens, the number of possible sequences of n tokens is Vⁿ. In the original Transformer's English–German translation experiment, the shared vocabulary was about 37,000 tokens; the English–French experiment used a 32,000 word-piece vocabulary (Vaswani et al., 2017). Even a sequence of just two tokens already has <span data-calc="pairCount">…</span> possibilities.</p>
+      <p>That explosion is why a language model cannot store a table of answers for every sequence. It computes a probability from a formula instead.</p>
+      <div class="callout simplified"><p><strong>Simplified.</strong> This is a counting argument, not a description of how any particular model works. Many sequences are nonsense, and models never visit most of them.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-ex">In your own words: how is multiplying by a factor different from adding, and what does the exponent count?</label></p>
+        <textarea id="e-ex"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>Adding a fixed amount changes everything by the same step, so the graph is a line. Multiplying by a factor changes things in proportion to their size, so the steps get bigger as the amount grows (or smaller as it shrinks). The exponent counts how many times the factor has been multiplied in.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“Adding is like walking: the same distance every step. Multiplying is like a snowball rolling downhill: the bigger it gets, the more snow it picks up. We write ‘multiply 5 times’ as a small 5 above the number. Doubling just ten times from 1 gets you past a thousand.”</p>
+      <h4>Everyday analogy</h4>
+      <p>Folding paper. <em>Where it breaks down:</em> real paper cannot be folded more than a handful of times, so the pattern stops being physical long before the formula does.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Write 1, 2, 4, 8, 16 in a row and arrows labelled ×2.</li><li>Below it write 1, 2, 3, 4, 5 with arrows labelled +1.</li><li>Draw both as bars.</li><li>Label the doubling bars 2⁰ … 2⁴.</li><li>Ask: which one is ahead after 10 steps?</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>What is 2⁰?</strong> 1: zero multiplications leaves the start untouched.</p>
+      <p><strong>Can an exponent be negative?</strong> Yes; it means dividing instead of multiplying. We meet that with logarithms.</p>
+      <p><strong>Why does decay never reach zero?</strong> Halving leaves half of what remains, which is never nothing.</p>
+      <h4>Common misconception</h4>
+      <p>“2⁵ means 2 × 5.” It means 2 multiplied by itself five times: 32, not 10.</p>
+    </details>
+    <footer>Further reading: MML Ch 1 and the opening of Ch 5; logarithms (the inverse of this idea) come next in this module.</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

@@ -7,19 +7,16 @@
   <meta name="theme-color" content="#F6F1E7">
   <meta name="site-root" content="../../">
   <meta name="module-id" content="m01">
-  <title>Module 1: Linear algebra, part 1 · ML Math</title>
-  <meta name="description" content="Vectors as arrows and as lists, adding and scaling them, matrices as tables and machines, and matrix multiplication, taught from pictures first.">
+  <title>Module 1: Linear algebra - ML Math</title>
+  <meta name="description" content="Vectors, matrices and what they do to space. Part 1 is built; part 2 is on its way.">
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../../vendor/katex/katex.min.css">
   <link rel="stylesheet" href="../../assets/css/site.css">
-  <link rel="stylesheet" href="../../assets/css/widget-reserve.css">
   <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
   <script src="../../assets/js/rail-init.js"></script>
-  <script src="../../vendor/katex/katex.min.js"></script>
-  <script type="module" src="../../assets/js/linalg.mjs"></script>
+  <script type="module" src="../../assets/js/overview.mjs"></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -28,9 +25,9 @@
   <a class="brand" translate="no" href="../../index.html">ML Math</a>
   <div class="topbar-actions">
     <a class="topbar-progress" href="../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
-      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
   </div>
 </header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../index.html">Course home</a></p></noscript>
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
@@ -40,507 +37,50 @@
     <li>
       <a href="./" aria-current="page">1 · Linear algebra</a>
       <ul class="sub">
-        <li><a href="#concept-vectors">Vectors</a></li>
-        <li><a href="#concept-combine">Adding and scaling</a></li>
-        <li><a href="#concept-matrices">Matrices</a></li>
-        <li><a href="#concept-matmul">Matrix multiplication</a></li>
+        <li><a href="vectors/">Vectors: arrows and lists</a></li>
+        <li><a href="combine/">Adding, scaling and combining vectors</a></li>
+        <li><a href="matrices/">Matrices: tables and machines</a></li>
+        <li><a href="matmul/">Matrix-vector and matrix-matrix multiplication</a></li>
       </ul>
     </li>
     <li><span class="soon">2 · Analytic geometry</span></li>
     <li><span class="soon">3 · Matrix decompositions</span></li>
     <li><span class="soon">4 · Vector calculus</span></li>
-    <li><span class="soon">5 · Probability</span></li>
-    <li><span class="soon">6 · Optimisation</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
     <li><span class="soon">7 · Information theory</span></li>
-    <li><span class="soon">8 · Models meet data</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
   </ol>
 </nav>
 
 <main id="main">
-  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
-    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
-    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
-  </nav>
-
-  <div class="column page-hero">
+  <div class="column page-hero overview">
     <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
       <li><a href="../../index.html">Course</a></li>
       <li><span aria-current="page">Module 1: Linear algebra</span></li></ol></nav>
     <p class="eyebrow">Module 1 · part 1 of 2</p>
     <h1>Linear algebra</h1>
     <p class="lede">Lists of numbers that can also be arrows, and tables of numbers that act as machines. Four ideas, each from a picture first, then the symbols, then where it shows up inside a language model.</p>
-    <p>Terms with a dotted underline are a tap or hover away from a plain-language and a mathematical definition. Systems of equations, span and linear transformations come in the next part.</p>
-    <div class="callout">
-      <p><strong>Arrows are drawn in 2D only.</strong> A page is flat, so every picture here has two entries. The ideas that carry over unchanged to any number of entries are <strong>adding, scaling, dot products and matrix multiplication</strong>: each is a rule applied entry by entry, so it does not care how many entries there are. What cannot be drawn is anything with more than three entries (a language model uses hundreds), so treat the arrow as a guide for your intuition and the entry-by-entry rule as the definition.</p>
-    </div>
-    <div class="page-tools" data-page-tools>
-      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
-      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
-      <span class="page-tools-note muted">Opens or closes every Teach it panel and symbol list on this page. Answer reveals stay closed.</span>
-      <p class="page-tools-status" role="status" data-tools-status></p>
-    </div>
+    <p class="muted">Systems of equations, span and linear transformations come in the next part.</p>
+    <p class="overview-meta">About 58 min · 4 concepts</p>
+    <h2>By the end of this module you’ll be able to…</h2>
+    <ul class="overview-outcomes">
+      <li>Multiply a matrix by a vector and explain what it does to space</li>
+      <li>Describe a vector both as an arrow and as a list of numbers</li>
+      <li>Build new vectors from linear combinations of old ones</li>
+    </ul>
+    <p class="module-progress muted" data-module-progress aria-live="polite"></p>
+    <p class="overview-action"><a class="button" href="vectors/" data-overview-action>Start</a></p>
+    <h2>Concepts</h2>
+    <ol class="overview-list">
+      <li><a href="vectors/" data-cid="m01-vectors"><span class="ov-state" data-ov-state="m01-vectors" aria-hidden="true"></span><span class="ov-title">Vectors: arrows and lists</span><span class="ov-min muted">14 min</span></a></li>
+      <li><a href="combine/" data-cid="m01-combine"><span class="ov-state" data-ov-state="m01-combine" aria-hidden="true"></span><span class="ov-title">Adding, scaling and combining vectors</span><span class="ov-min muted">14 min</span></a></li>
+      <li><a href="matrices/" data-cid="m01-matrices"><span class="ov-state" data-ov-state="m01-matrices" aria-hidden="true"></span><span class="ov-title">Matrices: tables and machines</span><span class="ov-min muted">14 min</span></a></li>
+      <li><a href="matmul/" data-cid="m01-matmul"><span class="ov-state" data-ov-state="m01-matmul" aria-hidden="true"></span><span class="ov-title">Matrix-vector and matrix-matrix multiplication</span><span class="ov-min muted">16 min</span></a></li>
+    </ol>
   </div>
-
-  <p class="column module-progress muted" data-module-progress aria-live="polite"></p>
-
-  <!-- ===================== 1. VECTORS ===================== -->
-  <article class="concept-card" id="concept-vectors" data-size="full">
-    <header>
-      <p class="eyebrow">Full card · 1 of 4</p>
-      <h2>Vectors: arrows and lists</h2>
-      <p class="muted">A vector is a list of numbers in a fixed order. With two or three entries it is also an arrow.</p>
-    </header>
-
-    <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
-      <p>Tell a friend where a hidden treasure is: “walk 3 steps east, then 2 steps north”. Two numbers, in a fixed order, describe the whole trip. The list (3, 2) is a <span class="term" data-term="vector">vector</span>. Swap the order and you get (2, 3), a different trip.</p>
-      <p>The same trip is also an arrow. Start at the <span class="term" data-term="origin">origin</span>, draw a straight arrow to the point 3 across and 2 up. Two pictures, one object: the list is easy to calculate with, the arrow is easy to see.</p>
-      <p>Each number in the list is a <span class="term" data-term="component">component</span> (or entry), found by its position. Counting from 1, the vector below has entries v₁, v₂, …, vₙ, and n is its <span class="term" data-term="dimension">dimension</span>: how many numbers it holds.</p>
-      <div class="math-display" data-tex-display="\htmlData{sym=vecv}{\mathbf{v}}=(v_1,\;v_2,\;\dots,\;v_n)">v = (v₁, v₂, …, vₙ)</div>
-    </section>
-
-    <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
-      <p>Change the entries, or drag the tip of the arrow. The blue dots show how far across, the teal dots how far up. Then switch to 3 or 5 entries and see what stays and what has to go.</p>
-      <div data-widget="vectors">
-        <div class="widget widget-placeholder">
-          <p class="widget-title">One vector, two pictures</p>
-          <figure class="widget-draw"><figcaption class="widget-desc">With two entries, a flat grid shows an arrow from the origin to the point given by the entries. With more entries, a row of labelled boxes shows the list. The values are repeated in the text below the drawing.</figcaption></figure>
-          <div class="widget-reserve" aria-hidden="true"></div>
-        </div>
-      </div><!-- /widget -->
-    </section>
-
-    <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
-      <ul>
-        <li>Where you are on a map: latitude and longitude, two numbers in a fixed order.</li>
-        <li>Wind: a speed and a direction, which is exactly an arrow.</li>
-        <li>A colour on a screen: how bright its red, green and blue lights are, three numbers in order.</li>
-        <li>One customer's record in a shop's database: (visits per month, items per visit, average spend).</li>
-      </ul>
-      <p class="recognise"><strong>Recognition rule.</strong> If a thing needs several numbers in a fixed order to describe it, think “list”. If it also has a size and a direction, think “arrow”.</p>
-      <div class="check spot-it">
-        <fieldset>
-          <legend>Spot it. A drone is told to fly 30 m east and then 40 m north. How should its trip be stored so that nothing is lost?</legend>
-          <label class="radio-row"><input type="radio" name="spot-vec" data-correct data-why="Two numbers in a fixed order keep both the east part and the north part. That list is a vector, and its arrow shows where the drone ends up."><span>As the two-entry vector (30, 40)</span></label>
-          <label class="radio-row"><input type="radio" name="spot-vec" data-why="70 is how far the drone flew, but it no longer says which way. East and north are different directions, so they cannot simply be merged into one number."><span>As the single number 70</span></label>
-          <label class="radio-row"><input type="radio" name="spot-vec" data-why="Order carries meaning: the first entry is east and the second is north. (40, 30) would be a different trip."><span>As the unordered pair {30, 40}</span></label>
-        </fieldset>
-      </div>
-    </section>
-
-    <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
-      <div data-stepper="vectors"></div>
-      <div class="check" data-predict="vectors">
-        <h4>Predict, then reveal</h4>
-        <p><label for="p-vec">v = (3, 2, 7). What is v₃?</label></p>
-        <div class="row"><input id="p-vec" name="p-vec" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
-        <p class="hint-text" hidden>The small 3 is a position, not a number to multiply by. Count to the third entry from the left.</p>
-      </div>
-    </section>
-
-    <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
-      <p>One name for a whole list lets you write one rule that works on every entry at once. Without it, a record with 512 numbers would need 512 names.</p>
-      <p>Use a vector when position carries meaning and the entries belong together. Be careful when the entries use different units, such as an age and an income: the list is still a fine record, but the arrow picture and the idea of “how far apart” then mix unlike things.</p>
-      <p><strong>What carries over to many dimensions.</strong> Everything we do with entries (adding, scaling, taking dot products) works for any dimension. <strong>What cannot be drawn:</strong> more than three entries. So the arrow is a way to build intuition, not a requirement.</p>
-    </section>
-
-    <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
-      <p><span class="badge badge-convention">◆ Convention</span></p>
-      <p>Both the list and the arrow are choices of how to write down the same trip. We write the entries in a column or a row, number them from 1, and write bold or with an arrow on top. None of that is forced; another book can do it differently and the maths is unchanged. What is not a choice is that the order of entries must be fixed, or you could not compare two vectors.</p>
-    </section>
-
-    <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
-      <p>A language model does not work with words directly. It first turns each <span class="term" data-term="token">token</span> into a vector of numbers, called an <span class="term" data-term="embedding">embedding</span>. In the original Transformer base model that vector has <span data-calc="dModel">…</span> entries (Vaswani et al., 2017, §3.4 and Table 3).</p>
-      <div class="illustration">
-        <p><strong>Made-up illustration numbers, not real model weights.</strong> A token such as “cat” might be stored as a list like <span data-calc="embText">…</span>. That is only <span data-calc="embDim">…</span> entries instead of <span data-calc="dModel">…</span>, and the numbers are invented to show the shape of the idea.</p>
-      </div>
-      <div class="callout simplified"><p><strong>Simplified.</strong> The embedding values are learned during training. Individual entries do not have a neat meaning you can read off, such as “catness”. The useful fact is that the list is a vector, so the rules of this module apply to it.</p></div>
-      <div class="check explain-back">
-        <h4>Explain it back</h4>
-        <p><label for="e-vec">In your own words: why can the same vector be both a list and an arrow, and when can you no longer draw it?</label></p>
-        <textarea id="e-vec" name="e-vec" autocomplete="off"></textarea>
-        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
-        <div class="model-answer" hidden><p>The list gives the arrow's coordinates and the arrow gives the list a place in space, so they are two views of one thing. Once there are more than three entries there is no room to draw the arrow, but the list and every entry-by-entry rule still work.</p></div>
-      </div>
-    </section>
-
-    <details class="teach-it">
-      <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
-      <p>“A vector is a list of numbers where the order matters. Say ‘3 east, 2 north’. That is two numbers, and it is also an arrow from where you start. If the list has more numbers we cannot draw it, but we can still add and scale it, because we do it one number at a time. A language model turns every word-piece into a long list like this, hundreds of numbers, so it can do arithmetic on words.”</p>
-      <h4>Everyday analogy</h4>
-      <p>A postal address: street number, street, city, in a fixed order. <em>Where it breaks down:</em> you cannot meaningfully add two addresses, but you can add two vectors.</p>
-      <h4>Whiteboard sequence</h4>
-      <ol><li>Draw two axes and mark the origin.</li><li>Write (3, 2) and plot the point.</li><li>Draw the arrow from the origin to the point.</li><li>Write (2, 3) and draw it too, to show order matters.</li><li>Write a 5-entry list and say “no picture, same rules”.</li></ol>
-      <h4>Questions learners ask</h4>
-      <p><strong>Is a vector the arrow or the list?</strong> Both are the same object seen two ways. The list is how we compute; the arrow is how we picture.</p>
-      <p><strong>Does the arrow have to start at the origin?</strong> For this module, yes. Moving an arrow without turning it does not change what it means as a displacement, which we use when adding.</p>
-      <p><strong>What is a 1-entry vector?</strong> A single number written as a list. It is the case where the arrow sits on a line.</p>
-      <h4>Common misconception</h4>
-      <p>“A vector is an arrow, so I need a picture.” It is a list first. Most of the vectors in machine learning have too many entries to draw.</p>
-    </details>
-    <footer>Further reading: MML Ch 2.1 and 2.4 (vector spaces, vectors as lists).</footer>
-  </article>
-
-  <!-- ===================== 2. ADDITION AND SCALING ===================== -->
-  <article class="concept-card" id="concept-combine" data-size="full">
-    <header>
-      <p class="eyebrow">Full card · 2 of 4</p>
-      <h2>Adding, scaling and combining vectors</h2>
-      <p class="muted">Two moves build new vectors from old ones: stretch an arrow, and join arrows tip to tail.</p>
-    </header>
-
-    <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
-      <p>Walk 3 blocks east and 1 north. Then walk 1 block west and 2 north. Doing the two walks one after the other is <span class="term" data-term="vector-addition">vector addition</span>: put the second arrow where the first one ends, and the total trip is the arrow from the very start to the very end. In numbers, add the first entries together and the second entries together.</p>
-      <p><span class="term" data-term="scaling">Scaling</span> is doing the same walk several times: twice as far in the same direction, or half as far. A negative number sends you backwards. Every entry is multiplied by the same <span class="term" data-term="scalar">scalar</span>, which is just the name for an ordinary number when it is used to scale a vector.</p>
-      <p>Put the two moves together and you get a <span class="term" data-term="linear-combination">linear combination</span>: scale some arrows, then add them.</p>
-      <div class="math-display" data-tex-display="\htmlData{sym=scalarc}{c_1}\,\htmlData{sym=veca}{\mathbf{a}}+\htmlData{sym=scalarc}{c_2}\,\htmlData{sym=vecb}{\mathbf{b}}">c₁a + c₂b</div>
-    </section>
-
-    <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
-      <p>The dashed arrows are a (teal) and b (blue). Choose c₁ and c₂. The thick teal arrow is c₁a, the thick blue arrow starts at its tip, and the burgundy arrow from the origin to the very end is the sum. Use the “Build it up” choice to see one piece at a time.</p>
-      <div data-widget="combine">
-        <div class="widget widget-placeholder">
-          <p class="widget-title">Scale two arrows, then add them tip to tail</p>
-          <figure class="widget-draw"><figcaption class="widget-desc">Two fixed arrows, a and b, drawn from the origin. Each is multiplied by a number the learner chooses. The scaled a is drawn from the origin, the scaled b starts at its tip, and a third arrow from the origin to the end is their sum.</figcaption></figure>
-          <div class="widget-reserve" aria-hidden="true"></div>
-        </div>
-      </div><!-- /widget -->
-    </section>
-
-    <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
-      <ul>
-        <li>A boat steers across a river while the current pushes it downstream: the path over the ground is the sum of the two velocities.</li>
-        <li>Two people push a heavy box in different directions: the net push is the sum of the two force arrows.</li>
-        <li>Doubling a recipe multiplies every ingredient amount by 2: scaling a list.</li>
-        <li>Mixing paint, three parts blue to one part yellow, is a combination of two colour recipes.</li>
-      </ul>
-      <p class="recognise"><strong>Recognition rule.</strong> If two effects act together and each has a size and a direction, <em>add</em> them. If the same effect is made bigger, smaller or reversed, <em>scale</em> it.</p>
-      <div class="check spot-it">
-        <fieldset>
-          <legend>Spot it. A boat heads (4, 0) km/h east through still water. A current pushes it (0, 3) km/h north. Which operation gives its motion over the ground?</legend>
-          <label class="radio-row"><input type="radio" name="spot-comb" data-correct data-why="Both effects act at once, each with a size and a direction, so the motion is their sum: (4, 3). Add the east parts and the north parts separately."><span>Add the two vectors</span></label>
-          <label class="radio-row"><input type="radio" name="spot-comb" data-why="Scaling changes one effect's size. Here there are two different effects, not one effect made bigger."><span>Scale the boat's vector by the current</span></label>
-          <label class="radio-row"><input type="radio" name="spot-comb" data-why="Picking the larger vector throws away the other effect. The current really does change where the boat goes."><span>Keep only the longer arrow</span></label>
-        </fieldset>
-      </div>
-    </section>
-
-    <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
-      <div data-stepper="combine"></div>
-      <div class="check" data-predict="combine">
-        <h4>Predict, then reveal</h4>
-        <p><label for="p-comb">With a = (2, 1) and b = (−1, 2), what is the first entry of 2a − b?</label></p>
-        <div class="row"><input id="p-comb" name="p-comb" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
-        <p class="hint-text" hidden>Double the first entry of a, then subtract the first entry of b. Mind the signs.</p>
-      </div>
-    </section>
-
-    <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
-      <p>Adding and scaling are the only two things a vector space needs, and they build a huge family of vectors from a few. A question like “which arrows can I reach from a and b?” is a question about linear combinations (explored fully in the next part).</p>
-      <p>Adding vectors (and so linear combinations) needs the same number of entries: you cannot add (1, 2) to (1, 2, 3). Scaling one vector does not. Adding also assumes entries mean the same thing in each vector, position by position.</p>
-      <p><strong>Many dimensions.</strong> Both rules work unchanged for any number of entries. Only the arrow picture runs out.</p>
-    </section>
-
-    <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
-      <p><span class="badge badge-derived">✓ Derived</span></p>
-      <ol>
-        <li><strong>The requirement.</strong> Adding two arrows must give the arrow of doing one walk and then the other.</li>
-        <li><strong>Obvious candidates.</strong> Add entry by entry, or multiply entry by entry, or keep the longer arrow.</li>
-        <li><strong>Why most fail.</strong> Walk 3 east then 1 east: you must end 4 east, so entries must add. East and north steps do not interfere, so each entry adds on its own.</li>
-      </ol>
-      <p>Before you open the next part, predict: what should (3, 2) + (3, 2) be, and what single move gives the same result?</p>
-      <details class="reveal">
-        <summary>I have made my prediction: show the reasoning</summary>
-        <p>Doing the same walk twice gives (6, 4). That is each entry doubled, so doubling is just repeated adding. Scaling by 2 is forced to be “multiply every entry by 2”. Scaling by a fraction is forced the same way (half the walk), and a negative number is forced to mean walking backwards. That is why this card is Derived: addition and scaling fall out of what a walk is.</p>
-      </details>
-    </section>
-
-    <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
-      <ul>
-        <li><strong>Positions are added to token vectors.</strong> The original Transformer adds a position vector to each token's embedding, which works because both have the same dimension (Vaswani et al., 2017, §3.5).</li>
-        <li><strong>Layers add their output to their input.</strong> Each sub-layer's output is added to the vector that went into it, then normalised (Vaswani et al., 2017, §3.1). This is vector addition, applied once per sub-layer.</li>
-      </ul>
-      <div class="illustration">
-        <p><strong>Made-up illustration numbers, not real model weights.</strong> Take a token vector <span data-calc="embText">…</span> and a layer output <span data-calc="embUpdate">…</span>. Their sum is <span data-calc="embSum">…</span>, entry by entry.</p>
-        <div class="math-display" data-tex-calc="summedUp"></div>
-      </div>
-      <div class="callout simplified"><p><strong>Simplified.</strong> Real vectors have <span data-calc="dModel">…</span> entries, and the paper applies layer normalisation after the addition, which this card does not cover.</p></div>
-      <div class="check explain-back">
-        <h4>Explain it back</h4>
-        <p><label for="e-comb">In your own words: what does 2a − b mean as a walk, and why do the entries just add?</label></p>
-        <textarea id="e-comb" name="e-comb" autocomplete="off"></textarea>
-        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
-        <div class="model-answer" hidden><p>Walk along a twice as far, then walk along b backwards. East steps and north steps do not affect each other, so the total east is the sum of the east parts and the total north is the sum of the north parts. That is entry-by-entry adding.</p></div>
-      </div>
-    </section>
-
-    <details class="teach-it">
-      <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
-      <p>“There are two moves. Scaling stretches an arrow: times 2 makes it twice as long, times −1 flips it. Adding puts one arrow after another: go along the first, then along the second. In numbers both are easy: scale multiplies every entry; add adds entries in the same position. Mix them and you get a recipe such as 2a minus b.”</p>
-      <h4>Everyday analogy</h4>
-      <p>Following two sets of directions in a row: “2 blocks that way, then 1 block back along the other road”. <em>Where it breaks down:</em> real walks can be blocked by buildings; arrows can pass through anything.</p>
-      <h4>Whiteboard sequence</h4>
-      <ol><li>Draw a and b from the origin.</li><li>Draw 2a, longer in the same direction.</li><li>Draw −b from the tip of 2a, pointing the other way.</li><li>Draw the arrow from the origin to the end.</li><li>Write the same thing with numbers, entry by entry.</li></ol>
-      <h4>Questions learners ask</h4>
-      <p><strong>Why does the order of adding not matter?</strong> Adding entries is ordinary number adding, which does not care about order. As walks, either order reaches the same place.</p>
-      <p><strong>What does scaling by 0 give?</strong> The zero vector, an arrow of no length at the origin.</p>
-      <p><strong>Can I add vectors of different dimensions?</strong> No. There would be nothing to pair some entries with.</p>
-      <h4>Common misconception</h4>
-      <p>“Adding two vectors adds their lengths.” Not in general. Two arrows at an angle give a total shorter than the sum of their lengths.</p>
-    </details>
-    <footer>Further reading: MML Ch 2.4 (vector spaces) and Ch 2.5 (linear combinations in the next part).</footer>
-  </article>
-
-  <!-- ===================== 3. MATRICES ===================== -->
-  <article class="concept-card" id="concept-matrices" data-size="full">
-    <header>
-      <p class="eyebrow">Full card · 3 of 4</p>
-      <h2>Matrices: tables and machines</h2>
-      <p class="muted">A matrix is a table of numbers. It is also a machine that turns one vector into another.</p>
-    </header>
-
-    <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
-      <p>A bakery's recipe card lists grams of flour and sugar in one loaf, and in one cake. That is a small table with two <span class="term" data-term="row">rows</span> (flour, sugar) and two <span class="term" data-term="column">columns</span> (loaf, cake). A table like this is a <span class="term" data-term="matrix">matrix</span>. Its <span class="term" data-term="shape">shape</span> is rows × columns, so this one is 2×2.</p>
-      <p>Now the machine view. Type in how many loaves and cakes you will bake, as the vector (loaves, cakes). Out comes the total flour and sugar. Each column says what <em>one</em> of that product contributes, and you scale it by how many you make. That is exactly “scale some vectors and add”, from the last card.</p>
-      <p>The columns also have a picture. The two <span class="term" data-term="unit-vector">unit arrows</span> (1, 0) and (0, 1) go in; the matrix sends them to its first and second columns. Every other input is a mix of those two unit arrows, so its output is the same mix of the two columns.</p>
-      <div class="math-display" data-tex-display="\htmlData{sym=matM}{M}\,\htmlData{sym=vecv}{\mathbf{v}}=v_1\,(\text{column }1\text{ of }\htmlData{sym=matM}{M})+v_2\,(\text{column }2\text{ of }\htmlData{sym=matM}{M})">Mv = v₁(column 1) + v₂(column 2)</div>
-    </section>
-
-    <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
-      <p>Edit the six numbers. The dashed arrows are the two columns of M. The thick teal arrow is v₁ times column 1, the thick blue arrow starts at its tip and is v₂ times column 2, and the burgundy arrow is the output Mv. Change a matrix entry and watch the column arrows, and Mv, move together.</p>
-      <div data-widget="matrix">
-        <div class="widget widget-placeholder">
-          <p class="widget-title">A matrix as a machine: its columns are where the unit arrows land</p>
-          <figure class="widget-draw"><figcaption class="widget-desc">A two-by-two table of numbers. Its first column is drawn as an arrow in teal, its second column in blue. The input vector v scales each column arrow, the scaled arrows are placed tip to tail, and the burgundy arrow from the origin to the end is the output, Mv.</figcaption></figure>
-          <div class="widget-reserve" aria-hidden="true"></div>
-        </div>
-      </div><!-- /widget -->
-      <p class="muted">What a matrix does to the whole plane at once (rotating, stretching, shearing) is explored fully in the next part.</p>
-    </section>
-
-    <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
-      <ul>
-        <li>A recipe table: ingredients in each dish, turned into total ingredients for a menu.</li>
-        <li>A currency table: amounts in euros and pounds in, the total in dollars out.</li>
-        <li>A spreadsheet of monthly sales by region, read as a table.</li>
-        <li>A graphics program that shrinks or turns a picture: every point goes in, a new point comes out.</li>
-      </ul>
-      <p class="recognise"><strong>Recognition rule.</strong> If each output is a weighted total of the inputs, and the weights never change, think “matrix”.</p>
-      <div class="check spot-it">
-        <fieldset>
-          <legend>Spot it. A table lists grams of flour and sugar in one loaf and in one cake. You type how many loaves and cakes you bake. What does the matrix-machine give back?</legend>
-          <label class="radio-row"><input type="radio" name="spot-mat" data-correct data-why="Each column is what one loaf or one cake needs, scaled by how many you bake, and the scaled columns are added. The result is the total flour and the total sugar."><span>The total grams of flour and of sugar</span></label>
-          <label class="radio-row"><input type="radio" name="spot-mat" data-why="That is what you typed in. The input vector is the number of loaves and cakes; the machine produces something new from it."><span>The number of loaves and cakes</span></label>
-          <label class="radio-row"><input type="radio" name="spot-mat" data-why="The table has no prices, so the machine cannot give a cost. Its output entries are flour and sugar, the table's rows."><span>The price of the baking</span></label>
-        </fieldset>
-      </div>
-    </section>
-
-    <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
-      <div data-stepper="matrix"></div>
-      <div class="check" data-predict="matrix">
-        <h4>Predict, then reveal</h4>
-        <p><label for="p-mat">M = [[2, 1], [0, 3]] and v = (3, 2). What is the first entry of Mv?</label></p>
-        <div class="row"><input id="p-mat" name="p-mat" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
-        <p class="hint-text" hidden>Take row 1 of M, which is (2, 1), and pair it with (3, 2): multiply matching entries, then add.</p>
-      </div>
-    </section>
-
-    <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
-      <p>A matrix packs many weighted totals into one object, and lets one symbol, M, stand for the whole machine. Without it you would write a separate formula for each output.</p>
-      <p>A matrix machine always obeys two rules: doubling the input doubles the output, and the output for a sum is the sum of the outputs. So it cannot square a number, take a maximum or apply a curve. Those need something else, and a neural network adds them between matrices.</p>
-      <p>It also does not need to be square: a 3×2 matrix takes 2 numbers in and gives 3 out.</p>
-    </section>
-
-    <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
-      <p><span class="badge badge-motivated">● Motivated</span></p>
-      <ol>
-        <li><strong>The requirement.</strong> A rule where every output is a fixed weighted total of the inputs.</li>
-        <li><strong>Obvious candidates.</strong> A list of formulas, one per output, or a table of the weights.</li>
-        <li><strong>Why the table.</strong> The formulas all have the same shape, so only the weights differ. A table of weights holds everything and is easy to compute with.</li>
-      </ol>
-      <p>Reading the table as columns of arrows comes from the previous card: the input is v₁ copies of one arrow plus v₂ of another. The choice to list rows first, then columns, is a Convention: “2×3” means 2 rows, 3 columns.</p>
-      <p>Before you open the next part, predict: if M sends (1, 0) to (2, 1) and (0, 1) to (−1, 1), where does it send (1, 2)?</p>
-      <details class="reveal">
-        <summary>I have made my prediction: show the reasoning</summary>
-        <p>(1, 2) is 1 copy of (1, 0) plus 2 copies of (0, 1). So the output is 1 copy of (2, 1) plus 2 copies of (−1, 1): <span data-calc="matDefaultOut">…</span>. This is the default setting of the widget above.</p>
-      </details>
-    </section>
-
-    <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
-      <p>A <span class="term" data-term="layer">layer</span> of a language model multiplies its input vector by a matrix of learned numbers, the <span class="term" data-term="weight">weights</span>. Two examples from the original Transformer base model (Vaswani et al., 2017, §3.2 and §3.3):</p>
-      <ul>
-        <li>Each <span class="term" data-term="attention">attention</span> head builds its query, key and value vectors with <span class="term" data-term="learned-projection">learned projections</span>: matrices that turn a <span data-calc="dModel">…</span>-entry vector into a <span data-calc="dK">…</span>-entry one. In our column convention that matrix is <span data-calc="qShape">…</span>, so it has <span data-calc="qEntries">…</span> entries.</li>
-        <li>The <span class="term" data-term="feed-forward-layer">feed-forward layer</span> widens a <span data-calc="dModel">…</span>-entry vector to <span data-calc="dFf">…</span> entries with one matrix (<span data-calc="ffShape">…</span>, <span data-calc="ffEntries">…</span> entries) and narrows it back with another.</li>
-      </ul>
-      <div class="callout simplified"><p><strong>Simplified.</strong> The paper writes row vectors multiplied by matrices on the right (x W), so its matrices are the transposes of the ones here. The entry counts are the same. Biases and the non-linear step between the feed-forward matrices are left out.</p></div>
-      <div class="check explain-back">
-        <h4>Explain it back</h4>
-        <p><label for="e-mat">In your own words: why is “the columns are where the unit arrows land” enough to describe the whole machine?</label></p>
-        <textarea id="e-mat" name="e-mat" autocomplete="off"></textarea>
-        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
-        <div class="model-answer" hidden><p>Any input is some number of copies of the first unit arrow plus some number of copies of the second. A matrix machine scales and adds consistently, so the output is the same number of copies of the first column plus the same number of copies of the second. The two columns therefore fix the output for every input.</p></div>
-      </div>
-    </section>
-
-    <details class="teach-it">
-      <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
-      <p>“A matrix is a table of numbers, but think of it as a machine. You put in a list of numbers and out comes another list. The recipe: each column of the table is what one unit of an input contributes. Scale each column by how much of that input you have, add them up, and that is the output. In a language model, the weights between layers are exactly such tables.”</p>
-      <h4>Everyday analogy</h4>
-      <p>A vending machine's price list combined with an order: each item has fixed prices at each shop, you choose quantities, and you read off the totals. <em>Where it breaks down:</em> real prices can change with quantity (discounts); a matrix cannot.</p>
-      <h4>Whiteboard sequence</h4>
-      <ol><li>Draw a 2×2 table and label rows and columns.</li><li>Draw the two unit arrows (1, 0) and (0, 1).</li><li>Draw where they land: the two columns.</li><li>Pick an input, say (1, 2), and scale each column.</li><li>Add the scaled columns to get the output.</li></ol>
-      <h4>Questions learners ask</h4>
-      <p><strong>Is a matrix just a spreadsheet?</strong> As a table, yes. As a machine, it also says how to combine rows and columns.</p>
-      <p><strong>Why columns, not rows?</strong> With the input as a column vector, each input entry multiplies one column. Rows give the other, equally valid, view.</p>
-      <p><strong>Can the output be longer than the input?</strong> Yes: a 3×2 matrix takes 2 numbers in and gives 3 out.</p>
-      <h4>Common misconception</h4>
-      <p>“A matrix is only a grid of numbers.” The grid is just how we write it down. What defines it is what it does to vectors.</p>
-    </details>
-    <footer>Further reading: MML Ch 2.2 (matrices) and Ch 2.7 (linear mappings, in the next part).</footer>
-  </article>
-
-  <!-- ===================== 4. MATRIX MULTIPLICATION ===================== -->
-  <article class="concept-card" id="concept-matmul" data-size="full">
-    <header>
-      <p class="eyebrow">Full card · 4 of 4</p>
-      <h2>Matrix-vector and matrix-matrix multiplication</h2>
-      <p class="muted">Each entry of a product is a row dotted with a column. Chaining two machines is multiplying their matrices.</p>
-    </header>
-
-    <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
-      <p>In the last card, each output entry was “a row paired with the input, multiplied entry by entry, then added”. That is the <span class="term" data-term="dot-product">dot product</span> from the Σ card, and the whole recipe is the <span class="term" data-term="matrix-vector-product">matrix-vector product</span>: one dot product per row.</p>
-      <div class="bridge">
-        <p><strong>Back to x + y = 4.</strong> The one-row matrix [1 1] times the vector (x, y) is the single number x + y. For (x, y) = (1, 3) the product is <span data-calc="eqRowCheck">…</span>, so that pair solves the equation. Each equation is one row of weights; stack two equations and you have a two-row matrix. We will solve such systems in the next part. See <a href="../00-foundations/index.html#concept-equations">Equations in Module 0</a>.</p>
-      </div>
-      <p><span class="term" data-term="matrix-multiplication">Matrix multiplication</span> chains two machines. Feed a vector through B, then through A. The single machine that does both in one go is AB, with vectors written as columns, as in most machine-learning texts. Its entry in row i, column j is the dot product of row i of A with column j of B. Each column of AB is A applied to the matching column of B.</p>
-      <p>For the dot products to exist, A must have as many columns as B has rows. Written with <span class="term" data-term="shape">shapes</span>, an m×n times an n×p gives m×p.</p>
-      <div class="math-display" data-tex-display="(\htmlData{sym=matA}{A}\htmlData{sym=matB}{B})_{ij}=\sum_{k=1}^{\htmlData{sym=innern}{n}}A_{ik}\,B_{kj},\qquad(\htmlData{sym=rowsm}{m}\times\htmlData{sym=innern}{n})(\htmlData{sym=innern}{n}\times\htmlData{sym=colsp}{p})\to \htmlData{sym=rowsm}{m}\times\htmlData{sym=colsp}{p}">(AB)ᵢⱼ = Σₖ AᵢₖBₖⱼ</div>
-    </section>
-
-    <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
-      <p>Pick an example, then step through the output entries. The outlined row of the left matrix and the outlined column of the right matrix pair up to fill one cell of the answer (burgundy). Try the two swap examples: the same two matrices in the opposite order give different answers. Try “shapes that do not fit” too.</p>
-      <div data-widget="multiply">
-        <div class="widget widget-placeholder">
-          <p class="widget-title">Multiply, one output entry at a time</p>
-          <figure class="widget-draw"><figcaption class="widget-desc">Two tables of numbers side by side with their product on the right. For the chosen output entry, the matching row of the left table and column of the right table are outlined, and the output entry is filled in from their dot product. The working is repeated in the text below.</figcaption></figure>
-          <div class="widget-reserve" aria-hidden="true"></div>
-        </div>
-      </div><!-- /widget -->
-    </section>
-
-    <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
-      <ul>
-        <li>Total cost of a menu: ingredients per dish, then cost per ingredient, combined into cost per dish.</li>
-        <li>Chained unit conversions: kilometres to miles, then miles to something else, folded into one conversion.</li>
-        <li>Two photo filters applied in turn: one combined filter does the same job.</li>
-        <li>Population counts moving between cities each year: two years of moves, folded into one.</li>
-      </ul>
-      <p class="recognise"><strong>Recognition rule.</strong> If one weighted-total step feeds another, the two together are one matrix product, and the inner sizes must match.</p>
-      <div class="check spot-it">
-        <fieldset>
-          <legend>Spot it. Table A gives kilograms of 3 ingredients in each of 2 dishes (3×2). Table B gives the price per kilogram of each ingredient in 2 shops (2×3). Which product gives the cost of each dish in each shop?</legend>
-          <label class="radio-row"><input type="radio" name="spot-mul" data-correct data-why="B has 3 columns, one per ingredient, and A has 3 rows, one per ingredient, so the ingredients line up and cancel. The result is 2×2: shops by dishes."><span>B·A</span></label>
-          <label class="radio-row"><input type="radio" name="spot-mul" data-why="A·B is allowed by shape and gives a 3×3 table, but it pairs dishes with shops. The pairing makes no sense even though the sizes allow it."><span>A·B</span></label>
-          <label class="radio-row"><input type="radio" name="spot-mul" data-why="Adding needs the same shape, and A is 3×2 while B is 2×3. Even with matching shapes, adding kilograms to prices would mix unlike things."><span>A + B</span></label>
-        </fieldset>
-      </div>
-    </section>
-
-    <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
-      <div data-stepper="matmul"></div>
-      <div class="check" data-predict="matmul">
-        <h4>Predict, then reveal</h4>
-        <p><label for="p-mul">With A = [[1, 2, 3], [4, 5, 6]] and B = [[7, 8], [9, 10], [11, 12]], what is the entry in row 2, column 1 of AB?</label></p>
-        <div class="row"><input id="p-mul" name="p-mul" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
-        <p class="hint-text" hidden>Row 2 of A is (4, 5, 6). Column 1 of B is (7, 9, 11). Pair them up and add.</p>
-      </div>
-    </section>
-
-    <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
-      <p>It lets you fold many chained steps into one machine, and it lets a computer do all the dot products in one regular pattern. Without the rule, “apply B then A” would need to be spelled out every time.</p>
-      <p><strong>When it does not fit.</strong> The inner sizes must match. The order matters: AB and BA are usually different, and one can exist without the other. Multiplying matching entries of two same-shaped tables is a different operation, so do not confuse the two.</p>
-      <p><strong>Cost.</strong> An m×n times n×p product takes m·n·p multiplications; the widget shows the count for each example.</p>
-    </section>
-
-    <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
-      <p><span class="badge badge-derived">✓ Derived</span></p>
-      <ol>
-        <li><strong>The requirement.</strong> The product AB must be the machine that does B first, then A: (AB)v = A(Bv) for every v.</li>
-        <li><strong>Obvious candidate.</strong> Multiply matching entries of A and B.</li>
-        <li><strong>Why it fails.</strong> For P = [[1, 2], [3, 4]] and Q = [[0, 1], [1, 1]], applying Q then P to (1, 0) gives <span data-calc="composedVec">…</span>. The matching-entries table <span class="math" data-tex-calc="entrywiseMatrix"></span> sends (1, 0) to <span data-calc="entrywiseVec">…</span>. They disagree.</li>
-        <li><strong>Why the row-by-column rule remains.</strong> Write out A(Bv). Each entry of the result collects, from each column of B, a weighted sum of A's entries: a row of A paired with a column of B. That rule is forced by the requirement.</li>
-      </ol>
-      <p>Before you open the next part, predict: for P and Q above, is PQ the same as QP?</p>
-      <details class="reveal">
-        <summary>I have made my prediction: show the reasoning</summary>
-        <p>PQ is <span class="math" data-tex-calc="productMatrix"></span>. Swapping the order, as the swap example in the widget shows, changes the answer in general: doing B then A is a different journey from doing A then B. Order matters because the first machine's output is the second machine's input.</p>
-      </details>
-    </section>
-
-    <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
-      <ul>
-        <li><strong>Projections and feed-forward layers are matrix products.</strong> The query, key and value <span class="term" data-term="learned-projection">projections</span> and the two <span class="term" data-term="feed-forward-layer">feed-forward</span> matrices all work by matrix multiplication (Vaswani et al., 2017, §3.2 and §3.3). A <span data-calc="ffShape">…</span> matrix times one <span data-calc="dModel">…</span>-entry vector takes <span data-calc="ffMults">…</span> multiplications.</li>
-        <li><strong>A large share of the arithmetic.</strong> Much of a transformer's computation is matrix multiplication, including these layers and the attention-score step. We do not give a percentage here, since it depends on the model size and the sequence length.</li>
-        <li><strong>Hardware.</strong> A <span class="term" data-term="gpu">GPU</span> can do many independent multiplications and additions at once, which suits the many independent dot products inside a matrix product. This is general public knowledge about why such chips are used, not a statement about any company's systems.</li>
-      </ul>
-      <div class="callout simplified"><p><strong>Simplified.</strong> Real systems process many tokens at once, so the right-hand matrix has many columns instead of one. The attention scores multiply two matrices built from the same inputs (Module 2 and Module 10 build this up).</p></div>
-      <div class="check explain-back">
-        <h4>Explain it back</h4>
-        <p><label for="e-mul">In your own words: why do the inner sizes have to match, and why does the order of two matrices matter?</label></p>
-        <textarea id="e-mul" name="e-mul" autocomplete="off"></textarea>
-        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
-        <div class="model-answer" hidden><p>Each output entry pairs a row of the left matrix with a column of the right one, and pairing needs equal lengths, so the left's column count must equal the right's row count. The order matters because the product means “do the right one first, then the left one”, and the output of the first step is the input of the second.</p></div>
-      </div>
-    </section>
-
-    <details class="teach-it">
-      <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
-      <p>“Multiplying a matrix by a vector means: take each row, pair it with the vector, multiply matching numbers and add. Multiplying two matrices means chaining two machines into one. To fill each cell of the answer, take a row from the left matrix and a column from the right matrix, pair them off and add. The sizes must fit: columns on the left equal rows on the right. And the order matters, because the right machine runs first.”</p>
-      <h4>Everyday analogy</h4>
-      <p>Two currency converters in a row: euros to pounds, then pounds to dollars. One combined converter does both. <em>Where it breaks down:</em> currency rates are single numbers, and single numbers can be multiplied in either order; matrices cannot.</p>
-      <h4>Whiteboard sequence</h4>
-      <ol><li>Draw A and B side by side and write their shapes under them.</li><li>Check the inner sizes match and circle them.</li><li>Draw the empty answer table of the outer sizes.</li><li>Pick a cell, outline its row in A and column in B.</li><li>Pair, multiply, add, and write the number in the cell.</li></ol>
-      <h4>Questions learners ask</h4>
-      <p><strong>Why is it not just entry times entry?</strong> That would not chain machines. Row-by-column is what makes “B then A” correct.</p>
-      <p><strong>Is AB always the same as BA?</strong> No. Often one does not even exist.</p>
-      <p><strong>Is a vector a matrix?</strong> It can be treated as a matrix with one column, which is why matrix-vector is a special case.</p>
-      <h4>Common misconception</h4>
-      <p>“Matrix multiplication multiplies matching entries.” That is a different operation. Matrix multiplication pairs a row with a column and adds.</p>
-    </details>
-    <footer>Further reading: MML Ch 2.2 (matrix multiplication), including the shape rule and the failure of commutativity.</footer>
-  </article>
 </main>
 </div>
 <footer class="site-footer" id="site-footer"></footer>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m01">
+  <meta name="concept-id" content="m01-vectors">
+  <title>Vectors: arrows and lists - Linear algebra - ML Math</title>
+  <meta name="description" content="A vector is a list of numbers in a fixed order. With two or three entries it is also an arrow.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/linalg.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li>
+      <a href="../">1 · Linear algebra</a>
+      <ul class="sub">
+        <li><a href="./" aria-current="page">Vectors: arrows and lists</a></li>
+        <li><a href="../combine/">Adding, scaling and combining vectors</a></li>
+        <li><a href="../matrices/">Matrices: tables and machines</a></li>
+        <li><a href="../matmul/">Matrix-vector and matrix-matrix multiplication</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 1: Linear algebra</a></li>
+      <li><span aria-current="page">Vectors: arrows and lists</span></li></ol></nav>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-vectors" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 1 of 4</p>
+      <h1>Vectors: arrows and lists</h1>
+      <p class="muted">A vector is a list of numbers in a fixed order. With two or three entries it is also an arrow.</p>
+    </header>
+
+    <div class="callout">
+      <p><strong>Arrows are drawn in 2D only.</strong> A page is flat, so every picture here has two entries. The ideas that carry over unchanged to any number of entries are <strong>adding, scaling, dot products and matrix multiplication</strong>: each is a rule applied entry by entry, so it does not care how many entries there are. What cannot be drawn is anything with more than three entries (a language model uses hundreds), so treat the arrow as a guide for your intuition and the entry-by-entry rule as the definition.</p>
+    </div>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Tell a friend where a hidden treasure is: “walk 3 steps east, then 2 steps north”. Two numbers, in a fixed order, describe the whole trip. The list (3, 2) is a <span class="term" data-term="vector">vector</span>. Swap the order and you get (2, 3), a different trip.</p>
+      <p>The same trip is also an arrow. Start at the <span class="term" data-term="origin">origin</span>, draw a straight arrow to the point 3 across and 2 up. Two pictures, one object: the list is easy to calculate with, the arrow is easy to see.</p>
+      <p>Each number in the list is a <span class="term" data-term="component">component</span> (or entry), found by its position. Counting from 1, the vector below has entries v₁, v₂, …, vₙ, and n is its <span class="term" data-term="dimension">dimension</span>: how many numbers it holds.</p>
+      <div class="math-display" data-tex-display="\htmlData{sym=vecv}{\mathbf{v}}=(v_1,\;v_2,\;\dots,\;v_n)">v = (v₁, v₂, …, vₙ)</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Change the entries, or drag the tip of the arrow. The blue dots show how far across, the teal dots how far up. Then switch to 3 or 5 entries and see what stays and what has to go.</p>
+      <div data-widget="vectors">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">One vector, two pictures</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">With two entries, a flat grid shows an arrow from the origin to the point given by the entries. With more entries, a row of labelled boxes shows the list. The values are repeated in the text below the drawing.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>Where you are on a map: latitude and longitude, two numbers in a fixed order.</li>
+        <li>Wind: a speed and a direction, which is exactly an arrow.</li>
+        <li>A colour on a screen: how bright its red, green and blue lights are, three numbers in order.</li>
+        <li>One customer's record in a shop's database: (visits per month, items per visit, average spend).</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If a thing needs several numbers in a fixed order to describe it, think “list”. If it also has a size and a direction, think “arrow”.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A drone is told to fly 30 m east and then 40 m north. How should its trip be stored so that nothing is lost?</legend>
+          <label class="radio-row"><input type="radio" name="spot-vec" data-correct data-why="Two numbers in a fixed order keep both the east part and the north part. That list is a vector, and its arrow shows where the drone ends up."><span>As the two-entry vector (30, 40)</span></label>
+          <label class="radio-row"><input type="radio" name="spot-vec" data-why="70 is how far the drone flew, but it no longer says which way. East and north are different directions, so they cannot simply be merged into one number."><span>As the single number 70</span></label>
+          <label class="radio-row"><input type="radio" name="spot-vec" data-why="Order carries meaning: the first entry is east and the second is north. (40, 30) would be a different trip."><span>As the unordered pair {30, 40}</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="vectors"></div>
+      <div class="check" data-predict="vectors">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-vec">v = (3, 2, 7). What is v₃?</label></p>
+        <div class="row"><input id="p-vec" name="p-vec" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>The small 3 is a position, not a number to multiply by. Count to the third entry from the left.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>One name for a whole list lets you write one rule that works on every entry at once. Without it, a record with 512 numbers would need 512 names.</p>
+      <p>Use a vector when position carries meaning and the entries belong together. Be careful when the entries use different units, such as an age and an income: the list is still a fine record, but the arrow picture and the idea of “how far apart” then mix unlike things.</p>
+      <p><strong>What carries over to many dimensions.</strong> Everything we do with entries (adding, scaling, taking dot products) works for any dimension. <strong>What cannot be drawn:</strong> more than three entries. So the arrow is a way to build intuition, not a requirement.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-convention">◆ Convention</span></p>
+      <p>Both the list and the arrow are choices of how to write down the same trip. We write the entries in a column or a row, number them from 1, and write bold or with an arrow on top. None of that is forced; another book can do it differently and the maths is unchanged. What is not a choice is that the order of entries must be fixed, or you could not compare two vectors.</p>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>A language model does not work with words directly. It first turns each <span class="term" data-term="token">token</span> into a vector of numbers, called an <span class="term" data-term="embedding">embedding</span>. In the original Transformer base model that vector has <span data-calc="dModel">…</span> entries (Vaswani et al., 2017, §3.4 and Table 3).</p>
+      <div class="illustration">
+        <p><strong>Made-up illustration numbers, not real model weights.</strong> A token such as “cat” might be stored as a list like <span data-calc="embText">…</span>. That is only <span data-calc="embDim">…</span> entries instead of <span data-calc="dModel">…</span>, and the numbers are invented to show the shape of the idea.</p>
+      </div>
+      <div class="callout simplified"><p><strong>Simplified.</strong> The embedding values are learned during training. Individual entries do not have a neat meaning you can read off, such as “catness”. The useful fact is that the list is a vector, so the rules of this module apply to it.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-vec">In your own words: why can the same vector be both a list and an arrow, and when can you no longer draw it?</label></p>
+        <textarea id="e-vec" name="e-vec" autocomplete="off"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>The list gives the arrow's coordinates and the arrow gives the list a place in space, so they are two views of one thing. Once there are more than three entries there is no room to draw the arrow, but the list and every entry-by-entry rule still work.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“A vector is a list of numbers where the order matters. Say ‘3 east, 2 north’. That is two numbers, and it is also an arrow from where you start. If the list has more numbers we cannot draw it, but we can still add and scale it, because we do it one number at a time. A language model turns every word-piece into a long list like this, hundreds of numbers, so it can do arithmetic on words.”</p>
+      <h4>Everyday analogy</h4>
+      <p>A postal address: street number, street, city, in a fixed order. <em>Where it breaks down:</em> you cannot meaningfully add two addresses, but you can add two vectors.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw two axes and mark the origin.</li><li>Write (3, 2) and plot the point.</li><li>Draw the arrow from the origin to the point.</li><li>Write (2, 3) and draw it too, to show order matters.</li><li>Write a 5-entry list and say “no picture, same rules”.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Is a vector the arrow or the list?</strong> Both are the same object seen two ways. The list is how we compute; the arrow is how we picture.</p>
+      <p><strong>Does the arrow have to start at the origin?</strong> For this module, yes. Moving an arrow without turning it does not change what it means as a displacement, which we use when adding.</p>
+      <p><strong>What is a 1-entry vector?</strong> A single number written as a list. It is the case where the arrow sits on a line.</p>
+      <h4>Common misconception</h4>
+      <p>“A vector is an arrow, so I need a picture.” It is a list first. Most of the vectors in machine learning have too many entries to draw.</p>
+    </details>
+    <footer>Further reading: MML Ch 2.1 and 2.4 (vector spaces, vectors as lists).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

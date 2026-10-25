@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m00">
+  <meta name="concept-id" content="m00-sigma">
+  <title>Σ notation - Foundations - ML Math</title>
+  <meta name="description" content="Σ is a loop that adds: run the counter, work out each term, total them.">
+  <meta name="theme-color" content="#F6F1E7">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/foundations.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li>
+      <a href="../">0 · Foundations</a>
+      <ul class="sub">
+        <li><a href="../variables/">Variables and expressions</a></li>
+        <li><a href="../equations/">Equations</a></li>
+        <li><a href="../functions/">Functions and graphs</a></li>
+        <li><a href="../slope/">Slope and linear functions</a></li>
+        <li><a href="../exponents/">Exponents, growth and decay</a></li>
+        <li><a href="../logarithms/">Logarithms</a></li>
+        <li><a href="./" aria-current="page">Σ notation</a></li>
+        <li><a href="../ratios/">Ratios, percentages and averages</a></li>
+        <li><a href="../trig/">Sine and cosine</a></li>
+        <li><a href="../notation/">Reading mathematical notation</a></li>
+      </ul>
+    </li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 0: Foundations</a></li>
+      <li><span aria-current="page">Σ notation</span></li></ol></nav>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-sigma" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 7 of 10</p>
+      <h1>Σ notation</h1>
+      <p class="muted">Σ is a loop that adds: run the counter, work out each term, total them.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Think of a shop receipt. To get the total you go down the lines and add each price. A <span class="term" data-term="sum">sum</span> written with the Greek capital letter Σ (sigma) is that same instruction, packed small.</p>
+      <p>Under the Σ sits a counter, called the <span class="term" data-term="index">index</span>, and where it <span class="math" data-tex="\htmlData{sym=lo}{\text{starts}}">starts</span>. Above it sits where the counter <span class="math" data-tex="\htmlData{sym=hi}{\text{stops}}">stops</span>. To the right is the recipe for each term. For example:</p>
+      <div class="math-display" data-tex-display="\sum_{\htmlData{sym=i}{i}=1}^{4} \htmlData{sym=i}{i}^{2}=1^{2}+2^{2}+3^{2}+4^{2}">Σ i² = 1² + 2² + 3² + 4²</div>
+      <p>It reads “add up i squared, for i from 1 to 4”.</p>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Each bar is one term. Filled bars are inside the range and are added; outlined bars are skipped. Change where the counter starts and stops, or the recipe, and watch the expanded sum below.</p>
+      <div data-widget="sigma">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Expand a sum</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Bars show the terms of a sum for counter values one to six. The bars inside the chosen range are filled and are the ones added up; the rest are outlined.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A receipt total: one term per line.</li>
+        <li>Steps walked in a week: one term per day.</li>
+        <li>A road trip's distance: one term per leg.</li>
+        <li>Rainfall for a month: one term per day.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If you are adding up one number for each item in a list, you are doing a Σ.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A bike ride has four legs of lengths d₁, d₂, d₃, d₄ kilometres. Which expression is the total distance?</legend>
+          <label class="radio-row"><input type="radio" name="spot-sig" data-correct data-why="One term, d with subscript i, for each leg, added from the first leg to the fourth. That is the total."><span>Σ dᵢ, for i from 1 to 4</span></label>
+          <label class="radio-row"><input type="radio" name="spot-sig" data-why="This adds the counters 1, 2, 3, 4 themselves, not the lengths of the legs. The recipe must use the subscripted d."><span>Σ i, for i from 1 to 4</span></label>
+          <label class="radio-row"><input type="radio" name="spot-sig" data-why="That multiplies the legs. Total distance adds them, and Σ is the symbol for adding."><span>d₁ × d₂ × d₃ × d₄</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="sigma"></div>
+      <div class="check" data-predict="sigma">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-sig">What is the sum of i, for i from 1 to 4?</label></p>
+        <div class="row"><input id="p-sig" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Write the four terms for i = 1, 2, 3, 4, then add them.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Without Σ you would write “a₁ + a₂ + … + a₁₀₀₀” and hope the reader fills in the dots correctly. Σ states the rule exactly and works for any length, including a length n that is not yet known.</p>
+      <p>Use it for adding a family of terms that follow one recipe. If the terms have no pattern, just list them. If a stop value is below the start, the sum is empty and equals 0.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-convention">◆ Convention</span></p>
+      <p>The idea, a loop that adds terms, is not optional: any long sum needs some way to say “continue the pattern”. The symbols are a Convention: Σ for “sum”, i as the usual counter, start below and stop above. A book could swap them, and some do write the range after the symbol. What matters is that the rule, the start and the stop are all stated.</p>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>Two Σ's carry most of the load. The <span class="term" data-term="dot-product">dot product</span> of a list of <span class="term" data-term="weight">weights</span> with a list of inputs is a sum of products: with w = (2, −1, 3) and x = (4, 5, 1), it is 2·4 + (−1)·5 + 3·1 = <span data-calc="dotExample">…</span>. A neuron computes this, and attention scores in a transformer are dot products too (Module 2).</p>
+      <p>The second is the <span class="term" data-term="loss">loss</span>. The total surprise of a text is the sum of −log₂ p over its tokens. For three tokens with probabilities ½, ¼ and ⅛ that is 1 + 2 + 3 = <span data-calc="surpriseBits">…</span> bits, or <span data-calc="surpriseMean">…</span> bits per token on average. Dividing by the number of tokens is the idea behind the per-token training loss for next-token prediction.</p>
+      <div class="callout simplified"><p><strong>Simplified.</strong> Real training losses are usually reported in nats (natural logs) and averaged over many tokens and many texts, but the structure is the same: a sum of a per-token term.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-sig">In your own words: what do the start, the stop and the expression on the right of a Σ each tell you?</label></p>
+        <textarea id="e-sig"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>The start says where the counter begins and the stop says where it ends. The expression on the right is the recipe for one term, written with the counter. Run the counter from start to stop, work out each term, then add them all.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“Σ means ‘add these up’. Underneath is a counter and where it starts, on top is where it stops, and on the right is the recipe for each term. Run the counter, work out each term, add. It is just a for-loop that keeps a running total.”</p>
+      <h4>Everyday analogy</h4>
+      <p>Adding up a receipt. <em>Where it breaks down:</em> a receipt lines are arbitrary prices; a Σ's terms come from one rule.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Write Σ with start 1 and stop 4.</li><li>Write the recipe i² on the right.</li><li>Expand into 1² + 2² + 3² + 4².</li><li>Work out each term.</li><li>Add.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Does the counter have to be i?</strong> No, j, k or t work; it is just a label.</p>
+      <p><strong>Can the start be 0?</strong> Yes, and in computing it often is.</p>
+      <p><strong>What if the stop is smaller than the start?</strong> The sum is empty and equals 0.</p>
+      <h4>Common misconception</h4>
+      <p>“Σ i² is the same as (Σ i)².” It is not: 1 + 4 + 9 + 16 is not 10 squared.</p>
+    </details>
+    <footer>Further reading: MML Ch 2 (dot products arise in Ch 3) and Ch 1 for notation.</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

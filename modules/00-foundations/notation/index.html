@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m00">
+  <meta name="concept-id" content="m00-notation">
+  <title>Reading mathematical notation - Foundations - ML Math</title>
+  <meta name="description" content="Symbols are shorthand: read them aloud and they become sentences.">
+  <meta name="theme-color" content="#F6F1E7">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/foundations.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li>
+      <a href="../">0 · Foundations</a>
+      <ul class="sub">
+        <li><a href="../variables/">Variables and expressions</a></li>
+        <li><a href="../equations/">Equations</a></li>
+        <li><a href="../functions/">Functions and graphs</a></li>
+        <li><a href="../slope/">Slope and linear functions</a></li>
+        <li><a href="../exponents/">Exponents, growth and decay</a></li>
+        <li><a href="../logarithms/">Logarithms</a></li>
+        <li><a href="../sigma/">Σ notation</a></li>
+        <li><a href="../ratios/">Ratios, percentages and averages</a></li>
+        <li><a href="../trig/">Sine and cosine</a></li>
+        <li><a href="./" aria-current="page">Reading mathematical notation</a></li>
+      </ul>
+    </li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 0: Foundations</a></li>
+      <li><span aria-current="page">Reading mathematical notation</span></li></ol></nav>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-notation" data-size="compact">
+    <header>
+      <p class="eyebrow">Compact card · 10 of 10</p>
+      <h1>Reading mathematical notation</h1>
+      <p class="muted">Symbols are shorthand: read them aloud and they become sentences.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Notation is shorthand, like “tsp” for teaspoon. Each mark is a word or a hint about how to read the symbol next to it. A few turn up everywhere:</p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Common notation marks, scrolls sideways on narrow screens">
+        <table>
+          <thead><tr><th scope="col">Mark</th><th scope="col">Read aloud</th><th scope="col">Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><span class="math" data-tex="x_3">x₃</span></td><td>“x sub 3”</td><td>a <span class="term" data-term="subscript">subscript</span> picks the third entry</td></tr>
+            <tr><td><span class="math" data-tex="\hat{y}">ŷ</span></td><td>“y hat”</td><td>a <span class="term" data-term="hat">hat</span> marks an estimate or prediction</td></tr>
+            <tr><td><span class="math" data-tex="x\in S">x ∈ S</span></td><td>“x is in S”</td><td><span class="term" data-term="element-of">element of</span> a <span class="term" data-term="set">set</span></td></tr>
+            <tr><td><span class="math" data-tex="\forall\, i">∀ i</span></td><td>“for all i”</td><td><span class="term" data-term="for-all">for all</span>: true for every one</td></tr>
+            <tr><td><span class="math" data-tex="\mathbf{x}">𝐱</span></td><td>“bold x”</td><td>a <span class="term" data-term="vector">vector</span>: a list of numbers</td></tr>
+            <tr><td><span class="math" data-tex="\mathbb{R}">ℝ</span></td><td>“the reals”</td><td>the <span class="term" data-term="real-numbers">real numbers</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>The list x has five entries (in print, a list like this is often set in bold). The small number below each is a subscript: a position label that says which entry. Move the slider to point at a different box.</p>
+      <div data-widget="notation">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">x with a subscript picks one entry</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A list of five boxes, each labelled with its position as a subscript. The chosen box is highlighted.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>Chess notation: “Nf3” packs a piece and a square into three characters.</li>
+        <li>Sheet music: dots on a staff stand for pitch and length.</li>
+        <li>Recipe shorthand: “2 tbsp”, “350°F”.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> A symbol you don't know: check what is attached to it (a subscript, a hat, bold type), read the whole line aloud, then look the symbol up.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. How do you read “x₂ ∈ ℝ”?</legend>
+          <label class="radio-row"><input type="radio" name="spot-not" data-correct data-why="The subscript picks the second entry of x, and the element-of symbol says it belongs to the real numbers."><span>“The second entry of x is a real number”</span></label>
+          <label class="radio-row"><input type="radio" name="spot-not" data-why="A subscript is a label for position, not something you multiply by."><span>“x times 2 is a real number”</span></label>
+          <label class="radio-row"><input type="radio" name="spot-not" data-why="That would be a power, written as a small raised number above the line. A subscript sits below it."><span>“x squared is a real number”</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="notation"></div>
+      <div class="check" data-predict="notation">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-not">If x = (4, 7, 1, 9, 5), what is x₄?</label></p>
+        <div class="row"><input id="p-not" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Count along the list: the subscript is the position, starting at 1.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Notation packs a long sentence into a line so you can see the structure at a glance. Without it, a formula about a thousand numbers would be a thousand words.</p>
+      <p>It only helps if you can read it, so when stuck, translate the line into words one mark at a time.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-convention">◆ Convention</span></p>
+      <p>Every mark here is a Convention. Books differ: some draw vectors with an arrow instead of bold, some number entries from 0. Check the notation page of whatever you are reading.</p>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>The link is conceptual: papers about language models are written in this notation, with data as xᵢ, predictions as ŷ and vectors in bold, so reading it is a prerequisite for reading them. Nothing about a model changes with the notation.</p>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>Everyday analogy</h4>
+      <p>Street numbers: “12” on a road picks one house out of many. <em>Where it breaks down:</em> house numbers are not always consecutive, subscripts usually are.</p>
+      <h4>Common misconception</h4>
+      <p>“A subscript means multiply.” It is a label for which item, nothing more.</p>
+    </details>
+    <footer>Further reading: the notation table at the start of MML.</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

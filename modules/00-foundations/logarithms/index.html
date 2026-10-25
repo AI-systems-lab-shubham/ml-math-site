@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m00">
+  <meta name="concept-id" content="m00-logarithms">
+  <title>Logarithms - Foundations - ML Math</title>
+  <meta name="description" content="A logarithm counts how many times you multiplied.">
+  <meta name="theme-color" content="#F6F1E7">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/foundations.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li>
+      <a href="../">0 · Foundations</a>
+      <ul class="sub">
+        <li><a href="../variables/">Variables and expressions</a></li>
+        <li><a href="../equations/">Equations</a></li>
+        <li><a href="../functions/">Functions and graphs</a></li>
+        <li><a href="../slope/">Slope and linear functions</a></li>
+        <li><a href="../exponents/">Exponents, growth and decay</a></li>
+        <li><a href="./" aria-current="page">Logarithms</a></li>
+        <li><a href="../sigma/">Σ notation</a></li>
+        <li><a href="../ratios/">Ratios, percentages and averages</a></li>
+        <li><a href="../trig/">Sine and cosine</a></li>
+        <li><a href="../notation/">Reading mathematical notation</a></li>
+      </ul>
+    </li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 0: Foundations</a></li>
+      <li><span aria-current="page">Logarithms</span></li></ol></nav>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-logarithms" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 6 of 10</p>
+      <h1>Logarithms</h1>
+      <p class="muted">A logarithm counts how many times you multiplied.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Start at 1 and keep multiplying by 2: 1, 2, 4, 8. How many multiplications does it take to reach 8? Three. That count, three, is the <span class="term" data-term="logarithm">logarithm</span> of 8 for the <span class="term" data-term="base">base</span> 2. The base is the number you keep multiplying by.</p>
+      <p>We write it <span class="math" data-tex="\log_{2} 8 = 3">log₂ 8 = 3</span>. In general, <span class="math" data-tex="\log_{\htmlData{sym=bs}{b}} x = \htmlData{sym=k}{k}">log_b x = k</span> means “multiply 1 by <span class="math" data-tex="\htmlData{sym=bs}{b}">b</span> exactly <span class="math" data-tex="\htmlData{sym=k}{k}">k</span> times to get x”, which is the same as <span class="math" data-tex="b^{k}=x">bᵏ = x</span>.</p>
+      <p>The count does not have to be whole. 50 sits between 10 and 100, so its base-10 logarithm sits between 1 and 2 (about <span data-calc="log50">…</span>).</p>
+      <p>The useful consequence: gluing two runs of multiplications end to end adds their counts. So the logarithm of a product is the sum of the logarithms.</p>
+      <div class="math-display" data-tex-display="\log(a\,b)=\log a+\log b">log(ab) = log a + log b</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Move the slider to multiply more times. The boxes show 1 multiplied by the base again and again (k means thousand, M million). On the ordinary ruler, position is proportional to the number, so the dot barely leaves the start. On the log ruler, position is proportional to the number of steps, so every multiplication moves the dot the same distance and one picture holds numbers of very different sizes.</p>
+      <div data-widget="logs">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Count the multiplications</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A row of boxes shows 1 multiplied by the base again and again. Two rulers below place the current number: on an ordinary ruler it sits very close to the start, on a log ruler each multiplication moves it the same distance.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li><strong>Earthquake magnitude.</strong> Each whole step up the scale means the ground moves about <span data-calc="eqAmp">…</span> times as far (amplitude on a seismograph), but releases roughly 30 times as much energy (about <span data-calc="eqEnergyRounded">…</span> under the classic 1.5 relation; USGS also gives a newer estimate near 27), not 10. Two steps: <span data-calc="eqAmp2">…</span> times the amplitude and about <span data-calc="eqEnergy2">…</span> times the energy under the classic relation.</li>
+        <li><strong>Decibels.</strong> A rise of 10 <span class="term" data-term="decibel">dB</span> is <span data-calc="db10Power">…</span> times the <em>power</em>. A rise of 20 dB is <span data-calc="db20Amp">…</span> times the <span class="term" data-term="amplitude">amplitude</span> (of pressure or voltage), because power goes as amplitude squared, which makes 20 dB also <span data-calc="db20Power">…</span> times the power. Power doubling is about <span data-calc="db3Power">…</span> dB.</li>
+        <li><strong><span class="term" data-term="ph">pH</span>.</strong> Each step down is roughly ten times the effective concentration of hydrogen ions (strictly, their activity). Pure water at room temperature sits near pH <span data-calc="ph7">…</span>.</li>
+        <li><strong><span class="term" data-term="octave">Octaves</span>.</strong> Each octave doubles the frequency. From a note at 110 Hz to one at 880 Hz is <span data-calc="octaves">…</span> octaves.</li>
+        <li><strong>Bits.</strong> Picking one of 8 equally likely options takes <span data-calc="bits8">…</span> yes-or-no questions.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If equal steps on a scale mean equal <em>multiplications</em>, not equal additions, the scale is logarithmic.</p>
+      <p class="muted">A caution: “human perception is logarithmic” is only a rough rule. Loudness and pitch follow ratios fairly well over a middle range, but not exactly, and other fits, such as power laws, describe some senses better. Treat it as a reason log scales are handy, not a law.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A news report says a magnitude 7 earthquake struck, after a magnitude 6 earlier in the week. Compared with the magnitude 6, how much larger is the ground motion (amplitude) of the magnitude 7?</legend>
+          <label class="radio-row"><input type="radio" name="spot-log" data-correct data-why="One whole step up the scale multiplies the amplitude by about ten, because the scale counts multiplications by ten. Energy is a different quantity and grows faster."><span>About <span data-calc="eqAmp">…</span> times larger</span></label>
+          <label class="radio-row"><input type="radio" name="spot-log" data-why="That treats the scale as ordinary numbers. On a logarithmic scale a step is a multiplication, not an addition, so the gap is far bigger than the two numbers suggest."><span>About 7/6 as large (a little bigger)</span></label>
+          <label class="radio-row"><input type="radio" name="spot-log" data-why="That figure is the energy ratio, not the amplitude ratio. Energy grows by roughly 30 times per step while the shaking amplitude grows by about 10 times per step."><span>About 30 times larger</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="logarithms"></div>
+      <div class="check" data-predict="logarithms">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-log">Start at 1 and keep doubling. How many doublings reach 32? (That is log₂ 32.)</label></p>
+        <div class="row"><input id="p-log" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Write the doublings out: 1, 2, 4 … and count the arrows until you land on 32.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Numbers made by repeated multiplication span enormous ranges: the quietest and loudest sounds people can comfortably hear span about 120–130 dB SPL (decibels of sound pressure level, relative to 20 µPa). At 120 dB that is a power ratio of about <span data-calc="db120">…</span>. Logarithms squeeze that range into small, evenly spaced numbers and turn multiplying into adding, which is far easier to handle.</p>
+      <p>They fit quantities that grow or shrink by ratios. They do not fit zero or negative numbers (no number of multiplications gives them), and they are the wrong tool when changes are additive.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span> <span class="badge badge-convention">◆ Convention</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> We want a number that turns multiplying into adding: f(a × b) = f(a) + f(b).</li>
+        <li><strong>Obvious candidate.</strong> Use the number itself, f(x) = x.</li>
+        <li><strong>Why it fails.</strong> 3 × 4 = 12, but 3 + 4 = 7, not 12.</li>
+      </ol>
+      <p>Predict: what could you count about a product that adds up when you multiply?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>Count the multiplications by the base. Multiplying b^j by b^k lays j runs and k runs end to end, giving b^(j+k), so the counts add. The idea is forced by the requirement (Derived). The choice of base is a Convention: another base only multiplies every logarithm by the same constant, which is why base 2 (bits), base 10 and base e (the natural logarithm) can be used interchangeably up to units.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <p>A language model assigns a probability to each next token, and the probability of a whole sequence is the product of the individual probabilities (Module 5). Multiply 400 probabilities of 0.01 and the exact answer is a 1 with 800 zeros after the decimal point; ordinary double-precision arithmetic has nothing that small and returns <span data-calc="underflow">…</span>. Add the <span class="term" data-term="natural-logarithm">natural logs</span> instead and the total is a comfortable <span data-calc="sumLogs">…</span>. This is why models and their training code work with <span class="term" data-term="log-probability">log-probabilities</span>.</p>
+      <p>Logs also set the units of the usual quality measures. If a model spreads its probability evenly over 4 tokens, the surprise at each is ln 4 = <span data-calc="nats4">…</span> nats, or <span data-calc="bits4">…</span> <span class="term" data-term="bit">bits</span>. The <span class="term" data-term="perplexity">perplexity</span> is e raised to the average surprise in nats, which comes to <span data-calc="ppl4">…</span>: as unsure as a choice among four equally likely tokens.</p>
+      <div class="callout simplified"><p><strong>Simplified.</strong> Real per-token probabilities vary; 0.01 and a uniform spread over four tokens are chosen so the arithmetic is visible. Perplexity is defined as the exponential of the average negative log-probability; using bits and 2 raised to the power gives the same number.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-log">In your own words: what does a logarithm count, and why does that turn products into sums?</label></p>
+        <textarea id="e-log"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>A logarithm counts how many times you multiply by the base to reach a number. Multiplying two numbers joins their runs of multiplications end to end, so the counts add. That is why log(ab) = log a + log b, and why logarithms turn long products into short sums.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“Start at 1 and keep multiplying by 10. 10, 100, 1,000. The logarithm just counts the steps: three. It turns a huge range into small evenly spaced numbers, which is why earthquakes, sound and acidity are reported on log scales. And since gluing two runs of tens together adds the counts, multiplying numbers becomes adding their logs.”</p>
+      <h4>Everyday analogy</h4>
+      <p>Counting the zeros in a number: 1,000 has three, 1,000,000 has six. <em>Where it breaks down:</em> it works only for exact powers of ten; real logarithms also handle numbers like 50.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw a row of boxes 1, 10, 100, 1,000 with ×10 arrows.</li><li>Label the arrows 1, 2, 3 as you count them.</li><li>Circle 1,000 and write log₁₀ 1000 = 3.</li><li>Draw a second row of equal spacing, one box per power.</li><li>Show 100 × 1,000 as two runs joined, 2 + 3 = 5.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Is a logarithm of 1 always 0?</strong> Yes: zero multiplications leave you at 1.</p>
+      <p><strong>Why is there no log of 0?</strong> No amount of multiplying 1 by a positive number ever lands on 0.</p>
+      <p><strong>Why does an earthquake step differ for amplitude and energy?</strong> They are different quantities. Measured amplitude is defined to grow tenfold per step, while an empirical relation between magnitude and energy says energy grows by roughly 30 times per step (10<sup>1.5</sup> ≈ 32 under the classic relation; USGS also gives a newer estimate near 27). Both are multiplications; the sizes differ.</p>
+      <h4>Common misconception</h4>
+      <p>“A 20 dB sound is twice as powerful as a 10 dB sound.” It is 10 times the power. Equal steps on a log scale are equal multiplications, not equal additions.</p>
+    </details>
+    <footer>Further reading: MML Ch 1 (motivation), and the use of logarithms of probabilities in Ch 6 and 8.</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

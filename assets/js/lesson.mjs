@@ -9,6 +9,8 @@ import { continueMode, continueLabel, makePending, readPending, PENDING_KEY } fr
 import { createToast } from "./toast.mjs";
 
 const VISIT_DWELL_MS = 2000;
+// One line, shown the first time a concept page loads; dismissing it is remembered on mlmath:ui:v1 (hintDismissed).
+const HINT = "Terms with a dotted underline are a tap or hover away from a plain-language and a mathematical definition. Expand all and Collapse all open or close every Teach it panel and symbol list on a page. Answer reveals stay closed.";
 const el = (html) => { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; };
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
