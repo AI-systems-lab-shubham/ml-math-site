@@ -12,7 +12,7 @@ One source of truth: `data/glossary.json`. Pages reference terms by id. A term h
   "plain": "A single number that says how much two arrows point the same way: large when they align, zero when they are perpendicular.",
   "math": "\\mathbf{a}\\cdot\\mathbf{b}=\\sum_i a_i b_i=\\|\\mathbf{a}\\|\\|\\mathbf{b}\\|\\cos\\theta",
   "llm": "Attention scores are dot products between query and key vectors.",
-  "learnMore": "modules/02-analytic-geometry/#concept-dot-product",
+  "learnMore": "modules/02-analytic-geometry/dot-product/",
   "uses": ["vector", "angle"],
   "looseUse": null
 }

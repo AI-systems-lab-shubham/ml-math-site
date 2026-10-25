@@ -4,6 +4,9 @@ Order follows *Mathematics for Machine Learning* (MML), with extra modules where
 
 Card sizes: **F** = full interactive card, **C** = compact card (mini diagram, same seven stages, shorter).
 
+## Page structure
+One page per concept (`modules/NN-slug/<concept-slug>/`) and one overview per module (`modules/NN-slug/`), since Session S1. New concepts get their own page and a `path` in `data/course.json`; the overview lists only built concepts. See `docs/LEARNING-UX.md` section 2a.
+
 ## Build phases
 - **Phase 1:** design system, site shell, glossary engine, Module 0 (vertical slice for UX review).
 - **Phase 2:** Modules 1 to 8, one or two per session.
@@ -12,7 +15,7 @@ Card sizes: **F** = full interactive card, **C** = compact card (mini diagram, s
 ---
 
 ## [x] Module 0: Foundations (high-school refresher). MML Ch 1 (motivation)
-_Retrofitted to the course shell and lesson template (LEARNING-UX Session A). All ten cards built and verified. Claims are logged in `docs/CLAIMS.md`; items marked Verify there need a source check before publishing._
+_Retrofitted to the course shell and lesson template (LEARNING-UX Session A). Since Session S1 each concept is its own page (`modules/00-foundations/<slug>/`) and `modules/00-foundations/` is the overview. All ten cards built and verified. Claims are logged in `docs/CLAIMS.md`; items marked Verify there need a source check before publishing._
 - Variables and expressions (C)
 - **Equations, e.g. x + y = 4** (F): a rule linking quantities, not an instruction; one equation with two unknowns gives a line of solutions; two equations pin down a point. Real life: a fixed total split two ways (time, volume, mass conservation).
   *In an LLM:* next-token probabilities satisfy p₁ + … + p_V = 1 over the vocabulary; prompt tokens + output tokens must fit within the context window; a neuron's w·x + b = 0 is a line (or plane) through the data.
@@ -26,13 +29,13 @@ _Retrofitted to the course shell and lesson template (LEARNING-UX Session A). Al
 - Reading mathematical notation: subscripts, hats, ∈, ∀, vectors in bold (C)
 
 ## [ ] Module 1: Linear algebra. MML Ch 2
-_Part 1 built (vectors, adding and scaling, matrices, matrix multiplication; page `modules/01-linear-algebra/`), on the full lesson template since Session B2 (objectives, takeaways, status control, On this page, Expand / Collapse all). Tick this module only when part 2 meets the definition of done. Part 1's matrix-multiplication card already links forward to the systems-of-equations idea as plain text and back to Module 0's x + y = 4; part 2 must link back too._
+_Part 1 built (vectors, adding and scaling, matrices, matrix multiplication; one page per concept under `modules/01-linear-algebra/`, which is the overview), on the full lesson template since Session B2 (objectives, takeaways, status control, On this page, Expand / Collapse all). Tick this module only when part 2 meets the definition of done. Part 1's matrix-multiplication card already links forward to the systems-of-equations idea as plain text and back to Module 0's x + y = 4; part 2 must link back too._
 - Vectors as arrows and as lists (F). *LLM:* an embedding is a vector (the original Transformer base model uses d_model = 512).
 - Vector addition, scaling, linear combinations (F)
 - Matrices as tables and as machines (F). *LLM:* weights are matrices.
 - Matrix-vector and matrix-matrix multiplication (F). *LLM:* most of a transformer's computation is matrix multiplication (Q, K, V projections, feed-forward layers); GPUs are built for it.
 - Transpose, identity, inverse (C)
-- Systems of linear equations (F), linking back to x + y = 4. **Add a real link to `modules/00-foundations/index.html#concept-equations` from this card.** Part 1 shows [1 1](x, y) = x + y as the first row.
+- Systems of linear equations (F), linking back to x + y = 4. **Add a real link to `modules/00-foundations/equations/` (a relative link from the concept page) from this card.** Part 1 shows [1 1](x, y) = x + y as the first row.
 - Span, linear independence, basis, rank (C)
 - Linear transformations: rotate, scale, shear, project (F). Part 1 refers to this as plain text, “(explored fully in the next part)”. Turn those references into links when this card exists (matrices card, picture and Real life stages).
 

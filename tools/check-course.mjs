@@ -53,6 +53,19 @@ export function checkCourse(course, fs) {
     }
   }
 
+  // Each overview's old-link map must match course.json (old #concept-x links go to the concept pages).
+  for (const m of course.modules.filter((x) => x.status === "built")) {
+    const html = fs.read(`${m.path}index.html`);
+    if (html === null) continue;
+    const raw = html.match(/<script type="application\/json" id="old-links">([\s\S]*?)<\/script>/)?.[1];
+    if (!raw) { errors.push(`${m.id}: overview has no old-link map`); continue; }
+    let map;
+    try { map = JSON.parse(raw); } catch { errors.push(`${m.id}: old-link map is not valid JSON`); continue; }
+    const want = Object.fromEntries(m.concepts.filter((c) => c.status === "built").map((c) => [c.anchor, c.path.slice(m.path.length)]));
+    if (JSON.stringify(map) !== JSON.stringify(want)) errors.push(`${m.id}: old-link map does not match course.json`);
+    if (!html.includes("assets/js/old-links.mjs")) errors.push(`${m.id}: overview does not load old-links.mjs`);
+  }
+
   // Home page: module cards and outcomes are static HTML and must match course.json.
   const home = fs.read("index.html");
   if (home !== null) {

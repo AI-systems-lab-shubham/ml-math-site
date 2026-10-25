@@ -169,8 +169,9 @@ ${TOC}
     // Overview: title, lede, time, outcomes, the primary button and the list of built concepts. Nothing else.
     const dir = m.path, toRoot = up(dir);
     const first = built[0];
+    const oldLinks = JSON.stringify(Object.fromEntries(built.map((c) => [c.anchor, rel(dir, c.path)])));
     const eyebrow = old.eyebrow;
-    const overview = `${headFor(old.head, { toRoot, title: `${modTitle} - ML Math`, description: m.summary, moduleId: m.id, script: "overview.mjs", katex: false })}
+    const overview = `${headFor(old.head, { toRoot, title: `${modTitle} - ML Math`, description: m.summary, moduleId: m.id, script: "overview.mjs", katex: false }).replace("</head>", `  <script type="application/json" id="old-links">${oldLinks}</script>\n  <script type="module" src="${toRoot}assets/js/old-links.mjs"></script>\n</head>`)}
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 ${headerHtml(toRoot, false)}

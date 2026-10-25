@@ -58,6 +58,7 @@ Flat. 1px borders, no card shadows. Only popovers elevate: `0 8px 24px rgba(20,3
 - Animations are started by the learner (Play, Step, slider drag). Nothing autoplays.
 - One animation moving at a time on screen.
 - `prefers-reduced-motion`: replace animation with step buttons or instant changes.
+- **Moving between pages** is a short cross-fade of about 200ms on the lesson content only. `site.css` turns it on with `@view-transition { navigation: auto; }` inside `@media (prefers-reduced-motion: no-preference)`; the header, the left rail and the right panel carry their own `view-transition-name` (`site-header`, `site-rail`, `page-panel`) so they stay put. Under reduced motion there is no animation. Every page loads `site.css` (the 404 page carries its own inline styles and does not fade).
 
 ## 8. Responsive and accessibility
 - Breakpoints: 480, 768, 900px.
@@ -128,9 +129,14 @@ Contrast ratios below were computed with the WCAG 2 formula against `--paper` (t
 
 **Symbols in equations**: KaTeX draws symbols in an `aria-hidden` layer, so they are pointer-only (hover or tap opens the popover; no tab stop, no role). Under each display equation that has symbols sits a collapsed `<details>` "Symbols in this equation" listing each symbol as a real button that opens the same popover; symbols inside inline maths are listed under their paragraph ("Symbols in this paragraph"). **When the paragraph just before an equation also has symbols, the two lists become one disclosure, "Symbols", placed after the equation** (paragraph symbols first), so a paragraph-and-equation pair carries one 44px row, not two. Equations without symbols get no list. A display equation that scrolls sideways becomes a focusable region (`tabindex="0"`, `role="region"`, a unique `aria-label` such as "Equation 3, scrolls sideways"); one that fits is plain content.
 
-**Landmarks**: one breadcrumb per page (in the module hero). The outcomes and takeaways boxes are plain headed blocks, not landmarks. Each per-card pager is named with its concept ("Previous and next concept for Equations").
+**Landmarks**: one breadcrumb per page (Course › Module › Concept on a concept page). The outcomes and takeaways boxes are plain headed blocks (h2 under the concept's h1), not landmarks. The pager is a navigation landmark named "Previous concept" and is left out on the first concept of the course.
 
 **Drawing text**: 14.5px in the drawing's own units, scaled up by `--ts` when the drawing is squeezed, so rendered text is never under 14px.
+
+**One thing at a time (Session S1)**: a concept page shows only its concept; a module overview shows only its module. Nothing on a concept page previews what comes next: no "Up next", no list of later concepts. The page ends with one filled button ("Mark complete and continue", or "Continue" when already Complete; on the last concept of the course "Mark complete" plus a "Back to course home" text link at 44px). Previous may show the previous concept's title. "Builds on" signposts point backwards only.
+**Overview page**: breadcrumb, eyebrow, h1, lede (and, for Module 1, one muted line), "About N min · M concepts", outcomes list, module progress line, one filled Start / Continue / Review from the start button, then the built concepts as 44px bordered rows (status icon with text, title, minutes). Planned concepts are not listed.
+**First-visit hint** (`.first-hint`): one bordered `--paper` block of 0.9375rem `--muted` text with a secondary Dismiss button, shown under the breadcrumb of a concept page until dismissed. A classic script (`assets/js/first-hint.js`) inserts it while the page is parsed, so it is in the first paint and moves nothing. Dismissal is remembered on `mlmath:ui:v1` (`hintDismissed`).
+**Outline module rows**: a 44px chevron button (shows or hides that module's concepts; not remembered) beside a link to the module overview. Only the current module is open on load.
 
 ## Prompt for Claude Code
 "Build this page following DESIGN.md. Use the tokens exactly. Check screenshots at 375, 768 and 1280px for overlap before calling it done."

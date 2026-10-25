@@ -10,7 +10,7 @@ const realFs = { read: (p) => (existsSync(new URL(p, root)) ? readFileSync(new U
 
 const concept = (id, extra = {}) => ({ id, title: id, anchor: `concept-${id}`, path: `m/${id}/`, size: "full", minutes: 5, status: "built", objectives: ["x"], takeaways: [], ...extra });
 const good = () => ({ modules: [{ id: "m1", status: "built", path: "m/", minutes: 10, prerequisites: [], concepts: [concept("c1"), concept("c2"), concept("c3", { status: "planned" })] }, { id: "m2", status: "planned", path: "n/", prerequisites: ["m1"], concepts: [] }] });
-const overview = '<a href="c1/">c1</a><a href="c2/">c2</a>';
+const overview = '<a href="c1/">c1</a><a href="c2/">c2</a><script type="application/json" id="old-links">{"concept-c1":"c1/","concept-c2":"c2/"}</script><script src="assets/js/old-links.mjs"></script>';
 const cpage = (id) => `<meta name="concept-id" content="${id}"><article class="concept-card" id="concept-${id}"></article>`;
 const pages = (over = {}) => ({ "m/index.html": overview, "m/c1/index.html": cpage("c1"), "m/c2/index.html": cpage("c2"), ...over });
 const fsOf = (map) => ({ read: (p) => map[p] ?? null });
@@ -93,6 +93,12 @@ test("a path outside the module folder fails", () => {
 test("an overview that lists a planned concept, or omits a built one, fails", () => {
   assert.ok(checkCourse(good(), fsOf(pages({ "m/index.html": overview + '<a href="c3/">c3</a>' }))).some((e) => e.includes("planned concept c3")));
   assert.ok(checkCourse(good(), fsOf(pages({ "m/index.html": '<a href="c1/">c1</a>' }))).some((e) => e.includes("does not link to c2")));
+});
+
+test("an old-link map that disagrees with course.json fails", () => {
+  const bad = overview.replace('"concept-c2":"c2/"', '"concept-c2":"nope/"');
+  assert.ok(checkCourse(good(), fsOf(pages({ "m/index.html": bad }))).some((e) => e.includes("old-link map does not match")));
+  assert.ok(checkCourse(good(), fsOf(pages({ "m/index.html": '<a href="c1/">c1</a><a href="c2/">c2</a>' }))).some((e) => e.includes("no old-link map")));
 });
 
 test("a Continue target page that does not exist fails (module boundary)", () => {
