@@ -639,7 +639,7 @@ async function boot() {
   const shell = await initShell({ moduleId: document.querySelector('meta[name="module-id"]')?.content });
   initLesson(shell);
   renderMath();
-  initPageNav();
+  initPageNav(shell);
   await initGlossary();
   initSections();
 }

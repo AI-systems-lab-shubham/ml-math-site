@@ -76,7 +76,8 @@ export function prepare(root) {
 }
 
 // One collapsed <details> under each equation that has symbols (a paragraph, for symbols in inline maths).
-// Each symbol is a real button that opens the same popover as the symbol in the equation.
+// When the paragraph just before an equation also has symbols, the two lists become one "Symbols" list after the equation,
+// so there is one row of space, not two. Each symbol is a real button that opens the same popover as the symbol in the equation.
 function addSymbolLists(root) {
   const groups = new Map();
   root.querySelectorAll(".katex [data-sym][data-ready]").forEach((el) => {
@@ -88,13 +89,23 @@ function addSymbolLists(root) {
     if (!g.syms.has(el.dataset.sym)) g.syms.set(el.dataset.sym, el.textContent.trim());
     groups.set(anchor, g);
   });
+  for (const [anchor, g] of [...groups]) {
+    const prev = g.display && !anchor.dataset.symbolList ? anchor.previousElementSibling : null;
+    const before = prev && groups.get(prev);
+    if (before && !before.display) {
+      g.syms = new Map([...before.syms, ...g.syms]);   // the paragraph's symbols first
+      g.merged = true;
+      prev.dataset.symbolList = "merged";
+      groups.delete(prev);
+    }
+  }
   for (const [anchor, g] of groups) {
     if (anchor.dataset.symbolList) continue;
     anchor.dataset.symbolList = "1";
     const details = document.createElement("details");
     details.className = "eq-symbols";
     const sum = document.createElement("summary");
-    sum.textContent = g.display ? "Symbols in this equation" : "Symbols in this paragraph";
+    sum.textContent = g.merged ? "Symbols" : g.display ? "Symbols in this equation" : "Symbols in this paragraph";
     const ul = document.createElement("ul");
     for (const [id, text] of g.syms) {
       const b = document.createElement("button");

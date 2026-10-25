@@ -19,6 +19,7 @@ const STEPS = [
   { name: "e2e-symbols", cmd: ["node", "tests/e2e/symbols.mjs"], browser: true },
   { name: "e2e-progress-menu", cmd: ["node", "tests/e2e/progress-menu.mjs"], browser: true },
   { name: "e2e-lesson-nav", cmd: ["node", "tests/e2e/lesson-nav.mjs"], browser: true },
+  { name: "e2e-switcher", cmd: ["node", "tests/e2e/module-switcher.mjs"], browser: true },
   { name: "e2e-widgets", cmd: ["node", "tests/e2e/widgets-lazy.mjs"], browser: true },
   { name: "e2e-404", cmd: ["node", "tests/e2e/404.mjs"], browser: true },
   { name: "ui", cmd: ["node", "tools/ui-verify.mjs"], browser: true, ui: true },

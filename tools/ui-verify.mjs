@@ -10,13 +10,13 @@ import path from "node:path";
 import { requirePlaywright, serveStatic, siteRoot } from "./lib/playwright.mjs";
 
 const arg = (name) => (process.argv.includes(name) ? process.argv[process.argv.indexOf(name) + 1] : null);
-const WIDTHS = (arg("--widths") ?? "375,768,900,1100,1280").split(",").map(Number);
+const WIDTHS = (arg("--widths") ?? "375,768,900,1100,1280,1440").split(",").map(Number);
 const ONLY_PAGES = arg("--pages")?.split(",") ?? null;
 const ONLY_CHECKS = arg("--checks")?.split(",") ?? null;
 const SHOTS = !process.argv.includes("--no-shots");
 const REPORT_DIR = path.resolve(process.env.REPORT_DIR ?? path.join(siteRoot, "reports"));
 const AXE_PATH = process.env.AXE_PATH ?? "";
-const AXE_WIDTHS = [375, 768, 900, 1280]; // axe runs at these widths (those that are also in --widths)
+const AXE_WIDTHS = [375, 768, 900, 1280, 1440]; // axe runs at these widths (those that are also in --widths)
 const CLS_BUDGET = 0.1;
 const MIN_TARGET = 44;
 const MIN_TEXT = 14;
@@ -138,7 +138,7 @@ const probes = {
       if ((cs.display === "inline" || cs.display === "inline-block") && el.parentElement && [...el.parentElement.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) continue;
       const r = box.getBoundingClientRect();
       if (r.width === 0 || r.height === 0) continue;
-      const need = finePointer && el.closest("#site-nav ul.sub") ? 40 : min;
+      const need = finePointer && el.closest("#site-nav ul.sub, .module-switch") ? 40 : min;
       if (r.width < need - 0.5 || r.height < need - 0.5) out.push(`${probes.describe(el)} is ${Math.round(r.width)}x${Math.round(r.height)}px`);
     }
     return out.slice(0, 12);

@@ -28,7 +28,11 @@ for (const [name, url] of [["m00", "modules/00-foundations/"], ["m01", "modules/
       displaysWithSyms: displays.filter((d) => d.querySelector("[data-sym]")).length,
       displaysWithList: displays.filter((d) => d.nextElementSibling?.matches(".eq-symbols")).length,
       listsOnSymless: lists.filter((d) => { const a = d.previousElementSibling; return !a?.querySelector("[data-sym]"); }).length,
-      missing: syms.filter((e) => { const list = e.closest(".math-display")?.nextElementSibling ?? e.closest("p, li, td")?.nextElementSibling; return !list?.matches?.(".eq-symbols") && !e.closest("p, li, td")?.querySelector(".eq-symbols"); }).length,
+      missing: syms.filter((e) => { const list = e.closest(".math-display")?.nextElementSibling ?? e.closest("p, li, td")?.nextElementSibling; const merged = list?.matches?.(".math-display") && list.nextElementSibling?.matches(".eq-symbols"); return !list?.matches?.(".eq-symbols") && !merged && !e.closest("p, li, td")?.querySelector(".eq-symbols"); }).length,
+      // A paragraph's symbols that sit just before an equation with symbols are merged into one "Symbols" list after the equation.
+      splitBeforeDisplay: lists.filter((d) => d.nextElementSibling?.matches(".math-display") && d.nextElementSibling.querySelector("[data-sym]")).length,
+      mergedLists: lists.filter((d) => d.querySelector(":scope > summary")?.textContent === "Symbols").length,
+      mergedHasBoth: lists.filter((d) => d.querySelector(":scope > summary")?.textContent === "Symbols").every((d) => d.previousElementSibling?.matches(".math-display") && d.previousElementSibling.previousElementSibling?.dataset.symbolList === "merged"),
       unscrollable: displays.filter((d) => d.scrollWidth > d.clientWidth + 1 && d.tabIndex !== 0).length,
       scrollOk: regions.every((r) => r.tabIndex === 0),
       uniqueLabels: new Set(labels).size === labels.length,
@@ -39,6 +43,8 @@ for (const [name, url] of [["m00", "modules/00-foundations/"], ["m01", "modules/
   check(info.focusableSyms === 0, `${name}: ${info.focusableSyms} KaTeX symbols still have tabindex or a role`);
   check(info.openLists === 0, `${name}: symbol lists should start collapsed`);
   check(info.displaysWithSyms === info.displaysWithList, `${name}: ${info.displaysWithSyms} display equations have symbols but ${info.displaysWithList} have a list`);
+  check(info.splitBeforeDisplay === 0, `${name}: ${info.splitBeforeDisplay} paragraph symbol lists still sit above an equation that has its own list`);
+  check((name !== "m00" || info.mergedLists > 0) && info.mergedHasBoth, `${name}: merged "Symbols" lists exist (${info.mergedLists}) and each follows its equation`);
   check(info.listsOnSymless === 0, `${name}: a symbol list sits under something with no symbols`);
   check(info.missing === 0, `${name}: ${info.missing} symbols have no list`);
   check(info.unscrollable === 0 && info.scrollOk && info.fitting === 0, `${name}: scrolling equations must be focusable regions, fitting ones must not be`);

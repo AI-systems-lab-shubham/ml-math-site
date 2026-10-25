@@ -491,3 +491,37 @@ a.module-card:hover { border-color: var(--burgundy); }
 @media print { .toast { display: none; } }
 main:focus { outline: none; }
 .is-fresh .status-face { transition: none; }
+
+/* ---------- module switcher inside "On this page" ---------- */
+.module-switch { margin: 0 0 var(--s2); }
+.module-switch-btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: var(--s2); min-height: 44px; padding: var(--s2) var(--s3); border-radius: 12px; font-size: .9375rem; line-height: 1.3; text-align: left; }
+.module-switch-label { flex: 1; min-width: 0; }
+.module-switch-btn .chev, .msw-toggle .chev { margin: 0; flex: none; }
+.module-switch-btn[aria-expanded="true"] .chev, .msw-toggle[aria-expanded="true"] .chev { transform: rotate(45deg); }
+.module-switch-list { margin-top: var(--s2); max-height: min(60vh, 420px); overflow-y: auto; overscroll-behavior: contain; border: 1px solid var(--rule); border-radius: 12px; padding: var(--s1); background: var(--paper); }
+.module-switch-list[hidden] { display: none; }
+.msw-modules, .msw-concepts { list-style: none; margin: 0; padding: 0; max-width: none; }
+.msw-module, .msw-concepts li { margin: 0; }
+.msw-concepts[hidden] { display: none; }
+.msw-head { display: flex; align-items: center; }
+.msw-toggle { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 8px; background: transparent; color: var(--navy); cursor: pointer; }
+.msw-toggle:hover, .msw-link:hover, .msw-concepts a:hover { background: rgba(20, 33, 61, .06); }
+.msw-link { flex: 1; min-width: 0; display: flex; align-items: center; min-height: 44px; padding: 0 var(--s2); border-radius: 8px; color: var(--navy); font-size: .9375rem; font-weight: 600; text-decoration: none; }
+.msw-num { font: 500 .875rem var(--font-mono); color: var(--burgundy); margin-right: var(--s2); }
+.is-planned .msw-num { color: var(--muted); }
+.msw-concepts { padding-left: var(--s5); }
+.msw-concepts a { display: flex; align-items: center; gap: var(--s2); min-height: 44px; padding: 0 var(--s2); border-radius: 8px; color: var(--muted); font-size: .9375rem; text-decoration: none; }
+.msw-concepts a[aria-current] { color: var(--navy); font-weight: 600; background: rgba(122, 31, 61, .08); box-shadow: inset 3px 0 0 var(--burgundy); }
+.msw-state { display: inline-flex; flex: none; color: var(--muted); }
+.msw-state .state-icon { width: 16px; height: 16px; }
+.msw-state.state-in-progress { color: var(--c-blue); }
+.msw-state.state-complete { color: var(--ok); }
+.msw-state.state-revisit { color: var(--try); }
+.msw-title { min-width: 0; }
+.is-planned .msw-head { flex-wrap: wrap; gap: var(--s1) var(--s2); min-height: 44px; padding: var(--s1) var(--s2) var(--s1) var(--s3); color: var(--muted); font-size: .9375rem; }
+.is-planned .msw-soon-title { display: inline-flex; align-items: center; }
+/* Pointer-only exception (DESIGN.md section 8), as for the outline rows: 40px for a fine pointer from 900px. */
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
+  .msw-toggle { width: 40px; min-height: 40px; }
+  .msw-link, .msw-concepts a { min-height: 40px; }
+}

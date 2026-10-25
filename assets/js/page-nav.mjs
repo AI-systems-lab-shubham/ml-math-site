@@ -2,6 +2,7 @@
 // plus Expand all / Collapse all for the collapsible sections, anchors that open closed sections, and print.
 // Predict-then-reveal panels (details.reveal) are answer gates: Expand all skips them and they are never remembered.
 import { readUi, writeUi } from "./shell.mjs";
+import { createModuleSwitch } from "./module-switch.mjs";
 import { pickCurrent, sectionKey, withOpen, cleanOpen, plural, barAway } from "./page-nav-math.mjs";
 
 const WIDE = "(min-width: 1200px)";
@@ -10,12 +11,18 @@ const el = (tag, attrs = {}, text) => { const e = document.createElement(tag); f
 const cards = () => [...document.querySelectorAll("main article.concept-card[id]")];
 const stageLabel = (s) => { const h = s.querySelector(":scope > .stage-heading"); if (!h) return s.dataset.stage; const c = h.cloneNode(true); c.querySelector(".stage-number")?.remove(); return c.textContent.trim(); };
 
-export function initPageNav() {
+export function initPageNav(shell) {
   const nav = document.querySelector("[data-page-toc]");
   if (!nav) return;
   const toggle = nav.querySelector(".page-toc-toggle");
   const panel = nav.querySelector("[data-toc-panel]");
-  const cardLine = nav.querySelector("[data-toc-card]");
+  const course = shell?.course;
+  const moduleId = shell?.moduleId;
+  const conceptOf = (cardId) => course?.modules.flatMap((m) => m.concepts).find((c) => c.anchor === cardId);
+  // The switcher sits above the stage list; without course data the panel just names the card.
+  const switcher = course && shell.progress ? createModuleSwitch({ course, moduleId, progress: shell.progress }) : null;
+  const plainCard = switcher ? null : el("p", { class: "page-toc-card" });
+  panel.append(switcher?.element ?? plainCard);
   const currentText = nav.querySelector("[data-toc-current]");
   const header = document.getElementById("site-header");
   const wide = matchMedia(WIDE);
@@ -45,6 +52,7 @@ export function initPageNav() {
   const setOpen = (open) => {
     toggle.setAttribute("aria-expanded", String(open));
     nav.classList.toggle("is-open", open);
+    if (!open) switcher?.close();
   };
 
   const measure = () => (header?.getBoundingClientRect().height ?? 61) + (wide.matches ? 0 : nav.getBoundingClientRect().height) + 24;
@@ -57,7 +65,7 @@ export function initPageNav() {
     const stageKey = pickCurrent(m.items.map((i) => ({ key: i.id, top: i.node.getBoundingClientRect().top })), line);
     if (cardKey !== shownCard) {
       for (const x of model) x.list.hidden = x !== m;
-      cardLine.textContent = m.title;
+      if (switcher) switcher.setCurrent(conceptOf(m.card.id)?.id, m.title); else plainCard.textContent = m.title;
       shownCard = cardKey;
       shownStage = undefined;
     }
@@ -95,7 +103,10 @@ export function initPageNav() {
 
   toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
   nav.addEventListener("keydown", (ev) => {
-    if (ev.key === "Escape" && nav.classList.contains("is-open")) { ev.preventDefault(); setOpen(false); toggle.focus(); }
+    if (ev.key !== "Escape") return;
+    // First Esc closes the module switcher and puts focus back on its button; the next closes the bar list.
+    if (switcher?.isOpen()) { ev.preventDefault(); ev.stopPropagation(); switcher.close(); switcher.button.focus(); return; }
+    if (nav.classList.contains("is-open")) { ev.preventDefault(); setOpen(false); toggle.focus(); }
   });
   panel.addEventListener("click", (ev) => { if (ev.target.closest("a") && !wide.matches) setOpen(false); });
   document.addEventListener("pointerdown", (ev) => { if (nav.classList.contains("is-open") && !nav.contains(ev.target)) setOpen(false); });

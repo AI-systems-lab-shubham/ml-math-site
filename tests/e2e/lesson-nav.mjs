@@ -122,7 +122,7 @@ for (const url of [M0, M1]) for (const w of [1200, 1280, 1440]) for (const rail 
 // 4. Scrollspy.
 {
   const { ctx, page } = await open(1280, M0);
-  const cur = () => page.evaluate(() => ({ card: document.querySelector("[data-toc-card]").textContent, stage: document.querySelector('.page-toc-list:not([hidden]) a[aria-current="location"]')?.textContent ?? null }));
+  const cur = () => page.evaluate(() => ({ card: document.querySelector(".module-switch-label").textContent.split(" › ").slice(1).join(" › "), stage: document.querySelector('.page-toc-list:not([hidden]) a[aria-current="location"]')?.textContent ?? null }));
   const settle = () => page.waitForTimeout(250);
   for (const [id, stage] of [["concept-equations-meaning", "Meaning"], ["concept-equations-real-life", "Real life"], ["concept-equations-in-an-llm", "In an LLM"], ["concept-equations-teach-it", "Teach it"]]) {
     await page.evaluate((i) => document.getElementById(i).scrollIntoView(), id);
@@ -222,7 +222,7 @@ for (const [name, url] of [["module-0", M0], ["module-1", M1]]) {
   // The toc's Teach it item opens it too.
   await page.locator('.page-toc-list:not([hidden]) a', { hasText: "Teach it" }).click();
   await page.waitForTimeout(300);
-  const cardId = await page.evaluate(() => document.querySelector("[data-toc-card]").textContent);
+  const cardId = await page.evaluate(() => document.querySelector(".module-switch-label").textContent.split(" › ").slice(1).join(" › "));
   check(await page.evaluate(() => [...document.querySelectorAll("main details.teach-it")].some((d) => d.open)), `the toc's Teach it item opens the section (card ${cardId})`);
   // Print.
   await page.evaluate(() => document.querySelectorAll("main details").forEach((d) => { d.open = false; }));
