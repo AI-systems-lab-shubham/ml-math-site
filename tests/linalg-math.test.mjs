@@ -603,3 +603,29 @@ test("attention-score shapes: n×d_k times d_k×n is n×n (illustrative n = 4 to
   // the 64×512 query projection is not square, so it has no inverse
   assert.equal(isSquare(Array.from({ length: transformerBase.dK }, () => Array(transformerBase.dModel).fill(0))), false);
 });
+
+test("the receipts on the Systems card: 2 apples + 1 pear = 7 and 4 apples + 2 pears = 14 is one line, so many prices fit", () => {
+  const r = solveSystem([[2, 1], [4, 2]], [7, 14]);
+  assert.equal(r.kind, "infinite");
+  assert.equal(r.freeVariables, 1);
+  assert.deepEqual(matVec([[2, 1], [4, 2]], [3, 1]), [7, 14]); // 3 and 1 fit
+  assert.deepEqual(matVec([[2, 1], [4, 2]], [2, 3]), [7, 14]); // 2 and 3 fit too
+});
+
+test("a linear system with two different solutions has a whole line of them: A(x + t(y − x)) = b", () => {
+  const A = [[1, 1], [2, 2]], b = [4, 8];
+  const x = [1, 3], y = [4, 0];
+  assert.deepEqual(matVec(A, x), b);
+  assert.deepEqual(matVec(A, y), b);
+  for (const t of [-2, 0.5, 3]) {
+    const z = x.map((xi, i) => xi + t * (y[i] - xi));
+    assert.deepEqual(matVec(A, z).map((v) => Math.round(v * 1e9) / 1e9), b);
+  }
+});
+
+test("a price + tax = total table has rank 2, and a plane has room for only two independent directions", () => {
+  // columns: price, tax, total = price + tax
+  const cols = [[10, 20, 30], [1, 3, 2], [11, 23, 32]]; // tax is not proportional to price, so the two are independent
+  assert.equal(rank(fromColumns(cols)), 2);
+  assert.equal(areIndependent([[1, 0], [0, 1], [3, -2]]), false);
+});

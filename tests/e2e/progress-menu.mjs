@@ -4,7 +4,9 @@
 // module collapses; no menu animation under reduced motion; status survives a reload and reaches other tabs; data from a
 // later version is kept and flagged; row and button sizes follow DESIGN.md section 8.
 // Run: node tests/e2e/progress-menu.mjs   (Playwright needed; prints SKIPPED and exits 1 otherwise)
-import { requirePlaywright, serveStatic } from "../../tools/lib/playwright.mjs";
+import { readFileSync } from "node:fs";
+import { requirePlaywright, serveStatic, siteRoot } from "../../tools/lib/playwright.mjs";
+const TOTAL = JSON.parse(readFileSync(`${siteRoot}/data/course.json`, "utf8")).modules.filter((m) => m.status === "built").flatMap((m) => m.concepts).filter((c) => c.status === "built").length; // built concepts
 
 const pw = await requirePlaywright("progress-menu e2e");
 const { base, close } = await serveStatic();
@@ -259,15 +261,15 @@ async function open(width, { url = M0, ctxOpts = {}, init } = {}) {
   check(await group.locator('input[value="revisit"]').isChecked(), "lesson control follows the outline menu");
   // Revisit does not count toward complete.
   const hdr = await page.locator("[data-course-progress]").innerText();
-  check(/^0 of 14 complete/.test(hdr), `header: revisit is not complete (got "${hdr}")`);
+  check(new RegExp(`^0 of ${TOTAL} complete`).test(hdr), `header: revisit is not complete (got "${hdr}")`);
   await ctx.close();
 }
 
-// 12. Home: "n of 14 complete", the To revisit list, and Resume.
+// 12. Home: "n of N complete", the To revisit list, and Resume.
 {
   const { ctx, page } = await open(1280, { url: "index.html" });
-  await page.waitForFunction(() => /of 14 complete/.test(document.querySelector("[data-hero-count]").textContent));
-  check((await page.locator("[data-hero-count]").innerText()) === "0 of 14 complete", "home: 0 of 14 complete on a clean browser");
+  await page.waitForFunction((t) => new RegExp(`of ${t} complete`).test(document.querySelector("[data-hero-count]").textContent), TOTAL);
+  check((await page.locator("[data-hero-count]").innerText()) === `0 of ${TOTAL} complete`, "home: 0 of N complete on a clean browser");
   check((await page.locator("[data-revisit-title]").innerText()) === "To revisit (0)", "home: To revisit (0)");
   check((await page.locator("[data-hero-action] a").innerText()) === "Start the course", "home: Start on a clean browser");
   await ctx.close();
@@ -279,8 +281,8 @@ async function open(width, { url = M0, ctxOpts = {}, init } = {}) {
   }, last: { id: "m00-sigma", at: "2026-01-01T00:00:04.000Z" }, open: {}, quiz: {} });
   const init = `if (!localStorage.getItem(${JSON.stringify(KEY)})) localStorage.setItem(${JSON.stringify(KEY)}, ${JSON.stringify(seeded)});`;
   const h = await open(1280, { url: "index.html", init });
-  await h.page.waitForFunction(() => /of 14 complete/.test(document.querySelector("[data-hero-count]").textContent));
-  check((await h.page.locator("[data-hero-count]").innerText()) === "1 of 14 complete", "home: revisit concepts are not counted (1 complete)");
+  await h.page.waitForFunction((t) => new RegExp(`of ${t} complete`).test(document.querySelector("[data-hero-count]").textContent), TOTAL);
+  check((await h.page.locator("[data-hero-count]").innerText()) === `1 of ${TOTAL} complete`, "home: revisit concepts are not counted (1 complete)");
   check((await h.page.locator("[data-revisit-title]").innerText()) === "To revisit (2)", "home: To revisit (2)");
   const rows = await h.page.locator("[data-revisit-list] .syllabus-concept").allInnerTexts();
   check(rows.length === 2 && /Slope/.test(rows[0]) && /Σ notation/.test(rows[1]), `home: revisit list in course order (got ${rows})`);
@@ -289,7 +291,7 @@ async function open(width, { url = M0, ctxOpts = {}, init } = {}) {
   const seeded2 = JSON.parse(seeded); seeded2.concepts["m00-equations"].status = "complete";
   const init2 = `if (!localStorage.getItem(${JSON.stringify(KEY)})) localStorage.setItem(${JSON.stringify(KEY)}, ${JSON.stringify(JSON.stringify(seeded2))});`;
   const h2 = await open(1280, { url: "index.html", init: init2 });
-  await h2.page.waitForFunction(() => /of 14 complete/.test(document.querySelector("[data-hero-count]").textContent));
+  await h2.page.waitForFunction((t) => new RegExp(`of ${t} complete`).test(document.querySelector("[data-hero-count]").textContent), TOTAL);
   check(/Continue: /.test(await h2.page.locator("[data-hero-action] a").innerText()), "home: with nothing in progress, the next not-started concept");
   await h2.ctx.close();
 }

@@ -38,7 +38,7 @@ function inverseWidget(host) {
   const w = widgetShell({
     title: "Flip it, then try to undo it",
     description: "Three tables of numbers. The left one is your matrix M. The middle one is its transpose, with row 1 of M outlined and the same numbers outlined as column 1 of the transpose. The right one is the inverse of M with exact fractions, or a message that no inverse exists when the determinant is zero.",
-    viewBox: "40 100 560 250",
+    viewBox: "40 100 560 170",
   });
   const M = [[1, 2], [3, 4]];
   w.readout.style.whiteSpace = "pre-line";
@@ -51,7 +51,7 @@ function inverseWidget(host) {
     label("M", 70 + CW, "navy");
     text(c, 70 + 2 * CW + 32, top + CH + 5, "→", { "text-anchor": "middle" });
     table(c, transpose(M), 245, top, { hiCol: 0 });
-    label("Mᵀ (transpose)", 245 + CW, "teal");
+    label("M^T (transpose)", 245 + CW, "teal");
     const inv = inverse(M);
     const x3 = 420;
     if (inv) {
@@ -63,7 +63,7 @@ function inverseWidget(host) {
     }
     const d = det2(M);
     const lines = [
-      `Transpose: row 1 of M, ${tup(M[0])}, becomes column 1 of Mᵀ. Entry (1, 2) = ${n(M[0][1])} moved to position (2, 1).`,
+      `Transpose: row 1 of M, ${tup(M[0])}, becomes column 1 of M^T. Entry (1, 2) = ${n(M[0][1])} moved to position (2, 1).`,
       `Determinant ad − bc = ${paren(M[0][0])}·${paren(M[1][1])} − ${paren(M[0][1])}·${paren(M[1][0])} = ${n(d)}`,
     ];
     if (inv) {
@@ -286,8 +286,10 @@ function transformWidget(host) {
     const c1 = column(M, 1), c2 = column(M, 2);
     zarrow(plot, c1, "teal");
     zarrow(plot, c2, "blue");
+    // Keep the two labels on opposite sides of their tips so they do not run into each other.
+    const left2 = c2[0] < c1[0] - 0.05;
     zt(c, zx(c1[0]) + 8, zy(c1[1]) + (c1[1] > 0.2 ? -8 : 18), "column 1", { "text-anchor": "start", style: "fill:var(--c-teal)" });
-    zt(c, zx(c2[0]) + 8, zy(c2[1]) - 8, "column 2", { "text-anchor": "start", style: "fill:var(--c-blue)" });
+    zt(c, zx(c2[0]) + (left2 ? -8 : 8), zy(c2[1]) - 8, "column 2", { "text-anchor": left2 ? "end" : "start", style: "fill:var(--c-blue)" });
     let arcInfo = "";
     if (kind === "rotate" && p.angle !== 0) {
       // Screen coordinates: y points down, so a counter-clockwise turn on screen is SVG sweep-flag 0.
@@ -324,7 +326,8 @@ function transformWidget(host) {
   const sliders = { rotate: [angle], scale: [sx, sy], shear: [sk], project: [] };
   const sliderBox = html("div", { class: "control-group" });
   const syncSliders = () => {
-    [angle, sx, sy, sk].forEach((s) => { s.el.hidden = !sliders[kind].includes(s); });
+    // display:none, not the hidden attribute: the .control rule sets display and would override it.
+    [angle, sx, sy, sk].forEach((s) => { s.el.style.display = sliders[kind].includes(s) ? "" : "none"; });
   };
   const picker = radios({
     legend: "Transformation", name: nextId("transform-kind"), value: kind,
@@ -353,13 +356,13 @@ const stepperData = {
     const prod = fracMatMul(inv, SQ.map((r) => r.map((x) => frac(x))));
     const AB = matMul(PA, PB);
     return [
-      { title: "Transpose: rows become columns", text: `Take A, 2 rows by 3 columns. Row 1 is ${tup(A23[0])}; it becomes column 1 of Aᵀ. The shape flips from ${shape(A23).rows}×${shape(A23).cols} to ${shape(At).rows}×${shape(At).cols}.`, tex: `A=${bm(A23)},\\quad A^{\\top}=${bm(At)}` },
+      { title: "Transpose: rows become columns", text: `Take A, 2 rows by 3 columns. Row 1 is ${tup(A23[0])}; it becomes column 1 of A^T. The shape flips from ${shape(A23).rows}×${shape(A23).cols} to ${shape(At).rows}×${shape(At).cols}.`, tex: `A=${bm(A23)},\\quad A^{\\top}=${bm(At)}` },
       { title: "Identity: the do-nothing machine", text: `Multiplying by the identity changes nothing, from either side (the identity must be the right size each time).`, tex: `I_2A=${bm(matMul(identity(2), A23))}=A,\\quad AI_3=${bm(matMul(A23, identity(3)))}=A` },
       { title: "Inverse: first the determinant", text: `For a 2×2 matrix the determinant is ad − bc. Here a = 1, b = 2, c = 3, d = 4, so it is 1·4 − 2·3 = ${fracToString(det)}. It is not zero, so an inverse exists.`, tex: `\\det\\begin{bmatrix}1&2\\\\3&4\\end{bmatrix}=1\\cdot4-2\\cdot3=${fracToString(det)}` },
       { title: "Inverse: swap, flip two signs, divide", text: `Swap a and d, change the signs of b and c, then divide everything by the determinant (${fracToString(det)}).`, tex: `M^{-1}=\\tfrac{1}{${fracToString(det)}}\\begin{bmatrix}4&-2\\\\-3&1\\end{bmatrix}=${fracBm(inv)}` },
       { title: "Check that it undoes M", text: `Multiply M⁻¹ by M. For example, row 1 of M⁻¹ with column 1 of M: (${fx(inv[0][0])})·1 + (${fx(inv[0][1])})·3 = ${fx(prod[0][0])}. All four entries together give the identity.`, tex: `M^{-1}M=${fracBm(prod)}` },
       { title: "A matrix with no inverse", text: `For [[1, 2], [2, 4]] the determinant is 1·4 − 2·2 = ${n(det2(SING))}. And it sends both (2, 0) and (0, 1) to ${tup(matVec(SING, [2, 0]))}. Given that output, you could not tell which input it came from, so no machine can undo it.`, tex: `\\begin{bmatrix}1&2\\\\2&4\\end{bmatrix}${colTex([2, 0])}=${colTex(matVec(SING, [2, 0]))}=\\begin{bmatrix}1&2\\\\2&4\\end{bmatrix}${colTex([0, 1])}` },
-      { title: "Reversing a chain reverses the order", text: `Take A = ${rowTex(PA[0])}, ${rowTex(PA[1])} and B = ${rowTex(PB[0])}, ${rowTex(PB[1])}. Here AB ≠ BA, so order shows up. (AB)ᵀ matches BᵀAᵀ and not AᵀBᵀ; (AB)⁻¹ matches B⁻¹A⁻¹ and not A⁻¹B⁻¹.`, tex: `(AB)^{\\top}=${bm(transpose(AB))}=B^{\\top}A^{\\top},\\ \\text{but }A^{\\top}B^{\\top}=${bm(matMul(transpose(PA), transpose(PB)))}` },
+      { title: "Reversing a chain reverses the order", text: `Take A = ${rowTex(PA[0])}, ${rowTex(PA[1])} and B = ${rowTex(PB[0])}, ${rowTex(PB[1])}. Here AB ≠ BA, so order shows up. (AB)^T matches B^TA^T and not A^TB^T; (AB)⁻¹ matches B⁻¹A⁻¹ and not A⁻¹B⁻¹.`, tex: `(AB)^{\\top}=${bm(transpose(AB))}=B^{\\top}A^{\\top},\\ \\text{but }A^{\\top}B^{\\top}=${bm(matMul(transpose(PA), transpose(PB)))}` },
       { title: "Same for the inverse", text: `Check: B⁻¹A⁻¹ gives the inverse of AB; A⁻¹B⁻¹ does not. Think of socks and shoes: you put socks on, then shoes; to undo, shoes come off first.`, tex: `(AB)^{-1}=${bm(inum(inverse(AB)))}=B^{-1}A^{-1},\\ \\text{but }A^{-1}B^{-1}=${bm(matMul(inum(inverse(PA)), inum(inverse(PB))))}` },
     ];
   },
@@ -417,7 +420,7 @@ const stepperData = {
 const predictions = {
   transpose() {
     const At = transpose(A23);
-    return { expected: At[2][0], explain: `Aᵀ has 3 rows and 2 columns. Its entry in row 3, column 1 is the entry of A in row 1, column 3, which is ${A23[0][2]}.` };
+    return { expected: At[2][0], explain: `A^T has 3 rows and 2 columns. Its entry in row 3, column 1 is the entry of A in row 1, column 3, which is ${A23[0][2]}.` };
   },
   systems() {
     const sol = solveSystem([[1, 1], [1, -1]], [4, 2]);

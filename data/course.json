@@ -351,8 +351,8 @@
           "takeaways": [
             "The [[transpose|transpose]] swaps rows and columns: entry (i, j) moves to (j, i), so an m×n matrix becomes n×m.",
             "The [[identity matrix|identity-matrix]] is the “do nothing” machine: it leaves every vector and every matrix unchanged.",
-            "An [[inverse|inverse-matrix]] undoes a matrix. It exists only for a square matrix with a nonzero [[determinant|determinant]], and reversing a chain reverses the order: (AB)ᵀ = BᵀAᵀ and (AB)⁻¹ = B⁻¹A⁻¹.",
-            "Attention scores in a transformer multiply the queries by the transpose of the keys, QKᵀ."
+            "An [[inverse|inverse-matrix]] undoes a matrix. It exists only for a square matrix with a nonzero [[determinant|determinant]], and reversing a chain reverses the order: (AB)^T = B^TA^T and (AB)⁻¹ = B⁻¹A⁻¹.",
+            "Attention scores in a transformer multiply the queries by the transpose of the keys, QK^T."
           ],
           "requires": [
             "m01-matmul"
