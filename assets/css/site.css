@@ -525,3 +525,15 @@ main:focus { outline: none; }
   .msw-toggle { width: 40px; min-height: 40px; }
   .msw-link, .msw-concepts a { min-height: 40px; }
 }
+
+/* Page changes: a short cross-fade of the lesson content only. The header, the left rail and the right panel
+   have their own transition names, so they stay put while the content fades. Nothing animates under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  .topbar { view-transition-name: site-header; }
+  .site-nav { view-transition-name: site-rail; }
+  .page-toc { view-transition-name: page-panel; }
+  ::view-transition-group(root) { animation-duration: 200ms; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 200ms; animation-timing-function: ease-in-out; }
+  ::view-transition-group(site-header), ::view-transition-group(site-rail), ::view-transition-group(page-panel) { animation-duration: 0s; }
+}
