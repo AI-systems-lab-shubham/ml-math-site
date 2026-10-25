@@ -47,6 +47,10 @@
         <li><a href="../combine/">Adding, scaling and combining vectors</a></li>
         <li><a href="../matrices/">Matrices: tables and machines</a></li>
         <li><a href="./" aria-current="page">Matrix-vector and matrix-matrix multiplication</a></li>
+        <li><a href="../transpose-inverse/">Transpose, identity and inverse</a></li>
+        <li><a href="../systems/">Systems of linear equations</a></li>
+        <li><a href="../span-rank/">Span, linear independence, basis and rank</a></li>
+        <li><a href="../transformations/">Linear transformations: rotate, scale, shear, project</a></li>
       </ul>
     </li>
     <li><span class="soon">2 · Analytic geometry</span></li>
@@ -82,7 +86,7 @@
 
   <article class="concept-card" id="concept-matmul" data-size="full">
     <header>
-      <p class="eyebrow">Full card · 4 of 4</p>
+      <p class="eyebrow">Full card · 4 of 8</p>
       <h1>Matrix-vector and matrix-matrix multiplication</h1>
       <p class="muted">Each entry of a product is a row dotted with a column. Chaining two machines is multiplying their matrices.</p>
     </header>
@@ -91,7 +95,7 @@
       <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
       <p>In the last card, each output entry was “a row paired with the input, multiplied entry by entry, then added”. That is the <span class="term" data-term="dot-product">dot product</span> from the Σ card, and the whole recipe is the <span class="term" data-term="matrix-vector-product">matrix-vector product</span>: one dot product per row.</p>
       <div class="bridge">
-        <p><strong>Back to x + y = 4.</strong> The one-row matrix [1 1] times the vector (x, y) is the single number x + y. For (x, y) = (1, 3) the product is <span data-calc="eqRowCheck">…</span>, so that pair solves the equation. Each equation is one row of weights; stack two equations and you have a two-row matrix. We will solve such systems in the next part. See <a href="../../00-foundations/equations/">Equations in Module 0</a>.</p>
+        <p><strong>Back to x + y = 4.</strong> The one-row matrix [1 1] times the vector (x, y) is the single number x + y. For (x, y) = (1, 3) the product is <span data-calc="eqRowCheck">…</span>, so that pair solves the equation. Each equation is one row of weights; stack two equations and you have a two-row matrix. See <a href="../../00-foundations/equations/">Equations in Module 0</a>.</p>
       </div>
       <p><span class="term" data-term="matrix-multiplication">Matrix multiplication</span> chains two machines. Feed a vector through B, then through A. The single machine that does both in one go is AB, with vectors written as columns, as in most machine-learning texts. Its entry in row i, column j is the dot product of row i of A with column j of B. Each column of AB is A applied to the matching column of B.</p>
       <p>For the dot products to exist, A must have as many columns as B has rows. Written with <span class="term" data-term="shape">shapes</span>, an m×n times an n×p gives m×p.</p>
@@ -156,7 +160,7 @@
         <li><strong>Why it fails.</strong> For P = [[1, 2], [3, 4]] and Q = [[0, 1], [1, 1]], applying Q then P to (1, 0) gives <span data-calc="composedVec">…</span>. The matching-entries table <span class="math" data-tex-calc="entrywiseMatrix"></span> sends (1, 0) to <span data-calc="entrywiseVec">…</span>. They disagree.</li>
         <li><strong>Why the row-by-column rule remains.</strong> Write out A(Bv). Each entry of the result collects, from each column of B, a weighted sum of A's entries: a row of A paired with a column of B. That rule is forced by the requirement.</li>
       </ol>
-      <p>Before you open the next part, predict: for P and Q above, is PQ the same as QP?</p>
+      <p>Before you continue, predict: for P and Q above, is PQ the same as QP?</p>
       <details class="reveal">
         <summary>I have made my prediction: show the reasoning</summary>
         <p>PQ is <span class="math" data-tex-calc="productMatrix"></span>. Swapping the order, as the swap example in the widget shows, changes the answer in general: doing B then A is a different journey from doing A then B. Order matters because the first machine's output is the second machine's input.</p>

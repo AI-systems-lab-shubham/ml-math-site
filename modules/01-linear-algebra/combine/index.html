@@ -47,6 +47,10 @@
         <li><a href="./" aria-current="page">Adding, scaling and combining vectors</a></li>
         <li><a href="../matrices/">Matrices: tables and machines</a></li>
         <li><a href="../matmul/">Matrix-vector and matrix-matrix multiplication</a></li>
+        <li><a href="../transpose-inverse/">Transpose, identity and inverse</a></li>
+        <li><a href="../systems/">Systems of linear equations</a></li>
+        <li><a href="../span-rank/">Span, linear independence, basis and rank</a></li>
+        <li><a href="../transformations/">Linear transformations: rotate, scale, shear, project</a></li>
       </ul>
     </li>
     <li><span class="soon">2 · Analytic geometry</span></li>
@@ -82,7 +86,7 @@
 
   <article class="concept-card" id="concept-combine" data-size="full">
     <header>
-      <p class="eyebrow">Full card · 2 of 4</p>
+      <p class="eyebrow">Full card · 2 of 8</p>
       <h1>Adding, scaling and combining vectors</h1>
       <p class="muted">Two moves build new vectors from old ones: stretch an arrow, and join arrows tip to tail.</p>
     </header>
@@ -139,7 +143,7 @@
 
     <section data-stage="why-when">
       <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
-      <p>Adding and scaling are the only two things a vector space needs, and they build a huge family of vectors from a few. A question like “which arrows can I reach from a and b?” is a question about linear combinations (explored fully in the next part).</p>
+      <p>Adding and scaling are the only two things a vector space needs, and they build a huge family of vectors from a few. A question like “which arrows can I reach from a and b?” is a question about linear combinations.</p>
       <p>Adding vectors (and so linear combinations) needs the same number of entries: you cannot add (1, 2) to (1, 2, 3). Scaling one vector does not. Adding also assumes entries mean the same thing in each vector, position by position.</p>
       <p><strong>Many dimensions.</strong> Both rules work unchanged for any number of entries. Only the arrow picture runs out.</p>
     </section>
@@ -152,7 +156,7 @@
         <li><strong>Obvious candidates.</strong> Add entry by entry, or multiply entry by entry, or keep the longer arrow.</li>
         <li><strong>Why most fail.</strong> Walk 3 east then 1 east: you must end 4 east, so entries must add. East and north steps do not interfere, so each entry adds on its own.</li>
       </ol>
-      <p>Before you open the next part, predict: what should (3, 2) + (3, 2) be, and what single move gives the same result?</p>
+      <p>Before you continue, predict: what should (3, 2) + (3, 2) be, and what single move gives the same result?</p>
       <details class="reveal">
         <summary>I have made my prediction: show the reasoning</summary>
         <p>Doing the same walk twice gives (6, 4). That is each entry doubled, so doubling is just repeated adding. Scaling by 2 is forced to be “multiply every entry by 2”. Scaling by a fraction is forced the same way (half the walk), and a negative number is forced to mean walking backwards. That is why this card is Derived: addition and scaling fall out of what a walk is.</p>
@@ -194,7 +198,7 @@
       <h4>Common misconception</h4>
       <p>“Adding two vectors adds their lengths.” Not in general. Two arrows at an angle give a total shorter than the sum of their lengths.</p>
     </details>
-    <footer>Further reading: MML Ch 2.4 (vector spaces) and Ch 2.5 (linear combinations in the next part).</footer>
+    <footer>Further reading: MML Ch 2.4 (vector spaces).</footer>
   </article>
 </main>
 </div>

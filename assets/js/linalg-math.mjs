@@ -421,3 +421,35 @@ export function signedArea(points) {
   });
   return s / 2;
 }
+
+/**
+ * 2×2 inverse by the formula (1/(ad − bc))·[[d, −b], [−c, a]], in exact fractions.
+ * Null when ad − bc = 0. Integer entries only. Agrees with `inverse` (tested).
+ */
+export function inverse2ByFormula(M) {
+  const { rows, cols } = shape(M);
+  if (rows !== 2 || cols !== 2) throw new RangeError("inverse2ByFormula needs a 2×2 matrix");
+  const [[a, b], [c, d]] = M;
+  const det = a * d - b * c;
+  if (det === 0) return null;
+  return [[frac(d, det), frac(-b, det)], [frac(-c, det), frac(a, det)]];
+}
+
+/**
+ * Rank of a 2×2 matrix with any real entries: 2 when |ad − bc| > 1e-12, else 0 when
+ * every entry is within 1e-12 of zero, else 1. The tolerance 1e-12 only matters for
+ * rotation entries (cos, sin in floating point); the matrices that really are singular
+ * here (zero scales, the projection) have a determinant of exactly 0.
+ */
+export function rank2(M) {
+  const { rows, cols } = shape(M);
+  if (rows !== 2 || cols !== 2) throw new RangeError("rank2 needs a 2×2 matrix");
+  const TOL = 1e-12;
+  if (Math.abs(det2(M)) > TOL) return 2;
+  return M.flat().every((x) => Math.abs(x) <= TOL) ? 0 : 1;
+}
+
+/** Entries needed to store a rank-r update to a d×k matrix as a d×r matrix times an r×k matrix: r·(d + k). */
+export function lowRankEntryCount(d, k, r) {
+  return r * (d + k);
+}

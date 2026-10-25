@@ -14,9 +14,22 @@ test("Continue: the last concept of a module goes to the next built module's ove
   assert.equal(t.kind, "module");
   assert.equal(t.path, "modules/01-linear-algebra/");
 });
+test("Continue: Matrix multiplication now continues to the next concept, not to the end of the course", () => {
+  assert.deepEqual(continueTarget(course, "m01-matmul"), { kind: "concept", path: "modules/01-linear-algebra/transpose-inverse/", title: "Transpose, identity and inverse", id: "m01-transpose" });
+});
+test("Continue: each new Module 1 concept continues to the next one", () => {
+  assert.equal(continueTarget(course, "m01-transpose").id, "m01-systems");
+  assert.equal(continueTarget(course, "m01-systems").id, "m01-span");
+  assert.equal(continueTarget(course, "m01-span").id, "m01-transformations");
+});
 test("Continue: the last concept of the course so far has no target (planned modules are not targets)", () => {
-  assert.equal(continueTarget(course, "m01-matmul"), null);
-  assert.equal(chain(course).at(-1).id, "m01-matmul");
+  assert.equal(continueTarget(course, "m01-transformations"), null);
+  assert.equal(chain(course).at(-1).id, "m01-transformations");
+});
+test("Continue: with the last four Module 1 concepts planned again, Matrix multiplication is the end of the course", () => {
+  const partial = structuredClone(course);
+  for (const c of partial.modules[1].concepts.slice(4)) c.status = "planned";
+  assert.equal(continueTarget(partial, "m01-matmul"), null);
 });
 test("Continue: unknown id has no target", () => assert.equal(continueTarget(course, "nope"), null));
 

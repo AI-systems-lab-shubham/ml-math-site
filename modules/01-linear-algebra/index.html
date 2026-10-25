@@ -8,7 +8,7 @@
   <meta name="site-root" content="../../">
   <meta name="module-id" content="m01">
   <title>Module 1: Linear algebra - ML Math</title>
-  <meta name="description" content="Vectors, matrices and what they do to space. Part 1 is built; part 2 is on its way.">
+  <meta name="description" content="Vectors, matrices and what they do to space: from arrows and tables to inverses, systems, span and linear transformations.">
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
@@ -17,7 +17,7 @@
   <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
   <script src="../../assets/js/rail-init.js"></script>
   <script type="module" src="../../assets/js/overview.mjs"></script>
-  <script type="application/json" id="old-links">{"concept-vectors":"vectors/","concept-combine":"combine/","concept-matrices":"matrices/","concept-matmul":"matmul/"}</script>
+  <script type="application/json" id="old-links">{"concept-vectors":"vectors/","concept-combine":"combine/","concept-matrices":"matrices/","concept-matmul":"matmul/","concept-transpose":"transpose-inverse/","concept-systems":"systems/","concept-span":"span-rank/","concept-transformations":"transformations/"}</script>
   <script type="module" src="../../assets/js/old-links.mjs"></script>
 </head>
 <body>
@@ -43,6 +43,10 @@
         <li><a href="combine/">Adding, scaling and combining vectors</a></li>
         <li><a href="matrices/">Matrices: tables and machines</a></li>
         <li><a href="matmul/">Matrix-vector and matrix-matrix multiplication</a></li>
+        <li><a href="transpose-inverse/">Transpose, identity and inverse</a></li>
+        <li><a href="systems/">Systems of linear equations</a></li>
+        <li><a href="span-rank/">Span, linear independence, basis and rank</a></li>
+        <li><a href="transformations/">Linear transformations: rotate, scale, shear, project</a></li>
       </ul>
     </li>
     <li><span class="soon">2 · Analytic geometry</span></li>
@@ -62,16 +66,17 @@
     <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
       <li><a href="../../index.html">Course</a></li>
       <li><span aria-current="page">Module 1: Linear algebra</span></li></ol></nav>
-    <p class="eyebrow">Module 1 · part 1 of 2</p>
+    <p class="eyebrow">Module 1</p>
     <h1>Linear algebra</h1>
-    <p class="lede">Lists of numbers that can also be arrows, and tables of numbers that act as machines. Four ideas, each from a picture first, then the symbols, then where it shows up inside a language model.</p>
-    <p class="muted">Systems of equations, span and linear transformations come in the next part.</p>
-    <p class="overview-meta">About 58 min · 4 concepts</p>
+    <p class="lede">Lists of numbers that can also be arrows, and tables of numbers that act as machines. Eight ideas, each from a picture first, then the symbols, then where it shows up inside a language model.</p>
+    <p class="overview-meta">About 106 min · 8 concepts</p>
     <h2>By the end of this module you’ll be able to…</h2>
     <ul class="overview-outcomes">
       <li>Multiply a matrix by a vector and explain what it does to space</li>
       <li>Describe a vector both as an arrow and as a list of numbers</li>
       <li>Build new vectors from linear combinations of old ones</li>
+      <li>Solve a small system of linear equations and say when it has no, one or infinitely many solutions</li>
+      <li>Describe rotations, scalings, shears and projections as matrices, and say which can be undone</li>
     </ul>
     <p class="module-progress muted" data-module-progress aria-live="polite"></p>
     <p class="overview-action"><a class="button" href="vectors/" data-overview-action>Start</a></p>
@@ -81,6 +86,10 @@
       <li><a href="combine/" data-cid="m01-combine"><span class="ov-state" data-ov-state="m01-combine" aria-hidden="true"></span><span class="ov-title">Adding, scaling and combining vectors</span><span class="ov-min muted">14 min</span></a></li>
       <li><a href="matrices/" data-cid="m01-matrices"><span class="ov-state" data-ov-state="m01-matrices" aria-hidden="true"></span><span class="ov-title">Matrices: tables and machines</span><span class="ov-min muted">14 min</span></a></li>
       <li><a href="matmul/" data-cid="m01-matmul"><span class="ov-state" data-ov-state="m01-matmul" aria-hidden="true"></span><span class="ov-title">Matrix-vector and matrix-matrix multiplication</span><span class="ov-min muted">16 min</span></a></li>
+      <li><a href="transpose-inverse/" data-cid="m01-transpose"><span class="ov-state" data-ov-state="m01-transpose" aria-hidden="true"></span><span class="ov-title">Transpose, identity and inverse</span><span class="ov-min muted">10 min</span></a></li>
+      <li><a href="systems/" data-cid="m01-systems"><span class="ov-state" data-ov-state="m01-systems" aria-hidden="true"></span><span class="ov-title">Systems of linear equations</span><span class="ov-min muted">14 min</span></a></li>
+      <li><a href="span-rank/" data-cid="m01-span"><span class="ov-state" data-ov-state="m01-span" aria-hidden="true"></span><span class="ov-title">Span, linear independence, basis and rank</span><span class="ov-min muted">10 min</span></a></li>
+      <li><a href="transformations/" data-cid="m01-transformations"><span class="ov-state" data-ov-state="m01-transformations" aria-hidden="true"></span><span class="ov-title">Linear transformations: rotate, scale, shear, project</span><span class="ov-min muted">14 min</span></a></li>
     </ol>
   </div>
 </main>

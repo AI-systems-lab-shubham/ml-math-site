@@ -13,9 +13,11 @@ const homeHtml = read("index.html");
 const hintJs = read("assets/js/first-hint.js");
 
 function inputs(m) {
+  const oldHtml = readOld(SOURCE_REV, `${m.path}index.html`);
   return {
-    oldHtml: readOld(SOURCE_REV, `${m.path}index.html`),
-    conceptHtmls: m.concepts.filter((c) => c.status === "built").map((c) => read(`${c.path}index.html`)),
+    oldHtml,
+    // Only the concepts that were split out of the old page; later concepts were written by hand.
+    conceptHtmls: m.concepts.filter((c) => c.status === "built" && oldHtml.includes(`id="${c.anchor}"`)).map((c) => read(`${c.path}index.html`)),
     overviewHtml: read(`${m.path}index.html`),
     homeHtml, hintJs,
   };

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m01">
+  <meta name="concept-id" content="m01-systems">
+  <title>Systems of linear equations - Linear algebra - ML Math</title>
+  <meta name="description" content="Several equations about the same unknowns, all true at once. They have no solution, exactly one, or infinitely many.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/linalg2.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li>
+      <a href="../">1 · Linear algebra</a>
+      <ul class="sub">
+        <li><a href="../vectors/">Vectors: arrows and lists</a></li>
+        <li><a href="../combine/">Adding, scaling and combining vectors</a></li>
+        <li><a href="../matrices/">Matrices: tables and machines</a></li>
+        <li><a href="../matmul/">Matrix-vector and matrix-matrix multiplication</a></li>
+        <li><a href="../transpose-inverse/">Transpose, identity and inverse</a></li>
+        <li><a href="./" aria-current="page">Systems of linear equations</a></li>
+        <li><a href="../span-rank/">Span, linear independence, basis and rank</a></li>
+        <li><a href="../transformations/">Linear transformations: rotate, scale, shear, project</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 1: Linear algebra</a></li>
+      <li><span aria-current="page">Systems of linear equations</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-systems" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 6 of 8</p>
+      <h1>Systems of linear equations</h1>
+      <p class="muted">Several equations about the same unknowns, all true at once. They have no solution, exactly one, or infinitely many.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Two glasses hold 4 litres in total. That alone does not say how much is in each: one <span class="term" data-term="equation">equation</span>, two <span class="term" data-term="unknown">unknowns</span>, a whole line of answers. Now add a second fact: the first glass holds 2 litres more than the second. Two facts, both true at once, are a <span class="term" data-term="system-of-equations">system of equations</span>, and a <span class="term" data-term="solution">solution</span> must satisfy every equation in it.</p>
+      <div class="bridge">
+        <p><strong>Back to x + y = 4.</strong> The one-row matrix [1 1] times (x, y) is x + y, so x + y = 4 is a system with a single row. The picture on that card was a line of solutions. Adding a second equation adds a second line, and the solutions are the points on both. See <a href="../../00-foundations/equations/">Equations in Module 0</a>, and the product [1 1](1, 3) = <span data-calc="eqRow">…</span> from the multiplication card.</p>
+      </div>
+      <p>Each equation is one row of weights. Stack the rows into a matrix A, the totals into a vector b, and the unknowns into a vector x. The whole system is one statement about the matrix-vector product:</p>
+      <div class="math-display" data-tex-display="\htmlData{sym=matA}{A}\,\htmlData{sym=vecx}{\mathbf{x}}=\htmlData{sym=vecbRhs}{\mathbf{b}}">A x = b</div>
+      <p>There are only three outcomes. The lines can cross at one point (exactly one solution), run side by side and never meet (no solution), or lie on top of each other (infinitely many). A linear system never has exactly two solutions: two lines that share two points are the same line.</p>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Each equation draws a line. The burgundy dot marks the solution when the lines cross once. Try the four buttons, then change the numbers: make the second equation a doubled copy of the first, then nudge one total so they separate.</p>
+      <div data-widget="systems">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Two equations, two lines</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A grid with two straight lines, one for each equation, in teal and blue. Where the lines cross, a burgundy dot marks the one solution. Parallel lines never meet, so there is no solution. Two copies of the same line meet everywhere, so there are infinitely many solutions. The matrix form and a plain-language verdict are written below.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>Two shops sell the same two fruits at different prices; two receipts let you find each price.</li>
+        <li>A mixture problem: how much 10% and 30% juice makes a 20% drink?</li>
+        <li>Two moving objects whose paths cross: a time and a place that satisfies both.</li>
+        <li>A balanced budget: income and spending both have to add up.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If several facts must all hold for the same unknowns, and each fact is a weighted total, it is a linear system. Count the facts and the unknowns, then ask whether the facts are really different.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. Receipt 1: 2 apples and 1 pear cost 7. Receipt 2: 4 apples and 2 pears cost 14. Can you find the price of one apple?</legend>
+          <label class="radio-row"><input type="radio" name="spot-sys" data-correct data-why="Receipt 2 is receipt 1 doubled (4 = 2·2, 2 = 2·1, 14 = 2·7), so it is the same line. There are infinitely many price pairs that fit, and no single answer."><span>No: the second receipt says nothing new, so many prices fit</span></label>
+          <label class="radio-row"><input type="radio" name="spot-sys" data-why="Two receipts do not always pin down two prices. Here the second is exactly double the first, so it adds no new information."><span>Yes: two receipts always give two prices</span></label>
+          <label class="radio-row"><input type="radio" name="spot-sys" data-why="They do not contradict: doubling the first receipt gives the second exactly. A contradiction would look like the same items with a different total."><span>No: the receipts contradict each other</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="systems"></div>
+      <div class="check" data-predict="systems">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-sys">x + y = 4 and x − y = 2. What is x?</label></p>
+        <div class="row"><input id="p-sys" name="p-sys" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Add the two equations. What happens to the y terms?</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Real questions have many facts and many unknowns. Writing them as Ax = b gives one object to reason about, and the tools of the earlier cards apply: if A has an <span class="term" data-term="inverse-matrix">inverse</span>, the answer is x = A⁻¹b.</p>
+      <p><strong>When it does not fit.</strong> If A has no inverse, you cannot use that formula. You then get either no solution or infinitely many, depending on whether the equations contradict each other or repeat each other. The same happens when there are fewer equations than unknowns: one equation in two unknowns, like x + y = 4, leaves a line of answers.</p>
+      <p><strong>What to reach for instead.</strong> Elimination (add multiples of one equation to another, as in the worked example) works for any linear system, with or without an inverse.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> Write “these totals, from these weighted sums of the same unknowns” as one statement.</li>
+        <li><strong>Obvious candidate.</strong> Keep each equation as a separate line of algebra.</li>
+        <li><strong>Why it falls short.</strong> Every equation has the same shape: a row of weights times the unknowns. The matrix-vector product from the Matrices card does exactly “row of weights times the unknowns” for every row at once.</li>
+        <li><strong>Why Ax = b remains.</strong> Stacking the rows is forced: row i of A times x must equal b<sub>i</sub>. The notation letters A, x and b are a Convention.</li>
+      </ol>
+      <p>Before you continue, predict: why can a linear system never have exactly two solutions?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>If x and y both solve Ax = b, then so does every point on the straight line through them: for any number t, A(x + t(y − x)) = Ax + t(Ay − Ax) = b + t(b − b) = b. A straight line has infinitely many points, so having two solutions already means having infinitely many.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Next-token probabilities are one linear equation.</strong> A model’s next-token probabilities p₁, …, p<sub>V</sub> must add up to 1 (a defining property of a probability distribution). As a system that is one row [1 1 … 1] with total 1. With V = 4 unknowns it leaves <span data-calc="probFree">…</span> free choices. A real vocabulary has tens of thousands of tokens, so almost all of the probabilities are free, apart from this one equation (and each being at least 0, which this card does not cover).</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> The probabilities also have to be non-negative, which is an inequality, not an equation. The count of free choices above ignores that.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-sys">In your own words: what are the three things that can happen when you solve two equations in two unknowns, and what does each look like as lines?</label></p>
+        <textarea id="e-sys" name="e-sys" autocomplete="off"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>The lines cross at one point (exactly one solution), run parallel without meeting (no solution), or are the same line (infinitely many solutions). There is never a case with exactly two solutions, because two lines that share two points are the same line.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“A system of equations is several facts about the same unknown numbers. Each fact is a row of weights. Stack the rows and you get Ax = b. With two unknowns, each fact is a line. If the lines cross once, you have exactly one answer. If they never meet, none. If they are the same line, infinitely many. Never exactly two.”</p>
+      <h4>Everyday analogy</h4>
+      <p>Two witnesses describing where a stranger stood. Their descriptions cross at one spot, or they conflict, or they say the same thing twice. <em>Where it breaks down:</em> witnesses can be wrong in many ways; lines only cross, miss or coincide.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Write the two equations one under the other.</li><li>Draw both lines on a grid.</li><li>Mark where they meet and read off (x, y).</li><li>Rewrite as a matrix equation Ax = b.</li><li>Draw a second picture where the lines are parallel and one where they coincide.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Is elimination the same as using the inverse?</strong> Both give the same answer when it is unique. Elimination also works when there is no inverse.</p>
+      <p><strong>What about three unknowns?</strong> Each equation is a flat sheet instead of a line. The same three outcomes still hold.</p>
+      <p><strong>Why does a repeated equation not help?</strong> It says nothing new, so it removes no possibilities.</p>
+      <h4>Common misconception</h4>
+      <p>“Two equations always give a unique answer.” Only if they are genuinely different facts. A repeated or contradictory pair does not.</p>
+    </details>
+    <footer>Further reading: MML Ch 2.3 (solving systems of linear equations).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

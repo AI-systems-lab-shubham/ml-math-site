@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m01">
+  <meta name="concept-id" content="m01-transpose">
+  <title>Transpose, identity and inverse - Linear algebra - ML Math</title>
+  <meta name="description" content="Flip a table over its diagonal, find the machine that does nothing, and find the machine that undoes another.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/linalg2.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li>
+      <a href="../">1 · Linear algebra</a>
+      <ul class="sub">
+        <li><a href="../vectors/">Vectors: arrows and lists</a></li>
+        <li><a href="../combine/">Adding, scaling and combining vectors</a></li>
+        <li><a href="../matrices/">Matrices: tables and machines</a></li>
+        <li><a href="../matmul/">Matrix-vector and matrix-matrix multiplication</a></li>
+        <li><a href="./" aria-current="page">Transpose, identity and inverse</a></li>
+        <li><a href="../systems/">Systems of linear equations</a></li>
+        <li><a href="../span-rank/">Span, linear independence, basis and rank</a></li>
+        <li><a href="../transformations/">Linear transformations: rotate, scale, shear, project</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 1: Linear algebra</a></li>
+      <li><span aria-current="page">Transpose, identity and inverse</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-transpose" data-size="compact">
+    <header>
+      <p class="eyebrow">Compact card · 5 of 8</p>
+      <h1>Transpose, identity and inverse</h1>
+      <p class="muted">Flip a table over its diagonal, find the machine that does nothing, and find the machine that undoes another.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>A table of marks has a row for each student and a column for each test. Turn it on its side and you have a row for each test and a column for each student: same numbers, flipped over the diagonal. That flip is the <span class="term" data-term="transpose">transpose</span>. Every row becomes a column, so a table with 2 rows and 3 columns becomes one with 3 rows and 2 columns.</p>
+      <p>Next, a machine that does nothing. Multiplying a number by 1 leaves it unchanged. The matrix version is the <span class="term" data-term="identity-matrix">identity matrix</span>: 1s down the diagonal and 0s elsewhere. It sends every vector to itself.</p>
+      <p>Finally, a machine that undoes another. If a <span class="term" data-term="matrix">matrix</span> A turns v into Av, the <span class="term" data-term="inverse-matrix">inverse</span> A⁻¹ turns Av back into v. Not every machine can be undone. The inverse exists only for a <span class="term" data-term="square-matrix">square matrix</span> (as many rows as columns) whose <span class="term" data-term="determinant">determinant</span> is not zero. For a 2×2 matrix with rows (a, b) and (c, d), the determinant is ad − bc; on this card we use it only as that test.</p>
+      <div class="math-display" data-tex-display="(\htmlData{sym=matA}{A}\htmlData{sym=supT}{^{\top}})_{ij}=\htmlData{sym=matA}{A}_{ji},\qquad \htmlData{sym=matA}{A}\,\htmlData{sym=matA}{A}\htmlData{sym=supInv}{^{-1}}=\htmlData{sym=matI}{I}">(Aᵀ)ᵢⱼ = Aⱼᵢ,   A A⁻¹ = I</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Change the four numbers of M. The outlined row of M becomes the outlined column of Mᵀ. On the right is M⁻¹ in exact fractions, with a check that M⁻¹M gives the identity. Press “No inverse” and watch what happens when the determinant reaches zero.</p>
+      <div data-widget="inverse">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Flip it, then try to undo it</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Three tables of numbers. The left one is your matrix M. The middle one is its transpose, with row 1 of M outlined and the same numbers outlined as column 1 of the transpose. The right one is the inverse of M with exact fractions, or a message that no inverse exists when the determinant is zero.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A timetable read by day instead of by subject: the same table, flipped.</li>
+        <li>Pressing “undo” after one edit: the inverse of that edit.</li>
+        <li>Converting euros to dollars and back, when the rate is known: each conversion undoes the other.</li>
+        <li>Putting on socks then shoes. To undo, the shoes come off first: reverse the order.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If you swap rows for columns, think “transpose”. If a step must be exactly reversible, ask for its inverse, and expect the order of a chain to reverse.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. You blur a photo with a strong filter that turns many different pixel patterns into the same result. Can a single matrix “un-blur” it exactly?</legend>
+          <label class="radio-row"><input type="radio" name="spot-inv" data-correct data-why="If two different inputs give the same output, nothing can tell them apart afterwards. That is exactly a matrix with no inverse (determinant zero)."><span>No: different inputs share one output, so there is no inverse</span></label>
+          <label class="radio-row"><input type="radio" name="spot-inv" data-why="It is a common guess, but it fails: any matrix that sends two different inputs to the same output has no inverse."><span>Yes: every matrix has an inverse</span></label>
+          <label class="radio-row"><input type="radio" name="spot-inv" data-why="Flipping rows and columns (the transpose) has nothing to do with undoing; it changes the table's shape, not what the machine does."><span>Yes: just take the transpose</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="transpose"></div>
+      <div class="check" data-predict="transpose">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-tr">A = [[1, 2, 3], [4, 5, 6]]. What is the entry in row 3, column 1 of Aᵀ?</label></p>
+        <div class="row"><input id="p-tr" name="p-tr" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Entry (3, 1) of Aᵀ is entry (1, 3) of A: swap the two positions.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>The transpose lets you pair rows with rows when a formula wants a row against a row. The identity is the starting point of every “undo”: an inverse is defined as the matrix that brings you back to the identity. The inverse lets you reverse a step exactly.</p>
+      <p><strong>When it does not fit.</strong> An inverse exists only for a square matrix with a nonzero determinant. A tall or wide matrix, or a square one that squashes different inputs together, has none. Do not write A⁻¹ as “1/A”: it is a matrix, not a reciprocal of every entry.</p>
+      <p><strong>Order.</strong> Reversing a chain reverses the order: (AB)ᵀ = BᵀAᵀ and (AB)⁻¹ = B⁻¹A⁻¹. The tempting AᵀBᵀ and A⁻¹B⁻¹ are wrong in general; the worked example shows a case where they differ.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> A machine B that undoes A must satisfy B(Av) = v for every v. So BA must act like multiplying by 1: it must be the identity.</li>
+        <li><strong>The identity is forced.</strong> The only matrix with Iv = v for every v has 1s on the diagonal and 0s elsewhere. Its columns are the unit arrows, which must land on themselves.</li>
+        <li><strong>The order is forced.</strong> To undo “A then B” (the product BA when vectors are columns), undo B’s step last-first: apply B⁻¹ before A⁻¹. That is (BA)⁻¹ = A⁻¹B⁻¹, and the same reasoning gives (AB)⁻¹ = B⁻¹A⁻¹.</li>
+        <li><strong>When it fails.</strong> If A sends two inputs to one output, no B can recover which one it was. The 2×2 test for that is ad − bc = 0.</li>
+      </ol>
+      <p>The name and symbol “ᵀ” for the transpose are a Convention; the swap itself is simply what “rows become columns” means.</p>
+      <p>Before you continue, predict: is (AB)⁻¹ equal to A⁻¹B⁻¹ for the A and B in the worked example?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>No. For those matrices AB ≠ BA, and the last two steps of the worked example show the entries: B⁻¹A⁻¹ matches the inverse of AB, while A⁻¹B⁻¹ gives a different matrix.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Transpose in attention.</strong> In the original Transformer, the attention scores are computed from QKᵀ, the queries times the transpose of the keys (Vaswani et al., 2017, §3.2.1). For 4 tokens with key size <span data-calc="dK">…</span> (illustrative: the paper's sizes, but 4 tokens), Q is 4×<span data-calc="dK">…</span>, Kᵀ is <span data-calc="dK">…</span>×4, and the product is <span data-calc="qkShape">…</span>: one score for every pair of tokens, using <span data-calc="qkMults">…</span> multiplications.</li>
+        <li><strong>No inverse for a narrowing projection.</strong> The query projection in that paper maps a <span data-calc="dModel">…</span>-entry vector to a <span data-calc="dK">…</span>-entry one, so its matrix is <span data-calc="projShape">…</span>, which is not square. A matrix that is not square has no inverse, so that step cannot be undone exactly. This follows from the shapes alone; it says nothing about what any trained model learns.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> The paper stores one row per token, so its matrices are the transposes of the column-convention ones used on this site. Real models also have many heads and a scaling factor in the scores; this card keeps only the shape of the step.</p></div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>Everyday analogy</h4>
+      <p>The transpose is turning a page of a table on its side. The inverse is the “undo” button, which only works if no information was lost. <em>Where it breaks down:</em> “undo” in an app remembers history; a matrix inverse uses only the output.</p>
+      <h4>Common misconception</h4>
+      <p>“A⁻¹ is 1 divided by A, entry by entry.” It is a different matrix, defined by A A⁻¹ = I, and for some matrices it does not exist.</p>
+    </details>
+    <footer>Further reading: MML Ch 2.2.2 (inverse and transpose).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m01">
+  <meta name="concept-id" content="m01-transformations">
+  <title>Linear transformations: rotate, scale, shear, project - Linear algebra - ML Math</title>
+  <meta name="description" content="What a matrix does to the whole plane at once: turn it, stretch it, lean it over, or squash it flat.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/linalg2.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li>
+      <a href="../">1 · Linear algebra</a>
+      <ul class="sub">
+        <li><a href="../vectors/">Vectors: arrows and lists</a></li>
+        <li><a href="../combine/">Adding, scaling and combining vectors</a></li>
+        <li><a href="../matrices/">Matrices: tables and machines</a></li>
+        <li><a href="../matmul/">Matrix-vector and matrix-matrix multiplication</a></li>
+        <li><a href="../transpose-inverse/">Transpose, identity and inverse</a></li>
+        <li><a href="../systems/">Systems of linear equations</a></li>
+        <li><a href="../span-rank/">Span, linear independence, basis and rank</a></li>
+        <li><a href="./" aria-current="page">Linear transformations: rotate, scale, shear, project</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">2 · Analytic geometry</span></li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 1: Linear algebra</a></li>
+      <li><span aria-current="page">Linear transformations: rotate, scale, shear, project</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-transformations" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 8 of 8</p>
+      <h1>Linear transformations: rotate, scale, shear, project</h1>
+      <p class="muted">What a matrix does to the whole plane at once: turn it, stretch it, lean it over, or squash it flat.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Draw a grid on a rubber sheet, pin the origin, and then move the sheet. If you only turn it, stretch it evenly along its axes, lean it sideways, or squash it onto a line, then straight lines stay straight, the grid squares stay equally spaced parallelograms, and the origin stays put. A rule that moves the plane like that is a <span class="term" data-term="linear-transformation">linear transformation</span>.</p>
+      <p>On the <a href="../matrices/">Matrices card</a> we saw that a matrix sends the unit arrows (1, 0) and (0, 1) to its two columns, and that fixes where every other point goes. So every linear transformation of the plane is a 2×2 matrix, and the matrix is just the record of where the two unit arrows land. Four standard ones:</p>
+      <ul>
+        <li>A <span class="term" data-term="rotation">rotation</span> turns the plane by an angle θ, counter-clockwise on the page, with vectors written as columns.</li>
+        <li><span class="term" data-term="scaling">Scaling</span> stretches the x-direction by sx and the y-direction by sy.</li>
+        <li>A <span class="term" data-term="shear">shear</span> leans the square over: the top slides sideways by k for each unit of height.</li>
+        <li>A <span class="term" data-term="projection">projection</span> onto the x-axis drops every point straight down onto the x-axis.</li>
+      </ul>
+      <div class="math-display" data-tex-display="\begin{bmatrix}\cos\htmlData{sym=theta}{\theta}&-\sin\htmlData{sym=theta}{\theta}\\\sin\htmlData{sym=theta}{\theta}&\cos\htmlData{sym=theta}{\theta}\end{bmatrix},\quad\begin{bmatrix}\htmlData{sym=scaleSx}{s_x}&0\\0&\htmlData{sym=scaleSy}{s_y}\end{bmatrix},\quad\begin{bmatrix}1&\htmlData{sym=shearK}{k}\\0&1\end{bmatrix},\quad\begin{bmatrix}1&0\\0&0\end{bmatrix}">rotation, scaling, shear, projection</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>The dashed square is the unit square before; the filled shape is where it lands. The teal arrow is where (1, 0) lands (column 1) and the blue arrow is where (0, 1) lands (column 2). Pick a transformation and drag its slider. For a rotation, the burgundy arc shows the turn: positive angles go counter-clockwise on the screen, negative ones clockwise. Try “Project onto the x-axis” and see the square collapse.</p>
+      <div data-widget="transform">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Where does the unit square go?</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A grid with the unit square outlined with a dashed line. The same square after the chosen transformation is filled in navy. A teal arrow shows where the arrow (1, 0) lands, which is column 1 of the matrix, and a blue arrow shows where (0, 1) lands, which is column 2. For a rotation, a curved burgundy arrow shows the turn and its direction. The matrix, the area scale and whether it can be undone are written below.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+      <p class="muted">The determinant shown here is only the signed area scale of the unit square: how much the transformation multiplies its area, with a minus sign if the shape is flipped over. Its full treatment comes later in the course.</p>
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>Rotating a photo in an editor: every pixel position is turned about the centre.</li>
+        <li>Zooming a map along one direction only: a stretch in x or y.</li>
+        <li>Italic type: upright letters leaned over, a shear.</li>
+        <li>A shadow of a building at noon on the ground: a flattening onto a surface, like a projection.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If a motion keeps straight lines straight and leaves the origin where it is, it is a linear transformation, and a matrix describes it. If it squashes the plane, the matrix has no inverse.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A drawing app slides every point to the right by 2 units, whatever its position. Is that a linear transformation of the plane?</legend>
+          <label class="radio-row"><input type="radio" name="spot-lin" data-correct data-why="The origin moves (to (2, 0)), and a linear transformation must keep the origin fixed. Sliding everything by a fixed amount is a translation, which is not linear."><span>No: the origin moves</span></label>
+          <label class="radio-row"><input type="radio" name="spot-lin" data-why="Straight lines do stay straight, but the origin also has to stay put, and here it moves to (2, 0)."><span>Yes: straight lines stay straight</span></label>
+          <label class="radio-row"><input type="radio" name="spot-lin" data-why="A shear leans the shape with the origin fixed. A uniform slide moves the origin too, so it is a different kind of motion."><span>Yes: it is a shear</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="transformations"></div>
+      <div class="check" data-predict="transformations">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-tf">A shear with k = 2 sends (x, y) to (x + 2y, y). What is the first entry of the image of (3, 2)?</label></p>
+        <div class="row"><input id="p-tf" name="p-tf" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Row 1 of the shear matrix is (1, 2). Pair it with (3, 2) and add.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Thinking of a matrix as a motion of space gives it a shape you can see: is it a turn, a stretch, a lean, a squash, or a mix? Chaining motions is multiplying matrices, and undoing a motion is taking the inverse, so the earlier cards come together here.</p>
+      <p><strong>Invertible or not.</strong> A rotation loses no information, so it can be undone by turning back. A projection squashes the plane onto a line, so many points share one image: its rank is 1 and it has no inverse. Scaling by 0 does the same.</p>
+      <p><strong>When it does not fit.</strong> Motions that move the origin (a slide), bend lines (a curve), or have limits (a maximum) are not linear. A translation can be written with an extra number added on, which is a different, slightly larger idea.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> A rotation by θ must keep lengths and angles, so the arrow (1, 0) lands at length 1, at angle θ.</li>
+        <li><strong>Where (1, 0) lands.</strong> At angle θ on the unit circle: (cos θ, sin θ). That is column 1.</li>
+        <li><strong>Where (0, 1) lands.</strong> It started 90° counter-clockwise from (1, 0), so it lands 90° counter-clockwise from (cos θ, sin θ), which is (−sin θ, cos θ). That is column 2.</li>
+        <li><strong>The matrix.</strong> Columns (cos θ, sin θ) and (−sin θ, cos θ) give rows (cos θ, −sin θ) and (sin θ, cos θ). The same idea gives the other three: write down where the unit arrows land, and the columns follow. The letters sx, sy, k and θ are names; the matrices are not a convention, but a counter-clockwise positive angle is.</li>
+      </ol>
+      <p>Before you continue, predict: where does a 90° counter-clockwise rotation send (1, 0)? And (0, 1)?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>(1, 0) turns a quarter-turn to point straight up: (0, 1). (0, 1) turns a quarter-turn to point left: (−1, 0). Those are the two columns of the 90° matrix, as the first two steps of the worked example show.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Every linear layer is a linear map, plus a shift.</strong> The projections and feed-forward matrices of the original Transformer are matrices, so (ignoring biases) each one is a linear transformation, and it moves a whole space of vectors at once (Vaswani et al., 2017, §3.2 and §3.3). With a bias added it is a linear map followed by a slide, which is no longer linear in the strict sense.</li>
+        <li><strong>Why there is a nonlinearity in between.</strong> Two linear maps with nothing between them collapse into one matrix: applying <span class="math" data-tex-calc="stackedProduct"></span> in a single step to (3, −1) gives <span data-calc="stackedCheck">…</span>, the same as applying the two in turn (<span data-calc="stackedTwo">…</span>). The feed-forward layer of the original Transformer therefore puts a ReLU between its two matrices (Vaswani et al., 2017, §3.3).</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> The example matrices are small made-up numbers, not weights from a model. Real layers also add biases and use many heads or very wide matrices.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-tf">In your own words: why does knowing where (1, 0) and (0, 1) land tell you everything about a linear transformation of the plane, and why can a projection not be undone?</label></p>
+        <textarea id="e-tf" name="e-tf" autocomplete="off"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>Every point is some amount of (1, 0) plus some amount of (0, 1), and a linear transformation keeps scaling and adding, so the image is the same amounts of the two landing points. A projection squashes the plane onto a line, so different points share one image, and from the image alone you cannot tell which point it came from.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“A matrix moves the whole plane. Look at where the two unit arrows land: those landing places are the columns. A rotation turns, a scaling stretches, a shear leans, a projection squashes onto a line. Rotations, scalings with no zero and shears can be undone. A projection cannot, because many points end up in the same place.”</p>
+      <h4>Everyday analogy</h4>
+      <p>A rubber sheet with a grid drawn on it: pin the middle, then turn, stretch, lean or flatten it. <em>Where it breaks down:</em> a real sheet can be folded or torn; a linear transformation cannot fold, only squash flat.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw the unit square with arrows (1, 0) and (0, 1).</li><li>Choose a motion and sketch where each arrow lands.</li><li>Write the two landing points as columns.</li><li>Sketch the image of the square.</li><li>Ask: can it be undone? Check whether the image is flat.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Does the order of two transformations matter?</strong> Yes: the matrices are multiplied, and a product usually changes when its factors are swapped.</p>
+      <p><strong>Why counter-clockwise?</strong> It is the standard convention for positive angles; the opposite direction is just a negative angle.</p>
+      <p><strong>What does a negative determinant mean?</strong> Here: the square is flipped over like a mirror image.</p>
+      <h4>Common misconception</h4>
+      <p>“A transformation moves each point independently.” A linear transformation moves all points by one consistent rule: the landing places of the two unit arrows decide everything.</p>
+    </details>
+    <footer>Further reading: MML Ch 2.7 (linear mappings).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

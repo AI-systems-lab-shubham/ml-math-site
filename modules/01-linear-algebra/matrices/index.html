@@ -47,6 +47,10 @@
         <li><a href="../combine/">Adding, scaling and combining vectors</a></li>
         <li><a href="./" aria-current="page">Matrices: tables and machines</a></li>
         <li><a href="../matmul/">Matrix-vector and matrix-matrix multiplication</a></li>
+        <li><a href="../transpose-inverse/">Transpose, identity and inverse</a></li>
+        <li><a href="../systems/">Systems of linear equations</a></li>
+        <li><a href="../span-rank/">Span, linear independence, basis and rank</a></li>
+        <li><a href="../transformations/">Linear transformations: rotate, scale, shear, project</a></li>
       </ul>
     </li>
     <li><span class="soon">2 · Analytic geometry</span></li>
@@ -82,7 +86,7 @@
 
   <article class="concept-card" id="concept-matrices" data-size="full">
     <header>
-      <p class="eyebrow">Full card · 3 of 4</p>
+      <p class="eyebrow">Full card · 3 of 8</p>
       <h1>Matrices: tables and machines</h1>
       <p class="muted">A matrix is a table of numbers. It is also a machine that turns one vector into another.</p>
     </header>
@@ -105,7 +109,6 @@
           <div class="widget-reserve" aria-hidden="true"></div>
         </div>
       </div><!-- /widget -->
-      <p class="muted">What a matrix does to the whole plane at once (rotating, stretching, shearing) is explored fully in the next part.</p>
     </section>
 
     <section data-stage="real-life">
@@ -154,7 +157,7 @@
         <li><strong>Why the table.</strong> The formulas all have the same shape, so only the weights differ. A table of weights holds everything and is easy to compute with.</li>
       </ol>
       <p>Reading the table as columns of arrows comes from the previous card: the input is v₁ copies of one arrow plus v₂ of another. The choice to list rows first, then columns, is a Convention: “2×3” means 2 rows, 3 columns.</p>
-      <p>Before you open the next part, predict: if M sends (1, 0) to (2, 1) and (0, 1) to (−1, 1), where does it send (1, 2)?</p>
+      <p>Before you continue, predict: if M sends (1, 0) to (2, 1) and (0, 1) to (−1, 1), where does it send (1, 2)?</p>
       <details class="reveal">
         <summary>I have made my prediction: show the reasoning</summary>
         <p>(1, 2) is 1 copy of (1, 0) plus 2 copies of (0, 1). So the output is 1 copy of (2, 1) plus 2 copies of (−1, 1): <span data-calc="matDefaultOut">…</span>. This is the default setting of the widget above.</p>
@@ -193,7 +196,7 @@
       <h4>Common misconception</h4>
       <p>“A matrix is only a grid of numbers.” The grid is just how we write it down. What defines it is what it does to vectors.</p>
     </details>
-    <footer>Further reading: MML Ch 2.2 (matrices) and Ch 2.7 (linear mappings, in the next part).</footer>
+    <footer>Further reading: MML Ch 2.2 (matrices).</footer>
   </article>
 </main>
 </div>

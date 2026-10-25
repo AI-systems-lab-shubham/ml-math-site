@@ -7,7 +7,7 @@ import {
   multiplyCountFromShapes, sameMatrix, teaserMatVec, transformerBase, illustrativeEmbedding, entrywiseProduct,
   frac, fracToString, fracToNumber, fracMatMul, fracMatrixToNumbers, transpose, identity, isSquare, det2, determinant,
   inverse, rank, areIndependent, inSpan, solveSystem, rotation, rotationDegrees, scaling, shear, projectionOntoX,
-  unitSquare, transformedSquare, signedArea,
+  unitSquare, transformedSquare, signedArea, inverse2ByFormula, rank2, lowRankEntryCount, entryCount as entryCountOf,
 } from "../assets/js/linalg-math.mjs";
 
 // ---- Vectors ----
@@ -515,4 +515,91 @@ test("transformations compose by matrix multiplication, and in the order written
   assert.deepEqual(SR, [[1, -1], [1, 0]]);
   assert.deepEqual(RS, [[0, -1], [1, 1]]);
   assert.deepEqual(matVec(SR, [1, 0]), matVec(S, matVec(R, [1, 0])));
+});
+
+test("the 2×2 inverse formula agrees with the general inverse, and fails exactly when ad − bc = 0", () => {
+  const key = (F) => (F === null ? null : F.map((r) => r.map(fracToString)));
+  let invertible = 0;
+  for (let a = -3; a <= 3; a++) for (let b = -3; b <= 3; b++) for (let c = -3; c <= 3; c++) for (let d = -3; d <= 3; d++) {
+    const M = [[a, b], [c, d]];
+    assert.deepEqual(key(inverse2ByFormula(M)), key(inverse(M)));
+    assert.equal(inverse(M) === null, a * d - b * c === 0);
+    if (inverse(M) !== null) invertible++;
+  }
+  assert.ok(invertible > 0);
+  // the worked example: [[1,2],[3,4]] has det −2 and inverse [[−2, 1], [3/2, −1/2]]
+  assert.deepEqual(key(inverse2ByFormula([[1, 2], [3, 4]])), [["-2", "1"], ["3/2", "-1/2"]]);
+  assert.deepEqual(matVec([[1, 2], [3, 4]], [-2, 3 / 2]), [1, 0]); // M times column 1 of M⁻¹ is column 1 of I
+});
+
+test("a singular matrix sends different inputs to the same output, so nothing can undo it", () => {
+  const M = [[1, 2], [2, 4]];
+  assert.deepEqual(matVec(M, [2, 0]), [2, 4]);
+  assert.deepEqual(matVec(M, [0, 1]), [2, 4]);
+});
+
+test("rank2 on rotations, scalings, shears and the projection (tolerance 1e-12)", () => {
+  assert.equal(rank2(rotationDegrees(37)), 2);
+  assert.equal(rank2(rotationDegrees(90)), 2);
+  assert.equal(rank2(shear(2)), 2);
+  assert.equal(rank2(scaling(2, -1.5)), 2);
+  assert.equal(rank2(scaling(0, 1)), 1);
+  assert.equal(rank2(scaling(0, 0)), 0);
+  assert.equal(rank2(projectionOntoX), 1);
+  // rank2 agrees with the exact rank on integer matrices
+  for (let a = -2; a <= 2; a++) for (let b = -2; b <= 2; b++) for (let c = -2; c <= 2; c++) for (let d = -2; d <= 2; d++) {
+    assert.equal(rank2([[a, b], [c, d]]), rank([[a, b], [c, d]]));
+  }
+});
+
+test("rank facts used on the span card", () => {
+  // column 3 = 2·column 2 − column 1 in [[1,2,3],[4,5,6],[7,8,9]]
+  const cols = [[1, 4, 7], [2, 5, 8], [3, 6, 9]];
+  assert.deepEqual(linearCombination([-1, 2], [cols[0], cols[1]]), cols[2]);
+  assert.equal(areIndependent(cols), false);
+  assert.equal(rank(fromColumns(cols)), 2);
+  assert.equal(rank(transpose(fromColumns(cols))), 2);
+  // a recipe for a target: (5, −3) = 5·(1, 0) + (−3)·(0, 1)
+  assert.deepEqual(solveSystem(fromColumns([[1, 0], [0, 1]]), [5, -3]).solution.map(fracToNumber), [5, -3]);
+  // two arrows along the same line cannot reach (1, 0)
+  assert.equal(solveSystem(fromColumns([[1, 2], [2, 4]]), [1, 0]).kind, "none");
+  // a recipe exists but is not unique when the arrows are dependent and the target is on their line
+  assert.equal(solveSystem(fromColumns([[1, 2], [2, 4]]), [3, 6]).kind, "infinite");
+});
+
+test("a thin-times-thin product has rank at most the thin size, and stores fewer numbers", () => {
+  const B = [[1], [2], [0], [1]]; // 4×1
+  const A = [[1, 0, 2]]; // 1×3
+  const BA = matMul(B, A);
+  assert.deepEqual(shape(BA), { rows: 4, cols: 3 });
+  assert.equal(rank(BA), 1);
+  assert.equal(entryCountOf(shape(BA)), 12);
+  assert.equal(lowRankEntryCount(4, 3, 1), 7); // 4 + 3 numbers instead of 12
+  // a rank-2 product of 4×2 and 2×3 never exceeds rank 2
+  assert.ok(rank(matMul([[1, 0], [0, 1], [1, 1], [2, 1]], [[1, 2, 3], [4, 5, 6]])) <= 2);
+  assert.equal(lowRankEntryCount(512, 512, 8), 8192); // r·(d + k) = 8·1024
+  assert.equal(entryCountOf({ rows: 512, cols: 512 }), 262144);
+});
+
+test("next-token probabilities: one linear equation over V unknowns leaves V − 1 free", () => {
+  const r = solveSystem([[1, 1, 1, 1]], [1]);
+  assert.equal(r.kind, "infinite");
+  assert.equal(r.freeVariables, 3);
+  assert.deepEqual(matVec([[1, 1, 1, 1]], [0.5, 0.25, 0.125, 0.125]), [1]);
+});
+
+test("composition: rotating then shearing is one matrix, and a bias-free stack of two linear layers collapses to one", () => {
+  const W1 = [[1, 2], [0, 1]];
+  const W2 = [[0, 1], [1, 1]];
+  const x = [3, -1];
+  assert.deepEqual(matVec(W2, matVec(W1, x)), matVec(matMul(W2, W1), x));
+});
+
+test("attention-score shapes: n×d_k times d_k×n is n×n (illustrative n = 4 tokens, d_k = 64)", () => {
+  const Q = Array.from({ length: 4 }, () => Array(transformerBase.dK).fill(0));
+  assert.deepEqual(shape(transpose(Q)), { rows: 64, cols: 4 });
+  assert.deepEqual(resultShape(Q, transpose(Q)), { rows: 4, cols: 4 });
+  assert.equal(multiplyCount(Q, transpose(Q)), 4 * 64 * 4);
+  // the 64×512 query projection is not square, so it has no inverse
+  assert.equal(isSquare(Array.from({ length: transformerBase.dK }, () => Array(transformerBase.dModel).fill(0))), false);
 });

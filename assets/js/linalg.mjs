@@ -9,7 +9,7 @@ import {
 } from "./widgets.mjs";
 
 import {
-  n, tup, paren, sub, bm, colTex, rowTex, stroke, fillOf, text, PLANE_VIEW, px, py, drawPlane, arrow, segmentLabel,
+  n, tup, paren, sub, bm, colTex, rowTex, stroke, fillOf, text, XMAX, YMAX, PLANE_VIEW, px, py, drawPlane, arrow, segmentLabel,
   enableTipDrag, numberField, fieldGroup, bootPage,
 } from "./linalg-shared.mjs";
 

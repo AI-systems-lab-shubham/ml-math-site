@@ -6,6 +6,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, posix } from "node:path";
+import { editArticle, editOverviewPart, isDroppedLeftover } from "./lib/post-split-edits.mjs";
 
 export const SOURCE_REV = "fbf615d";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -33,19 +34,20 @@ export function parseOld(html) {
   const head = html.slice(0, html.indexOf("</head>"));
   const hero = html.slice(html.indexOf('<div class="column page-hero">'), html.indexOf('<p class="column module-progress'));
   const one = (re, what) => { const m = hero.match(re); if (!m) throw new Error(`old page: ${what} not found`); return m[1]; };
-  const lede = one(/<p class="lede">([\s\S]*?)<\/p>/, "lede");
+  const lede = editOverviewPart("lede", one(/<p class="lede">([\s\S]*?)<\/p>/, "lede"));
   const dotted = one(/<\/p>\s*<p>(Terms with[\s\S]*?)<\/p>/, "dotted-underline paragraph");
   const note = one(/<span class="page-tools-note muted">([\s\S]*?)<\/span>/, "page-tools note");
-  const eyebrow = one(/<p class="eyebrow">([\s\S]*?)<\/p>/, "eyebrow");
+  const eyebrow = editOverviewPart("eyebrow", one(/<p class="eyebrow">([\s\S]*?)<\/p>/, "eyebrow"));
   const callout = hero.match(/<div class="callout">[\s\S]*?<\/div>/)?.[0] ?? null;
-  const articles = [...html.matchAll(/<article class="concept-card" id="([^"]+)"[^>]*>[\s\S]*?<\/article>/g)].map((m) => ({ id: m[1], html: m[0] }));
+  const articles = [...html.matchAll(/<article class="concept-card" id="([^"]+)"[^>]*>[\s\S]*?<\/article>/g)].map((m) => ({ id: m[1], html: editArticle(m[1], m[0]) }));
   return { head, lede, dotted, note, eyebrow, callout, articles };
 }
 
 // "Terms with …definition. Systems of equations … next part." -> the how-to sentence and what is left.
 export function splitDotted(dotted) {
   if (!dotted.startsWith(HOWTO.terms)) throw new Error("dotted-underline paragraph changed; update HOWTO");
-  return dotted.slice(HOWTO.terms.length).trim();
+  const rest = dotted.slice(HOWTO.terms.length).trim();
+  return isDroppedLeftover(rest) ? "" : rest;
 }
 
 const headerHtml = (toRoot, withTerms) => `<header class="topbar" id="site-header">
@@ -120,11 +122,13 @@ export function buildPages(course, readSource = (p) => readOld(SOURCE_REV, p)) {
     const old = parseOld(readSource(`${m.path}index.html`));
     const num = modNum(course, m);
     const built = m.concepts.filter((c) => c.status === "built");
-    if (old.articles.length !== built.length) throw new Error(`${m.id}: ${old.articles.length} articles but ${built.length} built concepts`);
+    // Concepts added after the split have no old article; they are written by hand and are not generated here.
+    const fromOld = built.filter((c) => old.articles.some((a) => a.id === c.anchor));
+    if (old.articles.length !== fromOld.length) throw new Error(`${m.id}: ${old.articles.length} old articles but ${fromOld.length} matching built concepts`);
     const leftover = splitDotted(old.dotted);
     const modTitle = `Module ${num}: ${m.title}`;
 
-    built.forEach((c, i) => {
+    fromOld.forEach((c, i) => {
       if (old.articles[i].id !== c.anchor) throw new Error(`${c.id}: article ${i} is ${old.articles[i].id}, expected ${c.anchor}`);
       const dir = c.path, toRoot = up(dir);
       let { html: art, changes } = rewriteLinks(old.articles[i].html, course, dir);
