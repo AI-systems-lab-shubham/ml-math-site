@@ -23,6 +23,8 @@ const M0 = "modules/00-foundations/index.html";
 const intoMain = (html) => (dir) => edit(dir, M0, (s) => s.replace('<main id="main">', `<main id="main">${html}`));
 
 const MUTATIONS = [
+  { name: "primary-action: a second filled button beside the first", check: "primary-action", pages: "home", widths: "1280", apply: (dir) => edit(dir, "index.html", (s) => s.replace('<p class="muted" data-total-time></p>', '<p class="muted" data-total-time></p><button class="button" type="button">Extra</button>')) },
+  { name: "primary-action: a demoted button turned filled again", check: "primary-action", pages: "m00", widths: "375", apply: css(".button-secondary.button-small{background:#7A1F3D!important;color:#fff!important}") },
   { name: "hscroll: 1400px-wide block", check: "hscroll", pages: "m00", widths: "375", apply: intoMain('<div style="width:1400px;height:20px;background:#ccc"></div>') },
   { name: "overlap: two buttons stacked", check: "overlap", pages: "m00", widths: "1280", apply: intoMain('<button style="position:absolute;top:240px;left:300px;width:140px;height:50px">A</button><button style="position:absolute;top:250px;left:340px;width:140px;height:50px">B</button>') },
   { name: "clipped: lede cut off", check: "clipped", pages: "m00", widths: "1280", apply: css(".lede{height:20px;overflow:hidden}") },

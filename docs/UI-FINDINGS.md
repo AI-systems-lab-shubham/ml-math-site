@@ -136,3 +136,16 @@ Notes
 ## Polish session P2: before and after
 
 `node tools/ui-verify.mjs` with axe-core 4.10.2 at 375, 768, 900 and 1280px (now on home, Module 0, Module 1 and 404.html; a new `meta` check covers title, description, lang, favicon, one main, links with text). **Before: 0 findings. After: 0.** The 404 page was mutation-tested (no lang, no main, low contrast): 18 findings, so the checks bite. Widgets are mounted before the checks run, so the real widgets are still audited.
+
+## Session B2: before and after
+
+`node tools/ui-verify.mjs` with axe-core at 375, 768, 900, 1100 and 1280px on home, Module 0, Module 1 and 404. **Before the session's UI work: 0 findings. After: 0**, with one new check, `primary-action` (steps down every page and flags more than one filled button in view; mutation-tested, 2 of 2 planted defects caught, 16 of 16 across the whole mutation suite).
+
+Problems the checks and the new e2e found on the way, all fixed:
+- **A glossary popover could land on top of the term it explains** (focus-ring finding at 375px) once the page scrolled differently under the second sticky bar. The popover now goes on the side with room, scrolls inside itself when neither side fits, and is placed again after focus has scrolled the page.
+- **`scroll-margin-top` on every element made focusing a sticky bar scroll the page up** by the margin. The bars, the outline and popups are exempt.
+- **A 170px empty gap under the status control** (a wrapping column flex container stretched the fieldset); present since the four-state control was added, found in the B2 screenshots.
+- **The bar hid itself after a jump** to an anchor (the jump counted as "scrolling down"). Jumps over 1,000px, and a calm period after any link or hash, keep it.
+- The "Up next" link on the last card of a module was resolved by object identity and so pointed inside the same page; it now finds the module by id.
+
+Not covered: a real phone, a real screen reader, the live Pages site.

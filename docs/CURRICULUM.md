@@ -12,7 +12,7 @@ Card sizes: **F** = full interactive card, **C** = compact card (mini diagram, s
 ---
 
 ## [x] Module 0: Foundations (high-school refresher). MML Ch 1 (motivation)
-_Retrofitted to the course shell and lesson template (LEARNING-UX Session A); Module 1 follows in Session B. All ten cards built and verified. Claims are logged in `docs/CLAIMS.md`; items marked Verify there need a source check before publishing._
+_Retrofitted to the course shell and lesson template (LEARNING-UX Session A). All ten cards built and verified. Claims are logged in `docs/CLAIMS.md`; items marked Verify there need a source check before publishing._
 - Variables and expressions (C)
 - **Equations, e.g. x + y = 4** (F): a rule linking quantities, not an instruction; one equation with two unknowns gives a line of solutions; two equations pin down a point. Real life: a fixed total split two ways (time, volume, mass conservation).
   *In an LLM:* next-token probabilities satisfy p₁ + … + p_V = 1 over the vocabulary; prompt tokens + output tokens must fit within the context window; a neuron's w·x + b = 0 is a line (or plane) through the data.
@@ -26,7 +26,7 @@ _Retrofitted to the course shell and lesson template (LEARNING-UX Session A); Mo
 - Reading mathematical notation: subscripts, hats, ∈, ∀, vectors in bold (C)
 
 ## [ ] Module 1: Linear algebra. MML Ch 2
-_Part 1 built (vectors, adding and scaling, matrices, matrix multiplication; page `modules/01-linear-algebra/`). Tick this module only when part 2 meets the definition of done. Part 1's matrix-multiplication card already links forward to the systems-of-equations idea as plain text and back to Module 0's x + y = 4; part 2 must link back too._
+_Part 1 built (vectors, adding and scaling, matrices, matrix multiplication; page `modules/01-linear-algebra/`), on the full lesson template since Session B2 (objectives, takeaways, status control, On this page, Expand / Collapse all). Tick this module only when part 2 meets the definition of done. Part 1's matrix-multiplication card already links forward to the systems-of-equations idea as plain text and back to Module 0's x + y = 4; part 2 must link back too._
 - Vectors as arrows and as lists (F). *LLM:* an embedding is a vector (the original Transformer base model uses d_model = 512).
 - Vector addition, scaling, linear combinations (F)
 - Matrices as tables and as machines (F). *LLM:* weights are matrices.

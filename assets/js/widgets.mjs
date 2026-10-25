@@ -226,7 +226,7 @@ export function mountStepper(host, steps) {
   const body = html("div", { class: "stepper-body", "aria-live": "polite" });
   const count = html("span", { class: "stepper-count" });
   const back = html("button", { type: "button", class: "button-secondary button-small", text: "Back" });
-  const next = html("button", { type: "button", class: "button button-small", text: "Next step" });
+  const next = html("button", { type: "button", class: "button-secondary button-small", text: "Next step" });
   host.classList.add("stepper");
   host.append(body, html("div", { class: "stepper-nav" }, back, next, count));
   let i = 0;

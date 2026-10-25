@@ -148,6 +148,22 @@ test("undo restores the previous status, including not-started, with a fresh sta
   assert.equal(p.undo("a1", null), null);
 });
 
+test("setStatus returns the new statusAt; undo with expectedAt is refused after any later change", () => {
+  const s = fakeStorage();
+  const a = createProgress({ course: toy, storage: s, now: makeClock().at(100), target: null });
+  const b = createProgress({ course: toy, storage: s, now: makeClock().at(200), target: null });
+  const r = a.setStatus("a1", "complete");
+  assert.equal(r.statusAt, "2026-01-01T00:01:40.000Z");               // 100 s = 1 min 40 s
+  b.setStatus("a1", "revisit");                                         // another tab changes it afterwards
+  assert.equal(a.undo("a1", r.previous, r.statusAt), null, "refused: changed since");
+  assert.equal(a.status("a1"), "revisit", "nothing was clobbered");
+  const r2 = a.setStatus("a2", "complete");
+  assert.notEqual(a.undo("a2", r2.previous, r2.statusAt), null, "allowed when nothing changed");
+  assert.equal(a.status("a2"), "not-started");
+  const r3 = a.setStatus("a3", "in-progress");
+  assert.notEqual(a.undo("a3", r3.previous), null, "without expectedAt it always restores");
+});
+
 test("revisit does not count toward complete; arithmetic: 3 built in A", () => {
   const p = make();
   assert.deepEqual(p.moduleProgress("A"), { total: 3, done: 0, inProgress: 0, revisit: 0, planned: 1, all: 4, percent: 0 });

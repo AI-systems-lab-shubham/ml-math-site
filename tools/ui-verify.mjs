@@ -144,6 +144,19 @@ const probes = {
     return out.slice(0, 12);
   },
 
+  // Filled (primary) buttons in the viewport right now: .button without .button-secondary, or any button or link painted in the burgundy fill.
+  primaries() {
+    const burgundy = "rgb(122, 31, 61)";
+    return [...document.querySelectorAll("button, a, [role=button]")].filter((el) => {
+      if (!el.checkVisibility?.({ checkVisibilityCSS: true })) return false;
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 || r.height === 0 || r.bottom <= 0 || r.top >= innerHeight) return false;
+      const cs = getComputedStyle(el);
+      const filled = cs.backgroundColor === burgundy && !el.hasAttribute("aria-pressed");
+      return filled || (el.classList.contains("button") && !el.classList.contains("button-secondary"));
+    }).map((el) => probes.describe(el));
+  },
+
   smallText(min) {
     const groups = new Map();
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
@@ -367,6 +380,18 @@ for (const pg of selected) {
     if (want("tap-target")) { for (const e of await run(page, "targets", probes.interactiveSel, MIN_TARGET)) add("tap-target", pg, width, e); ran.add("tap-target"); }
     if (want("small-text")) { for (const e of await run(page, "smallText", MIN_TEXT)) add("small-text", pg, width, e); ran.add("small-text"); }
     if (want("landmark-unique") && width === WIDTHS[WIDTHS.length - 1]) { for (const e of await run(page, "landmarks")) add("landmark-unique", pg, "all", e, e.replace(/\d+ /, "")); ran.add("landmark-unique"); }
+    if (want("primary-action") && (pg.expectModule || pg.key === "home")) {
+      // One primary action per screen (DESIGN.md section 9): step down the page and count the filled buttons in view.
+      const total = await page.evaluate(() => document.documentElement.scrollHeight);
+      for (let y = 0; y <= total; y += 400) {
+        await page.evaluate((top) => scrollTo(0, top), y);
+        const found = await run(page, "primaries");
+        if (found.length > 1) { add("primary-action", pg, width, `${found.length} filled buttons in view at scroll ${y}px: ${found.join("; ")}`, "button.button"); break; }
+      }
+      await page.evaluate(() => scrollTo(0, 0));
+      await page.waitForTimeout(500); // scrolling opens cards, which repaints their status: let those short transitions end before the motion check
+      ran.add("primary-action");
+    }
     if (want("rail-content") && width >= 900 && (await page.locator("#site-nav").isVisible())) {
       const w = await page.evaluate(() => document.querySelector("main").getBoundingClientRect().width);
       if (w < 640 - 0.5) add("rail-content", pg, width, `content column is ${Math.round(w)}px with the rail shown (minimum 640px)`, "main");

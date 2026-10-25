@@ -406,7 +406,7 @@ function multiplyWidget(host) {
     onChange: (value) => { key = value; k = 0; draw(); sync(); },
   });
   const prev = html("button", { type: "button", class: "button-secondary button-small", text: "Previous entry" });
-  const next = html("button", { type: "button", class: "button button-small", text: "Next entry" });
+  const next = html("button", { type: "button", class: "button-secondary button-small", text: "Next entry" });
   const all = html("button", { type: "button", class: "button-secondary button-small", "aria-pressed": "false", text: "Fill in the whole product" });
   const count = () => {
     const p = PRESETS[key];

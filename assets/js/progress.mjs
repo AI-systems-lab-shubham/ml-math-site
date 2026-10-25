@@ -138,22 +138,29 @@ export function createProgress({ course, storage = defaultStorage(), now = () =>
       });
     },
 
-    // Explicit, by the learner. Returns { previous } (for undo) or null for an unknown id or status.
+    // Explicit, by the learner. Returns { previous, statusAt } (for undo) or null for an unknown id or status.
     setStatus(id, status) {
       if (!known(id) || !STATUSES.includes(status)) return null;
       return change(() => {
         const at = now();
         const previous = { status: statusOf(id), statusAt: state.concepts[id]?.statusAt ?? null };
-        state.concepts[id] = { status, statusAt: stampFor(id) };
+        const statusAt = stampFor(id);
+        state.concepts[id] = { status, statusAt };
         if (status !== "not-started") state.last = { id, at };
-        return { previous };
+        return { previous, statusAt };
       });
     },
 
     // Puts back what setStatus returned as `previous`. The restore is a new change with a new statusAt,
-    // so it also wins a merge with another tab.
-    undo(id, previous) {
-      return previous ? api.setStatus(id, previous.status) : null;
+    // so it also wins a merge with another tab. When `expectedAt` (the statusAt setStatus returned) is given, the
+    // undo is refused (null) if the concept has been changed since, here or in another tab.
+    undo(id, previous, expectedAt) {
+      if (!previous) return null;
+      if (expectedAt) {
+        refresh();
+        if (state.concepts[id]?.statusAt !== expectedAt) return null;
+      }
+      return api.setStatus(id, previous.status);
     },
 
     // Where "Start / Resume" should go: { id, kind } with kind start | resume | next | all-done, or null.

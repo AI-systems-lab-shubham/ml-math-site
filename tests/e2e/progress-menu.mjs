@@ -233,13 +233,13 @@ async function open(width, { url = M0, ctxOpts = {}, init } = {}) {
     cards: document.querySelectorAll("article.concept-card[id]").length,
     inWidget: document.querySelectorAll("[data-widget] .status-control, .status-control [data-widget]").length,
     pending: [...document.querySelectorAll("[data-widget]")].filter((h) => h.dataset.lazy !== "mounted").length,
-    markComplete: [...document.querySelectorAll("button")].filter((b) => /mark complete/i.test(b.textContent)).length,
+    markComplete: [...document.querySelectorAll("button")].filter((b) => /^(mark complete|✓ completed · undo)$/i.test(b.textContent.trim())).length,
     options: [...document.querySelectorAll("#concept-equations .status-control label")].map((l) => l.textContent.trim()),
   }));
   check(info.controls === info.cards && info.cards > 0, `every card has a status control, built eagerly (${info.controls} of ${info.cards})`);
   check(info.pending > 0, "some widgets are still unmounted placeholders while the controls already exist");
   check(info.inWidget === 0, "no status control sits inside a lazy widget placeholder");
-  check(info.markComplete === 0, "the old Mark complete button is gone");
+  check(info.markComplete === 0, "the old Mark complete toggle (and its Completed · undo state) is gone; Mark complete and continue replaces it");
   check(info.options.join("|") === "Not started|In progress|Complete|Revisit", `four options in order (got ${info.options})`);
   const group = page.locator("#concept-equations .status-control");
   check((await group.locator("legend").innerText()) === "Your progress on this card", "control has a legend");

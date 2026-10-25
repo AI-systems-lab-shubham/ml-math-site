@@ -5,6 +5,8 @@ import { findConcept, neighbours, renderInline } from "./course.mjs";
 import { hrefTo } from "./shell.mjs";
 import { STATUSES } from "./progress.mjs";
 import { stateIcon, stateLabel } from "./state-icons.mjs";
+import { continueMode, continueLabel, makePending, readPending, PENDING_KEY } from "./continue-math.mjs";
+import { createToast } from "./toast.mjs";
 
 const VISIT_DWELL_MS = 2000;
 const el = (html) => { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; };
@@ -18,14 +20,31 @@ export function initLesson(shell) {
   if (!mod) return;
   const byAnchor = new Map(mod.concepts.map((c) => [c.anchor, c]));
   const linkTo = (c, from) => {
-    const m = course.modules.find((x) => x.concepts.includes(c)) ?? from;
+    // `c` may be a copy from the Previous / Up next chain, so find its module by id rather than by identity.
+    const m = course.modules.find((x) => x.concepts.some((y) => y.id === c.id)) ?? from;
     return m.id === moduleId ? `#${c.anchor}` : hrefTo(`${m.path}#${c.anchor}`);
   };
+
+  const toast = createToast();
+  const goTo = (c) => { // jump to a concept's card and put focus on its heading (no scroll of its own)
+    const h = document.querySelector(`#${c.anchor} > header h2`);
+    if (h) requestAnimationFrame(() => h.focus({ preventScroll: true }));
+  };
+  const undoToast = (c, res) => toast.show({
+    text: `“${c.title}” marked complete.`,
+    actionLabel: "Undo",
+    onAction: () => {
+      const ok = progress.undo(c.id, res.previous, res.statusAt);
+      toast.show(ok ? { text: `Undone: “${c.title}” is back to ${stateLabel(res.previous.status).toLowerCase()}.` }
+                    : { text: `Could not undo: “${c.title}” has been changed since.` });
+    },
+  });
 
   for (const card of cards) {
     const c = byAnchor.get(card.id);
     if (!c || c.status !== "built") continue;
     const header = card.querySelector(":scope > header");
+    card.querySelector(":scope > header h2")?.setAttribute("tabindex", "-1");
     const { prev, next } = neighbours(course, c.id);
 
     const needs = (c.requires ?? []).map((id) => findConcept(course, id)).filter(Boolean);
@@ -47,9 +66,10 @@ export function initLesson(shell) {
     }
 
     const group = `status-${c.id}`;
-    const done = el(`<div class="lesson-done"><fieldset class="status-control"><legend>Your progress on this card</legend>
+    const done = el(`<div class="lesson-done is-fresh"><fieldset class="status-control"><legend>Your progress on this card</legend>
       <div class="status-options">${STATUSES.map((st) => `<label class="status-opt state-${st}"><input type="radio" name="${group}" value="${st}"><span class="status-face">${stateIcon(st)}<span>${stateLabel(st)}</span></span></label>`).join("")}</div></fieldset>
-      <div class="status-feedback"><p class="complete-status" role="status"></p><button class="button-secondary button-small" type="button" hidden>Undo</button></div></div>`);
+      <div class="lesson-actions"><button class="button lesson-primary" type="button" data-continue></button></div>
+      <div class="status-feedback"><p class="complete-status" role="status"></p><button class="button-secondary button-small" type="button" data-undo hidden>Undo</button></div></div>`);
     const nextHref = next ? linkTo(next, mod) : null;
     const pager = el(`<nav class="pager" aria-label="Previous and next concept for ${esc(c.title)}">
       ${prev ? `<a class="pager-prev" href="${linkTo(prev, mod)}" rel="prev"><span class="pager-label">Previous</span><span class="pager-title">${esc(prev.title)}</span></a>` : "<span></span>"}
@@ -57,31 +77,76 @@ export function initLesson(shell) {
              : `<p class="pager-end">That is everything available so far. More modules are on the way.</p>`}</nav>`);
     (footer ?? card).before(done, pager);
 
-    const undoBtn = done.querySelector(".status-feedback button");
+    const undoBtn = done.querySelector("[data-undo]");
+    const primary = done.querySelector("[data-continue]");
     const note = done.querySelector(".complete-status");
     const radios = [...done.querySelectorAll('input[type="radio"]')];
-    const paint = () => { const st = progress.status(c.id); radios.forEach((r) => { r.checked = r.value === st; }); };
+    const mode = () => continueMode(progress.status(c.id), next);
+    const paint = () => {
+      const st = progress.status(c.id);
+      radios.forEach((r) => { r.checked = r.value === st; });
+      const m = mode();
+      primary.hidden = m === "none";
+      primary.textContent = continueLabel(m, next?.title);
+    };
     paint();
     progress.subscribe(paint);
+    // The first paint of the saved status is not a change the learner made: no transition until the next frame.
+    requestAnimationFrame(() => requestAnimationFrame(() => done.classList.remove("is-fresh")));
     let undoTo = null;
+    let undoAt = null;
     for (const r of radios) {
       r.addEventListener("change", () => {
         if (!r.checked) return;
         const res = progress.setStatus(c.id, r.value);
         if (!res) return;
         undoTo = res.previous;
+        undoAt = null;
         note.textContent = `Marked ${stateLabel(r.value).toLowerCase()}.`;
         undoBtn.hidden = false;
       });
     }
+    primary.addEventListener("click", () => {
+      const m = mode();
+      if (m === "continue") { go(); return; }
+      const res = progress.setStatus(c.id, "complete");
+      if (!res) return;
+      undoTo = res.previous;
+      undoAt = res.statusAt;
+      note.textContent = "Marked complete.";
+      undoBtn.hidden = false;
+      if (m === "mark-continue") go(res);
+    });
+    // Moves to the next concept: in this page by hash, in another page by address. The undo travels with the learner.
+    const go = (res) => {
+      if (res) {
+        const pending = makePending({ id: c.id, title: c.title, previous: res.previous, expectedAt: res.statusAt }, Date.now());
+        if (next.moduleId === mod.id) { undoToast(c, res); location.hash = `#${next.anchor}`; goTo(next); return; }
+        try { sessionStorage.setItem(PENDING_KEY, JSON.stringify(pending)); } catch { /* storage blocked: the undo stays on this card */ }
+      }
+      location.href = linkTo(next, mod);
+    };
     undoBtn.addEventListener("click", () => {
       if (!undoTo) return;
-      progress.undo(c.id, undoTo);
+      if (undoAt && !progress.undo(c.id, undoTo, undoAt)) { note.textContent = "Could not undo: this card has been changed since."; undoTo = null; undoAt = null; undoBtn.hidden = true; return; }
+      if (!undoAt) progress.undo(c.id, undoTo);
       note.textContent = `Back to ${stateLabel(undoTo.status).toLowerCase()}.`;
       undoTo = null;
+      undoAt = null;
       undoBtn.hidden = true;
-      radios.find((r) => r.checked)?.focus();
+      (radios.find((r) => r.checked) ?? primary).focus();
     });
+  }
+
+  // Arrived through "Mark complete and continue" from another page: show its undo here, and put focus on the heading.
+  let raw = null;
+  try { raw = sessionStorage.getItem(PENDING_KEY); sessionStorage.removeItem(PENDING_KEY); } catch { /* storage blocked */ }
+  const pending = readPending(raw, Date.now(), (id) => !!findConcept(course, id));
+  if (pending) {
+    const c = findConcept(course, pending.id).concept;
+    undoToast(c, { previous: pending.previous, statusAt: pending.expectedAt });
+    const here = byAnchor.get(location.hash.slice(1));
+    if (here) goTo(here);
   }
 
   track(shell, cards, byAnchor);

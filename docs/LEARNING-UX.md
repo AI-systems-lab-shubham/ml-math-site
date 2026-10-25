@@ -54,12 +54,13 @@ Injected by `assets/js/shell.mjs` from `course.json` so there is no duplicated m
 4. The seven Concept Card stages (see `docs/CONCEPT-CARD.md`).
 5. **Key takeaways** box: three or four lines.
 6. Teach it panel.
-7. The four-option **status control** (Not started, In progress, Complete, Revisit, with Undo), then **Previous** and **Up next** (with the next concept's title and time).
-- **"On this page" mini-nav:** the stage list, with the current stage highlighted as you scroll (IntersectionObserver). Sticky beside the content on wide screens, a collapsible bar on phones.
+7. The four-option **status control** (Not started, In progress, Complete, Revisit, with Undo) and the one primary button, **Mark complete and continue**, then **Previous** and **Up next** (with the next concept's title and time).
+- **"On this page" mini-nav** (built in Session B2, both modules): the current card's stage list, with the current stage marked as you scroll (a throttled scroll listener and a tested pure picker, `assets/js/page-nav-math.mjs`). Beside the content from 1200px, a collapsible sticky bar below that. Anchors clear both sticky bars (`scroll-margin-top`).
+- **Mark complete and continue:** the one primary action on a lesson page. It sets Complete, moves to the next concept (in this page or the next module's page), and offers Undo in a toast (`assets/js/toast.mjs`, timing in `assets/js/continue-math.mjs`).
 
 ## 5. Collapsibles and accordions
 - Use native `<details>`/`<summary>` for derivations, "go deeper", FAQs and the Teach it panel. One consistent chevron, a 44px minimum hit area, and a visible focus ring.
-- **Expand all / Collapse all** per page. Open state is remembered. A link to an anchor inside a closed section opens it. In print, everything opens.
+- **Expand all / Collapse all** per page (Teach it panels and symbol lists; predict-then-reveal answers are excluded and never remembered). Open state is remembered on `mlmath:ui:v1` (`sectionsOpen`). A link to an anchor inside a closed section opens it, and opening a section mounts the lazy widgets inside it. In print, everything opens.
 - Respect `prefers-reduced-motion` (no height animation when set).
 
 ## 6. Course home page (`index.html`)
@@ -102,14 +103,15 @@ Injected by `assets/js/shell.mjs` from `course.json` so there is no duplicated m
 
 ## 11a. Lazy widgets (added in polish session P2)
 Every interactive widget mounts through one function, `mountWhenNeeded(el, mountFn)` in `assets/js/widgets.mjs`. **Session B (four-state progress) and every later module must use it; never call a widget's mount function directly.**
-- `mountFn(el)` runs once, when `el` nears the viewport, when focus moves (the next and previous unmounted widget mount, so Tab never skips one), when the URL hash or a click on an in-page link names `el`, an ancestor or a descendant (mounted before the browser scrolls), on `beforeprint` and in print media, and when the placeholder is clicked. Calling it again for the same element does nothing.
+- `mountFn(el)` runs once, when `el` nears the viewport, when focus moves (the next and previous unmounted widget mount, so Tab never skips one), when the URL hash or a click on an in-page link names `el`, an ancestor or a descendant (mounted before the browser scrolls), on `beforeprint` and in print media, when a closed `<details>` that holds it opens (click, Expand all, a link to an anchor inside it), and when the placeholder is clicked. Calling it again for the same element does nothing.
 - The host in the HTML is `<div data-widget="name">` and holds a static placeholder: the title and description as visible text (so find-in-page works), no focusable children, and a reserved height. `node tools/measure-widgets.mjs --write` mounts the real widget at every width, then writes the placeholder into the page and `assets/css/widget-reserve.css`. Run it after adding or changing any widget; `tests/e2e/widgets-lazy.mjs` fails on a stale placeholder or a layout shift.
 - Steppers, predict, spot-it and explain-it blocks are cheap and stay eager.
 - Anything Session B adds that is not part of a widget's own markup (progress controls, state icons) must not sit inside a pending placeholder.
 
 ## 12. Session plan
 - **Session A:** `course.json`, progress store and tests, shell (header, outline, footer), lesson template, course home. Retrofit Module 0 only, as the proof.
-- **Session B:** retrofit Module 1; add accordions, on-this-page, Resume, Previous/Next (the four-state status control was built in Session B1).
+- **Session B1:** the four-state progress model, outline status menu, lesson status control, home count and To revisit list.
+- **Session B2:** Module 1 on the lesson template, On this page, Expand / Collapse all, Mark complete and continue with Undo.
 - **Session C:** search, quizzes for Modules 0 and 1, cheat sheets, prerequisite map, polish.
 - After each session: push, open the live Pages URL, and test on a real phone.
 - **Additions to `DESIGN.md`** (do these in Session A): progress ring colours (use `--ok` for complete, `--c-blue` for in progress, `--muted` for not started), accordion and chevron style, outline row states, dialog and search styles, key-takeaways box style.

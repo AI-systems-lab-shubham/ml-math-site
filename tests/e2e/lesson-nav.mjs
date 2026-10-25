@@ -306,6 +306,157 @@ for (const [name, url, hashId, cid, cardId] of [["module-0", M0, "concept-slope-
   await j.ctx.close();
 }
 
+// 10. Secondary buttons are still clearly buttons; "Mark complete and continue" is the only filled one.
+{
+  const { ctx, page } = await open(1280, M0);
+  const o = await page.evaluate(() => {
+    const pick = (sel) => [...document.querySelectorAll(sel)].map((b) => { const cs = getComputedStyle(b), r = b.getBoundingClientRect(); return { cls: b.className, border: cs.borderTopWidth, bc: cs.borderTopColor, bg: cs.backgroundColor, h: Math.round(r.height), txt: b.textContent.trim() }; });
+    return { checks: pick("[data-check]"), steppers: pick("[data-stepper] button"), primaries: pick("main .button:not(.button-secondary)"), cards: document.querySelectorAll("article.concept-card[id]").length };
+  });
+  check(o.checks.length >= 10 && o.checks.every((b) => /button-secondary/.test(b.cls) && !/(^| )button( |$)/.test(b.cls)), `all ${o.checks.length} Check buttons are secondary`);
+  check(o.steppers.length >= 10 && o.steppers.every((b) => /button-secondary/.test(b.cls)), "Back and Next step are secondary");
+  for (const b of [...o.checks, ...o.steppers]) if (b.border !== "1px" || b.bc !== "rgb(122, 31, 61)" || b.h < 44) { check(false, `secondary button "${b.txt}" needs a visible border and 44px (got ${b.border} ${b.bc} ${b.h}px)`); break; }
+  check(o.primaries.length === o.cards && o.primaries.every((b) => /lesson-primary/.test(b.cls)), `the only filled buttons are the ${o.cards} Mark-complete-and-continue buttons (got ${o.primaries.map((b) => b.txt)})`);
+  const hov = await page.evaluate(() => { const b = document.querySelector("[data-check]"); b.scrollIntoView({ block: "center" }); return getComputedStyle(b).backgroundColor; });
+  await page.locator("[data-check]").first().hover();
+  await page.waitForTimeout(300);
+  const hov2 = await page.evaluate(() => getComputedStyle(document.querySelector("[data-check]")).backgroundColor);
+  check(hov !== hov2, `a secondary button shows a hover state (${hov} -> ${hov2})`);
+  const t = await open(1100, M0, { ctxOpts: { hasTouch: true } });
+  const small = await t.page.evaluate(() => [...document.querySelectorAll("[data-check], [data-stepper] button, [data-continue]")].filter((b) => b.checkVisibility()).map((b) => b.getBoundingClientRect().height).filter((h) => h < 44).length);
+  check(small === 0, `touch: Check, stepper and continue buttons are all at least 44px high (${small} smaller)`);
+  await t.ctx.close();
+  const first = await page.evaluate(() => [...document.querySelectorAll("[data-continue]")].map((b) => b.textContent));
+  check(first[0] === "Mark complete and continue" && first.length === 10, `Module 0 buttons say Mark complete and continue (got ${first[0]})`);
+  await ctx.close();
+  const m1 = await open(1280, M1);
+  const labels = await m1.page.evaluate(() => [...document.querySelectorAll("[data-continue]")].map((b) => b.textContent));
+  check(labels.slice(0, 3).every((l) => l === "Mark complete and continue") && labels[3] === "Mark complete", `Module 1: the last concept says just Mark complete (got ${labels})`);
+  await m1.ctx.close();
+}
+
+// 11. Mark complete and continue: same page, across pages, undo, clearance under the bars, the toast.
+const statusOf = (page, id) => page.evaluate((i) => document.querySelector(`#site-nav [data-status-of="${i}"]`).dataset.status, id);
+const focusInfo = (page) => page.evaluate(() => { const a = document.activeElement; return { tag: a.tagName, inToast: !!a.closest(".toast"), card: a.closest("article")?.id ?? null }; });
+const toastText = (page) => page.evaluate(() => { const t = document.querySelector(".toast"); return t.hidden ? null : t.querySelector(".toast-text").textContent; });
+for (const w of [375, 768, 1280]) {
+  const { ctx, page } = await open(w, M0);
+  const before = await statusOf(page, "m00-variables");
+  await page.locator("#concept-variables [data-continue]").scrollIntoViewIfNeeded();
+  await page.locator("#concept-variables [data-continue]").click();
+  await page.waitForTimeout(700);
+  check(await statusOf(page, "m00-variables") === "complete", `@${w}: continue sets Complete`);
+  check(await page.evaluate(() => location.hash) === "#concept-equations", `@${w}: continue moves to the next concept (${await page.evaluate(() => location.hash)})`);
+  const f = await focusInfo(page);
+  check(f.tag === "H2" && f.card === "concept-equations" && !f.inToast, `@${w}: focus lands on the next card's heading, not in the toast (got ${JSON.stringify(f)})`);
+  const bb = await barsBottom(page);
+  const ht = await page.evaluate(() => document.querySelector("#concept-equations > header h2").getBoundingClientRect().top);
+  check(ht >= bb && ht < bb + 140, `@${w}: next heading (top ${Math.round(ht)}) is fully below the bars (bottom ${Math.round(bb)})`);
+  check(/Variables and expressions.*marked complete/.test(await toastText(page) ?? ""), `@${w}: the toast says what happened (got ${await toastText(page)})`);
+  const live = await page.evaluate(() => { const l = [...document.querySelectorAll('[role="status"][aria-live="polite"]')].find((e) => e.classList.contains("sr-only") && e.textContent.includes("marked complete")); return !!l; });
+  check(live, `@${w}: the toast text is announced through a polite live region`);
+  // Undo from the toast.
+  await page.locator(".toast-action").click();
+  check(await statusOf(page, "m00-variables") === before, `@${w}: Undo from the toast restores ${before} (got ${await statusOf(page, "m00-variables")})`);
+  check(/Undone/.test(await toastText(page) ?? ""), `@${w}: the toast confirms the undo`);
+  // The origin card keeps its own Undo working too.
+  await page.locator("#concept-equations [data-continue]").scrollIntoViewIfNeeded();
+  await page.locator("#concept-equations [data-continue]").click();
+  await page.waitForTimeout(500);
+  await page.evaluate(() => document.querySelector("#concept-equations .status-feedback [data-undo]").scrollIntoView({ block: "center" }));
+  await page.locator("#concept-equations [data-undo]").click();
+  check(await statusOf(page, "m00-equations") !== "complete", `@${w}: the card's own Undo works after continuing`);
+  await ctx.close();
+}
+// Last concept of a module: continue crosses to the next page, and the undo goes with it.
+{
+  const { ctx, page } = await open(1280, M0);
+  const before = await statusOf(page, "m00-notation");
+  await page.locator("#concept-notation [data-continue]").scrollIntoViewIfNeeded();
+  await page.locator("#concept-notation [data-continue]").click();
+  await page.waitForURL(/01-linear-algebra\/#concept-vectors/);
+  await page.waitForSelector("#site-nav [data-status-of]", { state: "attached" });
+  await page.waitForTimeout(700);
+  check(await statusOf(page, "m00-notation") === "complete", "across pages: the concept is Complete");
+  check(/Reading mathematical notation.*marked complete/.test(await toastText(page) ?? ""), `across pages: the toast is shown on the next page (got ${await toastText(page)})`);
+  const f = await focusInfo(page);
+  check(f.tag === "H2" && f.card === "concept-vectors", `across pages: focus on the next heading (got ${JSON.stringify(f)})`);
+  await page.locator(".toast-action").click();
+  check(await statusOf(page, "m00-notation") === before, `across pages: Undo restores ${before}`);
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForTimeout(400);
+  check(await toastText(page) === null, "the pending undo is used once: a reload shows no toast");
+  await ctx.close();
+}
+// The cross-page undo expires after about 60 s; a changed concept refuses it.
+{
+  const mk = (ageMs) => `if (!sessionStorage.getItem("seeded")) { sessionStorage.setItem("seeded", "1"); sessionStorage.setItem("mlmath:continue:v1", JSON.stringify({ id: "m00-notation", title: "Reading mathematical notation", previous: { status: "in-progress" }, expectedAt: "2026-01-01T00:00:00.000Z", at: Date.now() - ${ageMs} })); }`;
+  const stale = await open(1280, `${M1}#concept-vectors`, { init: mk(61000) });
+  await stale.page.waitForTimeout(500);
+  check(await toastText(stale.page) === null, "an undo older than 60 s is ignored");
+  await stale.ctx.close();
+  const fresh = await open(1280, `${M1}#concept-vectors`, { init: mk(59000) });
+  await fresh.page.waitForTimeout(500);
+  check(/Reading mathematical notation/.test(await toastText(fresh.page) ?? ""), "an undo 59 s old is still offered");
+  await fresh.page.locator(".toast-action").click();
+  check(/Could not undo/.test(await toastText(fresh.page) ?? ""), `an undo whose concept has changed is refused (got ${await toastText(fresh.page)})`);
+  await fresh.ctx.close();
+}
+
+// 12. The toast: at least 10 s, paused by hover and by focus, never takes focus (fake clock, so the test is quick and exact).
+{
+  const startToast = async (page) => {
+    await page.locator("#concept-variables [data-continue]").scrollIntoViewIfNeeded();
+    await page.locator("#concept-variables [data-continue]").click();
+    await page.waitForTimeout(100);
+  };
+  const run = async (fn) => {
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    const page = await ctx.newPage();
+    await page.clock.install();
+    await page.goto(base + M0, { waitUntil: "networkidle" });
+    await page.waitForSelector("#site-nav [data-status-of]", { state: "attached" });
+    await page.clock.runFor(300);
+    await fn(page);
+    await ctx.close();
+  };
+  await run(async (page) => {
+    await startToast(page);
+    await page.clock.runFor(9900);
+    check(await toastText(page) !== null, "toast: still there at 9.9 s (never under 10 s)");
+    await page.clock.runFor(2000);
+    check(await toastText(page) !== null, "toast: still there at 11.9 s (stays 12 s)");
+    await page.clock.runFor(1000);
+    check(await toastText(page) === null, "toast: gone after 12 s");
+  });
+  await run(async (page) => {
+    await startToast(page);
+    await page.locator(".toast").hover();
+    await page.clock.runFor(30000);
+    check(await toastText(page) !== null, "toast: hovering pauses the countdown (visible after 30 s)");
+    await page.mouse.move(5, 400);
+    await page.clock.runFor(5000);
+    check(await toastText(page) !== null, "toast: leaving the toast resumes, with time left");
+    await page.clock.runFor(8000);
+    check(await toastText(page) === null, "toast: gone once the remaining time has run");
+  });
+  await run(async (page) => {
+    await startToast(page);
+    await page.locator(".toast-dismiss").focus();
+    await page.clock.runFor(30000);
+    check(await toastText(page) !== null, "toast: keyboard focus on it pauses the countdown");
+    await page.keyboard.press("Escape");
+    check(await toastText(page) === null, "toast: Esc dismisses it when focused");
+  });
+  await run(async (page) => {
+    await startToast(page);
+    const f = await focusInfo(page);
+    check(!f.inToast, "toast: showing it does not move focus into it");
+    await page.locator(".toast-dismiss").click();
+    check(await toastText(page) === null, "toast: Dismiss closes it");
+  });
+}
+
 await browser.close();
 await close();
 console.log(`lesson-nav e2e: ${checks} checks, ${failures} failed`);
