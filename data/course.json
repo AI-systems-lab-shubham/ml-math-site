@@ -268,7 +268,7 @@
             "[[Vector addition|vector-addition]] puts one arrow after another; in numbers, add the entries in the same position.",
             "[[Scaling|scaling]] multiplies every entry by the same [[scalar|scalar]]; a negative one reverses the arrow.",
             "A [[linear combination|linear-combination]] scales some vectors and then adds them, like 2a − b.",
-            "Both moves need vectors of the same dimension."
+            "Adding vectors (and so linear combinations) needs the same number of entries; scaling one vector does not."
           ],
           "requires": [
             "m01-vectors"
@@ -310,7 +310,7 @@
           ],
           "takeaways": [
             "Each entry of a product pairs a [[row|row]] of the left matrix with a [[column|column]] of the right one: a [[dot product|dot-product]].",
-            "Multiplying matrices chains two machines into one: AB means do B first, then A.",
+            "Multiplying matrices chains two machines into one: AB means do B first, then A, with vectors written as columns, as in most machine-learning texts.",
             "The inner sizes must match: an m×n times an n×p gives m×p.",
             "Order matters: AB and BA are usually different, and one can exist without the other."
           ],
