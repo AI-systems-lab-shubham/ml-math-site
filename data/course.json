@@ -229,15 +229,17 @@
       "title": "Linear algebra",
       "path": "modules/01-linear-algebra/",
       "status": "built",
-      "summary": "Vectors, matrices and what they do to space. Part 1 is built; part 2 is on its way.",
-      "minutes": 58,
+      "summary": "Vectors, matrices and what they do to space: from arrows and tables to inverses, systems, span and linear transformations.",
+      "minutes": 106,
       "prerequisites": [
         "m00"
       ],
       "outcomes": [
         "Multiply a matrix by a vector and explain what it does to space",
         "Describe a vector both as an arrow and as a list of numbers",
-        "Build new vectors from linear combinations of old ones"
+        "Build new vectors from linear combinations of old ones",
+        "Solve a small system of linear equations and say when it has no, one or infinitely many solutions",
+        "Describe rotations, scalings, shears and projections as matrices, and say which can be undone"
       ],
       "concepts": [
         {
@@ -335,14 +337,27 @@
         },
         {
           "id": "m01-transpose",
-          "title": "Transpose, identity, inverse",
+          "title": "Transpose, identity and inverse",
           "anchor": "concept-transpose",
-          "path": "modules/01-linear-algebra/transpose/",
+          "path": "modules/01-linear-algebra/transpose-inverse/",
           "size": "compact",
           "minutes": 10,
-          "status": "planned",
-          "objectives": [],
-          "takeaways": []
+          "status": "built",
+          "objectives": [
+            "Turn a [[matrix|matrix]] into its [[transpose|transpose]] by swapping rows and columns, and give the new [[shape|shape]]",
+            "Say what the [[identity matrix|identity-matrix]] does and why multiplying by it changes nothing",
+            "Decide when an [[inverse|inverse-matrix]] exists (a square matrix with a nonzero [[determinant|determinant]]) and check it with A·A⁻¹ = I"
+          ],
+          "takeaways": [
+            "The [[transpose|transpose]] swaps rows and columns: entry (i, j) moves to (j, i), so an m×n matrix becomes n×m.",
+            "The [[identity matrix|identity-matrix]] is the “do nothing” machine: it leaves every vector and every matrix unchanged.",
+            "An [[inverse|inverse-matrix]] undoes a matrix. It exists only for a square matrix whose [[determinant|determinant]] is not zero.",
+            "Reversing a chain reverses the order: (AB)ᵀ = BᵀAᵀ and (AB)⁻¹ = B⁻¹A⁻¹.",
+            "Attention scores in a transformer multiply the queries by the transpose of the keys, QKᵀ."
+          ],
+          "requires": [
+            "m01-matmul"
+          ]
         },
         {
           "id": "m01-systems",
@@ -351,20 +366,48 @@
           "path": "modules/01-linear-algebra/systems/",
           "size": "full",
           "minutes": 14,
-          "status": "planned",
-          "objectives": [],
-          "takeaways": []
+          "status": "built",
+          "objectives": [
+            "Write two [[equations|equation]] in two [[unknowns|unknown]] as one matrix equation Ax = b",
+            "Read a [[system of equations|system-of-equations]] as two lines, and say whether they cross once, never, or lie on top of each other",
+            "State that a linear system has no solution, exactly one, or infinitely many (never exactly two), and solve a system with an inverse as x = A⁻¹b"
+          ],
+          "takeaways": [
+            "Each [[equation|equation]] in a [[system|system-of-equations]] is one row of a matrix; the whole system is Ax = b.",
+            "In two unknowns each equation is a line, and the solutions are the points on every line at once.",
+            "A linear system has no solution, exactly one, or infinitely many solutions. It never has exactly two.",
+            "If A has an [[inverse|inverse-matrix]], the one solution is x = A⁻¹b.",
+            "Next-token probabilities obey one linear equation (they sum to 1), which leaves all but one of them free."
+          ],
+          "requires": [
+            "m01-matmul",
+            "m00-equations"
+          ]
         },
         {
           "id": "m01-span",
-          "title": "Span, linear independence, basis, rank",
+          "title": "Span, linear independence, basis and rank",
           "anchor": "concept-span",
-          "path": "modules/01-linear-algebra/span/",
+          "path": "modules/01-linear-algebra/span-rank/",
           "size": "compact",
           "minutes": 10,
-          "status": "planned",
-          "objectives": [],
-          "takeaways": []
+          "status": "built",
+          "objectives": [
+            "Describe the [[span|span]] of one or two vectors as everything their [[linear combinations|linear-combination]] can reach",
+            "Tell whether vectors are [[linearly independent|linearly-independent]], and say what a [[basis|basis]] is",
+            "Find the [[rank|rank]] of a small matrix as its number of independent columns"
+          ],
+          "takeaways": [
+            "The [[span|span]] of some vectors is every vector you can build from them by [[linear combinations|linear-combination]].",
+            "Vectors are [[linearly independent|linearly-independent]] when none of them can be built from the others.",
+            "A [[basis|basis]] is a set of independent vectors whose span is the whole space; two such arrows reach every point of the plane.",
+            "The [[rank|rank]] of a matrix is its number of independent columns, and it is never more than the number of rows or columns.",
+            "A LoRA update is a product of two thin matrices, so its rank is at most the thin size r."
+          ],
+          "requires": [
+            "m01-systems",
+            "m01-combine"
+          ]
         },
         {
           "id": "m01-transformations",
@@ -373,9 +416,23 @@
           "path": "modules/01-linear-algebra/transformations/",
           "size": "full",
           "minutes": 14,
-          "status": "planned",
-          "objectives": [],
-          "takeaways": []
+          "status": "built",
+          "objectives": [
+            "Describe a [[linear transformation|linear-transformation]] as a map that keeps straight lines straight and the origin fixed, and write its matrix from where the unit arrows land",
+            "Write the matrices for a [[rotation|rotation]], a scaling, a [[shear|shear]] and a [[projection|projection]], and say which are invertible",
+            "Explain why a projection loses information (rank 1, no inverse) while a rotation loses none"
+          ],
+          "takeaways": [
+            "A [[linear transformation|linear-transformation]] sends vectors to vectors and respects adding and scaling; every matrix is one.",
+            "The columns of its matrix are where the unit arrows land, so two columns describe the whole plane's motion.",
+            "A rotation by θ counter-clockwise has rows (cos θ, −sin θ) and (sin θ, cos θ); a shear has rows (1, k) and (0, 1); a scaling has rows (sx, 0) and (0, sy).",
+            "Projecting onto the x-axis, with rows (1, 0) and (0, 0), has rank 1 and no inverse: many inputs share one output.",
+            "Two linear layers with nothing between them are one matrix, so a transformer puts a nonlinearity between its linear layers."
+          ],
+          "requires": [
+            "m01-matrices",
+            "m01-span"
+          ]
         }
       ]
     },
