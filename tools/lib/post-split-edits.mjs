@@ -18,11 +18,18 @@ export const ARTICLE_EDITS = {
   "concept-matrices": [
     { from: "Full card · 3 of 4", to: "Full card · 3 of 8", why: "Module 1 now has eight built concepts." },
     { from: '      <p class="muted">What a matrix does to the whole plane at once (rotating, stretching, shearing) is explored fully in the next part.</p>\n', to: "", why: "Remove the forward pointer (the Linear transformations card links back to Matrices instead)." },
+    { from: 'so it has <span data-calc="qEntries">…</span> entries.</li>', to: 'so it has <span data-calc="qEntries">…</span> entries. The Transformer paper writes the same matrix as <span data-calc="qShapeRowForm">…</span> because it multiplies row vectors; this course uses column vectors, so it appears as <span data-calc="qShape">…</span>.</li>', why: "Add the row-vector versus column-vector note (F1)." },
     { from: "MML Ch 2.2 (matrices) and Ch 2.7 (linear mappings, in the next part).", to: "MML Ch 2.2 (matrices).", why: "Remove the forward pointer." },
   ],
   "concept-matmul": [
     { from: "Full card · 4 of 4", to: "Full card · 4 of 8", why: "Module 1 now has eight built concepts." },
     { from: " We will solve such systems in the next part.", to: "", why: "Remove the forward pointer." },
+  ],
+  "concept-slope": [
+    { from: "depends on the current size (next card), or where", to: "depends on the current size, or where", why: "Remove the forward pointer (F1)." },
+  ],
+  "concept-variables": [
+    { from: " (plus a few other operations we meet later).", to: " (plus a few other operations).", why: "Remove the forward pointer (F1)." },
   ],
   "concept-equations": [
     { from: "(solving systems of linear equations) for the full treatment, coming in Module 1.", to: "(solving systems of linear equations).", why: "Remove the forward pointer." },

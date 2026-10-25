@@ -97,21 +97,42 @@ export function enableTipDrag(canvas, getTip, setTip, clampTo) {
   canvas.addEventListener("pointercancel", stop);
 }
 
-/** A labelled number box that arrow keys can nudge. */
-export function numberField({ label, min, max, step = 1, value, onInput }) {
+/**
+ * A labelled number box that arrow keys can nudge. Whole numbers only unless `integer: false`.
+ * Anything else (empty, text, a decimal, out of range) gets a short polite message, is never passed to
+ * `onInput`, and the box goes back to the last good value when the learner leaves it.
+ */
+export function numberField({ label, min, max, step = 1, value, onInput, integer = true }) {
   const id = nextId("num");
-  const input = html("input", { type: "number", id, name: id, min, max, step, value, inputmode: "decimal", autocomplete: "off" });
-  const clamp = (v) => Math.min(max, Math.max(min, v));
+  const msgId = `${id}-msg`;
+  const input = html("input", { type: "number", id, name: id, min, max, step, value, inputmode: integer ? "numeric" : "decimal", autocomplete: "off" });
+  const msg = html("p", { class: "field-msg", id: msgId, role: "status" });
+  let lastGood = value;
+  const problem = () => {
+    const v = input.valueAsNumber;
+    if (input.validity.badInput || !Number.isFinite(v)) return `Please type a number between ${min} and ${max}${integer ? ", with no decimal point" : ""}.`;
+    if (integer && !Number.isInteger(v)) return `Whole numbers only here, so ${v} will not work. Try ${Math.round(v)}.`;
+    if (v < min || v > max) return `Please keep it between ${min} and ${max}.`;
+    return "";
+  };
+  const show = (text) => {
+    msg.textContent = text;
+    if (text) { input.setAttribute("aria-invalid", "true"); input.setAttribute("aria-describedby", msgId); }
+    else { input.removeAttribute("aria-invalid"); input.removeAttribute("aria-describedby"); }
+  };
   input.addEventListener("input", () => {
-    const v = input.valueAsNumber;
-    if (Number.isFinite(v)) onInput(clamp(v));
+    const text = problem();
+    show(text);
+    if (text) return;
+    try { onInput(input.valueAsNumber); lastGood = input.valueAsNumber; }
+    catch { show("That value could not be used. Try another whole number."); }
   });
-  input.addEventListener("change", () => {
-    const v = input.valueAsNumber;
-    input.value = Number.isFinite(v) ? clamp(v) : value;
-  });
-  const el = html("div", { class: "control" }, html("label", { for: id, text: label }), input);
-  return { el, input, set: (v) => { input.value = v; } };
+  const restore = () => { if (problem()) input.value = lastGood; };
+  input.addEventListener("change", restore);
+  input.addEventListener("blur", restore);
+  input.addEventListener("focus", () => { if (!problem()) show(""); });
+  const el = html("div", { class: "control" }, html("label", { for: id, text: label }), input, msg);
+  return { el, input, set: (v) => { input.value = v; lastGood = v; show(""); } };
 }
 
 export const fieldGroup = (legend, ...fields) =>

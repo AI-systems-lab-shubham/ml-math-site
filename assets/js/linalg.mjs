@@ -410,6 +410,7 @@ const calcs = {
   matDefaultOut: () => tup(matVec([[2, -1], [1, 1]], [1, 2])),
   qEntries: () => entryCount({ rows: transformerBase.dK, cols: transformerBase.dModel }).toLocaleString("en-US"),
   qShape: () => `${transformerBase.dK}×${transformerBase.dModel}`,
+  qShapeRowForm: () => `${transformerBase.dModel}×${transformerBase.dK}`,
   ffEntries: () => entryCount({ rows: transformerBase.dFf, cols: transformerBase.dModel }).toLocaleString("en-US"),
   ffShape: () => `${transformerBase.dFf}×${transformerBase.dModel}`,
   ffMults: () => multiplyCountFromShapes({ rows: transformerBase.dFf, cols: transformerBase.dModel }, { rows: transformerBase.dModel, cols: 1 }).toLocaleString("en-US"),

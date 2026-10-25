@@ -141,6 +141,10 @@ details.teach-it h4 { margin-top: var(--s4); font-size: 1.1rem; }
 .widget-draw { aspect-ratio: 16 / 10; min-height: 280px; width: 100%; margin: 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--paper); overflow: hidden; }
 .widget-draw svg { display: block; width: 100%; height: 100%; }
 .widget-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--s4); margin-top: var(--s4); }
+sup { font-size: 0.75em; line-height: 0; vertical-align: baseline; position: relative; top: -0.45em; }
+.field-msg { margin: 0; font-size: 0.9375rem; color: var(--burgundy); }
+.field-msg:empty { margin-top: calc(-1 * var(--s1)); }
+.control input[aria-invalid="true"] { border-color: var(--burgundy); }
 .control { display: flex; flex-direction: column; gap: var(--s1); min-width: 0; }
 .control-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s3); }
 .control label, .control legend, .control-label { font-weight: 600; font-size: 1rem; }

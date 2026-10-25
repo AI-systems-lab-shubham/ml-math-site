@@ -351,7 +351,7 @@
           "takeaways": [
             "The [[transpose|transpose]] swaps rows and columns: entry (i, j) moves to (j, i), so an m×n matrix becomes n×m.",
             "The [[identity matrix|identity-matrix]] is the “do nothing” machine: it leaves every vector and every matrix unchanged.",
-            "An [[inverse|inverse-matrix]] undoes a matrix. It exists only for a square matrix with a nonzero [[determinant|determinant]], and reversing a chain reverses the order: (AB)^T = B^TA^T and (AB)⁻¹ = B⁻¹A⁻¹.",
+            "An [[inverse|inverse-matrix]] undoes a matrix. It exists only for a square matrix with a nonzero [[determinant|determinant]], and reversing a chain reverses the order: (AB)^T = B^{T}A^{T} and (AB)⁻¹ = B⁻¹A⁻¹.",
             "Attention scores in a transformer multiply the queries by the transpose of the keys, QK^T."
           ],
           "requires": [
@@ -398,7 +398,7 @@
           "takeaways": [
             "The [[span|span]] of some vectors is every vector you can build from them by [[linear combinations|linear-combination]].",
             "Vectors are [[linearly independent|linearly-independent]] when none can be built from the others; independent vectors that span the whole space are a [[basis|basis]], and two such arrows reach every point of the plane.",
-            "The [[rank|rank]] of a matrix is its number of independent columns, and it is never more than the number of rows or columns.",
+            "The [[rank|rank]] of a matrix is its number of independent columns, and it is never more than the smaller of the number of rows and the number of columns.",
             "A LoRA update is a product of two thin matrices, so its rank is at most the thin size r."
           ],
           "requires": [

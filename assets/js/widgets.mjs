@@ -269,9 +269,15 @@ export function mountPredict(host, resolve) {
   const hint = host.querySelector("[data-hint]");
   const hintText = host.querySelector(".hint-text");
   check.addEventListener("click", () => {
+    if (input.validity.badInput) { feedback(host, false, "That is not a number yet.", "Please type digits, like 3 or -2."); input.focus(); return; }
     if (input.value.trim() === "") { feedback(host, false, "Commit to a guess first.", "Type a number, even if you are unsure. Guessing before the reveal is what makes the answer stick."); input.focus(); return; }
-    const { expected, explain } = resolve();
-    const ok = Math.abs(Number(input.value) - expected) < 1e-9;
+    const guess = input.valueAsNumber;
+    if (input.validity.badInput || !Number.isFinite(guess)) { feedback(host, false, "That is not a number yet.", "Please type digits, like 3 or -2."); input.focus(); return; }
+    let result;
+    try { result = resolve(); } catch { feedback(host, false, "Sorry, that could not be checked.", "Please try another number."); return; }
+    const { expected, explain } = result;
+    if (Number.isInteger(expected) && !Number.isInteger(guess)) { feedback(host, false, "Whole numbers only here.", `${guess} is not a whole number. Please try one, like 3 or -2.`); input.focus(); return; }
+    const ok = Math.abs(guess - expected) < 1e-9;
     feedback(host, ok, ok ? "Yes." : `Not quite: the answer is ${fmt(expected, 4)}.`, explain);
   });
   hint?.addEventListener("click", () => { hintText.hidden = !hintText.hidden; });

@@ -60,8 +60,13 @@ export function totalMinutes(course) {
 const MARK = /\[\[([^\]|]+)\|([a-z0-9-]+)\]\]/g;
 const escapeHtml = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+// Only ^T, ^-1 and ^{...} become superscripts; x^2 or a stray ^ stays as written. Runs on escaped text, so the body is safe.
+const SUP = /\^(?:\{([^{}]+)\}|(-1)(?![0-9])|(T)(?![A-Za-z0-9]))/g;
+
 export function renderInline(text) {
-  return escapeHtml(text).replace(MARK, '<span class="term" data-term="$2">$1</span>');
+  return escapeHtml(text)
+    .replace(SUP, (_, body, inv, t) => `<sup>${body ?? inv ?? t}</sup>`)
+    .replace(MARK, '<span class="term" data-term="$2">$1</span>');
 }
 
 export function termIdsIn(text) {

@@ -511,3 +511,15 @@ test("renderInline escapes HTML and turns [[text|id]] into glossary spans", () =
   assert.deepEqual(termIdsIn("[[x|a]] and [[y|b-c]]"), ["a", "b-c"]);
   assert.equal(plainText("a [[slope|slope]]"), "a slope");
 });
+
+test("renderInline converts only ^T, ^-1 and ^{...} to superscripts", () => {
+  assert.equal(renderInline("QK^T."), "QK<sup>T</sup>.");
+  assert.equal(renderInline("A^-1 b"), "A<sup>-1</sup> b");
+  assert.equal(renderInline("A^{T}A"), "A<sup>T</sup>A");
+  assert.equal(renderInline("x^2 and a^b and ^ alone and A^Tx and A^-12"), "x^2 and a^b and ^ alone and A^Tx and A^-12");
+});
+
+test("renderInline escapes a ^{...} body containing < or &", () => {
+  assert.equal(renderInline("x^{a<b&c}"), "x<sup>a&lt;b&amp;c</sup>");
+  assert.equal(renderInline("x^{<img src=x onerror=1>}"), "x<sup>&lt;img src=x onerror=1&gt;</sup>");
+});
