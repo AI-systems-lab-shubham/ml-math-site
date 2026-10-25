@@ -32,7 +32,7 @@ if (shell) {
     heroKey = key;
     if (hit) {
       const label = { start: "Start the course", resume: `Resume: ${hit.concept.title}`, next: `Continue: ${hit.concept.title}` }[r.kind];
-      action.innerHTML = `<a class="button" href="${hrefTo(`${hit.module.path}#${hit.concept.anchor}`)}">${esc(label)}</a>`;
+      action.innerHTML = `<a class="button" href="${hrefTo(hit.concept.path)}">${esc(label)}</a>`;
     } else {
       action.innerHTML = `<p class="muted">You have worked through everything available so far.${c.revisit ? " Your Revisit list is below." : " More modules are on the way."}</p>`;
     }
@@ -75,7 +75,7 @@ if (shell) {
     revisitKey = key;
     revisitList.innerHTML = items.map((c) => {
       const hit = findConcept(course, c.id);
-      return `<li><a href="${hrefTo(`${hit.module.path}#${hit.concept.anchor}`)}"><span class="outline-state state-revisit">${stateIcon("revisit")}</span><span class="syllabus-concept">${esc(hit.concept.title)}<span class="revisit-module"> · ${esc(hit.module.title)}</span></span><span class="syllabus-min">${hit.concept.minutes}\u00a0min</span></a></li>`;
+      return `<li><a href="${hrefTo(hit.concept.path)}"><span class="outline-state state-revisit">${stateIcon("revisit")}</span><span class="syllabus-concept">${esc(hit.concept.title)}<span class="revisit-module"> · ${esc(hit.module.title)}</span></span><span class="syllabus-min">${hit.concept.minutes}\u00a0min</span></a></li>`;
     }).join("");
   };
   paintRevisit();
@@ -90,7 +90,7 @@ if (shell) {
       const open = progress.isOpen(`syllabus:${m.id}`) ? " open" : "";
       const avail = p.planned ? `${p.total} of ${p.all} concepts available` : `${p.total} concepts`;
       const rows = m.concepts.map((c) => c.status === "built"
-        ? `<li><a href="${hrefTo(`${m.path}#${c.anchor}`)}"><span class="outline-state state-${progress.status(c.id)}" data-state-of="${c.id}">${stateIcon(progress.status(c.id))}<span class="sr-only">${stateLabel(progress.status(c.id))}: </span></span><span class="syllabus-concept">${esc(c.title)}</span><span class="syllabus-min">${c.minutes}\u00a0min</span></a></li>`
+        ? `<li><a href="${hrefTo(c.path)}"><span class="outline-state state-${progress.status(c.id)}" data-state-of="${c.id}">${stateIcon(progress.status(c.id))}<span class="sr-only">${stateLabel(progress.status(c.id))}: </span></span><span class="syllabus-concept">${esc(c.title)}</span><span class="syllabus-min">${c.minutes}\u00a0min</span></a></li>`
         : `<li class="syllabus-soon"><span class="outline-state">${stateIcon("new")}</span><span class="syllabus-concept">${esc(c.title)}</span><span class="outline-soon">Coming soon</span></li>`).join("");
       return `<li><details data-module="${m.id}"${open}><summary><span class="chev" aria-hidden="true"></span><span class="syllabus-name">Module ${i}: ${esc(m.title)}</span>
         <span class="syllabus-meta" data-syl-meta="${m.id}" data-avail="${esc(avail)}">${avail} · ${p.done} complete ${ringSvg(p.percent)}</span></summary>

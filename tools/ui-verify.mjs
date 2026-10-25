@@ -1,5 +1,7 @@
 // UI verification for every built page: layout, keyboard, console, structure, glossary and motion checks.
-// Usage: node tools/ui-verify.mjs [--pages home,m00,m01,404] [--widths 375,900] [--checks hscroll,overlap,...] [--no-shots]
+// Usage: node tools/ui-verify.mjs [--pages home,m00,m00-slope,m01-*,404] [--widths 375,900] [--checks hscroll,overlap,...] [--no-shots] [--jobs 3]
+// Pages come from data/course.json: home, each built module's overview (key mNN), each built concept page (key mNN-slug), 404.
+// A key ending in * selects every page that starts with it (m01-* is all of Module 1's concept pages).
 // Env:   BASE_URL   run against a live site (default: serve this repo locally)
 //        SITE_DIR   serve another copy of the site (used by the mutation test)
 //        REPORT_DIR where report.md, results.json and screenshots go (default: reports/)
@@ -12,6 +14,7 @@ import { requirePlaywright, serveStatic, siteRoot } from "./lib/playwright.mjs";
 const arg = (name) => (process.argv.includes(name) ? process.argv[process.argv.indexOf(name) + 1] : null);
 const WIDTHS = (arg("--widths") ?? "375,768,900,1100,1280,1440").split(",").map(Number);
 const ONLY_PAGES = arg("--pages")?.split(",") ?? null;
+const JOBS = Number(arg("--jobs") ?? 3);   // pages checked at the same time
 const ONLY_CHECKS = arg("--checks")?.split(",") ?? null;
 const SHOTS = !process.argv.includes("--no-shots");
 const REPORT_DIR = path.resolve(process.env.REPORT_DIR ?? path.join(siteRoot, "reports"));
@@ -43,11 +46,15 @@ async function mountWidgets(page) {
   await page.waitForTimeout(200);
 }
 
-const pages = [{ key: "home", label: "Home", url: "", expectModule: null }];
-for (const m of course.modules.filter((x) => x.status === "built")) pages.push({ key: m.id, label: `${m.id} ${m.title}`, url: m.path, expectModule: m });
+const pages = [{ key: "home", kind: "home", label: "Home", url: "", concept: null }];
+for (const m of course.modules.filter((x) => x.status === "built")) {
+  pages.push({ key: m.id, kind: "overview", label: `${m.id} ${m.title} (overview)`, url: m.path, concept: null, module: m });
+  for (const c of m.concepts.filter((x) => x.status === "built")) pages.push({ key: c.id, kind: "concept", label: `${c.id} ${c.title}`, url: c.path, concept: c, module: m });
+}
 const has404 = process.env.BASE_URL ? true : fs.existsSync(path.join(process.env.SITE_DIR ?? siteRoot, "404.html"));
-if (has404) pages.push({ key: "404", label: "404", url: "404.html", expectModule: null, expect404: true });
-const selected = pages.filter((p) => !ONLY_PAGES || ONLY_PAGES.includes(p.key));
+if (has404) pages.push({ key: "404", kind: "404", label: "404", url: "404.html", concept: null, expect404: true });
+const picks = (key) => !ONLY_PAGES || ONLY_PAGES.some((k) => (k.endsWith("*") ? key.startsWith(k.slice(0, -1)) : k === key));
+const selected = pages.filter((p) => picks(p.key));
 
 // ---------- findings ----------
 const findings = []; // { check, page, width, evidence }
@@ -194,6 +201,8 @@ const probes = {
     const out = [];
     const cards = [...document.querySelectorAll("article.concept-card")];
     for (const id of expectedIds) if (!cards.some((c) => c.id === id)) out.push(`missing concept card #${id}`);
+    if (cards.length !== expectedIds.length) out.push(`page holds ${cards.length} concept cards, expected ${expectedIds.length}`);
+    if (expectedIds.length === 1 && document.querySelectorAll("h1").length !== 1) out.push(`page has ${document.querySelectorAll("h1").length} h1 headings, expected 1`);
     for (const c of cards) {
       const got = [...c.querySelectorAll(":scope > section[data-stage]")].map((s) => s.dataset.stage);
       if (got.join() !== stages.join()) out.push(`#${c.id}: stages are [${got.join(", ")}], expected the seven in order`);
@@ -352,7 +361,7 @@ if (want("axe") && !axeSource) {
   console.error("########################################################\n");
 }
 
-for (const pg of selected) {
+async function runPage(pg) {
   for (const width of WIDTHS) {
     const ctx = await browser.newContext({ viewport: { width, height: 800 } });
     await ctx.addInitScript(() => {
@@ -380,7 +389,7 @@ for (const pg of selected) {
     if (want("tap-target")) { for (const e of await run(page, "targets", probes.interactiveSel, MIN_TARGET)) add("tap-target", pg, width, e); ran.add("tap-target"); }
     if (want("small-text")) { for (const e of await run(page, "smallText", MIN_TEXT)) add("small-text", pg, width, e); ran.add("small-text"); }
     if (want("landmark-unique") && width === WIDTHS[WIDTHS.length - 1]) { for (const e of await run(page, "landmarks")) add("landmark-unique", pg, "all", e, e.replace(/\d+ /, "")); ran.add("landmark-unique"); }
-    if (want("primary-action") && (pg.expectModule || pg.key === "home")) {
+    if (want("primary-action") && pg.kind !== "404") {
       // One primary action per screen (DESIGN.md section 9): step down the page and count the filled buttons in view.
       const total = await page.evaluate(() => document.documentElement.scrollHeight);
       for (let y = 0; y <= total; y += 400) {
@@ -403,8 +412,8 @@ for (const pg of selected) {
       ran.add("layout-shift");
     }
     if (want("meta") && width === WIDTHS[WIDTHS.length - 1]) { for (const e of await run(page, "meta")) add("meta", pg, "all", e); ran.add("meta"); }
-    if (want("structure") && pg.expectModule && width === WIDTHS[WIDTHS.length - 1]) {
-      const ids = pg.expectModule.concepts.filter((c) => c.status === "built").map((c) => c.anchor);
+    if (want("structure") && pg.kind !== "404" && pg.kind !== "home" && width === WIDTHS[WIDTHS.length - 1]) {
+      const ids = pg.concept ? [pg.concept.anchor] : [];
       for (const e of await run(page, "structure", ids, STAGES)) add("structure", pg, "all", e);
       ran.add("structure");
     }
@@ -462,6 +471,10 @@ for (const pg of selected) {
     await ctx.close();
   }
 }
+let nextPage = 0;
+await Promise.all(Array.from({ length: Math.max(1, Math.min(JOBS, selected.length)) }, async () => {
+  while (nextPage < selected.length) await runPage(selected[nextPage++]);
+}));
 await browser.close();
 if (server) await server.close();
 

@@ -4,6 +4,7 @@ import { chain, builtConcepts, totalMinutes } from "./course.mjs";
 import { STATUSES } from "./progress.mjs";
 import { stateIcon, stateLabel, statusButtonName } from "./state-icons.mjs";
 import { createStatusMenu } from "./status-menu.mjs";
+import { cleanUi } from "./ui-state.mjs";
 
 export { stateIcon };
 
@@ -33,11 +34,11 @@ async function loadCourse() {
   }
 }
 
-export async function initShell({ moduleId = null } = {}) {
+export async function initShell({ moduleId = null, conceptId = null } = {}) {
   // The header, Menu button and rail toggle come first so navigation works even if course.json fails to load.
   const nav = prepareNav();
   const header = mountHeader(moduleId);
-  const shell = { course: null, progress: null, moduleId, setCurrent: () => {}, revealCurrent: () => {}, closeStatusMenu: () => {} };
+  const shell = { course: null, progress: null, moduleId, conceptId, revealCurrent: () => {}, closeStatusMenu: () => {} };
   if (nav && header) wireRail(header, nav, shell);
   const course = await loadCourse();
   if (!course) return null;
@@ -61,8 +62,7 @@ const RAIL_MIN = "(min-width: 900px)";
 
 export function readUi() {
   try {
-    const v = JSON.parse(localStorage.getItem(UI_KEY));
-    return v && typeof v === "object" ? v : {};
+    return cleanUi(JSON.parse(localStorage.getItem(UI_KEY)));
   } catch {
     return {};
   }
@@ -70,6 +70,7 @@ export function readUi() {
 
 export function writeUi(patch) {
   try {
+    // readUi() drops values no longer used (the old outlineOpen), so the next write removes them from storage.
     localStorage.setItem(UI_KEY, JSON.stringify({ ...readUi(), ...patch }));
   } catch { /* storage blocked: the preference lasts for this visit only */ }
 }
@@ -156,35 +157,38 @@ function wireRail(header, nav, shell) {
   render();
 }
 
-// Current module open, the others collapsed. A learner's own opening of another module is remembered
-// on the UI key (mlmath:ui:v1), not in the progress store; the current module always opens.
+// Only the current module starts open. A learner can open the others while on the page; that is not remembered.
+// A module row is a chevron button (shows or hides its concepts) beside a link to the module's overview page.
+// A concept row is a status button beside a link straight to the concept page.
 function buildOutline(shell) {
-  const { course, progress, moduleId } = shell;
+  const { course, progress, moduleId, conceptId } = shell;
   const nav = document.getElementById("site-nav");
   const body = nav?.querySelector(".outline-body");
   if (!body) return;
-  const saved = readUi().outlineOpen ?? {};
-  const link = (m, c) => (m.id === moduleId ? `#${c.anchor}` : hrefTo(`${m.path}#${c.anchor}`));
+  const onOverview = moduleId && !conceptId;
   const modules = course.modules.map((m, i) => {
     const num = `<span class="outline-mod-num" aria-hidden="true">${i}</span><span class="sr-only">Module ${i}: </span>`;
     if (m.status !== "built") {
       return `<li class="outline-module is-planned"><div class="outline-planned"><span class="outline-planned-title">${num}${esc(m.title)}</span><span class="outline-soon">Coming soon</span></div></li>`;
     }
-    const open = m.id === moduleId || saved[m.id] === true;
+    const open = m.id === moduleId;
     const rows = m.concepts.map((c) => c.status === "built"
-      ? `<li class="outline-row"><button type="button" class="outline-state-btn" data-status-of="${c.id}" aria-haspopup="menu" aria-expanded="false" aria-describedby="ol-${c.id}"></button><a id="ol-${c.id}" href="${link(m, c)}" data-cid="${c.id}"><span class="outline-title">${esc(c.title)}</span></a></li>`
+      ? `<li class="outline-row"><button type="button" class="outline-state-btn" data-status-of="${c.id}" aria-haspopup="menu" aria-expanded="false" aria-describedby="ol-${c.id}"></button><a id="ol-${c.id}" href="${hrefTo(c.path)}" data-cid="${c.id}"><span class="outline-title">${esc(c.title)}</span></a></li>`
       : `<li><span class="outline-disabled" aria-disabled="true"><span class="outline-state">${stateIcon("not-started")}</span><span class="outline-title">${esc(c.title)}</span><span class="outline-soon">Coming soon</span></span></li>`).join("");
-    return `<li class="outline-module"><details data-module="${m.id}"${open ? " open" : ""}>
-      <summary><span class="chev" aria-hidden="true"></span><span class="outline-mod-title">${num}${esc(m.title)}</span><span class="outline-mod-progress" data-mod-progress="${m.id}"></span></summary>
-      <ul class="sub">${rows}</ul></details></li>`;
+    return `<li class="outline-module"><div class="outline-mod-head">
+      <button type="button" class="outline-mod-toggle" aria-expanded="${open}" aria-controls="ol-sub-${m.id}" aria-label="Concepts in ${esc(m.title)}"><span class="chev" aria-hidden="true"></span></button>
+      <a class="outline-mod-link" href="${hrefTo(m.path)}" data-module-link="${m.id}"${onOverview && open ? ' aria-current="page"' : ""}><span class="outline-mod-title">${num}${esc(m.title)}</span><span class="outline-mod-progress" data-mod-progress="${m.id}"></span></a></div>
+      <ul class="sub" id="ol-sub-${m.id}"${open ? "" : " hidden"}>${rows}</ul></li>`;
   }).join("");
   const legend = STATUSES.map((st) => `<li><span class="outline-state state-${st}">${stateIcon(st)}</span>${stateLabel(st)}</li>`).join("");
   body.innerHTML = `<p class="outline-heading" id="outline-title">Course outline</p><ul class="outline-legend" aria-label="Legend">${legend}</ul><ol aria-labelledby="outline-title">${modules}</ol>`;
   nav.setAttribute("aria-label", "Course outline");
+  if (conceptId) nav.querySelector(`a[data-cid="${conceptId}"]`)?.setAttribute("aria-current", "page");
 
-  nav.querySelectorAll("details[data-module]").forEach((d) => d.addEventListener("toggle", () => {
-    if (d.dataset.module === moduleId) return;
-    writeUi({ outlineOpen: { ...(readUi().outlineOpen ?? {}), [d.dataset.module]: d.open } });
+  nav.querySelectorAll(".outline-mod-toggle").forEach((t) => t.addEventListener("click", () => {
+    const open = t.getAttribute("aria-expanded") !== "true";
+    t.setAttribute("aria-expanded", String(open));
+    nav.querySelector(`#${t.getAttribute("aria-controls")}`).hidden = !open;
   }));
 
   const paint = () => {
@@ -217,11 +221,6 @@ function buildOutline(shell) {
     const pad = 16;
     if (r.top < n.top + pad) nav.scrollTop -= n.top + pad - r.top;
     else if (r.bottom > n.bottom - pad) nav.scrollTop += r.bottom - (n.bottom - pad);
-  };
-  shell.setCurrent = (id) => {
-    nav.querySelectorAll("[aria-current]").forEach((a) => a.removeAttribute("aria-current"));
-    nav.querySelector(`a[data-cid="${id}"]`)?.setAttribute("aria-current", "page");
-    shell.revealCurrent();
   };
 }
 

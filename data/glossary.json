@@ -5,509 +5,509 @@
       "plain": "A letter that stands for a number that can change or is not yet known, like an empty box you can put different numbers into.",
       "math": "x \\in \\mathbb{R}",
       "llm": "Every number a model learns is held in a variable until training fixes its value.",
-      "learnMore": "modules/00-foundations/#concept-variables", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/variables/", "uses": [], "looseUse": null
     },
     {
       "id": "expression", "term": "expression", "aliases": ["expressions"], "kind": "math",
       "plain": "A recipe of numbers, variables and operations that becomes a single number once every variable is filled in, such as 3x + 2.",
       "math": "3x+2",
-      "learnMore": "modules/00-foundations/#concept-variables", "uses": ["variable"], "looseUse": null
+      "learnMore": "modules/00-foundations/variables/", "uses": ["variable"], "looseUse": null
     },
     {
       "id": "parameter", "term": "parameter", "aliases": ["parameters"], "kind": "ml",
       "plain": "A variable inside a model that is adjusted while the model learns, then held fixed when the model is used.",
       "math": "\\theta",
       "llm": "Large language models are described by their parameter count; GPT-3 (2020) has 175 billion (Brown et al., 2020).",
-      "learnMore": "modules/00-foundations/#concept-variables", "uses": ["variable"], "looseUse": null
+      "learnMore": "modules/00-foundations/variables/", "uses": ["variable"], "looseUse": null
     },
     {
       "id": "equation", "term": "equation", "aliases": ["equations"], "kind": "math",
       "plain": "A statement that two expressions have the same value. It is a rule linking quantities, not an instruction to calculate.",
       "math": "x+y=4",
-      "learnMore": "modules/00-foundations/#concept-equations", "uses": ["expression"], "looseUse": null
+      "learnMore": "modules/00-foundations/equations/", "uses": ["expression"], "looseUse": null
     },
     {
       "id": "unknown", "term": "unknown", "aliases": ["unknowns"], "kind": "math",
       "plain": "A variable in an equation whose value we are trying to find.",
-      "learnMore": "modules/00-foundations/#concept-equations", "uses": ["variable", "equation"], "looseUse": null
+      "learnMore": "modules/00-foundations/equations/", "uses": ["variable", "equation"], "looseUse": null
     },
     {
       "id": "solution", "term": "solution", "aliases": ["solutions"], "kind": "math",
       "plain": "A choice of values for the unknowns that makes the equation true.",
       "math": "(x, y) = (1, 3) \\text{ solves } x+y=4",
-      "learnMore": "modules/00-foundations/#concept-equations", "uses": ["equation", "unknown"], "looseUse": null
+      "learnMore": "modules/00-foundations/equations/", "uses": ["equation", "unknown"], "looseUse": null
     },
     {
       "id": "coordinate", "term": "coordinates", "aliases": ["coordinate"], "kind": "math",
       "plain": "A pair of numbers that pins down a spot on a flat sheet: how far across, then how far up.",
       "math": "(x, y)",
-      "learnMore": "modules/00-foundations/#concept-equations", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/equations/", "uses": [], "looseUse": null
     },
     {
       "id": "line", "term": "line", "aliases": ["straight line", "lines"], "kind": "math",
       "plain": "A perfectly straight path with no bends that goes on forever in both directions. Every point on it has coordinates that fit one rule.",
       "math": "ax+by=c",
-      "learnMore": "modules/00-foundations/#concept-equations", "uses": ["coordinate"], "looseUse": null
+      "learnMore": "modules/00-foundations/equations/", "uses": ["coordinate"], "looseUse": null
     },
     {
       "id": "input", "term": "input", "aliases": ["inputs"], "kind": "math",
       "plain": "The number you feed into a rule or machine.",
       "math": "x",
-      "learnMore": "modules/00-foundations/#concept-functions", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/functions/", "uses": [], "looseUse": null
     },
     {
       "id": "output", "term": "output", "aliases": ["outputs"], "kind": "math",
       "plain": "The number that comes out of a rule or machine after you feed it an input.",
       "math": "f(x)",
-      "learnMore": "modules/00-foundations/#concept-functions", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/functions/", "uses": [], "looseUse": null
     },
     {
       "id": "function", "term": "function", "aliases": ["functions"], "kind": "math",
       "plain": "A rule that turns each allowed input into exactly one output, like a vending machine that always gives the same snack for the same button.",
       "math": "f : x \\mapsto f(x)",
       "llm": "Seen from outside, a language model is a function from a piece of text to a probability for each possible next token.",
-      "learnMore": "modules/00-foundations/#concept-functions", "uses": ["input", "output"], "looseUse": null
+      "learnMore": "modules/00-foundations/functions/", "uses": ["input", "output"], "looseUse": null
     },
     {
       "id": "graph", "term": "graph", "aliases": ["graphs"], "kind": "math",
       "plain": "A picture of a function: for every input, mark a point whose coordinates are the input and its output.",
       "math": "\\{(x, f(x))\\}",
-      "learnMore": "modules/00-foundations/#concept-functions", "uses": ["function", "coordinate"], "looseUse": null
+      "learnMore": "modules/00-foundations/functions/", "uses": ["function", "coordinate"], "looseUse": null
     },
     {
       "id": "rate-of-change", "term": "rate of change", "aliases": [], "kind": "math",
       "plain": "How much one quantity changes for each one-unit change in another, such as kilometres per hour.",
       "math": "\\dfrac{\\Delta y}{\\Delta x}",
-      "learnMore": "modules/00-foundations/#concept-slope", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/slope/", "uses": [], "looseUse": null
     },
     {
       "id": "slope", "term": "slope", "aliases": ["gradient (of a line)"], "kind": "math",
       "plain": "How steeply a line climbs: the rise for each step across. A steady rate of change.",
       "math": "m=\\dfrac{y_2-y_1}{x_2-x_1}",
-      "learnMore": "modules/00-foundations/#concept-slope", "uses": ["line", "rate-of-change"], "looseUse": null
+      "learnMore": "modules/00-foundations/slope/", "uses": ["line", "rate-of-change"], "looseUse": null
     },
     {
       "id": "intercept", "term": "intercept", "aliases": ["y-intercept"], "kind": "math",
       "plain": "The place where a line crosses the vertical axis: the point whose coordinates have x equal to zero, so the output when the input is zero.",
       "math": "b = f(0)",
-      "learnMore": "modules/00-foundations/#concept-slope", "uses": ["line", "coordinate"], "looseUse": null
+      "learnMore": "modules/00-foundations/slope/", "uses": ["line", "coordinate"], "looseUse": null
     },
     {
       "id": "linear-function", "term": "linear function", "aliases": ["linear functions"], "kind": "math",
       "plain": "A function whose graph is a straight line: every equal step in the input changes the output by the same amount, called its slope.",
       "math": "f(x)=mx+b",
       "llm": "A single artificial neuron computes a linear function of its inputs before any activation is applied.",
-      "learnMore": "modules/00-foundations/#concept-slope", "uses": ["function", "slope", "line"], "looseUse": null
+      "learnMore": "modules/00-foundations/slope/", "uses": ["function", "slope", "line"], "looseUse": null
     },
     {
       "id": "base", "term": "base", "aliases": [], "kind": "math",
       "plain": "The number that is multiplied by itself in a power.",
       "math": "b \\text{ in } b^{n}",
-      "learnMore": "modules/00-foundations/#concept-exponents", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/exponents/", "uses": [], "looseUse": null
     },
     {
       "id": "exponent", "term": "exponent", "aliases": ["exponents", "power"], "kind": "math",
       "plain": "A small raised number saying how many copies of the base are multiplied together.",
       "math": "b^{n}=\\underbrace{b\\times\\cdots\\times b}_{n}",
-      "learnMore": "modules/00-foundations/#concept-exponents", "uses": ["base"], "looseUse": null
+      "learnMore": "modules/00-foundations/exponents/", "uses": ["base"], "looseUse": null
     },
     {
       "id": "factor", "term": "factor", "aliases": ["growth factor", "factors"], "kind": "math",
       "plain": "The number you multiply by at each step.",
       "math": "r \\text{ in } a r^{n}",
-      "learnMore": "modules/00-foundations/#concept-exponents", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/exponents/", "uses": [], "looseUse": null
     },
     {
       "id": "growth", "term": "growth", "aliases": ["exponential growth"], "kind": "math",
       "plain": "Repeated multiplication by a factor bigger than 1, so the amount gets bigger by a larger and larger step each time.",
       "math": "a r^{n},\\ r>1",
-      "learnMore": "modules/00-foundations/#concept-exponents", "uses": ["factor"], "looseUse": null
+      "learnMore": "modules/00-foundations/exponents/", "uses": ["factor"], "looseUse": null
     },
     {
       "id": "decay", "term": "decay", "aliases": ["exponential decay"], "kind": "math",
       "plain": "Repeated multiplication by a factor between 0 and 1, so the amount shrinks by a smaller and smaller step each time without ever reaching zero.",
       "math": "a r^{n},\\ 0<r<1",
-      "learnMore": "modules/00-foundations/#concept-exponents", "uses": ["factor"], "looseUse": null
+      "learnMore": "modules/00-foundations/exponents/", "uses": ["factor"], "looseUse": null
     },
     {
       "id": "probability", "term": "probability", "aliases": ["probabilities"], "kind": "math",
       "plain": "A number from 0 to 1 saying how likely something is: 0 means it cannot happen, 1 means it surely will.",
       "math": "0 \\le p \\le 1",
-      "learnMore": "modules/00-foundations/#concept-equations", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/equations/", "uses": [], "looseUse": null
     },
     {
       "id": "token", "term": "token", "aliases": ["tokens"], "kind": "llm",
       "plain": "A small chunk of text, often a word or part of a word, that a language model reads and writes one at a time.",
       "llm": "Tokens, not letters or words, are the units a language model counts and predicts.",
-      "learnMore": "modules/00-foundations/#concept-equations", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/equations/", "uses": [], "looseUse": null
     },
     {
       "id": "vocabulary", "term": "vocabulary", "aliases": [], "kind": "llm",
       "plain": "The complete list of tokens a language model can read or write.",
       "math": "V = |\\text{vocabulary}|",
       "llm": "In the original Transformer paper, the English-German translation experiment used a shared vocabulary of about 37,000 tokens; the English-French experiment used a 32,000 word-piece vocabulary (Vaswani et al., 2017).",
-      "learnMore": "modules/00-foundations/#concept-exponents", "uses": ["token"], "looseUse": null
+      "learnMore": "modules/00-foundations/exponents/", "uses": ["token"], "looseUse": null
     },
     {
       "id": "context-window", "term": "context window", "aliases": ["context length"], "kind": "llm",
       "plain": "The largest number of tokens a language model can take in at once, prompt and reply together.",
       "llm": "GPT-3 (2020) had a context window of 2,048 tokens (Brown et al., 2020).",
-      "learnMore": "modules/00-foundations/#concept-equations", "uses": ["token"], "looseUse": null
+      "learnMore": "modules/00-foundations/equations/", "uses": ["token"], "looseUse": null
     },
     {
       "id": "language-model", "term": "language model", "aliases": ["language models", "LLM"], "kind": "llm",
       "plain": "A function that reads some tokens and gives a probability for each token that might come next.",
       "math": "P(t_{n+1}\\mid t_1,\\dots,t_n)",
-      "learnMore": "modules/00-foundations/#concept-functions", "uses": ["function", "token", "probability"], "looseUse": null
+      "learnMore": "modules/00-foundations/functions/", "uses": ["function", "token", "probability"], "looseUse": null
     },
     {
       "id": "weight", "term": "weight", "aliases": ["weights"], "kind": "ml",
       "plain": "A number that sets how strongly one input counts in a calculation. A large weight makes that input matter more.",
       "math": "w",
       "llm": "The learned weights are most of a model's parameters.",
-      "learnMore": "modules/00-foundations/#concept-slope", "uses": ["input", "parameter"], "looseUse": null
+      "learnMore": "modules/00-foundations/slope/", "uses": ["input", "parameter"], "looseUse": null
     },
     {
       "id": "bias", "term": "bias", "aliases": ["bias term"], "kind": "ml",
       "plain": "A number added at the end of a calculation that shifts the whole result up or down, whatever the inputs are.",
       "math": "b",
-      "learnMore": "modules/00-foundations/#concept-slope", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/slope/", "uses": [], "looseUse": null
     },
     {
       "id": "neuron", "term": "neuron", "aliases": ["artificial neuron", "neurons"], "kind": "ml",
       "plain": "The basic unit of a neural network: it multiplies each input by a weight, adds the results and a bias, then (usually) bends the answer with an activation.",
       "math": "z = w\\,x + b",
       "llm": "Transformer layers contain many such units working side by side.",
-      "learnMore": "modules/00-foundations/#concept-slope", "uses": ["weight", "bias", "input"], "looseUse": "Called a neuron by analogy; it is a small formula, not a model of a brain cell."
+      "learnMore": "modules/00-foundations/slope/", "uses": ["weight", "bias", "input"], "looseUse": "Called a neuron by analogy; it is a small formula, not a model of a brain cell."
     },
     {
       "id": "logarithm", "term": "logarithm", "aliases": ["logarithms","log","logs","logarithmic"], "kind": "math",
       "plain": "Counts steps: how many times you multiply the base by itself to get from 1 to a number. It turns huge ranges into small, evenly spaced ones.",
       "math": "\\log_b x = k \\iff b^{k} = x",
       "llm": "Models work with logarithms of probabilities rather than the probabilities themselves.",
-      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["base"], "looseUse": null
+      "learnMore": "modules/00-foundations/logarithms/", "uses": ["base"], "looseUse": null
     },
     {
       "id": "natural-logarithm", "term": "natural logarithm", "aliases": ["ln","natural log"], "kind": "math",
       "plain": "The logarithm whose base is the special number e ≈ 2.718. It differs from other logarithms only by a constant factor, so it changes the units, not the idea.",
       "math": "\\ln x = \\log_e x",
       "llm": "Training code usually uses natural logarithms, so losses come out in nats.",
-      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["logarithm","base"], "looseUse": null
+      "learnMore": "modules/00-foundations/logarithms/", "uses": ["logarithm","base"], "looseUse": null
     },
     {
       "id": "amplitude", "term": "amplitude", "aliases": ["amplitudes"], "kind": "math",
       "plain": "The size of a wave's swing away from its resting level, such as how far air pressure rises and falls in a sound.",
-      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/logarithms/", "uses": [], "looseUse": null
     },
     {
       "id": "decibel", "term": "decibel", "aliases": ["decibels","dB"], "kind": "math",
       "plain": "A unit that compares two sizes on a logarithm scale. A rise of 10 dB means 10 times the power; a rise of 20 dB means 10 times the amplitude.",
       "math": "\\Delta L = 10\\log_{10}\\tfrac{P_2}{P_1} = 20\\log_{10}\\tfrac{A_2}{A_1}",
-      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["logarithm","amplitude"], "looseUse": null
+      "learnMore": "modules/00-foundations/logarithms/", "uses": ["logarithm","amplitude"], "looseUse": null
     },
     {
       "id": "ph", "term": "pH", "aliases": ["pH scale"], "kind": "math",
       "plain": "A chemistry scale for acidity on a logarithmic scale: pH 7 is neutral, and each step down means roughly ten times the effective concentration of hydrogen ions.",
       "math": "\\mathrm{pH} = -\\log_{10}[\\mathrm{H^{+}}]",
-      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["logarithm"], "looseUse": null
+      "learnMore": "modules/00-foundations/logarithms/", "uses": ["logarithm"], "looseUse": null
     },
     {
       "id": "octave", "term": "octave", "aliases": ["octaves"], "kind": "math",
       "plain": "A doubling of how fast a sound wave vibrates. Notes an octave apart sound like the same note, higher or lower. Counting octaves is counting doublings.",
       "math": "f_2 = 2 f_1",
-      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/logarithms/", "uses": [], "looseUse": null
     },
     {
       "id": "bit", "term": "bit", "aliases": ["bits"], "kind": "math",
       "plain": "The information in one yes-or-no answer between two equally likely options. Picking one of n equally likely options takes a base-2 logarithm of n bits.",
       "math": "\\text{bits} = \\log_2 n",
       "llm": "Language-model quality is often quoted in bits per token.",
-      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["logarithm"], "looseUse": null
+      "learnMore": "modules/00-foundations/logarithms/", "uses": ["logarithm"], "looseUse": null
     },
     {
       "id": "log-probability", "term": "log-probability", "aliases": ["log-probabilities","log probability","log probabilities"], "kind": "ml",
       "plain": "The logarithm of a probability. Probabilities multiply along a sequence, but their logs add, which keeps tiny numbers manageable.",
       "math": "\\ln p",
       "llm": "Models report and train on log-probabilities of tokens.",
-      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["logarithm","probability"], "looseUse": null
+      "learnMore": "modules/00-foundations/logarithms/", "uses": ["logarithm","probability"], "looseUse": null
     },
     {
       "id": "perplexity", "term": "perplexity", "aliases": [], "kind": "ml",
       "plain": "A measure of how unsure a language model is: the number of equally likely tokens it is effectively choosing between. It is computed from the average negative log-probability.",
       "math": "\\exp\\!\\Big(-\\tfrac{1}{N}\\sum_{t=1}^{N}\\ln p_t\\Big)",
       "llm": "A common way to report language-model quality on a test text; lower means less uncertain.",
-      "learnMore": "modules/00-foundations/#concept-logarithms", "uses": ["token","log-probability"], "looseUse": null
+      "learnMore": "modules/00-foundations/logarithms/", "uses": ["token","log-probability"], "looseUse": null
     },
     {
       "id": "sum", "term": "sum", "aliases": ["sums","summation","sigma notation","Σ"], "kind": "math",
       "plain": "The result of adding a list of numbers. The symbol Σ (sigma) is shorthand for “add up these terms, one for each value of the counter”.",
       "math": "\\sum_{i=1}^{n} a_i = a_1 + a_2 + \\cdots + a_n",
-      "learnMore": "modules/00-foundations/#concept-sigma", "uses": ["index"], "looseUse": null
+      "learnMore": "modules/00-foundations/sigma/", "uses": ["index"], "looseUse": null
     },
     {
       "id": "index", "term": "index", "aliases": ["indices","counter"], "kind": "math",
       "plain": "A counter, usually i, j or k, that labels positions in a list or the steps of a sum. It is written as a subscript.",
       "math": "i \\in \\{1,\\dots,n\\}",
-      "learnMore": "modules/00-foundations/#concept-sigma", "uses": ["subscript"], "looseUse": null
+      "learnMore": "modules/00-foundations/sigma/", "uses": ["subscript"], "looseUse": null
     },
     {
       "id": "subscript", "term": "subscript", "aliases": ["subscripts"], "kind": "math",
       "plain": "A small label written low and to the right of a symbol to pick one item from a family: x₃ is the third x.",
       "math": "x_3",
-      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/notation/", "uses": [], "looseUse": null
     },
     {
       "id": "ratio", "term": "ratio", "aliases": ["ratios"], "kind": "math",
       "plain": "A comparison of two quantities by division: how many times bigger one is than the other.",
       "math": "\\dfrac{a}{b}",
-      "learnMore": "modules/00-foundations/#concept-ratios", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/ratios/", "uses": [], "looseUse": null
     },
     {
       "id": "percentage", "term": "percentage", "aliases": ["percent","percentages"], "kind": "math",
       "plain": "A ratio written out of 100. 25 percent means 25 out of every 100, or one quarter.",
       "math": "p\\% = \\dfrac{p}{100}",
-      "learnMore": "modules/00-foundations/#concept-ratios", "uses": ["ratio"], "looseUse": null
+      "learnMore": "modules/00-foundations/ratios/", "uses": ["ratio"], "looseUse": null
     },
     {
       "id": "mean", "term": "mean", "aliases": ["average","averages","means"], "kind": "math",
       "plain": "The sum of the values divided by how many there are. It is the balance point of the data: the value everything would equal if shared out evenly.",
       "math": "\\bar{x} = \\dfrac{1}{n}\\sum_{i=1}^{n} x_i",
       "llm": "A training loss is typically the mean of a per-token loss.",
-      "learnMore": "modules/00-foundations/#concept-ratios", "uses": ["sum"], "looseUse": null
+      "learnMore": "modules/00-foundations/ratios/", "uses": ["sum"], "looseUse": null
     },
     {
       "id": "median", "term": "median", "aliases": ["medians"], "kind": "math",
       "plain": "The middle value once the numbers are sorted. Half the values lie below it and half above.",
-      "learnMore": "modules/00-foundations/#concept-ratios", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/ratios/", "uses": [], "looseUse": null
     },
     {
       "id": "outlier", "term": "outlier", "aliases": ["outliers"], "kind": "math",
       "plain": "A value far from the rest. It drags the mean toward itself but hardly moves the median.",
-      "learnMore": "modules/00-foundations/#concept-ratios", "uses": ["mean","median"], "looseUse": null
+      "learnMore": "modules/00-foundations/ratios/", "uses": ["mean","median"], "looseUse": null
     },
     {
       "id": "radian", "term": "radian", "aliases": ["radians"], "kind": "math",
       "plain": "An angle unit based on a circle of radius 1: the angle equals the length of arc it cuts. A full turn is 2π ≈ 6.283 radians.",
       "math": "360^{\\circ} = 2\\pi\\ \\text{rad}",
-      "learnMore": "modules/00-foundations/#concept-trig", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/trig/", "uses": [], "looseUse": null
     },
     {
       "id": "angle", "term": "angle", "aliases": ["angles"], "kind": "math",
       "plain": "How far one direction is turned away from another. Measured in degrees (a full turn is 360) or radians (a full turn is 2π).",
       "math": "\\theta",
-      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["radian"], "looseUse": null
+      "learnMore": "modules/00-foundations/trig/", "uses": ["radian"], "looseUse": null
     },
     {
       "id": "unit-circle", "term": "unit circle", "aliases": [], "kind": "math",
       "plain": "A circle of radius 1 centred at the origin. A point on it is found by turning through an angle from the positive x-direction.",
       "math": "x^2 + y^2 = 1",
-      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["angle"], "looseUse": null
+      "learnMore": "modules/00-foundations/trig/", "uses": ["angle"], "looseUse": null
     },
     {
       "id": "cosine", "term": "cosine", "aliases": ["cos"], "kind": "math",
       "plain": "For a turn through an angle, how far across the point on the unit circle lands: the horizontal shadow of a length-1 arrow. It is 1 at 0°, 0 at 90° and −1 at 180°.",
       "math": "\\cos\\theta",
       "llm": "Cosine similarity of two vectors is the cosine of the angle between them.",
-      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["unit-circle","angle"], "looseUse": null
+      "learnMore": "modules/00-foundations/trig/", "uses": ["unit-circle","angle"], "looseUse": null
     },
     {
       "id": "sine", "term": "sine", "aliases": ["sin"], "kind": "math",
       "plain": "For a turn through an angle, how far up the point on the unit circle lands: the vertical shadow of a length-1 arrow. It is 0 at 0°, 1 at 90° and 0 at 180°.",
       "math": "\\sin\\theta",
       "llm": "The original Transformer's position encodings are built from sines and cosines.",
-      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["unit-circle","angle"], "looseUse": null
+      "learnMore": "modules/00-foundations/trig/", "uses": ["unit-circle","angle"], "looseUse": null
     },
     {
       "id": "vector", "term": "vector", "aliases": ["vectors"], "kind": "math",
       "plain": "An ordered list of numbers, such as (4, 7, 1), that can also be drawn as an arrow. In print it is often shown in bold.",
       "math": "\\mathbf{x} = (x_1, \\dots, x_n)",
       "llm": "A piece of text is represented inside a model as vectors of numbers.",
-      "learnMore": "modules/01-linear-algebra/#concept-vectors", "uses": [], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/vectors/", "uses": [], "looseUse": null
     },
     {
       "id": "hat", "term": "hat", "aliases": ["hats"], "kind": "math",
       "plain": "A small ^ on top of a symbol. By convention it marks a value that is estimated or predicted, as opposed to the true one.",
       "math": "\\hat{y}",
       "llm": "ŷ is conventionally a model's prediction and y the true value.",
-      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/notation/", "uses": [], "looseUse": null
     },
     {
       "id": "element-of", "term": "element of", "aliases": ["∈","is in","belongs to"], "kind": "math",
       "plain": "The symbol ∈ says “is a member of”. x ∈ S reads “x is one of the things in the set S”.",
       "math": "x \\in S",
-      "learnMore": "modules/00-foundations/#concept-notation", "uses": ["set"], "looseUse": null
+      "learnMore": "modules/00-foundations/notation/", "uses": ["set"], "looseUse": null
     },
     {
       "id": "for-all", "term": "for all", "aliases": ["∀","for every"], "kind": "math",
       "plain": "The symbol ∀ says “for every”. A statement that begins with ∀ must hold for each item, with no exceptions.",
       "math": "\\forall\\, i",
-      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/notation/", "uses": [], "looseUse": null
     },
     {
       "id": "set", "term": "set", "aliases": ["sets"], "kind": "math",
       "plain": "A collection of distinct things, written in curly braces, such as {1, 2, 3}. Only membership matters, not order.",
       "math": "\\{1, 2, 3\\}",
-      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/notation/", "uses": [], "looseUse": null
     },
     {
       "id": "real-numbers", "term": "real numbers", "aliases": ["ℝ","real number"], "kind": "math",
       "plain": "Every number that sits somewhere on the number line: whole numbers, fractions, decimals, π and the rest. Written ℝ.",
       "math": "\\mathbb{R}",
-      "learnMore": "modules/00-foundations/#concept-notation", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/notation/", "uses": [], "looseUse": null
     },
     {
       "id": "loss", "term": "loss", "aliases": ["losses","loss function"], "kind": "ml",
       "plain": "A single number that says how wrong a model's predictions are on the data. Training tries to make it smaller.",
       "math": "L",
       "llm": "For next-token prediction the loss is the average surprise of the tokens that actually came next.",
-      "learnMore": "modules/00-foundations/#concept-sigma", "uses": [], "looseUse": null
+      "learnMore": "modules/00-foundations/sigma/", "uses": [], "looseUse": null
     },
     {
       "id": "dot-product", "term": "dot product", "aliases": ["dot products"], "kind": "math",
       "plain": "Multiply two lists entry by entry, then add the results into a single sum. It is large when the two lists agree and zero when they are perpendicular as arrows.",
       "math": "\\mathbf{a}\\cdot\\mathbf{b} = \\sum_i a_i b_i = \\|\\mathbf{a}\\|\\|\\mathbf{b}\\|\\cos\\theta",
       "llm": "Attention scores are dot products of query and key vectors.",
-      "learnMore": "modules/00-foundations/#concept-sigma", "uses": ["sum","vector"], "looseUse": null
+      "learnMore": "modules/00-foundations/sigma/", "uses": ["sum","vector"], "looseUse": null
     },
     {
       "id": "cosine-similarity", "term": "cosine similarity", "aliases": [], "kind": "ml",
       "plain": "The cosine of the angle between two vectors: 1 when they point the same way, 0 when perpendicular, −1 when opposite.",
       "math": "\\dfrac{\\mathbf{a}\\cdot\\mathbf{b}}{\\|\\mathbf{a}\\|\\|\\mathbf{b}\\|}",
       "llm": "Often used to compare the vectors that represent two pieces of text.",
-      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["cosine","vector"], "looseUse": null
+      "learnMore": "modules/00-foundations/trig/", "uses": ["cosine","vector"], "looseUse": null
     },
     {
       "id": "positional-encoding", "term": "positional encoding", "aliases": ["position encoding","position encodings"], "kind": "llm",
       "plain": "Numbers added to a token's vector to tell the model where in the sequence the token sits. The original Transformer built them from sines and cosines of different frequencies.",
       "llm": "Later models often use other schemes, so this is one design, not the only one.",
-      "learnMore": "modules/00-foundations/#concept-trig", "uses": ["token","sine","cosine","vector"], "looseUse": null
+      "learnMore": "modules/00-foundations/trig/", "uses": ["token","sine","cosine","vector"], "looseUse": null
     },
     {
       "id": "scalar", "term": "scalar", "aliases": ["scalars"], "kind": "math",
       "plain": "An ordinary single number (a real number), used to stretch or shrink a vector. The word tells a lone number apart from a list of numbers.",
       "math": "c \\in \\mathbb{R}",
-      "learnMore": "modules/01-linear-algebra/#concept-combine", "uses": ["vector","real-numbers"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/combine/", "uses": ["vector","real-numbers"], "looseUse": null
     },
     {
       "id": "component", "term": "component", "aliases": ["components","entry","entries"], "kind": "math",
       "plain": "One number in a vector's list, picked out by its position with a subscript: v₂ is the second component. In (3, 2) the first component is 3 and the second is 2.",
       "math": "v_i",
-      "learnMore": "modules/01-linear-algebra/#concept-vectors", "uses": ["vector","subscript"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/vectors/", "uses": ["vector","subscript"], "looseUse": null
     },
     {
       "id": "dimension", "term": "dimension", "aliases": ["dimensions","dimensional"], "kind": "math",
       "plain": "How many numbers a vector holds. (3, 2) has dimension 2 and (3, 2, 7) has dimension 3. It is the number of independent directions the vector can point in.",
       "math": "\\mathbf{v}\\in\\mathbb{R}^{n}",
       "llm": "The base Transformer model's token vectors have 512 entries (Vaswani et al., 2017).",
-      "learnMore": "modules/01-linear-algebra/#concept-vectors", "uses": ["vector"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/vectors/", "uses": ["vector"], "looseUse": null
     },
     {
       "id": "origin", "term": "origin", "aliases": [], "kind": "math",
       "plain": "The starting point (0, 0) of a coordinate picture, where the axes cross. An arrow for a vector begins here.",
       "math": "(0,0)",
-      "learnMore": "modules/01-linear-algebra/#concept-vectors", "uses": ["coordinate"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/vectors/", "uses": ["coordinate"], "looseUse": null
     },
     {
       "id": "unit-vector", "term": "unit arrow", "aliases": ["unit arrows","unit vector","unit vectors"], "kind": "math",
       "plain": "An arrow of length 1 along one axis, such as (1, 0) across or (0, 1) up. Every vector in the plane can be built from the two of them.",
       "math": "\\mathbf{e}_1=(1,0),\\ \\mathbf{e}_2=(0,1)",
-      "learnMore": "modules/01-linear-algebra/#concept-matrices", "uses": ["vector"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/matrices/", "uses": ["vector"], "looseUse": null
     },
     {
       "id": "vector-addition", "term": "vector addition", "aliases": ["adding vectors","add vectors"], "kind": "math",
       "plain": "Add two vectors entry by entry. As arrows: draw the second arrow starting where the first one ends, and the sum goes from the very start to the very end.",
       "math": "(\\mathbf{a}+\\mathbf{b})_i=a_i+b_i",
       "llm": "A transformer layer's output is added to its input vector (Vaswani et al., 2017).",
-      "learnMore": "modules/01-linear-algebra/#concept-combine", "uses": ["vector","component"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/combine/", "uses": ["vector","component"], "looseUse": null
     },
     {
       "id": "scaling", "term": "scaling", "aliases": ["scale a vector","scaled"], "kind": "math",
       "plain": "Multiply every entry of a vector by the same number (a scalar). The arrow keeps its line and stretches, shrinks, or flips round if the number is negative.",
       "math": "(c\\,\\mathbf{v})_i=c\\,v_i",
-      "learnMore": "modules/01-linear-algebra/#concept-combine", "uses": ["vector","scalar","component"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/combine/", "uses": ["vector","scalar","component"], "looseUse": null
     },
     {
       "id": "linear-combination", "term": "linear combination", "aliases": ["linear combinations"], "kind": "math",
       "plain": "A recipe that combines scaling and vector addition, such as 2a − b: scale some vectors, then add them. The result is another vector of the same dimension.",
       "math": "c_1\\mathbf{v}_1+c_2\\mathbf{v}_2+\\cdots+c_k\\mathbf{v}_k",
-      "learnMore": "modules/01-linear-algebra/#concept-combine", "uses": ["vector-addition","scaling","dimension"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/combine/", "uses": ["vector-addition","scaling","dimension"], "looseUse": null
     },
     {
       "id": "matrix", "term": "matrix", "aliases": ["matrices"], "kind": "math",
       "plain": "A rectangular table of numbers in rows and columns. It can be read as a table of data, or as a machine that turns one vector into another.",
       "math": "A\\in\\mathbb{R}^{m\\times n}",
       "llm": "A model's learned weights are stored as matrices.",
-      "learnMore": "modules/01-linear-algebra/#concept-matrices", "uses": ["row","column"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/matrices/", "uses": ["row","column"], "looseUse": null
     },
     {
       "id": "row", "term": "row", "aliases": ["rows"], "kind": "math",
       "plain": "One horizontal line of numbers in a table of numbers, read left to right.",
       "math": "A_{i,:}",
-      "learnMore": "modules/01-linear-algebra/#concept-matrices", "uses": [], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/matrices/", "uses": [], "looseUse": null
     },
     {
       "id": "column", "term": "column", "aliases": ["columns"], "kind": "math",
       "plain": "One vertical line of numbers in a table of numbers, read top to bottom. A column can be read as a vector, which is to say an arrow.",
       "math": "A_{:,j}",
-      "learnMore": "modules/01-linear-algebra/#concept-matrices", "uses": ["vector"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/matrices/", "uses": ["vector"], "looseUse": null
     },
     {
       "id": "shape", "term": "shape", "aliases": ["shapes","size of a matrix"], "kind": "math",
       "plain": "The number of rows by the number of columns of a matrix, written rows × columns. A 2×3 matrix has 2 rows and 3 columns.",
       "math": "m\\times n",
-      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["matrix","row","column"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/matmul/", "uses": ["matrix","row","column"], "looseUse": null
     },
     {
       "id": "matrix-vector-product", "term": "matrix-vector product", "aliases": ["matrix times a vector","matrix-vector multiplication"], "kind": "math",
       "plain": "Feed a vector into a matrix and get a new vector out. Each output entry is the dot product of one row of the matrix with the input vector.",
       "math": "(A\\mathbf{v})_i=\\sum_j A_{ij}v_j",
       "llm": "A layer of a neural network multiplies its input vector by a weight matrix.",
-      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["matrix","vector","row","dot-product"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/matmul/", "uses": ["matrix","vector","row","dot-product"], "looseUse": null
     },
     {
       "id": "matrix-multiplication", "term": "matrix multiplication", "aliases": ["matrix product","matrix products","matrix-matrix multiplication"], "kind": "math",
       "plain": "Combine two matrices into one. Each entry of the result is the dot product of a row of the left matrix with a column of the right matrix, so the shapes must fit: the left matrix needs as many columns as the right one has rows.",
       "math": "(AB)_{ij}=\\sum_k A_{ik}B_{kj}",
       "llm": "Most of the arithmetic in a transformer's layers is matrix multiplication, which is why hardware for it matters.",
-      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["matrix","row","column","dot-product","shape"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/matmul/", "uses": ["matrix","row","column","dot-product","shape"], "looseUse": null
     },
     {
       "id": "embedding", "term": "embedding", "aliases": ["embeddings"], "kind": "llm",
       "plain": "A vector of numbers, with a fixed dimension, that a model uses to stand for a token. The numbers are learned during training. Each entry has no meaning you can read off alone.",
       "math": "\\mathbf{e}\\in\\mathbb{R}^{d_{\\text{model}}}",
       "llm": "In the original Transformer base model each token is represented by a 512-entry vector (Vaswani et al., 2017).",
-      "learnMore": "modules/01-linear-algebra/#concept-vectors", "uses": ["vector","token","dimension"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/vectors/", "uses": ["vector","token","dimension"], "looseUse": null
     },
     {
       "id": "layer", "term": "layer", "aliases": ["layers"], "kind": "ml",
       "plain": "One stage of a neural network: it takes a vector in and gives a vector out. A model is a stack of layers, each feeding the next.",
       "llm": "A transformer is built from a stack of identical layers (Vaswani et al., 2017).",
-      "learnMore": "modules/01-linear-algebra/#concept-matrices", "uses": ["vector"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/matrices/", "uses": ["vector"], "looseUse": null
     },
     {
       "id": "learned-projection", "term": "learned projection", "aliases": ["learned projections","linear projection"], "kind": "ml",
       "plain": "A matrix of learned weights, used to turn one vector into another vector. Here 'projection' means a learned matrix map, not the shadow-style projection of Module 2.",
       "math": "\\mathbf{q}=W^{Q}\\mathbf{x}",
       "llm": "Attention builds its query, key and value vectors by multiplying by learned matrices (Vaswani et al., 2017).",
-      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["matrix","vector","weight"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/matmul/", "uses": ["matrix","vector","weight"], "looseUse": null
     },
     {
       "id": "feed-forward-layer", "term": "feed-forward layer", "aliases": ["feed-forward layers","feed-forward network"], "kind": "ml",
       "plain": "A layer that multiplies a vector by one weight matrix, applies a simple non-linear step, then multiplies by a second weight matrix.",
       "llm": "Each layer of the original Transformer contains one, applied to every token's vector separately (Vaswani et al., 2017).",
-      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["layer","matrix","vector","weight"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/matmul/", "uses": ["layer","matrix","vector","weight"], "looseUse": null
     },
     {
       "id": "attention", "term": "attention", "aliases": [], "kind": "llm",
       "plain": "A step where each token's vector is updated using the other tokens' vectors, weighted by how relevant a score says they are.",
       "llm": "Scaled dot-product attention (Vaswani et al., 2017) compares query vectors with key vectors using dot products.",
-      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["token","vector","dot-product"], "looseUse": "The word 'attention' names a calculation made of dot products and weighted sums. It does not mean the model attends in the human sense."
+      "learnMore": "modules/01-linear-algebra/matmul/", "uses": ["token","vector","dot-product"], "looseUse": "The word 'attention' names a calculation made of dot products and weighted sums. It does not mean the model attends in the human sense."
     },
     {
       "id": "gpu", "term": "GPU", "aliases": ["GPUs","graphics processor"], "kind": "ml",
       "plain": "A chip with thousands of small calculators that work at the same time. It was built for graphics and is also good at the many multiplications and additions inside matrix products.",
       "llm": "Large models are commonly trained and run on GPUs and similar accelerators.",
-      "learnMore": "modules/01-linear-algebra/#concept-matmul", "uses": ["matrix-multiplication"], "looseUse": null
+      "learnMore": "modules/01-linear-algebra/matmul/", "uses": ["matrix-multiplication"], "looseUse": null
     }
   ],
   "symbols": {

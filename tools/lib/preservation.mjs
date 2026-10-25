@@ -7,8 +7,8 @@ const article = (html) => html?.match(/<article class="concept-card"[\s\S]*?<\/a
 const calloutOf = (html) => html.match(/<div class="callout">[\s\S]*?<\/div>/)?.[0] ?? null;
 
 // oldHtml: the old module page. conceptHtmls: the new concept pages in course order. overviewHtml: the new overview.
-// homeHtml and lessonJs: where the two how-to sentences now live. Returns a list of problems (empty = preserved).
-export function comparePreservation({ oldHtml, conceptHtmls, overviewHtml, homeHtml, lessonJs }) {
+// homeHtml and hintJs (assets/js/first-hint.js): where the two how-to sentences now live. Returns a list of problems (empty = preserved).
+export function comparePreservation({ oldHtml, conceptHtmls, overviewHtml, homeHtml, hintJs }) {
   const problems = [];
   const old = parseOld(oldHtml);
   if (conceptHtmls.length !== old.articles.length) {
@@ -40,7 +40,7 @@ export function comparePreservation({ oldHtml, conceptHtmls, overviewHtml, homeH
   // 4. The moved sentences exist in their new places.
   if (old.dotted.startsWith(HOWTO.terms) && old.note === HOWTO.oldNote) {
     const home = textOf(homeHtml);
-    for (const [s, where] of [[home, "home page"], [textOf(lessonJs.replace(/\\"/g, '"')), "first-visit hint"]]) {
+    for (const [s, where] of [[home, "home page"], [textOf(hintJs), "first-visit hint"]]) {
       if (!s.includes(HOWTO.terms)) problems.push(`${where} is missing the dotted-underline sentence`);
       if (!s.includes(HOWTO.note)) problems.push(`${where} is missing the Expand/Collapse note`);
     }

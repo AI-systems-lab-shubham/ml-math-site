@@ -20,6 +20,26 @@ export function neighbours(course, id) {
   return { prev: list[i - 1] ?? null, next: list[i + 1] ?? null };
 }
 
+// Where "Continue" goes after a concept: the next concept of the same module, else the next built module's overview,
+// else null (end of the course so far).
+export function continueTarget(course, id) {
+  const hit = findConcept(course, id);
+  if (!hit) return null;
+  const { next } = neighbours(course, id);
+  if (next && next.moduleId === hit.module.id) return { kind: "concept", path: next.path, title: next.title, id: next.id };
+  const after = course.modules.slice(course.modules.indexOf(hit.module) + 1).find((m) => builtConcepts(m).length > 0);
+  return after ? { kind: "module", path: after.path, title: after.title, id: after.id } : null;
+}
+
+// The button on a module overview: Start (nothing begun), Continue (first concept that is not complete) or Review.
+export function overviewAction(module, statusOf) {
+  const list = builtConcepts(module);
+  if (list.length === 0) return null;
+  if (list.every((c) => statusOf(c.id) === "not-started")) return { label: "Start", concept: list[0] };
+  const open = list.find((c) => statusOf(c.id) !== "complete");
+  return open ? { label: "Continue", concept: open } : { label: "Review from the start", concept: list[0] };
+}
+
 export function findModule(course, id) {
   return course.modules.find((m) => m.id === id) ?? null;
 }

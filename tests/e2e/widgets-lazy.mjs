@@ -1,4 +1,4 @@
-// E2E for lazy widgets (assets/js/widgets.mjs, mountWhenNeeded) on every module page:
+// E2E for lazy widgets (assets/js/widgets.mjs, mountWhenNeeded) on every concept page:
 //   1. placeholders hold their title and description as text and contain nothing focusable;
 //   2. Tab from the top of the page, with no scrolling by the test, reaches every control of every widget;
 //   3. find-in-page style: scroll to a widget's heading text and click it; it mounts with no layout shift,
@@ -6,14 +6,18 @@
 //   4. a hash link to a concept, on load and by click, mounts that concept's widgets before the browser scrolls;
 //   5. print media mounts everything.
 // Run: node tests/e2e/widgets-lazy.mjs   (Playwright needed; prints SKIPPED and exits 1 otherwise)
-import { requirePlaywright, serveStatic } from "../../tools/lib/playwright.mjs";
+import { readFileSync } from "node:fs";
+import { requirePlaywright, serveStatic, siteRoot } from "../../tools/lib/playwright.mjs";
 
 const pw = await requirePlaywright("lazy widgets e2e");
 const { base, close } = await serveStatic();
 let failures = 0, checks = 0;
 const check = (ok, label) => { checks++; if (!ok) { failures++; console.error(`FAIL  ${label}`); } };
 const browser = await pw.chromium.launch();
-const PAGES = [["m00", "modules/00-foundations/"], ["m01", "modules/01-linear-algebra/"]];
+// One page per built concept, read from data/course.json (pass --pages id,id to run some).
+const course = JSON.parse(readFileSync(`${siteRoot}/data/course.json`, "utf8"));
+const only = process.argv.includes("--pages") ? process.argv[process.argv.indexOf("--pages") + 1].split(",") : null;
+const PAGES = course.modules.flatMap((m) => m.concepts.filter((c) => m.status === "built" && c.status === "built" && (!only || only.includes(c.id))).map((c) => [c.id, c.path]));
 // Holds back the scroll-triggered mount, so the page stays in its placeholder state until the test acts.
 const NO_SCROLL_MOUNT = () => { window.IntersectionObserver = class { observe() {} unobserve() {} disconnect() {} }; };
 const FOCUSABLE = 'a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])';

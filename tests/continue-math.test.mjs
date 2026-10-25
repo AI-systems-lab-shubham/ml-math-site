@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { continueMode, continueLabel, makePending, readPending, ToastTimer, PENDING_TTL_MS, TOAST_MS, TOAST_MIN_MS } from "../assets/js/continue-math.mjs";
+import { continueMode, continueLabel, createDwell, makePending, readPending, ToastTimer, PENDING_TTL_MS, TOAST_MS, TOAST_MIN_MS } from "../assets/js/continue-math.mjs";
 
 test("continueMode and label: four cases", () => {
-  const next = { title: "Functions and graphs" };
+  const next = { title: "Functions and graphs", kind: "concept" };
   assert.equal(continueMode("not-started", next), "mark-continue");
   assert.equal(continueMode("in-progress", next), "mark-continue");
   assert.equal(continueMode("revisit", next), "mark-continue", "revisit can be completed too");
@@ -11,7 +11,7 @@ test("continueMode and label: four cases", () => {
   assert.equal(continueMode("in-progress", null), "mark", "last concept: just mark");
   assert.equal(continueMode("complete", null), "none", "last and complete: nothing to do");
   assert.equal(continueLabel("mark-continue"), "Mark complete and continue");
-  assert.equal(continueLabel("continue", "Functions and graphs"), "Continue to Functions and graphs");
+  assert.equal(continueLabel("continue"), "Continue", "no title in the label");
   assert.equal(continueLabel("mark"), "Mark complete");
   assert.equal(continueLabel("none"), "");
 });
@@ -53,4 +53,21 @@ test("ToastTimer: runs 12 s (never under 10 s) and stops while paused", () => {
   assert.equal(p.remaining(99_999), 7000);
   p.resume(40_000); p.resume(41_000);                        // a second resume changes nothing
   assert.equal(p.remaining(41_000), 6000);
+});
+
+test("dwell: fires once after 2 s visible; hiding resets the clock; never fires twice", () => {
+  let now = 0, visible = true, id = 0;
+  const timers = new Map();
+  const fakes = { setTimer: (fn, ms) => { timers.set(++id, { fn, at: now + ms }); return id; }, clearTimer: (t) => timers.delete(t) };
+  const tick = (ms) => { now += ms; for (const [k, t] of [...timers]) if (t.at <= now) { timers.delete(k); t.fn(); } };
+  let fired = 0;
+  const d = createDwell({ onFire: () => fired++, isVisible: () => visible, ...fakes });
+  d.start(); tick(1999); assert.equal(fired, 0, "not before 2 s");
+  visible = false; d.visibilityChanged(); tick(5000); assert.equal(fired, 0, "hidden: no fire");
+  visible = true; d.visibilityChanged(); tick(1999); assert.equal(fired, 0, "the clock restarted");
+  tick(1); assert.equal(fired, 1, "fires at 2 s of visible time");
+  d.start(); d.visibilityChanged(); tick(10000); assert.equal(fired, 1, "only once");
+  let hiddenFired = 0;
+  const h = createDwell({ onFire: () => hiddenFired++, isVisible: () => false, ...fakes });
+  h.start(); tick(10000); assert.equal(hiddenFired, 0, "a page that starts hidden never fires");
 });

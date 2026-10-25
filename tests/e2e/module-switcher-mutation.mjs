@@ -27,8 +27,8 @@ const edit = (dir, file, from, to) => {
 
 const MUTATIONS = [
   { name: "a toggle nested inside the module link", apply: (d) => {
-    edit(d, SW, '<button type="button" class="msw-toggle" aria-expanded="${open}" aria-controls="msw-${m.id}" aria-label="Concepts in ${esc(m.title)}">${CHEV}</button>\n        <a class="msw-link" href="${href(m, built[0])}">${num}${esc(m.title)}</a></div>',
-      '<a class="msw-link" href="${href(m, built[0])}"><button type="button" class="msw-toggle" aria-expanded="${open}" aria-controls="msw-${m.id}" aria-label="Concepts in ${esc(m.title)}">${CHEV}</button>${num}${esc(m.title)}</a></div>'); } },
+    edit(d, SW, '<button type="button" class="msw-toggle" aria-expanded="${open}" aria-controls="msw-${m.id}" aria-label="Concepts in ${esc(m.title)}">${CHEV}</button>\n        <a class="msw-link" href="${hrefTo(m.path)}">${num}${esc(m.title)}</a></div>',
+      '<a class="msw-link" href="${hrefTo(m.path)}"><button type="button" class="msw-toggle" aria-expanded="${open}" aria-controls="msw-${m.id}" aria-label="Concepts in ${esc(m.title)}">${CHEV}</button>${num}${esc(m.title)}</a></div>'); } },
   { name: "a module with no built concepts rendered as a link", apply: (d) => {
     edit(d, SW, '<span class="msw-soon-title">${num}${esc(m.title)}</span>', '<a class="msw-soon-title" href="${hrefTo(m.path)}">${num}${esc(m.title)}</a>'); } },
   { name: "toggle without aria-controls", apply: (d) => { edit(d, SW, ' aria-controls="msw-${m.id}"', ''); } },

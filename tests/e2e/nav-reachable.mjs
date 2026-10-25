@@ -10,7 +10,7 @@ const shotsDir = process.argv.includes("--shots") ? process.argv[process.argv.in
 const pw = await requirePlaywright("nav-reachable e2e");
 const { base, close } = await serveStatic();
 
-const PAGES = [["home", "index.html"], ["module-0", "modules/00-foundations/"], ["module-1", "modules/01-linear-algebra/"]];
+const PAGES = [["home", "index.html"], ["module-0", "modules/00-foundations/"], ["module-1", "modules/01-linear-algebra/"], ["concept-m0", "modules/00-foundations/equations/"], ["concept-m1", "modules/01-linear-algebra/vectors/"]];
 const WIDTHS = [375, 768, 899, 900, 1000, 1100, 1280];
 const KEY = "mlmath:ui:v1";
 
@@ -140,12 +140,12 @@ for (const [name, url] of PAGES) {
 
 // Outline content: numbered modules, legend, current module open and the rest collapsed, state on the UI key only.
 {
-  const { ctx, page } = await open("module-0", "modules/00-foundations/#concept-logarithms", 1280);
+  const { ctx, page } = await open("module-0", "modules/00-foundations/logarithms/", 1280);
   await page.waitForSelector("#site-nav a[data-cid]");
   await page.waitForTimeout(500);
   const o = await page.evaluate(() => {
     const nav = document.getElementById("site-nav");
-    const mods = [...nav.querySelectorAll("details[data-module]")].map((d) => ({ id: d.dataset.module, open: d.open, num: d.querySelector(".outline-mod-num")?.textContent }));
+    const mods = [...nav.querySelectorAll(".outline-module:not(.is-planned)")].map((li) => { const t = li.querySelector(".outline-mod-toggle"); return { id: li.querySelector("[data-module-link]").dataset.moduleLink, open: t.getAttribute("aria-expanded") === "true", rowsInTabOrder: !li.querySelector("ul.sub").hidden, num: li.querySelector(".outline-mod-num")?.textContent }; });
     const cur = nav.querySelector('a[aria-current="page"]');
     const nr = nav.getBoundingClientRect(), cr = cur?.getBoundingClientRect();
     return { mods, legend: [...nav.querySelectorAll(".outline-legend li")].map((l) => l.textContent.trim()), cur: cur?.dataset.cid, curVisible: !!cr && cr.top >= nr.top && cr.bottom <= nr.bottom, planned: nav.querySelectorAll(".is-planned .outline-mod-num").length, rowH: Math.round(nav.querySelector("ul.sub a").getBoundingClientRect().height) };
@@ -157,16 +157,36 @@ for (const [name, url] of PAGES) {
   check(o.legend.join("|") === "Not started|In progress|Complete|Revisit", `legend should list the four states (got ${o.legend.join("|")})`);
   check(o.cur === "m00-logarithms" && o.curVisible, `current concept should be marked and scrolled into view in the rail (got ${o.cur}, visible ${o.curVisible})`);
   check(o.rowH >= 40 && o.rowH < 44, `fine pointer at 1280: rail rows should be 40px (got ${o.rowH})`);
-  // Open module 1 by hand: remembered on the UI key, absent from the progress store.
-  await page.locator('#site-nav details[data-module="m01"] > summary').click();
-  await page.waitForTimeout(150); // the details toggle event is queued
+  check(o.mods.every((m) => m.open === m.rowsInTabOrder), "closed modules hide their rows (so they are out of the tab order)");
+  // Open module 1 by hand: it is NOT remembered, and nothing is written for it.
+  await page.locator('#site-nav .outline-mod-toggle[aria-controls="ol-sub-m01"]').click();
+  check(await page.locator("#ol-sub-m01").isVisible(), "a module can be opened by hand");
   const st = await page.evaluate(() => ({ ui: localStorage.getItem("mlmath:ui:v1"), progress: localStorage.getItem("mlmath:progress:v1") }));
-  check(JSON.parse(st.ui)?.outlineOpen?.m01 === true, `opening a module should be saved on mlmath:ui:v1 (got ${st.ui})`);
-  check(!(st.progress ?? "").includes("outline:"), "outline open state should not be written to the progress store");
+  check(!(st.ui ?? "").includes("outlineOpen") && !(st.progress ?? "").includes("outline"), `opening a module by hand is not saved (ui ${st.ui})`);
   await page.reload({ waitUntil: "networkidle" });
   await page.waitForSelector("#site-nav a[data-cid]");
-  check(await page.evaluate(() => document.querySelector('#site-nav details[data-module="m01"]').open), "module 1 should stay open after reload");
+  check(await page.evaluate(() => document.getElementById("ol-sub-m01").hidden), "after a reload only the current module is open again");
+  // A module's name is a link to its overview page; its chevron is a separate button.
+  const ml = await page.evaluate(() => [...document.querySelectorAll("#site-nav [data-module-link]")].map((a) => ({ href: a.getAttribute("href"), nested: !!a.querySelector("button") })));
+  check(ml.length === 2 && ml.every((m) => /\/modules\/[^/]+\/$/.test(m.href) && !m.nested), `module links go to overview pages (${ml.map((m) => m.href)})`);
   await ctx.close();
+  // An old saved outlineOpen value is ignored without error, and dropped on the next write.
+  {
+    const old = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    await old.addInitScript(() => { try { if (!localStorage.getItem("mlmath:ui:v1")) localStorage.setItem("mlmath:ui:v1", JSON.stringify({ railHidden: false, outlineOpen: { m01: true, bogus: "x" } })); } catch (e) {} });
+    const op = await old.newPage();
+    const errs = [];
+    op.on("pageerror", (e) => errs.push(String(e)));
+    await op.goto(base + "modules/00-foundations/", { waitUntil: "networkidle" });
+    await op.waitForSelector("#site-nav a[data-cid]");
+    check(errs.length === 0, `an old outlineOpen value causes no error (${errs})`);
+    check(await op.evaluate(() => document.getElementById("ol-sub-m01").hidden), "an old outlineOpen value does not open modules");
+    await op.locator(T).focus();
+    await op.keyboard.press("Enter");
+    const after = await op.evaluate(() => JSON.parse(localStorage.getItem("mlmath:ui:v1")));
+    check(!("outlineOpen" in after) && "railHidden" in after, `the next write drops outlineOpen and keeps the rail state (${JSON.stringify(after)})`);
+    await old.close();
+  }
   // Phone-class pointer: 44px rows.
   const t = await browser.newContext({ viewport: { width: 1100, height: 800 }, hasTouch: true });
   const tp = await t.newPage();

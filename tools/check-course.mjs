@@ -1,9 +1,9 @@
-// Checks data/course.json: unique ids, built pages and anchors exist, Previous/Next chain is whole.
+// Checks data/course.json: unique ids, every built concept has its own page, overview pages list only built concepts, Previous/Next chain is whole.
 // Usage: node tools/check-course.mjs
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { chain, neighbours, termIdsIn } from "../assets/js/course.mjs";
+import { chain, neighbours, termIdsIn, continueTarget, findConcept } from "../assets/js/course.mjs";
 
 const STATUSES = new Set(["built", "planned"]);
 
@@ -29,6 +29,7 @@ export function checkCourse(course, fs) {
     if (m.status === "built" && m.minutes !== sum) errors.push(`${m.id}: minutes is ${m.minutes} but built concepts sum to ${sum}`);
     for (const c of m.concepts) {
       once("concept", c.id);
+      if (c.status !== "built" && html !== null && c.path && html.includes(`href="${c.path.slice(m.path.length)}"`)) errors.push(`${m.id}: overview links to planned concept ${c.id}`);
       if (!STATUSES.has(c.status)) errors.push(`${c.id}: bad status "${c.status}"`);
       if (c.status === "built" && m.status !== "built") errors.push(`${c.id}: built concept inside planned module ${m.id}`);
       if (c.status === "built") {
@@ -36,7 +37,18 @@ export function checkCourse(course, fs) {
         if (!Array.isArray(c.objectives) || c.objectives.length === 0) errors.push(`${c.id}: needs at least one objective`);
         for (const r of c.requires ?? []) if (!course.modules.some((x) => x.concepts.some((y) => y.id === r))) errors.push(`${c.id}: requires unknown concept ${r}`);
         if (fs.termIds) for (const text of [...c.objectives, ...(c.takeaways ?? [])]) for (const t of termIdsIn(text)) if (!fs.termIds.has(t)) errors.push(`${c.id}: unknown glossary term "${t}"`);
-        if (html !== null && !html.includes(`id="${c.anchor}"`)) errors.push(`${c.id}: anchor #${c.anchor} not found in ${m.path}index.html`);
+        if (typeof c.path !== "string" || !c.path.startsWith(m.path) || !c.path.endsWith("/")) errors.push(`${c.id}: path must be a folder inside ${m.path}`);
+        else {
+          const page = fs.read(`${c.path}index.html`);
+          if (page === null) errors.push(`${c.id}: page missing at ${c.path}index.html`);
+          else {
+            if (!page.includes(`id="${c.anchor}"`)) errors.push(`${c.id}: anchor #${c.anchor} not found in ${c.path}index.html`);
+            if (!page.includes(`<meta name="concept-id" content="${c.id}">`)) errors.push(`${c.id}: page does not declare its concept id`);
+            const others = (page.match(/<article class="concept-card"/g) ?? []).length;
+            if (others !== 1) errors.push(`${c.id}: page holds ${others} concept cards, expected 1`);
+          }
+          if (html !== null && !html.includes(`href="${c.path.slice(m.path.length)}"`)) errors.push(`${m.id}: overview does not link to ${c.id}`);
+        }
       }
     }
   }
@@ -52,6 +64,14 @@ export function checkCourse(course, fs) {
       if (m.status !== "built" && home.includes(`href="${m.path}"`)) errors.push(`index.html: planned module ${m.id} must not be linked`);
       if (m.status === "built") for (const o of m.outcomes) if (!home.includes(`<li>${esc(o)}</li>`)) errors.push(`index.html: outcome not listed: ${o}`);
     });
+  }
+
+  // Continue chain: every built concept continues to a page that exists; only the last one in the course has nowhere to go.
+  for (const [i, c] of chain(course).entries()) {
+    const t = continueTarget(course, c.id);
+    if (t === null) { if (i !== chain(course).length - 1) errors.push(`${c.id}: Continue has no target but it is not the last concept`); continue; }
+    if (fs.read(`${t.path}index.html`) === null) errors.push(`${c.id}: Continue goes to ${t.path}, which does not exist`);
+    if (t.kind === "concept" && findConcept(course, t.id)?.module.id !== findConcept(course, c.id).module.id) errors.push(`${c.id}: Continue leaves the module without going to an overview`);
   }
 
   // Previous/Next chain: reciprocal and covering every built concept exactly once.

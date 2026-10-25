@@ -62,13 +62,15 @@ for (const [id, s] of Object.entries(data.symbols ?? {})) {
 
 // page references
 const pages = [];
-const modulesDir = join(root, "modules");
-if (existsSync(modulesDir)) {
-  for (const d of readdirSync(modulesDir)) {
-    const p = join(modulesDir, d, "index.html");
-    if (existsSync(p)) pages.push(p);
+// Every page under modules/ (overviews and concept pages), at any depth.
+const walk = (dir) => {
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    if (e.isDirectory()) walk(join(dir, e.name));
+    else if (e.name === "index.html") pages.push(join(dir, e.name));
   }
-}
+};
+const modulesDir = join(root, "modules");
+if (existsSync(modulesDir)) walk(modulesDir);
 const referenced = new Set();
 for (const p of pages) {
   const html = readFileSync(p, "utf8");

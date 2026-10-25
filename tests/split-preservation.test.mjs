@@ -10,14 +10,14 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(join(root, p), "utf8");
 const course = JSON.parse(read("data/course.json"));
 const homeHtml = read("index.html");
-const lessonJs = read("assets/js/lesson.mjs");
+const hintJs = read("assets/js/first-hint.js");
 
 function inputs(m) {
   return {
     oldHtml: readOld(SOURCE_REV, `${m.path}index.html`),
     conceptHtmls: m.concepts.filter((c) => c.status === "built").map((c) => read(`${c.path}index.html`)),
     overviewHtml: read(`${m.path}index.html`),
-    homeHtml, lessonJs,
+    homeHtml, hintJs,
   };
 }
 const built = course.modules.filter((m) => m.status === "built");
@@ -38,7 +38,7 @@ const mutants = {
   "overview loses the lede": (i) => { i.overviewHtml = i.overviewHtml.replace(/<p class="lede">[\s\S]*?<\/p>/, ""); },
   "overview keeps the how-to text": (i) => { i.overviewHtml = i.overviewHtml.replace("</main>", "<p>Terms with a dotted underline are a tap or hover away from a plain-language and a mathematical definition.</p></main>"); },
   "home page loses the note": (i) => { i.homeHtml = i.homeHtml.replace(/Expand all and Collapse all open or close[^<]*/, ""); },
-  "hint loses the sentence": (i) => { i.lessonJs = i.lessonJs.replace("Terms with a dotted underline are a tap or hover away from a plain-language and a mathematical definition.", ""); },
+  "hint loses the sentence": (i) => { i.hintJs = i.hintJs.replace("Terms with a dotted underline are a tap or hover away from a plain-language and a mathematical definition.", ""); },
 };
 const withCallout = built.find((m) => readOld(SOURCE_REV, `${m.path}index.html`).includes('<div class="callout">'));
 for (const [name, mutate] of Object.entries(mutants)) {

@@ -1,5 +1,5 @@
 // Module switcher inside "On this page": a secondary button labelled "Module › Card" that opens, inline, a list of
-// every module read from course.json. Each module row is a link to its first built concept plus a separate chevron
+// every module read from course.json. Each module row is a link to the module's overview page plus a separate chevron
 // button (a sibling of the link, never inside it) that shows or hides its concepts. Modules with no built concepts
 // are "Coming soon" and are not links. Status icons are display-only.
 import { hrefTo, stateIcon } from "./shell.mjs";
@@ -14,7 +14,7 @@ export function createModuleSwitch({ course, moduleId, progress }) {
   root.className = "module-switch";
   const modules = course.modules.map((m, i) => ({ m, i, built: builtConcepts(m) }));
   const here = course.modules.find((m) => m.id === moduleId);
-  const href = (m, c) => (m.id === moduleId ? `#${c.anchor}` : hrefTo(`${m.path}#${c.anchor}`));
+  const href = (c) => hrefTo(c.path);
 
   const rows = modules.map(({ m, i, built }) => {
     const num = `<span class="msw-num" aria-hidden="true">${i}</span><span class="sr-only">Module ${i}: </span>`;
@@ -22,10 +22,10 @@ export function createModuleSwitch({ course, moduleId, progress }) {
       return `<li class="msw-module is-planned"><div class="msw-head"><span class="msw-soon-title">${num}${esc(m.title)}</span><span class="outline-soon">Coming soon</span></div></li>`;
     }
     const open = m.id === moduleId;
-    const concepts = built.map((c) => `<li><a href="${href(m, c)}" data-switch-cid="${c.id}"><span class="msw-state" data-switch-state="${c.id}" aria-hidden="true"></span><span class="msw-title">${esc(c.title)}</span><span class="sr-only" data-switch-sr="${c.id}"></span></a></li>`).join("");
+    const concepts = built.map((c) => `<li><a href="${href(c)}" data-switch-cid="${c.id}"><span class="msw-state" data-switch-state="${c.id}" aria-hidden="true"></span><span class="msw-title">${esc(c.title)}</span><span class="sr-only" data-switch-sr="${c.id}"></span></a></li>`).join("");
     return `<li class="msw-module${open ? " is-current" : ""}"><div class="msw-head">
         <button type="button" class="msw-toggle" aria-expanded="${open}" aria-controls="msw-${m.id}" aria-label="Concepts in ${esc(m.title)}">${CHEV}</button>
-        <a class="msw-link" href="${href(m, built[0])}">${num}${esc(m.title)}</a></div>
+        <a class="msw-link" href="${hrefTo(m.path)}">${num}${esc(m.title)}</a></div>
       <ul class="msw-concepts" id="msw-${m.id}"${open ? "" : " hidden"}>${concepts}</ul></li>`;
   }).join("");
 

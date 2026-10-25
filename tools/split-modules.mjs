@@ -85,6 +85,9 @@ function headFor(oldHead, { toRoot, title, description, moduleId, conceptId = nu
   h = h.replace(/<meta name="site-root" content="[^"]*">/, `<meta name="site-root" content="${toRoot}">`);
   if (conceptId) h = h.replace(/(<meta name="module-id" content="[^"]*">)/, `$1\n  <meta name="concept-id" content="${conceptId}">`);
   h = h.replace(/<script type="module" src="[^"]*"><\/script>/, `<script type="module" src="${toRoot}assets/js/${script}"></script>`);
+  // A concept page holds a widget whose readouts use the mono font; preloading it keeps the widget's height from
+  // changing when it mounts (a module page used it earlier in the text, a single-concept page does not).
+  if (katex) h = h.replace(/(\s*<link rel="stylesheet" href="[^"]*katex\.min\.css">)/, `\n  <link rel="preload" href="${toRoot}vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>$1`);
   if (!katex) {
     h = h.replace(/\s*<link rel="stylesheet" href="[^"]*katex\.min\.css">/, "").replace(/\s*<script src="[^"]*katex\.min\.js"><\/script>/, "").replace(/\s*<link rel="stylesheet" href="[^"]*widget-reserve\.css">/, "");
   }
@@ -145,6 +148,7 @@ ${TOC}
       <li><a href="${toRoot}index.html">Course</a></li>
       <li><a href="${rel(dir, m.path)}">${esc(modTitle)}</a></li>
       <li><span aria-current="page">${esc(c.title)}</span></li></ol></nav>
+    <script src="${toRoot}assets/js/first-hint.js"></script>
     <div class="page-tools" data-page-tools>
       <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
       <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>

@@ -44,7 +44,7 @@ export function initPageNav(shell) {
       it.link = a;
     }
     panel.append(list);
-    return { card, title: card.querySelector(":scope > header h2")?.textContent.trim() ?? card.id, items, list };
+    return { card, title: card.querySelector(":scope > header h1")?.textContent.trim() ?? card.id, items, list };
   });
 
   let shownCard = null;
@@ -72,7 +72,8 @@ export function initPageNav(shell) {
     if (stageKey !== shownStage) {
       for (const i of m.items) { if (i.id === stageKey) i.link.setAttribute("aria-current", "location"); else i.link.removeAttribute("aria-current"); }
       const item = m.items.find((i) => i.id === stageKey);
-      currentText.textContent = item ? `${m.title} · ${item.label}` : m.title;
+      // One concept per page, so the bar names only the stage (a long concept title would not fit the bar).
+      currentText.textContent = item ? item.label : "Start of page";
       shownStage = stageKey;
     }
   };

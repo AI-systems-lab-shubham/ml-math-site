@@ -35,7 +35,14 @@ export function collectFiles(root) {
   const files = [];
   if (existsSync(join(root, "index.html"))) files.push("index.html");
   const mods = join(root, "modules");
-  if (existsSync(mods)) for (const d of readdirSync(mods)) if (existsSync(join(mods, d, "index.html"))) files.push(`modules/${d}/index.html`);
+  // Every page under modules/ (overviews and concept pages), at any depth.
+  const walk = (dir, rel) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      if (e.isDirectory()) walk(join(dir, e.name), `${rel}/${e.name}`);
+      else if (e.name === "index.html") files.push(`${rel}/${e.name}`);
+    }
+  };
+  if (existsSync(mods)) walk(mods, "modules");
   for (const f of ["data/course.json", "data/glossary.json"]) if (existsSync(join(root, f))) files.push(f);
   return files;
 }

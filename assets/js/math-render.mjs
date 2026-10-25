@@ -36,11 +36,19 @@ function watchOverflow(el) {
       el.removeAttribute("aria-label");
     }
   };
-  new ResizeObserver(sync).observe(el);
+  const ro = new ResizeObserver(sync);
+  ro.observe(el);
+  // The formula itself changes width when the maths fonts arrive, without the box changing size.
+  const watchInner = () => { const inner = el.querySelector(".katex"); if (inner) ro.observe(inner); };
+  watchInner();
+  // A stepper re-renders its equation into the same box: follow the new formula too.
+  new MutationObserver(() => { watchInner(); sync(); }).observe(el, { childList: true });
   sync();
   // Attached a moment later, or widened when the maths fonts arrive: look again.
   requestAnimationFrame(sync);
   document.fonts?.ready.then(sync);
+  // Fonts load on demand, one after another, as the formulas that use them appear: look again after each batch.
+  document.fonts?.addEventListener("loadingdone", sync);
 }
 
 export function renderMath(root = document) {

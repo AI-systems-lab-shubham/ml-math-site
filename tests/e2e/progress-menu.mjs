@@ -10,7 +10,8 @@ const pw = await requirePlaywright("progress-menu e2e");
 const { base, close } = await serveStatic();
 const browser = await pw.chromium.launch();
 const KEY = "mlmath:progress:v1";
-const M0 = "modules/00-foundations/";
+const M0 = "modules/00-foundations/variables/";   // the first concept page
+const EQ = "modules/00-foundations/equations/";
 
 let failures = 0, checks = 0;
 const check = (ok, label) => { checks++; if (!ok) { failures++; console.error(`FAIL  ${label}`); } };
@@ -106,7 +107,8 @@ async function open(width, { url = M0, ctxOpts = {}, init } = {}) {
   check(stored2 === "revisit", "stored status is revisit");
 
   // Opening a revisit/complete concept does not change it: scroll to Equations for > 2 s.
-  await page.evaluate(() => document.getElementById("concept-equations").scrollIntoView());
+  await page.goto(base + EQ, { waitUntil: "networkidle" });
+  await page.waitForSelector("#site-nav [data-status-of]");
   await page.waitForTimeout(2600);
   check(await label(page, "m00-equations") === "Status: Revisit. Change status.", "opening a Revisit concept leaves it on Revisit");
 
@@ -128,30 +130,30 @@ async function open(width, { url = M0, ctxOpts = {}, init } = {}) {
     const out = [];
     const first = document.querySelector('#site-nav [data-status-of]');
     first.focus();
-    return { collapsedHidden: [...document.querySelectorAll('#site-nav details:not([open]) [data-status-of]')].every((b) => !b.checkVisibility()), collapsed: document.querySelectorAll('#site-nav details:not([open]) [data-status-of]').length };
+    return { collapsedHidden: [...document.querySelectorAll('#site-nav ul.sub[hidden] [data-status-of]')].every((b) => !b.checkVisibility()), collapsed: document.querySelectorAll('#site-nav ul.sub[hidden] [data-status-of]').length };
   });
   check(tabbed.collapsed > 0 && tabbed.collapsedHidden, `collapsed module's buttons should not be rendered (${tabbed.collapsed} found)`);
   await btn(page, "m00-variables").focus();
   const seen = new Set();
   for (let i = 0; i < 40; i++) {
     await page.keyboard.press("Tab");
-    const x = await page.evaluate(() => { const e = document.activeElement; return { inNav: !!e.closest("#site-nav"), id: e.dataset?.statusOf ?? e.dataset?.cid ?? e.closest("details")?.dataset.module ?? null }; });
+    const x = await page.evaluate(() => { const e = document.activeElement; return { inNav: !!e.closest("#site-nav"), id: e.dataset?.statusOf ?? e.dataset?.cid ?? e.dataset?.moduleLink ?? (e.classList.contains("outline-mod-toggle") ? e.getAttribute("aria-controls") : null) }; });
     if (!x.inNav) break;
     seen.add(x.id);
   }
-  check([...seen].every((id) => id === null || id.startsWith("m00") || id === "m01"), `Tab in the outline should reach only module 0 rows and module summaries (got ${[...seen]})`);
+  check([...seen].every((id) => id === null || id.startsWith("m00") || id === "m01" || id.startsWith("ol-sub-")), `Tab in the outline should reach only module 0 rows and module headers (got ${[...seen]})`);
   check([...seen].some((id) => id === "m00-notation"), "Tab reaches the last built row of the open module");
 
   // 6. Closes when the module collapses or the row is removed.
   await btn(page, "m00-slope").focus();
   await page.keyboard.press("Enter");
   check(await menuVisible(page), "menu open for the collapse test");
-  await page.evaluate(() => { document.querySelector('#site-nav details[data-module="m00"]').open = false; });
+  await page.evaluate(() => { document.getElementById("ol-sub-m00").hidden = true; });
   await page.waitForTimeout(100);
   check(!(await menuVisible(page)), "menu closes when its module collapses");
   a = await active(page);
-  check(a.tag === "SUMMARY", `focus moves to the module summary after the collapse (got ${JSON.stringify(a)})`);
-  await page.evaluate(() => { document.querySelector('#site-nav details[data-module="m00"]').open = true; });
+  check(await page.evaluate(() => document.activeElement.classList.contains("outline-mod-toggle")), `focus moves to the module's chevron button after the collapse (got ${JSON.stringify(a)})`);
+  await page.evaluate(() => { document.getElementById("ol-sub-m00").hidden = false; });
   await btn(page, "m00-slope").click();
   check(await menuVisible(page), "menu opens on click");
   await page.evaluate(() => document.querySelector('#site-nav [data-status-of="m00-slope"]').closest("li").remove());
@@ -227,7 +229,7 @@ async function open(width, { url = M0, ctxOpts = {}, init } = {}) {
 
 // 11. Lesson control: four options tied to the same state, eager (outside any lazy placeholder), keyboard-operable, with undo.
 {
-  const { ctx, page } = await open(1280);
+  const { ctx, page } = await open(1280, { url: EQ, init: "window.IntersectionObserver = class { observe() {} unobserve() {} disconnect() {} };" });
   const info = await page.evaluate(() => ({
     controls: document.querySelectorAll("article.concept-card .status-control").length,
     cards: document.querySelectorAll("article.concept-card[id]").length,

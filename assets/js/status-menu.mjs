@@ -99,14 +99,14 @@ export function createStatusMenu({ nav, progress, titleOf }) {
     if (isOpen() && !menu.contains(ev.target) && !ev.target.closest?.(".outline-state-btn")) close();
   });
 
-  // Collapsing the module that holds the menu's row closes it; focus goes to that module's summary.
-  nav.addEventListener("toggle", (ev) => {
-    const d = ev.target;
-    if (!isOpen() || d.open || !d.contains(owner)) return;
+  // Collapsing the module that holds the menu's row closes it; focus goes to that module's chevron button.
+  new MutationObserver(() => {
+    const list = owner?.closest("ul.sub");
+    if (!isOpen() || !list?.hidden) return;
     const hadFocus = menu.contains(document.activeElement) || document.activeElement === owner || document.activeElement === document.body;
     close();
-    if (hadFocus) d.querySelector(":scope > summary")?.focus();
-  }, true);
+    if (hadFocus) nav.querySelector(`[aria-controls="${list.id}"]`)?.focus();
+  }).observe(nav, { attributes: true, attributeFilter: ["hidden"], subtree: true });
   // The row is removed from the outline.
   new MutationObserver(() => { if (owner && !nav.contains(owner)) close(); }).observe(nav, { childList: true, subtree: true });
   nav.addEventListener("scroll", () => close());

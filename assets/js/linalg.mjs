@@ -547,7 +547,7 @@ async function boot() {
   document.querySelectorAll("[data-calc]").forEach((el) => { el.textContent = calcs[el.dataset.calc](); });
   document.querySelectorAll("[data-tex-calc]").forEach((el) => { el.dataset.tex = texCalcs[el.dataset.texCalc](); });
   renderMath();
-  const shell = await initShell({ moduleId: document.querySelector('meta[name="module-id"]')?.content });
+  const shell = await initShell({ moduleId: document.querySelector('meta[name="module-id"]')?.content, conceptId: document.querySelector('meta[name="concept-id"]')?.content });
   initLesson(shell);
   renderMath();
   initPageNav(shell);

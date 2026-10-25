@@ -526,6 +526,34 @@ main:focus { outline: none; }
   .msw-link, .msw-concepts a { min-height: 40px; }
 }
 
+/* One concept per page (Session S1). The card title is the page's h1 and keeps the size the h2 had. */
+.concept-card > header h1 { font-size: 2rem; }
+.outline-mod-head { display: flex; align-items: center; }
+.outline-mod-toggle { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 8px; background: transparent; color: var(--navy); cursor: pointer; }
+.outline-mod-toggle:hover { background: rgba(20, 33, 61, .06); }
+.outline-mod-toggle .chev { margin: 0; }
+.outline-mod-toggle[aria-expanded="true"] .chev { transform: rotate(45deg); }
+.site-nav a.outline-mod-link { flex: 1; min-width: 0; display: grid; align-content: center; font-weight: 600; padding-left: var(--s2); }
+.site-nav .outline-module > ul.sub[hidden] { display: none; }
+.first-hint { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s3); margin: 0 0 var(--s4); padding: var(--s2) var(--s3); border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); font-size: .9375rem; color: var(--muted); }
+.first-hint span { flex: 1 1 280px; }
+.lesson-home-link { display: inline-flex; align-items: center; min-height: 44px; color: var(--burgundy); font-weight: 600; }
+.pager { grid-template-columns: minmax(0, 1fr); }
+.how-note { margin-top: var(--s4); font-size: .9375rem; color: var(--muted); }
+.overview h2 { font-size: 1.5rem; margin-top: var(--s6); }
+.overview-meta { color: var(--muted); font-weight: 600; }
+.overview-outcomes { padding-left: 1.25rem; }
+.overview-action { margin: var(--s5) 0 var(--s6); }
+.overview-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s2); }
+.overview-list a { display: flex; align-items: center; gap: var(--s3); min-height: 44px; padding: var(--s2) var(--s3); border: 1px solid var(--line-strong); border-radius: 12px; background: var(--paper); color: var(--navy); text-decoration: none; }
+.overview-list a:hover { border-color: var(--burgundy); }
+.ov-state { display: inline-flex; flex: none; color: var(--muted); min-width: 24px; }
+.ov-state.state-in-progress { color: var(--c-blue); }
+.ov-state.state-complete { color: var(--ok); }
+.ov-state.state-revisit { color: var(--try); }
+.ov-title { flex: 1; min-width: 0; font-weight: 600; }
+.ov-min { flex: none; font-size: .875rem; font-variant-numeric: tabular-nums; }
+
 /* Page changes: a short cross-fade of the lesson content only. The header, the left rail and the right panel
    have their own transition names, so they stay put while the content fades. Nothing animates under reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
@@ -537,3 +565,4 @@ main:focus { outline: none; }
   ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 200ms; animation-timing-function: ease-in-out; }
   ::view-transition-group(site-header), ::view-transition-group(site-rail), ::view-transition-group(page-panel) { animation-duration: 0s; }
 }
+.site-nav .outline-mod-link .outline-mod-title, .site-nav .outline-mod-link .outline-mod-progress { grid-column: auto; }

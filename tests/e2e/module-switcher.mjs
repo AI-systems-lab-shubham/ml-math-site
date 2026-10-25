@@ -11,6 +11,7 @@ const { base, close } = await serveStatic(process.env.SITE_DIR ? path.resolve(pr
 const browser = await pw.chromium.launch();
 const M0 = "modules/00-foundations/";
 const M1 = "modules/01-linear-algebra/";
+const EQ = `${M0}equations/`;
 
 let failures = 0, checks = 0;
 const check = (ok, label) => { checks++; if (!ok) { failures++; console.error(`FAIL  ${label}`); } };
@@ -42,7 +43,7 @@ const label = (page) => page.locator(".module-switch-label").innerText();
 const settle = (page) => page.waitForTimeout(1500);
 
 for (const w of [375, 1280]) {
-  const { ctx, page } = await open(w, `${M0}#concept-equations`);
+  const { ctx, page } = await open(w, EQ);
   await openPanel(page, w);
   const btn = page.locator(".module-switch-btn");
   check((await label(page)) === "Foundations › Equations", `@${w}: the switcher is labelled "Foundations › Equations" (got "${await label(page)}")`);
@@ -78,7 +79,9 @@ for (const w of [375, 1280]) {
   const cur = live.find((r) => /Foundations/.test(r.raw)), other = live.find((r) => /Linear algebra/.test(r.raw));
   check(cur.toggle.expanded === "true" && cur.current === "m00-equations", `@${w}: current module open with Equations marked aria-current (got ${cur.toggle.expanded}, ${cur.current})`);
   check(other.toggle.expanded === "false" && other.toggle.listHidden === true, `@${w}: other modules start collapsed`);
-  check(cur.firstHref === "#concept-variables" && /01-linear-algebra\/#concept-vectors$/.test(other.firstHref), `@${w}: module links go to the first built concept (${cur.firstHref}, ${other.firstHref})`);
+  check(cur.firstHref.endsWith(M0) && other.firstHref.endsWith(M1), `@${w}: module links go to the module's overview page (${cur.firstHref}, ${other.firstHref})`);
+  const hrefs = await page.evaluate(() => [...document.querySelectorAll(".msw-concepts a")].map((a) => a.getAttribute("href")));
+  check(hrefs.length > 5 && hrefs.every((h) => /\/modules\/[^/]+\/[^/]+\/$/.test(h) && !h.includes("#")), `@${w}: concept links go straight to concept pages (${hrefs.slice(0, 2)})`);
   const icons = await page.evaluate(() => [...document.querySelectorAll(".msw-state")].map((i) => ({ aria: i.getAttribute("aria-hidden"), interactive: !!i.closest("button") || i.hasAttribute("tabindex") || !!i.querySelector("button, a") })));
   check(icons.length > 0 && icons.every((i) => i.aria === "true" && !i.interactive), `@${w}: status icons are display-only (${icons.length})`);
 
@@ -108,7 +111,7 @@ for (const w of [375, 1280]) {
 
 // Sizes and scrolling inside the list.
 {
-  const { ctx, page } = await open(375, `${M0}#concept-equations`);
+  const { ctx, page } = await open(375, EQ);
   await openPanel(page, 375);
   await page.locator(".module-switch-btn").click();
   await page.locator('.msw-toggle[aria-controls="msw-m01"]').click();
@@ -120,39 +123,40 @@ for (const w of [375, 1280]) {
   check(o.btn.every(([w, hh]) => hh >= 44) && o.toggles.every(([w, hh]) => w >= 44 && hh >= 44) && o.links.every(([w, hh]) => hh >= 44) && o.rows.every(([w, hh]) => hh >= 44), `touch: every switcher target is at least 44px (${JSON.stringify([o.btn[0], o.toggles[0], o.links[0], o.rows[0]])})`);
   check(o.overflowY === "auto" && o.scrolls, `a long list scrolls inside itself (overflow ${o.overflowY}, scrolls ${o.scrolls}, max-height ${o.maxH})`);
   await ctx.close();
-  const f = await open(1280, `${M0}#concept-equations`);
+  const f = await open(1280, EQ);
   await f.page.locator(".module-switch-btn").click();
   const g = await f.page.evaluate(() => [...document.querySelectorAll(".msw-toggle, .msw-link, .msw-concepts a")].filter((e) => e.checkVisibility()).map((e) => Math.round(e.getBoundingClientRect().height)));
   check(g.length > 5 && g.every((hh) => hh >= 40) && g.some((hh) => hh === 40), `fine pointer: rows are 40px (got ${[...new Set(g)]})`);
   await f.ctx.close();
 }
 
-// Cross-module jumps: the panel updates for the new card, and the target heading is fully below the sticky bars.
+// Cross-module jumps: a concept goes straight to its page (panel updated); a module goes to its overview.
 for (const w of [375, 768, 1280]) {
   for (const via of ["concept", "module"]) {
-    const { ctx, page } = await open(w, `${M0}#concept-equations`);
+    const { ctx, page } = await open(w, EQ);
     await openPanel(page, w);
     await page.locator(".module-switch-btn").click();
     if (via === "concept") {
       await page.locator('.msw-toggle[aria-controls="msw-m01"]').click();
       await page.locator('a[data-switch-cid="m01-matrices"]').click();
+      await page.waitForURL(/01-linear-algebra\/matrices\/$/);
+      await page.waitForSelector(".module-switch-btn", { state: "attached" });
+      await settle(page);
+      await openPanel(page, w);
+      check((await label(page)) === "Linear algebra › Matrices: tables and machines", `@${w} via concept: the switcher shows the new card (got "${await label(page)}")`);
+      const st = await page.evaluate(() => ({ list: document.querySelector(".page-toc-list:not([hidden])")?.dataset.for, items: [...document.querySelectorAll(".page-toc-list:not([hidden]) a")].map((a) => a.textContent).join("|"), cur: document.querySelector("a[data-switch-cid][aria-current]")?.dataset.switchCid, open: [...document.querySelectorAll(".msw-toggle")].map((t) => `${t.getAttribute("aria-controls")}=${t.getAttribute("aria-expanded")}`).join(",") }));
+      check(st.list === "concept-matrices" && st.items === "Meaning|Picture|Real life|Worked example|Why and when|How to arrive at it|In an LLM|Teach it", `@${w} via concept: the panel shows that card's stages (list for ${st.list})`);
+      check(st.cur === "m01-matrices", `@${w} via concept: the concept is marked current (${st.cur})`);
+      check(/msw-m00=false/.test(st.open) && /msw-m01=true/.test(st.open), `@${w} via concept: the new module is open and the old one collapsed (${st.open})`);
+      const bb = await barsBottom(page);
+      const ht = await page.evaluate(() => document.querySelector("article.concept-card > header h1").getBoundingClientRect().top);
+      check(ht >= bb, `@${w} via concept: the page opens at the top, heading (top ${Math.round(ht)}) below the bars (bottom ${Math.round(bb)})`);
     } else {
       await page.locator(".msw-link", { hasText: "Linear algebra" }).click();
+      await page.waitForURL(/01-linear-algebra\/$/);
+      await page.waitForSelector("#site-nav [data-status-of]", { state: "attached" });
+      check(await page.locator("h1").innerText() === "Linear algebra" && await page.locator("article.concept-card").count() === 0, `@${w} via module: lands on the module's overview page`);
     }
-    await page.waitForURL(/01-linear-algebra\/#concept-(matrices|vectors)/);
-    await page.waitForSelector(".module-switch-btn", { state: "attached" });
-    await settle(page);
-    const wantCard = via === "concept" ? "concept-matrices" : "concept-vectors";
-    const wantTitle = via === "concept" ? "Matrices: tables and machines" : "Vectors: arrows and lists";
-    await openPanel(page, w);
-    check((await label(page)) === `Linear algebra › ${wantTitle}`, `@${w} via ${via}: the switcher shows the new card (got "${await label(page)}")`);
-    const st = await page.evaluate(() => ({ list: document.querySelector(".page-toc-list:not([hidden])")?.dataset.for, items: [...document.querySelectorAll(".page-toc-list:not([hidden]) a")].map((a) => a.textContent).join("|"), cur: document.querySelector(".msw-concepts a[aria-current]")?.dataset.switchCid, open: [...document.querySelectorAll(".msw-toggle")].map((t) => `${t.getAttribute("aria-controls")}=${t.getAttribute("aria-expanded")}`).join() }));
-    check(st.list === wantCard && st.items === "Meaning|Picture|Real life|Worked example|Why and when|How to arrive at it|In an LLM|Teach it", `@${w} via ${via}: the panel shows that card's stages (list for ${st.list})`);
-    check(st.cur === (via === "concept" ? "m01-matrices" : "m01-vectors"), `@${w} via ${via}: the concept is marked current (${st.cur})`);
-    check(/msw-m00=false/.test(st.open) && /msw-m01=true/.test(st.open), `@${w} via ${via}: the new module is open and the old one collapsed (${st.open})`);
-    const bb = await barsBottom(page);
-    const ht = await page.evaluate((id) => document.querySelector(`#${id} > header h2`).getBoundingClientRect().top, wantCard);
-    check(ht >= bb && ht < bb + 140, `@${w} via ${via}: the target heading (top ${Math.round(ht)}) is fully below the sticky bars (bottom ${Math.round(bb)})`);
     await ctx.close();
   }
 }

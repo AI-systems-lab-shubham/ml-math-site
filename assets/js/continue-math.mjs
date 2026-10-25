@@ -6,14 +6,30 @@ export const PENDING_TTL_MS = 60_000;              // such an undo is forgotten 
 export const TOAST_MS = 12_000;                    // time the toast stays, counted only while it is not hovered or focused
 export const TOAST_MIN_MS = 10_000;                // never shorter than this
 
-// What the primary button does for a concept: "mark-continue" | "continue" | "mark" | "none".
-export function continueMode(status, next) {
-  if (next) return status === "complete" ? "continue" : "mark-continue";
+// What the primary button does for a concept. `target` is where "continue" goes (a concept page or the next
+// module's overview), or null at the end of the course. Modes: "mark-continue" | "continue" | "mark" | "none".
+export function continueMode(status, target) {
+  if (target) return status === "complete" ? "continue" : "mark-continue";
   return status === "complete" ? "none" : "mark";
 }
 
-export function continueLabel(mode, nextTitle) {
-  return { "mark-continue": "Mark complete and continue", continue: `Continue to ${nextTitle}`, mark: "Mark complete", none: "" }[mode];
+export function continueLabel(mode) {
+  return { "mark-continue": "Mark complete and continue", continue: "Continue", mark: "Mark complete", none: "" }[mode];
+}
+
+export const DWELL_MS = 2000;   // a concept page counts as opened after it has been visible this long
+
+// Fires `onFire` once, after the page has been visible for `ms`. Hiding the tab stops the clock; showing it restarts it.
+// Timer functions are injected so tests run on a fake clock.
+export function createDwell({ onFire, ms = DWELL_MS, isVisible = () => true, setTimer = setTimeout, clearTimer = clearTimeout }) {
+  let timer = null;
+  let fired = false;
+  const stop = () => { if (timer !== null) { clearTimer(timer); timer = null; } };
+  const start = () => {
+    if (fired || timer !== null || !isVisible()) return;
+    timer = setTimer(() => { timer = null; fired = true; onFire(); }, ms);
+  };
+  return { start, stop, visibilityChanged: () => (isVisible() ? start() : stop()), get fired() { return fired; } };
 }
 
 export const makePending = ({ id, title, previous, expectedAt }, nowMs) => ({ id, title, previous: { status: previous.status }, expectedAt, at: nowMs });
