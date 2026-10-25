@@ -90,7 +90,7 @@ for (const w of [375, 1280]) {
   await tog.focus();
   await page.keyboard.press("Space");
   check(await tog.getAttribute("aria-expanded") === "true" && await page.locator("#msw-m01").isVisible(), `@${w}: Space on a toggle shows its concepts`);
-  check(await page.locator("#msw-m01 a").count() === 4, `@${w}: Linear algebra lists its 4 built concepts`);
+  check(await page.locator("#msw-m01 a").count() === 8, `@${w}: Linear algebra lists its 8 built concepts`);
   await page.keyboard.press("Enter");
   check(await tog.getAttribute("aria-expanded") === "false" && await page.locator("#msw-m01").isHidden(), `@${w}: Enter on a toggle hides them again`);
   await page.keyboard.press("Space");

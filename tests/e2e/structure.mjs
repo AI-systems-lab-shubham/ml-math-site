@@ -88,7 +88,7 @@ for (const m of built) for (const w of [375, 768]) {
   await c.ctx.close();
   const d = await open(1280, m.path, { init: seed(Object.fromEntries(own.map((x) => [x.id, "complete"]))) });
   check(await d.page.locator("[data-overview-action]").innerText() === "Review from the start", "all complete: the button says Review from the start");
-  check(/4 of 4 concepts complete/.test(await d.page.locator("[data-module-progress]").innerText()), "the overview shows module progress");
+  check(new RegExp(`${own.length} of ${own.length} concepts complete`).test(await d.page.locator("[data-module-progress]").innerText()), "the overview shows module progress");
   await d.ctx.close();
   // Status icons on the overview follow the saved progress, with a text alternative.
   const e = await open(1280, m.path, { init: seed({ [own[0].id]: "complete" }) });

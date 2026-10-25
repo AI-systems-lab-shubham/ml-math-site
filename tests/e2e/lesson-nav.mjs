@@ -10,7 +10,7 @@ const browser = await pw.chromium.launch();
 const course = JSON.parse(readFileSync(`${siteRoot}/data/course.json`, "utf8"));
 const concepts = course.modules.flatMap((m) => m.concepts.filter((c) => c.status === "built" && m.status === "built"));
 const P = (id) => concepts.find((c) => c.id === id).path;
-const EQ = P("m00-equations"), VAR = P("m00-variables"), SLOPE = P("m00-slope"), VEC = P("m01-vectors"), COMB = P("m01-combine"), MATMUL = P("m01-matmul");
+const EQ = P("m00-equations"), VAR = P("m00-variables"), SLOPE = P("m00-slope"), VEC = P("m01-vectors"), COMB = P("m01-combine"), MATMUL = P("m01-matmul"), TRANSPOSE = P("m01-transpose"), TRANS = P("m01-transformations");
 const M1 = "modules/01-linear-algebra/";
 
 let failures = 0, checks = 0;
@@ -383,15 +383,26 @@ for (const w of [375, 768, 1280]) {
   check(await statusOf(page, "m00-notation") === before, `module boundary: Undo restores ${before}`);
   await ctx.close();
 }
-// 11d. Course end: Module 1's last concept says "Mark complete" and offers "Back to course home"; nothing says continue.
+// 11d. Matrix multiplication is no longer the end of the course: it continues to the next concept.
 {
   const { ctx, page } = await open(1280, MATMUL);
+  check(await labelOf(page) === "Mark complete and continue", `matmul: label is "Mark complete and continue" (got ${await labelOf(page)})`);
+  check(await page.locator(".lesson-home-link").count() === 0, "matmul: no Back to course home link any more");
+  await page.locator("[data-continue]").click();
+  await page.waitForURL((u) => u.pathname.endsWith(TRANSPOSE));
+  check(page.url().endsWith(TRANSPOSE), "matmul: Mark complete and continue goes to Transpose, identity and inverse");
+  check(await statusOf(page, "m01-matmul") === "complete", "matmul: the concept was marked complete on the way");
+  await ctx.close();
+}
+// 11d2. Course end: Module 1's last concept (Linear transformations) says "Mark complete" and offers "Back to course home"; nothing says continue.
+{
+  const { ctx, page } = await open(1280, TRANS);
   check(await labelOf(page) === "Mark complete", `course end: label is "Mark complete" (got ${await labelOf(page)})`);
   const home = page.locator(".lesson-home-link");
   check(await home.count() === 1 && /Back to course home/.test(await home.innerText()) && (await home.getAttribute("href")).endsWith("index.html"), "course end: a Back to course home link to the home page");
   await page.locator("[data-continue]").click();
   await page.waitForTimeout(400);
-  check(await statusOf(page, "m01-matmul") === "complete" && page.url().endsWith(MATMUL), "course end: Mark complete marks it and stays on the page");
+  check(await statusOf(page, "m01-transformations") === "complete" && page.url().endsWith(TRANS), "course end: Mark complete marks it and stays on the page");
   check(await page.locator("[data-continue]").isHidden() && await home.isVisible(), "course end: once complete the button goes and the home link stays");
   check(!/continue/i.test(await page.locator(".lesson-actions").innerText()), "course end: nothing says continue");
   await ctx.close();
