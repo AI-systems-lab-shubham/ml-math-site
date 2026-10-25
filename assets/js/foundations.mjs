@@ -15,6 +15,7 @@ import { renderMath } from "./math-render.mjs";
 import { initGlossary, prepare } from "./glossary.mjs";
 import { initShell } from "./shell.mjs";
 import { initLesson } from "./lesson.mjs";
+import { initPageNav, initSections } from "./page-nav.mjs";
 
 const stroke = (color, width = 3, extra = "") => `stroke:var(--c-${color});stroke-width:${width};fill:none;${extra}`;
 const fill = (color) => `fill:var(--${color === "ochre" ? "fill-ochre" : "c-" + color})`;
@@ -638,6 +639,8 @@ async function boot() {
   const shell = await initShell({ moduleId: document.querySelector('meta[name="module-id"]')?.content });
   initLesson(shell);
   renderMath();
+  initPageNav();
   await initGlossary();
+  initSections();
 }
 boot();

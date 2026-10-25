@@ -59,7 +59,7 @@ export async function initShell({ moduleId = null } = {}) {
 const UI_KEY = "mlmath:ui:v1";
 const RAIL_MIN = "(min-width: 900px)";
 
-function readUi() {
+export function readUi() {
   try {
     const v = JSON.parse(localStorage.getItem(UI_KEY));
     return v && typeof v === "object" ? v : {};
@@ -68,7 +68,7 @@ function readUi() {
   }
 }
 
-function writeUi(patch) {
+export function writeUi(patch) {
   try {
     localStorage.setItem(UI_KEY, JSON.stringify({ ...readUi(), ...patch }));
   } catch { /* storage blocked: the preference lasts for this visit only */ }

@@ -60,8 +60,6 @@
 @container (min-width: 742px) { [data-widget="combine"] .widget-reserve { min-height: 470px; } }
 @container (min-width: 743px) { [data-widget="combine"] .widget-reserve { min-height: 461px; } }
 @container (min-width: 785px) { [data-widget="combine"] .widget-reserve { min-height: 409px; } }
-@container (min-width: 962px) { [data-widget="combine"] .widget-reserve { min-height: 328px; } }
-@container (min-width: 984px) { [data-widget="combine"] .widget-reserve { min-height: 319px; } }
 [data-widget="matrix"] .widget-reserve { min-height: 916px; }
 @container (min-width: 259px) { [data-widget="matrix"] .widget-reserve { min-height: 890px; } }
 @container (min-width: 264px) { [data-widget="matrix"] .widget-reserve { min-height: 866px; } }

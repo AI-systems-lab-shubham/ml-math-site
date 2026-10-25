@@ -176,6 +176,8 @@ function open(el, ref, pin) {
   render();
   pop.hidden = false;
   position();
+  // Focusing a term can scroll it into view after this runs: place the popover again once the page has settled.
+  requestAnimationFrame(() => { if (!pop.hidden && trigger === el) position(); });
 }
 
 function close(returnFocus) {
@@ -209,14 +211,23 @@ function onOutside(ev) {
 function position() {
   const r = trigger.getBoundingClientRect();
   const gap = 8;
+  const edge = 8;
+  const stickyTop = (document.getElementById("site-header")?.getBoundingClientRect().bottom ?? 0) + edge;
+  pop.style.maxHeight = "";
   const pw = pop.offsetWidth;
   const ph = pop.offsetHeight;
-  const below = window.innerHeight - r.bottom;
-  const placeBelow = below >= ph + gap || below >= r.top;
-  const top = placeBelow ? r.bottom + gap : r.top - ph - gap;
+  const below = window.innerHeight - r.bottom - gap - edge;
+  const above = r.top - gap - stickyTop;
+  // Put it on the side with room; if neither side has enough, take the larger one and let the popover scroll inside,
+  // so it never sits on top of the term it explains.
+  const placeBelow = below >= ph || below >= above;
+  const room = Math.max(120, placeBelow ? below : above);
+  if (ph > room) pop.style.maxHeight = `${Math.floor(room)}px`;
+  const h = Math.min(ph, room);
+  const top = placeBelow ? r.bottom + gap : r.top - h - gap;
   let left = r.left + r.width / 2 - pw / 2;
   left = Math.max(12, Math.min(left, document.documentElement.clientWidth - pw - 12));
-  pop.style.top = `${Math.max(window.scrollY + 4, window.scrollY + top)}px`;
+  pop.style.top = `${window.scrollY + top}px`;
   pop.style.left = `${window.scrollX + left}px`;
 }
 

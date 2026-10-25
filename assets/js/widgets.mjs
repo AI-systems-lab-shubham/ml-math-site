@@ -82,6 +82,7 @@ export function widgetShell({ title, description, viewBox = "0 0 640 400" }) {
  *     ancestor of el, or something inside el; mounting happens before the browser scrolls;
  *   - the page is about to print, or print media is active;
  *   - the placeholder is clicked or tapped.
+ * It also runs when a closed <details> that holds the widget opens.
  * Calling it again for the same element does nothing. Session B (four-state progress) and any
  * later module must mount widgets through this function, never directly.
  */
@@ -108,6 +109,8 @@ function mountNow(el) {
 }
 
 export const mountAllLazy = () => [...lazy.keys()].forEach(mountNow);
+/** Mount every lazy widget inside `root` (used when a closed section opens: a widget in it was never near the viewport). */
+export const mountLazyWithin = (root) => { for (const el of lazy.keys()) if (root.contains(el)) mountNow(el); };
 
 const byId = (hash) => {
   if (!hash || hash.length < 2) return null;
@@ -153,6 +156,8 @@ function initLazy() {
     const there = new URL(a.href, document.baseURI);
     if (there.origin === here.origin && there.pathname === here.pathname && there.search === here.search) mountForHash(a.hash);
   }, true);
+  // A section that opens (click, Expand all, a link to an anchor inside it) mounts the widgets it holds.
+  document.addEventListener("toggle", (e) => { if (e.target.open) mountLazyWithin(e.target); }, true);
   const afterHash = () => { if (mountForHash(location.hash)) byId(location.hash)?.scrollIntoView(); };
   window.addEventListener("hashchange", afterHash);
   window.addEventListener("beforeprint", mountAllLazy);

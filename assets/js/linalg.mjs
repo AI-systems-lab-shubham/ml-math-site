@@ -11,6 +11,7 @@ import { renderMath } from "./math-render.mjs";
 import { initGlossary } from "./glossary.mjs";
 import { initShell } from "./shell.mjs";
 import { initLesson } from "./lesson.mjs";
+import { initPageNav, initSections } from "./page-nav.mjs";
 
 /* ---------- small helpers ---------- */
 const n = (v) => fmt(v).replace("-", "−");
@@ -549,6 +550,8 @@ async function boot() {
   const shell = await initShell({ moduleId: document.querySelector('meta[name="module-id"]')?.content });
   initLesson(shell);
   renderMath();
+  initPageNav();
   await initGlossary();
+  initSections();
 }
 boot();

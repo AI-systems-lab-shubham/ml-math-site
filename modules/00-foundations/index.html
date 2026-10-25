@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../../vendor/katex/katex.min.css">
   <link rel="stylesheet" href="../../assets/css/site.css">
   <link rel="stylesheet" href="../../assets/css/widget-reserve.css">
-  <noscript><style>[data-nav-toggle], [data-highlight-toggle] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
   <script src="../../assets/js/rail-init.js"></script>
   <script src="../../vendor/katex/katex.min.js"></script>
   <script type="module" src="../../assets/js/foundations.mjs"></script>
@@ -63,6 +63,11 @@
 </nav>
 
 <main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p><p class="page-toc-card" data-toc-card></p></div>
+  </nav>
+
   <div class="column page-hero">
     <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
       <li><a href="../../index.html">Course</a></li>
@@ -71,6 +76,12 @@
     <h1>Foundations</h1>
     <p class="lede">The high-school maths everything else rests on. Ten ideas, each taught from a picture first, then the symbols, then where it shows up inside a language model.</p>
     <p>Terms with a dotted underline are a tap or hover away from a plain-language and a mathematical definition.</p>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <span class="page-tools-note muted">Opens or closes every Teach it panel and symbol list on this page. Answer reveals stay closed.</span>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
   </div>
 
   <p class="column module-progress muted" data-module-progress aria-live="polite"></p>
