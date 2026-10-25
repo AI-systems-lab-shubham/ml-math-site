@@ -224,10 +224,27 @@ function buildOutline(shell) {
   };
 }
 
+// Details that are a closed one-line summary on narrow screens and plain open content when wide (summary hidden by
+// site.css via [data-wide]). Wide means viewport >= 768px, or, with `watch`, that element being >= 520px across.
+// A widget watches its own width because its reserved height (widget-reserve.css) is keyed on that width.
+export function syncPhoneDetails(root, watch = null) {
+  const list = root.matches("details.phone-details") ? [root] : [...root.querySelectorAll("details.phone-details")];
+  const set = (wide) => list.forEach((d) => { d.open = wide; d.toggleAttribute("data-wide", wide); });
+  if (watch) {
+    let last = null;
+    new ResizeObserver(() => { const wide = watch.getBoundingClientRect().width >= 520; if (wide !== last) { last = wide; set(wide); } }).observe(watch);
+    return;
+  }
+  const wide = window.matchMedia("(min-width: 768px)");
+  set(wide.matches);
+  wide.addEventListener("change", () => set(wide.matches));
+}
+
 function buildFooter({ course }) {
   const footer = document.getElementById("site-footer");
   if (!footer) return;
   footer.innerHTML = `
+    <details class="phone-details footer-details"><summary>About, sources and licences</summary>
     <div class="footer-grid">
       <section aria-labelledby="f-sources"><h2 id="f-sources">Sources and further reading</h2>
         <p>Topic order follows <em>Mathematics for Machine Learning</em> by Deisenroth, Faisal and Ong (Cambridge University Press, 2020). Each concept points to the relevant chapter by number. The explanations and figures here are original.</p>
@@ -239,7 +256,8 @@ function buildFooter({ course }) {
         <p>Everything works from the keyboard. Animations start only when you press a button, and they stay still if your system asks for reduced motion. Every diagram has a text description.</p></section>
       <section aria-labelledby="f-lic"><h2 id="f-lic">Licences</h2>
         <p>Fonts: Fraunces, Inter and JetBrains Mono, under the SIL Open Font Licence (<a href="${hrefTo("licenses/Fraunces-OFL.txt")}">Fraunces</a>, <a href="${hrefTo("licenses/Inter-OFL.txt")}">Inter</a>, <a href="${hrefTo("licenses/JetBrainsMono-OFL.txt")}">JetBrains Mono</a>). Maths rendering: <a href="${hrefTo("vendor/katex/LICENSE")}">KaTeX, MIT licence</a>. Everything is bundled, so the site works offline.</p></section>
-    </div>`;
+    </div></details>`;
+  syncPhoneDetails(footer);
 }
 
 // Says so when saved progress was unreadable or cannot be saved (never silent).

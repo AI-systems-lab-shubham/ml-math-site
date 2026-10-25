@@ -193,7 +193,8 @@ export function initSections() {
   };
   const restoreAfterPrint = () => {
     if (!beforePrint) return;
-    for (const [d, was] of beforePrint) setQuiet(d, was);
+    // A phone-details disclosure follows its widget's width (shell.mjs syncPhoneDetails), not what it was before printing.
+    for (const [d, was] of beforePrint) setQuiet(d, d.classList.contains("phone-details") ? d.hasAttribute("data-wide") : was);
     beforePrint = null;
   };
   addEventListener("beforeprint", openAllForPrint);

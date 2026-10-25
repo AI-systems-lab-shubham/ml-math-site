@@ -1,4 +1,5 @@
 // Module 1 (second half): widgets, worked examples and checks. Every number comes from linalg-math.mjs.
+import { syncPhoneDetails } from "./shell.mjs";
 import {
   matVec, matMul, shape, column, fromColumns, transpose, identity, det2, inverse, inverse2ByFormula, fracMatMul,
   fracMatrixToNumbers, fracToString, frac, rank, rank2, areIndependent, solveSystem, rotationDegrees, scaling, shear,
@@ -166,7 +167,11 @@ function systemsWidget(host) {
       b.addEventListener("click", () => setPreset(key));
       return b;
     })));
-  w.controls.append(fieldGroup("Equation 1: (number of x)·x + (number of y)·y = total", ...fields[0]), fieldGroup("Equation 2: (number of x)·x + (number of y)·y = total", ...fields[1]), presets);
+  // On phones the six number boxes sit under "Edit numbers", so the picture and the presets come first (always open from 768px).
+  const numbers = html("details", { class: "phone-details widget-numbers" }, html("summary", { text: "Edit numbers" }),
+    fieldGroup("Equation 1: (number of x)·x + (number of y)·y = total", ...fields[0]), fieldGroup("Equation 2: (number of x)·x + (number of y)·y = total", ...fields[1]));
+  w.controls.append(numbers, presets);
+  syncPhoneDetails(numbers, host);
   host.append(w.root);
   draw();
 }

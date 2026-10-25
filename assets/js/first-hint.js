@@ -10,8 +10,14 @@
   var p = document.createElement("p");
   p.className = "first-hint";
   p.setAttribute("role", "note");
+  // The first sentence is the hint; the rest explains the page buttons and is hidden on phones (site.css).
+  var cut = HINT.indexOf(". ") + 1;
   var text = document.createElement("span");
-  text.textContent = HINT;
+  text.textContent = HINT.slice(0, cut);
+  var more = document.createElement("span");
+  more.className = "first-hint-more";
+  more.textContent = HINT.slice(cut);
+  text.appendChild(more);
   var button = document.createElement("button");
   button.type = "button";
   button.className = "button-secondary button-small";

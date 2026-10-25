@@ -26,8 +26,10 @@ const BAD = [
 ];
 
 let fieldsSeen = 0;
-for (const [name, url] of PAGES) {
-  const page = await (await browser.newContext({ viewport: { width: 1280, height: 900 } })).newPage();
+// 375px too: on phones the Systems number boxes sit under a closed "Edit numbers" disclosure, which must be reachable by keyboard.
+const SIZES = [[1280, 900], [375, 812]];
+for (const [width, height] of SIZES) for (const [name, url] of PAGES) {
+  const page = await (await browser.newContext({ viewport: { width, height } })).newPage();
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
@@ -35,15 +37,24 @@ for (const [name, url] of PAGES) {
   await page.emulateMedia({ media: "print" }); // print media mounts every widget
   await page.waitForFunction(() => [...document.querySelectorAll("[data-widget]")].every((h) => h.dataset.lazy === "mounted"), null, { timeout: 5000 }).catch(() => {});
   await page.emulateMedia({ media: "screen" });
+  await page.waitForTimeout(300); // the breakpoint listener re-syncs the "Edit numbers" disclosure after print media ends
   const count = await page.locator('input[type="number"]:not([data-predict] input)').count();
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i++) try {
     const input = page.locator('input[type="number"]:not([data-predict] input)').nth(i);
-    const label = `${name} field ${i + 1}`;
+    const label = `${name}@${width} field ${i + 1}`;
     const msgId = await input.evaluate((el) => el.id + "-msg");
     const hasMsg = await page.locator(`#${msgId}`).count();
     check(hasMsg === 1, `${label}: no message element (not built with numberField)`);
     if (!hasMsg) continue;
     fieldsSeen++;
+    if (!(await input.isVisible())) {
+      const summary = input.locator("xpath=ancestor::details[1]/summary").filter({ hasText: "Edit numbers" });
+      check((await summary.count()) === 1, `${label} at ${width}px: hidden, and no "Edit numbers" disclosure to open`);
+      await summary.focus();
+      check(await summary.evaluate((el) => document.activeElement === el), `${label} at ${width}px: "Edit numbers" is not focusable`);
+      await page.keyboard.press("Enter");
+      check(await input.isVisible(), `${label} at ${width}px: Enter on "Edit numbers" did not reveal the field`);
+    }
     await input.scrollIntoViewIfNeeded();
     const good = await input.inputValue();
     for (const [what, act] of BAD) {
@@ -61,7 +72,7 @@ for (const [name, url] of PAGES) {
     await page.keyboard.type(good);
     check((await page.locator(`#${msgId}`).textContent()) === "", `${label}: message not cleared by a valid entry`);
     check((await input.getAttribute("aria-invalid")) === null, `${label}: still marked invalid after a valid entry`);
-  }
+  } catch (e) { check(false, `${name}@${width} field ${i + 1}: ${String(e.message).split("\n")[0]}`); }
   // Predict boxes: the answer is graded, so a non-number or a decimal must get a polite message, not a verdict.
   const predictBox = page.locator("[data-predict] input");
   for (let i = 0; i < await predictBox.count(); i++) {
@@ -77,7 +88,7 @@ for (const [name, url] of PAGES) {
       check(want.test(text) && !/answer is/.test(text), `${name} predict ${i + 1}, ${what}: expected a polite message, got "${text}"`);
     }
   }
-  check(errors.length === 0, `${name}: errors thrown: ${errors.join(" | ")}`);
+  check(errors.length === 0, `${name}@${width}: errors thrown: ${errors.join(" | ")}`);
   await page.context().close();
 }
 check(fieldsSeen > 0, "no number fields were found at all");
