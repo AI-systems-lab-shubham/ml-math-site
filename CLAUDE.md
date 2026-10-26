@@ -61,7 +61,10 @@ An interactive static website that teaches the maths behind machine learning and
 6. Keep replies short. No recaps of files already read.
 
 ## Check tools
-- `node tools/verify.mjs`: unit tests, course, glossary, claims lint, e2e nav test and email check in one run (a SKIPPED e2e counts as a failure).
+- `node tools/verify.mjs`: three tiers; add `--timings` to print each step's time and `--plan` to print what would run.
+  - `--fast` (unit tests, check-course, check-glossary, check-claims, check-fonts; no browser): after every change.
+  - `--changed`: at each checkpoint. Diffs from the commit recorded in git-ignored `reports/last-full-pass` (written by a passing `--full` on a clean tree), plus uncommitted and untracked files, and prints the base it used. It selects the pages that load a changed file (following imports), runs the e2e tests that matter for them and `ui-verify` on those pages at 375, 900 and 1280 px. A core file (`site.css`, `shell.mjs`, `widgets.mjs`, the progress code, ...), a file no page loads, anything it cannot classify, `data/course.json`, `DESIGN.md`, `tools/**`, `tests/**`, or a missing or stale marker runs `--full` instead.
+  - `--full` (the default): unit tests, course, glossary, claims, fonts, every e2e test, `ui-verify` at six widths and the email check, in one run (a SKIPPED e2e counts as a failure). Run it once before you push.
 - `node tools/ui-verify.mjs`: per-page layout, keyboard, console, structure, glossary and motion checks at six widths, plus axe-core if `AXE_PATH` is set; writes `reports/` and exits non-zero on any finding. Pages come from `data/course.json` (home, each overview `mNN`, each concept page `mNN-slug`, 404). Use `--pages m00-slope,m01-*` and `--widths 375,900,1280` at checkpoints and the full run once at the end; `--jobs N` sets how many pages run at once. `node tools/measure-widgets.mjs` takes the same `--pages` and `--widths` (reports only; `--write` needs the full sweep).
 
 ## Definition of done for a module
