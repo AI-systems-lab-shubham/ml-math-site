@@ -46,7 +46,7 @@ Four or five checkpoints (for example: wiring and course.json; first third of th
 | Each later checkpoint | `node tools/verify.mjs --changed` (it escalates to full by itself when a shared file changed or the marker is stale) |
 | Last step | `node tools/verify.mjs --full --timings` once, then `node tools/ui-verify.mjs` output reviewed by the `ui-reviewer` agent, a keyboard-only pass over popovers, sliders and collapsibles, and the `web-design-guidelines` skill on the files changed |
 
-Anything FAIL, or a browser step that is SKIPPED, counts as a failure. Fix each real finding and re-run; stop after two fix rounds and list what is still open. Never loosen an allow-list or a budget to make a check pass; if a check looks wrong, say so and let the user decide. If `ui-reviewer` cannot view images, say so and treat visual judgement as unverified.
+Anything FAIL, or a browser step that is SKIPPED, counts as a failure. The email check may be SKIPPED while NOREPLY_EMAIL is unset; that is not a failure. Add glossary entries in the same early checkpoint as course.json, so the full run happens once. If the user's prompt gives a different check plan for this session, follow the prompt. Fix each real finding and re-run; stop after two fix rounds and list what is still open. Never loosen an allow-list or a budget to make a check pass; if a check looks wrong, say so and let the user decide. If `ui-reviewer` cannot view images, say so and treat visual judgement as unverified.
 
 Finally tick the module in `docs/CURRICULUM.md` and commit.
 
