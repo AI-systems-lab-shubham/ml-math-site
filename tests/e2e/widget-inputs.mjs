@@ -91,7 +91,8 @@ for (const [width, height] of SIZES) for (const [name, url] of PAGES) {
   check(errors.length === 0, `${name}@${width}: errors thrown: ${errors.join(" | ")}`);
   await page.context().close();
 }
-check(fieldsSeen > 0, "no number fields were found at all");
+// With --pages (verify --changed) a page may legitimately have no number box; the whole-course run still must find some.
+check(only || fieldsSeen > 0, "no number fields were found at all");
 await browser.close();
 close();
 console.log(`${checks} checks, ${fieldsSeen} number fields, ${failures} failures`);
