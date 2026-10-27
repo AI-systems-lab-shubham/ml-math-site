@@ -22,7 +22,10 @@ function inputs(m) {
     homeHtml, hintJs,
   };
 }
-const built = course.modules.filter((m) => m.status === "built");
+// Only modules that were split out of the old long pages have a source revision to compare with;
+// later modules (Module 2 on) are written one page at a time and have nothing to preserve.
+const existedInSource = (m) => { try { readOld(SOURCE_REV, `${m.path}index.html`); return true; } catch { return false; } };
+const built = course.modules.filter((m) => m.status === "built" && existedInSource(m));
 
 for (const m of built) {
   test(`${m.id}: concept pages preserve the old module page's text`, () => {

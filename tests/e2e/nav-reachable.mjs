@@ -152,7 +152,7 @@ for (const [name, url] of PAGES) {
   });
   check(o.mods.find((m) => m.id === "m00")?.open === true, "module 0 page: module 0 should be open");
   check(o.mods.filter((m) => m.id !== "m00").every((m) => !m.open), "module 0 page: other modules should be collapsed");
-  check(o.mods.map((m) => m.num).join() === "0,1", `module numbers should read 0,1 (got ${o.mods.map((m) => m.num)})`);
+  check(o.mods.map((m) => m.num).join() === "0,1,2", `module numbers should read 0,1,2 (got ${o.mods.map((m) => m.num)})`);
   check(o.planned >= 1, "planned modules should be numbered too");
   check(o.legend.join("|") === "Not started|In progress|Complete|Revisit", `legend should list the four states (got ${o.legend.join("|")})`);
   check(o.cur === "m00-logarithms" && o.curVisible, `current concept should be marked and scrolled into view in the rail (got ${o.cur}, visible ${o.curVisible})`);
@@ -168,7 +168,7 @@ for (const [name, url] of PAGES) {
   check(await page.evaluate(() => document.getElementById("ol-sub-m01").hidden), "after a reload only the current module is open again");
   // A module's name is a link to its overview page; its chevron is a separate button.
   const ml = await page.evaluate(() => [...document.querySelectorAll("#site-nav [data-module-link]")].map((a) => ({ href: a.getAttribute("href"), nested: !!a.querySelector("button") })));
-  check(ml.length === 2 && ml.every((m) => /\/modules\/[^/]+\/$/.test(m.href) && !m.nested), `module links go to overview pages (${ml.map((m) => m.href)})`);
+  check(ml.length === 3 && ml.every((m) => /\/modules\/[^/]+\/$/.test(m.href) && !m.nested), `module links go to overview pages (${ml.map((m) => m.href)})`);
   await ctx.close();
   // An old saved outlineOpen value is ignored without error, and dropped on the next write.
   {

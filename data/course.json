@@ -436,14 +436,179 @@
       "id": "m02",
       "title": "Analytic geometry",
       "path": "modules/02-analytic-geometry/",
-      "status": "planned",
-      "summary": "Norms, distance, the dot product, angles and projections.",
-      "minutes": 0,
+      "status": "built",
+      "summary": "Norms, distance, the dot product, angles, orthogonality and projections, ending with why attention scores are divided by √d_k.",
+      "minutes": 82,
       "prerequisites": [
         "m01"
       ],
-      "outcomes": [],
-      "concepts": []
+      "outcomes": [
+        "Measure the length of a vector with the L1 and L2 norms and say when each is used",
+        "Compute a dot product and explain it as a shadow, an angle and a sign",
+        "Compute the cosine similarity of two vectors and say why it ignores length and is undefined for the zero vector",
+        "Project one vector onto another and check that the leftover is orthogonal",
+        "Explain why a dot product of d independent terms has variance d, and so why attention scores are divided by √d_k"
+      ],
+      "concepts": [
+        {
+          "id": "m02-norms",
+          "title": "Norms: L1 and L2",
+          "anchor": "concept-norms",
+          "path": "modules/02-analytic-geometry/norms/",
+          "size": "full",
+          "minutes": 14,
+          "status": "built",
+          "objectives": [
+            "Compute the [[L2 norm|l2-norm]] (straight-line length) and the [[L1 norm|l1-norm]] (grid-walk length) of a [[vector|vector]]",
+            "Explain why the L2 norm is Pythagoras and why the L1 norm ignores signs",
+            "Say how [[L2 regularisation|l2-regularisation]] and [[weight decay|weight-decay]] are related, and when they differ"
+          ],
+          "takeaways": [
+            "The [[L2 norm|l2-norm]] is the straight-line length, √(Σxᵢ²); the [[L1 norm|l1-norm]] is the grid-walk length, Σ|xᵢ|.",
+            "A [[norm|norm]] is never negative, is zero only for the zero vector, and scales when the vector is scaled.",
+            "[[L2 regularisation|l2-regularisation]] adds a penalty on the squared L2 norm of the weights to the loss, while [[weight decay|weight-decay]] shrinks the weights directly; they match for plain SGD but not for adaptive optimisers."
+          ],
+          "requires": [
+            "m01-vectors",
+            "m01-combine"
+          ]
+        },
+        {
+          "id": "m02-distance",
+          "title": "Distance",
+          "anchor": "concept-distance",
+          "path": "modules/02-analytic-geometry/distance/",
+          "size": "compact",
+          "minutes": 8,
+          "status": "built",
+          "objectives": [
+            "Compute the [[distance|distance]] between two points as the [[norm|norm]] of their difference",
+            "Say how the L2 and L1 distances differ for the same two points"
+          ],
+          "takeaways": [
+            "[[Distance|distance]] is the [[norm|norm]] of the difference: subtract, then measure.",
+            "The L2 distance is the straight line; the L1 distance is the walk along the grid, and it is never shorter.",
+            "Distance does not depend on the order of the two points."
+          ],
+          "requires": [
+            "m02-norms"
+          ]
+        },
+        {
+          "id": "m02-dot-product",
+          "title": "Dot product",
+          "anchor": "concept-dot-product",
+          "path": "modules/02-analytic-geometry/dot-product/",
+          "size": "full",
+          "minutes": 15,
+          "status": "built",
+          "objectives": [
+            "Compute a [[dot product|dot-product]] by multiplying matching entries and adding",
+            "Explain it as a shadow, ‖a‖‖b‖cos θ, and read its sign as same direction, right angles or opposite",
+            "Recognise that each row of a matrix-vector product is one dot product"
+          ],
+          "takeaways": [
+            "a·b = Σ aᵢbᵢ = ‖a‖‖b‖cos θ: two ways to compute the same number.",
+            "Positive means the arrows lean the same way, zero means right angles, negative means opposite ways.",
+            "Work done by a force is force · displacement; a matrix-vector product is one dot product per row.",
+            "An [[attention score|attention-score]] in a Transformer is a dot product of a query and a key."
+          ],
+          "requires": [
+            "m00-trig",
+            "m01-vectors",
+            "m01-matmul"
+          ]
+        },
+        {
+          "id": "m02-angle-cosine",
+          "title": "Angle and cosine similarity",
+          "anchor": "concept-angle-cosine",
+          "path": "modules/02-analytic-geometry/angle-cosine/",
+          "size": "full",
+          "minutes": 14,
+          "status": "built",
+          "objectives": [
+            "Compute the [[cosine similarity|cosine-similarity]] of two vectors and turn it into an [[angle|angle]]",
+            "Explain why cosine similarity lies in [−1, 1] and ignores length",
+            "Explain why the zero vector has no angle, so cosine similarity is undefined for it"
+          ],
+          "takeaways": [
+            "Cosine similarity is (a·b)/(‖a‖‖b‖): the dot product with the lengths divided out.",
+            "It is 1 for the same direction, 0 at right angles and −1 for opposite directions, whatever the lengths.",
+            "For vectors of length 1 it equals the dot product; for the zero vector it is undefined."
+          ],
+          "requires": [
+            "m02-dot-product"
+          ]
+        },
+        {
+          "id": "m02-orthogonality",
+          "title": "Orthogonality",
+          "anchor": "concept-orthogonality",
+          "path": "modules/02-analytic-geometry/orthogonality/",
+          "size": "compact",
+          "minutes": 8,
+          "status": "built",
+          "objectives": [
+            "Test whether two vectors are [[orthogonal|orthogonal]] by checking that their dot product is 0",
+            "State that the zero vector is orthogonal to every vector"
+          ],
+          "takeaways": [
+            "Two vectors are [[orthogonal|orthogonal]] exactly when a·b = 0, which for arrows means a right angle.",
+            "The zero vector is orthogonal to everything, since its dot product with anything is 0.",
+            "Orthogonal vectors share no direction: neither has a shadow on the other."
+          ],
+          "requires": [
+            "m02-dot-product",
+            "m02-angle-cosine"
+          ]
+        },
+        {
+          "id": "m02-projections",
+          "title": "Projections",
+          "anchor": "concept-projections",
+          "path": "modules/02-analytic-geometry/projections/",
+          "size": "full",
+          "minutes": 14,
+          "status": "built",
+          "objectives": [
+            "Compute the [[projection|projection]] of a vector a onto a vector b with ((a·b)/(b·b)) b",
+            "Show that the leftover a − projection is [[orthogonal|orthogonal]] to b",
+            "Tell an orthogonal projection from a [[learned projection|learned-projection]] in a Transformer"
+          ],
+          "takeaways": [
+            "The projection of a onto b is the part of a along b: ((a·b)/(b·b)) b.",
+            "What is left, a minus the projection, is orthogonal to b.",
+            "Projecting twice changes nothing more, and projecting onto the zero vector is undefined.",
+            "A Transformer's “linear projections” are learned matrices, not orthogonal projections."
+          ],
+          "requires": [
+            "m02-dot-product",
+            "m02-orthogonality"
+          ]
+        },
+        {
+          "id": "m02-sqrt-dk",
+          "title": "Why attention scores are divided by the square root of d_k",
+          "anchor": "concept-sqrt-dk",
+          "path": "modules/02-analytic-geometry/sqrt-dk/",
+          "size": "compact",
+          "minutes": 9,
+          "status": "built",
+          "objectives": [
+            "Show that the [[variance|variance]] of a dot product of d independent entries with mean 0 and variance 1 is d",
+            "Explain why dividing by √d_k brings the variance back to 1, and state the assumption this needs"
+          ],
+          "takeaways": [
+            "If the entries are [[independent|independent]] with [[mean|mean]] 0 and [[variance|variance]] 1, then q·k has mean 0 and variance d_k.",
+            "Dividing by the [[square root|square-root]] of d_k divides the variance by d_k, restoring variance 1.",
+            "This holds under that assumption; it is not a claim that trained queries and keys have unit variance."
+          ],
+          "requires": [
+            "m02-dot-product"
+          ]
+        }
+      ]
     },
     {
       "id": "m03",

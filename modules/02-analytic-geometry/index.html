@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../">
+  <meta name="module-id" content="m02">
+  <title>Module 2: Analytic geometry - ML Math</title>
+  <meta name="description" content="Norms, distance, the dot product, angles, orthogonality and projections, and why attention scores are divided by √d_k.">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../assets/js/rail-init.js"></script>
+  <script type="module" src="../../assets/js/overview.mjs"></script>
+  <script type="application/json" id="old-links">{"concept-norms":"norms/","concept-distance":"distance/","concept-dot-product":"dot-product/","concept-angle-cosine":"angle-cosine/","concept-orthogonality":"orthogonality/","concept-projections":"projections/","concept-sqrt-dk":"sqrt-dk/"}</script>
+  <script type="module" src="../../assets/js/old-links.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../00-foundations/">0 · Foundations</a></li>
+    <li><a href="../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li>
+      <a href="./" aria-current="page">2 · Analytic geometry</a>
+      <ul class="sub">
+        <li><a href="norms/">Norms: L1 and L2</a></li>
+        <li><a href="distance/">Distance</a></li>
+        <li><a href="dot-product/">Dot product</a></li>
+        <li><a href="angle-cosine/">Angle and cosine similarity</a></li>
+        <li><a href="orthogonality/">Orthogonality</a></li>
+        <li><a href="projections/">Projections</a></li>
+        <li><a href="sqrt-dk/">Why attention scores are divided by the square root of d_k</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <div class="column page-hero overview">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../index.html">Course</a></li>
+      <li><span aria-current="page">Module 2: Analytic geometry</span></li></ol></nav>
+    <p class="eyebrow">Module 2</p>
+    <h1>Analytic geometry</h1>
+    <p class="lede">How long an arrow is, how far apart two points are, and how much two arrows agree. Seven ideas, each from a picture first, then the symbols, then where it shows up inside a language model.</p>
+    <p class="overview-meta">About 82 min · 7 concepts</p>
+    <h2>By the end of this module you’ll be able to…</h2>
+    <ul class="overview-outcomes">
+      <li>Measure the length of a vector with the L1 and L2 norms and say when each is used</li>
+      <li>Compute a dot product and explain it as a shadow, an angle and a sign</li>
+      <li>Compute the cosine similarity of two vectors and say why it ignores length and is undefined for the zero vector</li>
+      <li>Project one vector onto another and check that the leftover is orthogonal</li>
+      <li>Explain why a dot product of d independent terms has variance d, and so why attention scores are divided by √d_k</li>
+    </ul>
+    <p class="module-progress muted" data-module-progress aria-live="polite"></p>
+    <p class="overview-action"><a class="button" href="norms/" data-overview-action>Start</a></p>
+    <h2>Concepts</h2>
+    <ol class="overview-list">
+      <li><a href="norms/" data-cid="m02-norms"><span class="ov-state" data-ov-state="m02-norms" aria-hidden="true"></span><span class="ov-title">Norms: L1 and L2</span><span class="ov-min muted">14 min</span></a></li>
+      <li><a href="distance/" data-cid="m02-distance"><span class="ov-state" data-ov-state="m02-distance" aria-hidden="true"></span><span class="ov-title">Distance</span><span class="ov-min muted">8 min</span></a></li>
+      <li><a href="dot-product/" data-cid="m02-dot-product"><span class="ov-state" data-ov-state="m02-dot-product" aria-hidden="true"></span><span class="ov-title">Dot product</span><span class="ov-min muted">15 min</span></a></li>
+      <li><a href="angle-cosine/" data-cid="m02-angle-cosine"><span class="ov-state" data-ov-state="m02-angle-cosine" aria-hidden="true"></span><span class="ov-title">Angle and cosine similarity</span><span class="ov-min muted">14 min</span></a></li>
+      <li><a href="orthogonality/" data-cid="m02-orthogonality"><span class="ov-state" data-ov-state="m02-orthogonality" aria-hidden="true"></span><span class="ov-title">Orthogonality</span><span class="ov-min muted">8 min</span></a></li>
+      <li><a href="projections/" data-cid="m02-projections"><span class="ov-state" data-ov-state="m02-projections" aria-hidden="true"></span><span class="ov-title">Projections</span><span class="ov-min muted">14 min</span></a></li>
+      <li><a href="sqrt-dk/" data-cid="m02-sqrt-dk"><span class="ov-state" data-ov-state="m02-sqrt-dk" aria-hidden="true"></span><span class="ov-title">Why attention scores are divided by the square root of d_k</span><span class="ov-min muted">9 min</span></a></li>
+    </ol>
+  </div>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

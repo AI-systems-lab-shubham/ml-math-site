@@ -39,10 +39,11 @@ _All eight concepts built, one page each under `modules/01-linear-algebra/` (whi
 - Span, linear independence, basis, rank (C)
 - Linear transformations: rotate, scale, shear, project (F). Built; links back to Matrices. The earlier plain-text forward pointers were removed rather than turned into links, since a card must not point at a later one.
 
-## [ ] Module 2: Analytic geometry. MML Ch 3
+## [x] Module 2: Analytic geometry. MML Ch 3
+_All seven concepts built, one page each under `modules/02-analytic-geometry/` (the overview). Cards link backward only; the checks now fail on a forward link. Claims are in `docs/CLAIMS.md`._
 - Norms: L1 and L2 (F). *LLM:* weight decay penalises the L2 norm.
 - Distance (C)
-- **Dot product** (F): how much of one arrow lies along another (shadow); zero when perpendicular; scales with length. Spot it: work done by a force along a path, light on a tilted surface. *LLM:* attention scores are dot products of query and key vectors, scaled by √d_k.
+- **Dot product** (F): how much of one arrow lies along another (shadow); zero when perpendicular; scales with length. Spot it: work done by a force along a path, light on a tilted surface. *LLM:* attention scores are dot products of query and key vectors.
 - Angle and cosine similarity (F). *LLM:* embedding similarity search.
 - Orthogonality (C)
 - Projections (F)

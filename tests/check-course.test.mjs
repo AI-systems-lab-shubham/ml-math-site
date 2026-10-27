@@ -106,3 +106,13 @@ test("a Continue target page that does not exist fails (module boundary)", () =>
   const errs = checkCourse(c, fsOf(pages({ "n/d1/index.html": cpage("d1") })));
   assert.ok(errs.some((e) => e.includes("c2") && e.includes("n/")), errs.join("\n"));
 });
+
+test("a card that links to a later card fails; a link back is fine, and the outline fallback outside the article is ignored", () => {
+  const forward = pages({ "m/c1/index.html": '<nav class="site-nav"><a href="../c2/">c2</a></nav><meta name="concept-id" content="c1"><article class="concept-card" id="concept-c1"><a href="../c2/">next</a></article>' });
+  const errs = checkCourse(good(), fsOf(forward));
+  assert.ok(errs.some((e) => e.includes("c1: links forward") && e.includes("m/c2/")), errs.join("\n"));
+  const backward = pages({ "m/c2/index.html": '<meta name="concept-id" content="c2"><article class="concept-card" id="concept-c2"><a href="../c1/#x">before</a> <a href="../c1/index.html">again</a></article>' });
+  assert.deepEqual(checkCourse(good(), fsOf(backward)), []);
+  const outlineOnly = pages({ "m/c1/index.html": '<nav class="site-nav"><a href="../c2/">c2</a></nav><meta name="concept-id" content="c1"><article class="concept-card" id="concept-c1"></article>' });
+  assert.deepEqual(checkCourse(good(), fsOf(outlineOnly)), []);
+});

@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m02">
+  <meta name="concept-id" content="m02-dot-product">
+  <title>Dot product - Analytic geometry - ML Math</title>
+  <meta name="description" content="One number that says how much two arrows lean the same way: a shadow, a sum of products, and a cosine, all at once.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/analytic.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li>
+      <a href="../">2 · Analytic geometry</a>
+      <ul class="sub">
+        <li><a href="../norms/">Norms: L1 and L2</a></li>
+        <li><a href="../distance/">Distance</a></li>
+        <li><a href="./" aria-current="page">Dot product</a></li>
+        <li><a href="../angle-cosine/">Angle and cosine similarity</a></li>
+        <li><a href="../orthogonality/">Orthogonality</a></li>
+        <li><a href="../projections/">Projections</a></li>
+        <li><a href="../sqrt-dk/">Why attention scores are divided by the square root of d_k</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 2: Analytic geometry</a></li>
+      <li><span aria-current="page">Dot product</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-dot-product" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 3 of 7</p>
+      <h1>Dot product</h1>
+      <p class="muted">One number that says how much two arrows lean the same way: a shadow, a sum of products, and a cosine, all at once.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Shine a lamp straight down on arrow a so its shadow falls on the line along arrow b. The shadow has a length, and the <span class="term" data-term="dot-product">dot product</span> is that shadow length multiplied by the length of b. If a leans the same way as b, the shadow points forwards along b and the number is positive. If a is at right angles to b it casts no shadow and the number is zero. If a leans against b the shadow points backwards and the number is negative.</p>
+      <p>To compute it, multiply the matching <span class="term" data-term="component">entries</span> and add the products. For a = (3, 2) and b = (4, 0) that is 3×4 + 2×0 = <span data-calc="dotMain">…</span>. The same number comes from the lengths and the angle: ‖a‖‖b‖ cos θ, where θ is the <span class="term" data-term="angle">angle</span> between the arrows (the <a href="../../00-foundations/trig/">Sine and cosine</a> card explains cosine). The two formulas always give the same number (the site’s tests check this on hundreds of random pairs).</p>
+      <div class="math-display" data-tex-display="\htmlData{sym=dotAB}{\mathbf{a}\cdot\mathbf{b}}=\sum_i a_ib_i=\|\mathbf{a}\|\,\|\mathbf{b}\|\cos\htmlData{sym=angleAB}{\theta}">a·b = Σ aᵢbᵢ = ‖a‖‖b‖ cos θ</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Change the four sliders. The ochre bar is the shadow of a on the line through b. Watch the sign of the dot product flip as a swings past right angles to b, and make b point the other way.</p>
+      <div data-widget="dot">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">The dot product as a shadow</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A grid with two arrows from the origin: a in blue and b in teal. A faint line extends b in both directions. A dotted line drops from the tip of a straight onto that line at a right angle, and the ochre segment from the origin to that foot is the shadow of a on b. The sum a1 times b1 plus a2 times b2, the angle between the arrows, the product of the two lengths and the cosine, and the sign are written below.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li><strong>Work.</strong> Work is force · displacement. A sled pulled by a rope with a force of 20 N at 30° to the ground over 5 m: 20 × 5 × cos 30° ≈ <span data-calc="work">…</span> J. If the pull were at right angles to the motion it would do <span data-calc="workZero">…</span> J of work.</li>
+        <li><strong>A shadow.</strong> The shadow of a stick on the ground, when the sun is overhead, is the stick’s part along the ground.</li>
+        <li><strong>Light on a tilted surface.</strong> A solar panel tilted away from the sun catches less light: how much follows the cosine of the tilt.</li>
+        <li><strong>A shopping bill.</strong> Multiply each price by its quantity and add: that is the dot product of the price list and the quantity list.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If you multiply matching items and add them up, or you ask how much of one push goes along another direction, think dot product.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A rope pulls a sled, but the rope is at exactly right angles to the direction the sled moves. How much work does the pull do on the sled in that direction?</legend>
+          <label class="radio-row"><input type="radio" name="spot-dot" data-correct data-why="Work is force · displacement. At right angles the cosine is 0, so the dot product is 0 and the pull adds nothing to the motion."><span>None: the dot product is zero</span></label>
+          <label class="radio-row"><input type="radio" name="spot-dot" data-why="The most work comes when the pull is exactly along the motion (cos 0° = 1). At right angles it is the least."><span>The most it possibly can</span></label>
+          <label class="radio-row"><input type="radio" name="spot-dot" data-why="Half would need an angle of 60°. At 90° the cosine is exactly 0."><span>Half as much as along the motion</span></label>
+        </fieldset>
+      </div>
+      <p class="muted">Each entry of a matrix-vector product is one dot product, of a row with the vector, as on the <a href="../../01-linear-algebra/matmul/">Matrix-vector and matrix-matrix multiplication</a> card.</p>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="dot"></div>
+      <div class="check" data-predict="dot">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-dot">What is the dot product of (2, 3) and (4, −1)?</label></p>
+        <div class="row"><input id="p-dot" name="p-dot" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Multiply the first entries, multiply the second entries, then add. Mind the minus sign.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>The dot product turns two lists into one number that says how much they agree. It also gives a length: a·a is the squared length of a, so every norm on the earlier card hides a dot product. It is also the building block of matrix multiplication, which is a table of dot products.</p>
+      <p><strong>One thing to watch.</strong> The dot product grows with the lengths of the arrows as well as with how well they line up, so a long arrow gives a big number even if it is only slightly aligned.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> We want a number f(a, b) that is the same whichever arrow comes first, scales when either arrow scales and adds when either arrow adds, and that gives the squared length when both arrows are the same: f(a, a) = ‖a‖².</li>
+        <li><strong>Use the lengths we already have.</strong> By Pythagoras, ‖a + b‖² is the squared length of the combined arrow. Expanding it with the rules above gives ‖a‖² + 2 f(a, b) + ‖b‖².</li>
+        <li><strong>Solve for f.</strong> f(a, b) = (‖a + b‖² − ‖a‖² − ‖b‖²) / 2. For a = (3, 2) and b = (4, 0) this gives <span data-calc="polar12">…</span>, the same as the sum of products.</li>
+        <li><strong>Multiply it out.</strong> Writing the squared lengths as sums of squared entries, everything cancels except a₁b₁ + a₂b₂ + …, so the requirements force the sum of products.</li>
+      </ol>
+      <p>Before you continue, predict: what is the dot product of an arrow with itself?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>It is the squared length. For (3, 4): 3×3 + 4×4 = 25 = 5², which is why “the squared length” and “the dot product with itself” are the same thing.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>The attention score is a dot product.</strong> In the original Transformer, each token has a query vector and a key vector, and the <span class="term" data-term="attention-score">attention score</span> between two tokens is the dot product of one token’s query with the other’s key (Vaswani et al., 2017, §3.2). With the made-up three-entry vectors q = (1, 0, 2) and k = (2, 1, 1), the score is <span data-calc="qk3">…</span>. A large positive score means the query and key lean the same way.</li>
+        <li><strong>Matrix products are dot products.</strong> Computing all the scores at once is a matrix multiplication, which is why the Matrix-vector card matters.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> The vectors above are made up. Real queries and keys come from learned matrices and have tens of entries (64 in the original base model). This card only covers the score itself, not what is done with it afterwards.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-dot">In your own words: why can the dot product be positive, zero or negative, and what does each sign tell you?</label></p>
+        <textarea id="e-dot" name="e-dot" autocomplete="off"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>The dot product is ‖a‖‖b‖ cos θ. The lengths are never negative, so the sign comes from the cosine. Below 90° the cosine is positive, so the arrows lean the same way. At 90° it is zero, so they are at right angles. Above 90° it is negative, so they lean opposite ways.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“Multiply matching entries and add: that is the dot product. It is also the shadow of one arrow on another, times the length of the other. Positive means they lean the same way, zero means right angles, negative means opposite. It is the way a computer asks how much two lists agree.”</p>
+      <h4>Everyday analogy</h4>
+      <p>A shadow at noon: the lamp is overhead and the shadow is the part of a stick that lies along the ground. <em>Where it breaks down:</em> a shadow has no sign; the dot product gets a minus sign when the arrow leans backwards.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw two arrows from one point.</li><li>Drop a perpendicular from the tip of a onto the line of b and mark the shadow.</li><li>Write a·b = shadow × ‖b‖.</li><li>Next to it, write a₁b₁ + a₂b₂ for the same example.</li><li>Rotate b to 90° and show the shadow shrink to nothing.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Is the dot product an arrow?</strong> No. It is one number.</p>
+      <p><strong>Why does it equal both formulas?</strong> Both come from the requirements on the card: linear in each arrow and equal to the squared length for a·a.</p>
+      <p><strong>Does order matter?</strong> No: a·b = b·a.</p>
+      <h4>Common misconception</h4>
+      <p>“A big dot product means the arrows point the same way.” It may only mean the arrows are long. To compare direction alone, you divide the lengths out.</p>
+    </details>
+    <footer>Further reading: MML Ch 3.2 (inner products).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

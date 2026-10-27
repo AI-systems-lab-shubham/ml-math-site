@@ -119,7 +119,10 @@ export function buildPages(course, readSource = (p) => readOld(SOURCE_REV, p)) {
   const files = new Map();
   const links = [];
   for (const m of course.modules.filter((x) => x.status === "built")) {
-    const old = parseOld(readSource(`${m.path}index.html`));
+    // Modules written after the split (Module 2 on) have no old long page; their pages are written by hand.
+    let source;
+    try { source = readSource(`${m.path}index.html`); } catch { continue; }
+    const old = parseOld(source);
     const num = modNum(course, m);
     const built = m.concepts.filter((c) => c.status === "built");
     // Concepts added after the split have no old article; they are written by hand and are not generated here.

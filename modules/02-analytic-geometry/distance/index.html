@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m02">
+  <meta name="concept-id" content="m02-distance">
+  <title>Distance - Analytic geometry - ML Math</title>
+  <meta name="description" content="How far apart two points are: subtract one from the other, then measure the difference with a norm.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/analytic.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li>
+      <a href="../">2 · Analytic geometry</a>
+      <ul class="sub">
+        <li><a href="../norms/">Norms: L1 and L2</a></li>
+        <li><a href="./" aria-current="page">Distance</a></li>
+        <li><a href="../dot-product/">Dot product</a></li>
+        <li><a href="../angle-cosine/">Angle and cosine similarity</a></li>
+        <li><a href="../orthogonality/">Orthogonality</a></li>
+        <li><a href="../projections/">Projections</a></li>
+        <li><a href="../sqrt-dk/">Why attention scores are divided by the square root of d_k</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 2: Analytic geometry</a></li>
+      <li><span aria-current="page">Distance</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-distance" data-size="compact">
+    <header>
+      <p class="eyebrow">Compact card · 2 of 7</p>
+      <h1>Distance</h1>
+      <p class="muted">How far apart two points are: subtract one from the other, then measure the difference with a norm.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>To find how far apart two places are, you first find the arrow that goes from one to the other. That arrow is the <em>difference</em>: subtract the start point from the end point entry by entry. Then you measure the arrow with a <span class="term" data-term="norm">norm</span>, as on the Norms card. That is the <span class="term" data-term="distance">distance</span>: the norm of the difference.</p>
+      <p>From A = (1, 2) to B = (4, 6) the difference is (3, 4). Its L2 length is <span data-calc="dist5">…</span>, the straight-line distance. Its L1 length is <span data-calc="dist7">…</span>, the walk along the grid. Swap A and B and the difference flips sign, but the norm does not change, so distance has no direction.</p>
+      <div class="math-display" data-tex-display="d(\mathbf{a},\mathbf{b})=\|\mathbf{a}-\mathbf{b}\|">d(a, b) = ‖a − b‖</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>The two dots are fixed. Choose how to travel from A to B and compare the two lengths.</p>
+      <div data-widget="distance">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Distance is the length of a difference</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A grid with two points, A at (1, 2) and B at (4, 6). The difference arrow runs from A to B. In the straight-line setting a navy line joins them and its length is the L2 distance. In the grid-walk setting an ochre path goes across and then up, and its length is the L1 distance.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>Two phones on a map: the straight-line gap is an L2 distance of their positions.</li>
+        <li>Two students’ marks in the same four tests: subtract test by test and measure the gap between the two lists.</li>
+        <li>Two colours as (red, green, blue) amounts: the size of the difference says how different they look, roughly.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If you subtract two lists of the same length and then measure the result, you are computing a distance.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A music app wants to find songs “close” to the one you are playing. Each song is described by a list of numbers. What can it do with two such lists to say how close the songs are?</legend>
+          <label class="radio-row"><input type="radio" name="spot-distance" data-correct data-why="That is exactly the distance: the norm of the difference. A small value means the lists, and so the songs as described, are close."><span>Subtract one list from the other and take a norm of the difference</span></label>
+          <label class="radio-row"><input type="radio" name="spot-distance" data-why="Adding gives a combined list, not a measure of how different the two are."><span>Add the two lists together</span></label>
+          <label class="radio-row"><input type="radio" name="spot-distance" data-why="That measures how big one song’s list is, not how far it is from the other."><span>Take the norm of one list only</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="distance"></div>
+      <div class="check" data-predict="distance">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-distance">What is the L1 distance between (2, 5) and (6, 2)?</label></p>
+        <div class="row"><input id="p-distance" name="p-distance" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Subtract entry by entry: 6 − 2 and 2 − 5. Drop the signs and add.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Distance turns “how similar are these two things?” into one number, as long as each thing is a list of numbers. It is how a program decides which examples are neighbours.</p>
+      <p><strong>When it does not fit.</strong> If one entry is measured in huge units (millimetres) and another in small ones (years), the big units swamp the sum. Put entries on comparable scales first.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-motivated">● Motivated</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> A distance should be zero when the two points are the same, never negative, and the same from A to B as from B to A.</li>
+        <li><strong>The candidate.</strong> The difference is zero exactly when the points match, so measuring it with a norm gives all three properties: the norm of 0 is 0, a norm is never negative, and flipping the arrow does not change its length.</li>
+        <li><strong>Why it is a good fit.</strong> Other distances exist, but this one lets any norm from the previous card become a distance, so we pick the norm that suits the problem.</li>
+      </ol>
+      <p>Before you continue, predict: if you move both points by the same amount, does the distance change?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>No. Both points shift by the same vector, so the difference is unchanged, and so is its norm.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Conceptual link only.</strong> A token’s <span class="term" data-term="embedding">embedding</span> is a vector, so the distance between two embeddings is defined by the formula on this card. This card makes no claim about which measure a particular model or search system uses.</li>
+      </ul>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>Everyday analogy</h4>
+      <p>Two pins on a map and a string between them: the string’s length is the distance. <em>Where it breaks down:</em> the string is always the straight line, but a norm can also measure a grid walk.</p>
+      <h4>Common misconception</h4>
+      <p>“Distance is the difference.” The difference is an arrow with a direction and can be negative; the distance is its length and never is.</p>
+    </details>
+    <footer>Further reading: MML Ch 3.3 (distances and metrics).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m02">
+  <meta name="concept-id" content="m02-angle-cosine">
+  <title>Angle and cosine similarity - Analytic geometry - ML Math</title>
+  <meta name="description" content="The dot product with the lengths divided out: a number from −1 to 1 that depends only on direction.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/analytic.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li>
+      <a href="../">2 · Analytic geometry</a>
+      <ul class="sub">
+        <li><a href="../norms/">Norms: L1 and L2</a></li>
+        <li><a href="../distance/">Distance</a></li>
+        <li><a href="../dot-product/">Dot product</a></li>
+        <li><a href="./" aria-current="page">Angle and cosine similarity</a></li>
+        <li><a href="../orthogonality/">Orthogonality</a></li>
+        <li><a href="../projections/">Projections</a></li>
+        <li><a href="../sqrt-dk/">Why attention scores are divided by the square root of d_k</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 2: Analytic geometry</a></li>
+      <li><span aria-current="page">Angle and cosine similarity</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-angle-cosine" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 4 of 7</p>
+      <h1>Angle and cosine similarity</h1>
+      <p class="muted">The dot product with the lengths divided out: a number from −1 to 1 that depends only on direction.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>The <a href="../dot-product/">Dot product</a> mixes two things: how well two arrows line up, and how long they are. To keep only the alignment, divide the lengths out. The result, <span class="term" data-term="cosine-similarity">cosine similarity</span>, is the cosine of the <span class="term" data-term="angle">angle</span> between the arrows. It is 1 when they point the same way, 0 at right angles and −1 when they point in opposite directions. Make one arrow ten times longer and nothing changes.</p>
+      <p>For vectors of length 1 the lengths are already 1, so cosine similarity is just the dot product. And there is one case with no answer: the zero vector has no direction, so it has no angle with anything, and cosine similarity is undefined for it. Code must check for that case instead of dividing by zero.</p>
+      <div class="math-display" data-tex-display="\cos\htmlData{sym=angleAB}{\theta}=\dfrac{\htmlData{sym=dotAB}{\mathbf{a}\cdot\mathbf{b}}}{\|\mathbf{a}\|\,\|\mathbf{b}\|}">cos θ = (a·b) / (‖a‖‖b‖)</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>The blue arrow a stays put. Turn b with the direction slider and stretch it with the length slider. The burgundy arc is the angle. Notice that the dot product changes with the length but the cosine does not. Slide the length down to 0 to see what happens at the zero vector.</p>
+      <div data-widget="angle">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Cosine ignores length</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A grid with a fixed blue arrow a pointing right. A teal arrow b has a direction and a length you set with two sliders. A burgundy arc marks the angle between them. Below the picture the dot product, which changes with the length of b, sits beside the cosine similarity, which only changes with the direction. If the length is zero, b is the zero vector and the cosine similarity is shown as undefined.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>Two compass bearings: the angle between “north-east” and “east” is the same whether you look at a street or a continent.</li>
+        <li>Two recipes written as amounts of the same ingredients: a double batch has the same proportions, so its cosine with the original is 1.</li>
+        <li>Two documents as word counts: a short note and a long essay on the same topics have a cosine near 1, although the essay has far larger counts.</li>
+        <li>Two people’s ratings of the same films, once each person’s average is removed: similar tastes point the same way.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If you want “same direction, whatever the size”, divide the dot product by both lengths.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A short tweet and a long article mention the same topics in the same proportions. Describe each as a list of word counts. Which measure says they are alike?</legend>
+          <label class="radio-row"><input type="radio" name="spot-angle" data-correct data-why="The article’s counts are larger, but the proportions match, so the arrows point the same way and the cosine is near 1."><span>Cosine similarity: near 1</span></label>
+          <label class="radio-row"><input type="radio" name="spot-angle" data-why="The dot product grows with the lengths, so the long article would score far higher than the tweet even though the topics are the same."><span>The raw dot product</span></label>
+          <label class="radio-row"><input type="radio" name="spot-angle" data-why="Cosine similarity can: it divides out the length, which is exactly what removes the size difference."><span>Neither can compare lists of different total size</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="angle"></div>
+      <div class="check" data-predict="angle">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-angle">What is the cosine similarity of (3, 4) and (6, 8)?</label></p>
+        <div class="row"><input id="p-angle" name="p-angle" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Is (6, 8) a stretched copy of (3, 4)? What is the angle between an arrow and its stretched copy?</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>When the size of a vector is incidental (a long document, a loud recording, a big population), cosine similarity compares the pattern without the size. It always lies in [−1, 1], so it is easy to read.</p>
+      <p><strong>When it does not fit.</strong> If size carries meaning, cosine similarity throws it away; the raw dot product keeps it. And it is undefined for the zero vector, so any program must handle that case. Computing the angle needs an arccosine; rounding can push the quotient just past 1, so code clamps it into [−1, 1] first.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> A number that depends on direction only: if either arrow is stretched by a positive factor, the number must not change.</li>
+        <li><strong>The problem.</strong> The dot product a·b is multiplied by c if you stretch a by c.</li>
+        <li><strong>The fix.</strong> Divide by something that is also multiplied by c: the length ‖a‖. Do the same for b. The quotient (a·b) / (‖a‖‖b‖) is unchanged by any positive stretching.</li>
+        <li><strong>The range.</strong> Since a·b = ‖a‖‖b‖ cos θ, the quotient is cos θ, so it lies between −1 and 1.</li>
+      </ol>
+      <p>Before you continue, predict: what is the cosine similarity of an arrow with itself?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>1. The angle between an arrow and itself is 0°, and cos 0° = 1. Equivalently, a·a = ‖a‖², and dividing by ‖a‖‖a‖ leaves 1.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Embedding similarity search.</strong> Systems that search a collection of embedding vectors for the ones most like a query commonly rank them by cosine similarity or by a dot product; the choice varies between systems. This is common practice in vector-search tools, not a statement about any particular model or company.</li>
+        <li><strong>Why the two often agree.</strong> If every vector has first been scaled to length 1, cosine similarity and the dot product are the same number, so ranking by one ranks by the other.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> This is a general description of how such search is commonly done. It says nothing about how any particular embedding model is trained or normalised.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-angle">In your own words: why does cosine similarity ignore length, and why is it undefined for the zero vector?</label></p>
+        <textarea id="e-angle" name="e-angle" autocomplete="off"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>It divides the dot product by both lengths, so stretching either arrow by a positive factor cancels out. The zero vector has length 0, so the division would be 0 divided by 0; it also has no direction, so there is no angle to measure.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“Cosine similarity is the dot product with the lengths divided out. It is 1 for the same direction, 0 at right angles, −1 for opposite. It ignores how long the arrows are, so a short note and a long essay on the same topic can match. It is undefined for the zero vector, because that has no direction.”</p>
+      <h4>Everyday analogy</h4>
+      <p>Two people pointing at the same star: how far away each one’s finger reaches does not matter, only where it points. <em>Where it breaks down:</em> fingers have a length that sometimes matters; cosine throws it away.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw a and b from one point with an angle between them.</li><li>Write a·b = ‖a‖‖b‖ cos θ.</li><li>Divide both sides by ‖a‖‖b‖.</li><li>Stretch b to twice the length and show the cosine does not move.</li><li>Shrink b to a point and write “0/0: undefined”.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Why between −1 and 1?</strong> Because it is a cosine of an angle.</p>
+      <p><strong>Is it a distance?</strong> No. It is a similarity: 1 means most alike, whereas a distance of 0 means most alike.</p>
+      <p><strong>What if the vectors are already length 1?</strong> Then cosine similarity is the dot product.</p>
+      <h4>Common misconception</h4>
+      <p>“Cosine similarity of 0 means the vectors are unrelated.” It means they are at right angles, which for word counts often means no shared words; it is not a general statement about meaning.</p>
+    </details>
+    <footer>Further reading: MML Ch 3.4 (angles and orthogonality).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

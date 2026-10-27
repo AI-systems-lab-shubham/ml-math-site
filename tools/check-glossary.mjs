@@ -3,6 +3,7 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { chain, termIdsIn } from "../assets/js/course.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const katex = createRequire(import.meta.url)(join(root, "vendor/katex/katex.min.js"));
@@ -94,8 +95,46 @@ while (queue.length) {
 }
 for (const id of byId.keys()) if (!referenced.has(id)) fail(`${id}: never referenced`);
 
+// A "Learn more" link must never point forward: a term shown on a concept page (in its text, in its objectives and
+// takeaways, or reached through a popover's `uses` chain) may only link to that concept or an earlier one.
+// Terms taught later therefore carry no learnMore until every page that shows them comes after the page they link to.
+// Enforced from Module 2 on. Modules 0 and 1 predate the rule and still hold some forward links; they are counted and
+// reported below, not failed, so that this check can guard all new content without rewriting old pages.
+const ENFORCE_FROM = "m02";
+let legacyForward = 0;
+{
+  const course = JSON.parse(readFileSync(join(root, "data/course.json"), "utf8"));
+  const order = chain(course);
+  const indexOfPath = new Map();
+  order.forEach((c, i) => indexOfPath.set(c.path, i));
+  for (const m of course.modules) {   // a link to a module overview counts as that module's first concept
+    const first = order.findIndex((c) => c.moduleId === m.id);
+    if (first >= 0 && !indexOfPath.has(m.path)) indexOfPath.set(m.path, first);
+  }
+  const reach = (ids) => {
+    const seen = new Set(ids);
+    const stack = [...ids];
+    while (stack.length) for (const u of byId.get(stack.pop())?.uses ?? []) if (!seen.has(u)) { seen.add(u); stack.push(u); }
+    return seen;
+  };
+  order.forEach((c, i) => {
+    const file = join(root, c.path, "index.html");
+    if (!existsSync(file)) return;
+    const shown = new Set([...readFileSync(file, "utf8").matchAll(/data-term="([^"]+)"/g)].map((m) => m[1]));
+    for (const text of [...(c.objectives ?? []), ...(c.takeaways ?? [])]) for (const t of termIdsIn(text)) shown.add(t);
+    for (const id of reach([...shown].filter((t) => byId.has(t)))) {
+      const target = byId.get(id)?.learnMore?.split("#")[0];
+      if (!target) continue;
+      const j = indexOfPath.get(target);
+      if (j !== undefined && j > i && c.moduleId < ENFORCE_FROM) { legacyForward++; continue; }
+      if (j !== undefined && j > i) fail(`${c.path}: term "${id}" links forward to ${target} (Learn more must point at this card or an earlier one)`);
+    }
+  });
+}
+
 if (errors.length) {
   console.error(errors.map((e) => `✖ ${e}`).join("\n"));
   process.exit(1);
 }
+if (legacyForward) console.log(`note: ${legacyForward} forward Learn more link(s) in Modules 0 and 1 are not enforced (they predate the rule).`);
 console.log(`✓ ${byId.size} glossary entries, ${Object.keys(data.symbols ?? {}).length} symbols, ${pages.length} page(s) checked.`);

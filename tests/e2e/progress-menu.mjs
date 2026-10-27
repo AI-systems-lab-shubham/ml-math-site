@@ -143,7 +143,7 @@ async function open(width, { url = M0, ctxOpts = {}, init } = {}) {
     if (!x.inNav) break;
     seen.add(x.id);
   }
-  check([...seen].every((id) => id === null || id.startsWith("m00") || id === "m01" || id.startsWith("ol-sub-")), `Tab in the outline should reach only module 0 rows and module headers (got ${[...seen]})`);
+  check([...seen].every((id) => id === null || id.startsWith("m00") || id === "m01" || id === "m02" || id.startsWith("ol-sub-")), `Tab in the outline should reach only module 0 rows and module headers (got ${[...seen]})`);
   check([...seen].some((id) => id === "m00-notation"), "Tab reaches the last built row of the open module");
 
   // 6. Closes when the module collapses or the row is removed.

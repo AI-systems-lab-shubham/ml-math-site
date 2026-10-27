@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m02">
+  <meta name="concept-id" content="m02-sqrt-dk">
+  <title>Why attention scores are divided by the square root of d_k - Analytic geometry - ML Math</title>
+  <meta name="description" content="Adding more terms makes a dot product spread out; dividing by √d_k exactly undoes that, under a stated assumption.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/analytic.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li>
+      <a href="../">2 · Analytic geometry</a>
+      <ul class="sub">
+        <li><a href="../norms/">Norms: L1 and L2</a></li>
+        <li><a href="../distance/">Distance</a></li>
+        <li><a href="../dot-product/">Dot product</a></li>
+        <li><a href="../angle-cosine/">Angle and cosine similarity</a></li>
+        <li><a href="../orthogonality/">Orthogonality</a></li>
+        <li><a href="../projections/">Projections</a></li>
+        <li><a href="./" aria-current="page">Why attention scores are divided by the square root of d_k</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 2: Analytic geometry</a></li>
+      <li><span aria-current="page">Why attention scores are divided by the square root of d_k</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-sqrt-dk" data-size="compact">
+    <header>
+      <p class="eyebrow">Compact card · 7 of 7</p>
+      <h1>Why attention scores are divided by the square root of d_k</h1>
+      <p class="muted">Adding more terms makes a dot product spread out; dividing by √d_k exactly undoes that, under a stated assumption.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Take a query vector q and a key vector k, each with d_k entries, and compute q·k. It is a sum of d_k products. The more terms you add, the more room the sum has to wander, so the typical size of q·k grows with d_k. Dividing by the right amount keeps the scores the same size however many entries there are. To find that amount, we need four ideas, each in one sentence:</p>
+      <ul>
+        <li>The <span class="term" data-term="mean">mean</span> is the average value: the balance point of the numbers.</li>
+        <li>The <span class="term" data-term="variance">variance</span> measures how spread out numbers are around their mean: the average of the squared distances from it.</li>
+        <li>Two random numbers are <span class="term" data-term="independent">independent</span> when knowing one tells you nothing about the other, like two separate coin flips.</li>
+        <li>The <span class="term" data-term="square-root">square root</span> of a number is the number that multiplies by itself to give it, so √64 = <span data-calc="sqrtDK">…</span>.</li>
+      </ul>
+      <p>The assumption: every entry of q and k is independent of the others, with mean 0 and variance 1. Then each product qᵢkᵢ has mean 0 and variance 1, variances of independent numbers add, so q·k has mean 0 and variance d_k. Dividing by √d_k divides the variance by d_k and gives variance 1.</p>
+      <div class="math-display" data-tex-display="\operatorname{Var}(\mathbf{q}\cdot\mathbf{k})=\htmlData{sym=dKsym}{d_k},\qquad \operatorname{Var}\!\left(\dfrac{\mathbf{q}\cdot\mathbf{k}}{\sqrt{\htmlData{sym=dKsym}{d_k}}}\right)=1">Var(q·k) = d_k, Var(q·k / √d_k) = 1</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Each chart shows 2000 simulated values of q·k from random vectors with d entries, on the same axis. The top chart widens as d grows. The bottom chart shows the same values divided by √d: it stays equally narrow. Pick normal random numbers or coin flips (+1 or −1); both have mean 0 and variance 1.</p>
+      <div data-widget="sqrt">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">How spread out are the dot products?</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">Two bar charts share one horizontal axis from minus 40 to 40. The top chart shows the spread of 2000 simulated dot products q·k of random vectors with d entries, each entry with mean 0 and variance 1. The bottom chart shows the same values after dividing by the square root of d. The top chart widens as d grows; the bottom one stays equally narrow. The measured variances are written below.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A walker who takes d steps of 1 metre, each forwards or backwards at random: after d steps the typical distance from the start grows like √d, not like d.</li>
+        <li>Adding the independent errors of d measurements: the typical total error grows like √d, not d.</li>
+        <li>Noise from many independent small sources in a circuit: the total noise grows like the square root of the number of sources.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If you add d independent wobbles of the same size, the spread of the total is √d times one wobble’s, because variances add.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A walker takes many steps of equal size, each forwards or backwards by a coin flip. How does the typical distance from the start grow with the number of steps?</legend>
+          <label class="radio-row"><input type="radio" name="spot-sqrt" data-correct data-why="The variance of the total adds up step by step, so it grows in proportion to the number of steps. The typical distance is the square root of that variance."><span>Like the square root of the number of steps</span></label>
+          <label class="radio-row"><input type="radio" name="spot-sqrt" data-why="That would need every step to go the same way. Steps in opposite directions cancel, so the total grows more slowly."><span>In proportion to the number of steps</span></label>
+          <label class="radio-row"><input type="radio" name="spot-sqrt" data-why="The spread of the total does grow, just more slowly than the number of steps."><span>It does not grow at all</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="sqrt"></div>
+      <div class="check" data-predict="sqrt">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-sqrt">Entries have mean 0 and variance 1 and are independent. What is the variance of q·k when d_k = 16?</label></p>
+        <div class="row"><input id="p-sqrt" name="p-sqrt" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Each of the 16 products has variance 1, and variances of independent numbers add.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Without the division, scores get more spread out as d_k grows, so some scores are very large in size. A model with a different d_k would then have scores of a different size for no good reason. Dividing by √d_k keeps the size steady.</p>
+      <p><strong>When it does not hold.</strong> The result needs the assumption: independent entries with mean 0 and variance 1. If each entry instead has variance 4, the variance of q·k is d_k × 4 × 4: for d_k = 16 that is <span data-calc="varFour">…</span>, and dividing by √16 does not bring it back to 1. Trained queries and keys are made by learned matrices; nothing here says they have unit variance or independent entries, so this is the argument for why the divisor is a sensible default, not a measurement of a trained model.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> The size of the scores should not depend on d_k.</li>
+        <li><strong>The spread.</strong> Under the assumption, each product qᵢkᵢ has variance 1 and q·k adds d_k independent such products, so its variance is d_k.</li>
+        <li><strong>The fix.</strong> Dividing a number by c divides its variance by c². We want to divide d_k by something to get 1, so c² = d_k and c = √d_k.</li>
+        <li><strong>The alternatives fail.</strong> Dividing by d_k itself over-corrects: the variance becomes 1/d_k, and scores shrink towards zero as d_k grows. Dividing by √d_k is the one choice that gives exactly 1.</li>
+      </ol>
+      <p>Before you continue, predict: if we divided by d_k instead of √d_k, would the variance of the scores be bigger or smaller than 1?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>Smaller: dividing by d_k divides the variance by d_k², giving d_k / d_k² = 1/d_k. For d_k = 64 that is far below 1, so the scores would be squeezed towards zero.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>In the original Transformer.</strong> The dot products of queries and keys are divided by √d_k, with d_k = <span data-calc="dK">…</span> in the base model, so the divisor is <span data-calc="sqrtDK">…</span> (Vaswani et al., 2017, §3.2.1). The paper’s footnote gives the argument of this card: if the components of q and k are independent random variables with mean 0 and variance 1, then q·k has mean 0 and variance d_k.</li>
+        <li><strong>The paper’s motivation.</strong> For large d_k the dot products grow large in size, which pushes the step that turns a token’s scores into positive weights adding up to 1 (the softmax) into regions where its slope is tiny, so learning is slow. Dividing by √d_k counteracts this.</li>
+        <li><strong>A check you can run.</strong> With <span data-calc="simN">…</span> random pairs at d_k = <span data-calc="dK">…</span> and a fixed seed, the variance of q·k came out as <span data-calc="varNormal">…</span> for normal random entries and <span data-calc="varCoin">…</span> for ±1 entries, near <span data-calc="dK">…</span>; after dividing by <span data-calc="sqrtDK">…</span> it was <span data-calc="varNormalScaled">…</span> and <span data-calc="varCoinScaled">…</span>, near 1.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> The simulation draws entries that really are independent with mean 0 and variance 1, which is the assumption, not a property of trained queries and keys. This card makes no claim about the values inside a trained model.</p></div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>Everyday analogy</h4>
+      <p>Many independent coin flips of ±1 metre: the more flips, the further you typically drift, but only like the square root of the number of flips. <em>Where it breaks down:</em> real queries and keys are not coin flips; the argument holds only under its assumption.</p>
+      <h4>Common misconception</h4>
+      <p>“The scores have variance 1 in a trained model.” The card only shows that dividing by √d_k gives variance 1 when the entries are independent with mean 0 and variance 1. Whether trained queries and keys are like that is a separate question.</p>
+    </details>
+    <footer>Further reading: MML Ch 3.2 (inner products), and Vaswani et al., 2017, §3.2.1 (scaled dot-product attention).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m02">
+  <meta name="concept-id" content="m02-norms">
+  <title>Norms: L1 and L2 - Analytic geometry - ML Math</title>
+  <meta name="description" content="Two honest ways to say how long an arrow is: as the crow flies, or as the taxi drives along the grid.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/analytic.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li>
+      <a href="../">2 · Analytic geometry</a>
+      <ul class="sub">
+        <li><a href="./" aria-current="page">Norms: L1 and L2</a></li>
+        <li><a href="../distance/">Distance</a></li>
+        <li><a href="../dot-product/">Dot product</a></li>
+        <li><a href="../angle-cosine/">Angle and cosine similarity</a></li>
+        <li><a href="../orthogonality/">Orthogonality</a></li>
+        <li><a href="../projections/">Projections</a></li>
+        <li><a href="../sqrt-dk/">Why attention scores are divided by the square root of d_k</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 2: Analytic geometry</a></li>
+      <li><span aria-current="page">Norms: L1 and L2</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-norms" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 1 of 7</p>
+      <h1>Norms: L1 and L2</h1>
+      <p class="muted">Two honest ways to say how long an arrow is: as the crow flies, or as the taxi drives along the grid.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>How long is an arrow? Walk 3 steps across and 4 steps up. You could answer by pulling a string tight from start to finish (the straight line), or by counting the steps you actually walked along the grid lines (3 + 4). Both are fair answers to “how far?”, and each one is a <span class="term" data-term="norm">norm</span>: a rule that turns a <span class="term" data-term="vector">vector</span> into a single length. Write the norm of x as ‖x‖.</p>
+      <p>The straight-line length is the <span class="term" data-term="l2-norm">L2 norm</span>. The two walked legs and the straight line make a right triangle, so Pythagoras gives the length: square each <span class="term" data-term="component">entry</span>, add the squares, take the <span class="term" data-term="square-root">square root</span>. For (3, 4) that is <span data-calc="l2_34">…</span>. In three entries the same idea repeats: (1, 2, 2) has length <span data-calc="l2_122">…</span>.</p>
+      <p>The grid-walk length is the <span class="term" data-term="l1-norm">L1 norm</span>: ignore the signs and add the sizes of the entries. For (3, 4) it is <span data-calc="l1_34">…</span>. A step backwards is still a step you walked, so it counts as positive.</p>
+      <p>Any fair length obeys three rules: it is never negative; it is zero only for the zero vector; and doubling an arrow doubles its length. The small number under the bars says which norm: ‖x‖₂ and ‖x‖₁.</p>
+      <div class="math-display" data-tex-display="\htmlData{sym=normX}{\|\mathbf{x}\|_2}=\sqrt{x_1^2+x_2^2+\cdots+x_n^2},\qquad \htmlData{sym=normX}{\|\mathbf{x}\|_1}=|x_1|+|x_2|+\cdots+|x_n|">‖x‖₂ = √(x₁² + … + xₙ²), ‖x‖₁ = |x₁| + … + |xₙ|</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>Move the two sliders to change the arrow. The navy line is the straight-line (L2) length; the thick ochre path is the walk along the grid (L1). The dashed shape is every point whose length matches the arrow’s for the norm you pick: a circle for L2, a diamond for L1. Try an arrow along an axis, where the two lengths agree.</p>
+      <div data-widget="norms">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Two ways to measure an arrow</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A grid with an arrow from the origin to a point you choose. A navy straight line shows the L2 length. An ochre path goes along the grid lines, across and then up, and its total length is the L1 norm. A dashed curve or diamond shows every point with the same length as the arrow, for the norm you pick. The two lengths are written below.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+      <p class="muted">This card uses two entries so you can draw it; the formulas work for any number of entries.</p>
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>Flying versus driving: the straight-line distance between two cities is an L2 length, the street-grid distance in a city laid out in blocks is an L1 length.</li>
+        <li>Pacing out a room: the diagonal across the floor is L2, walking along two walls is L1.</li>
+        <li>Total error: add up how far each prediction missed its target, ignoring whether it was too high or too low. That is the L1 norm of the list of errors.</li>
+        <li>A cable running diagonally across a rectangle of ground: its length is the L2 norm of (width, depth).</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If the length comes from squaring, adding and taking a root, it is L2. If it comes from adding sizes with the signs dropped, it is L1.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. Delivery drivers in a city built on a grid of blocks travel from a shop to a house that is 3 blocks east and 4 blocks north. Which length is the distance they actually drive?</legend>
+          <label class="radio-row"><input type="radio" name="spot-norms" data-correct data-why="Cars cannot cut across buildings, so they travel along the grid lines. That is the sum of the leg sizes, the L1 norm."><span>The L1 norm: 3 + 4 blocks</span></label>
+          <label class="radio-row"><input type="radio" name="spot-norms" data-why="The straight line is shorter, but there is no road along it. It is how far a bird would fly, not how far the van drives."><span>The L2 norm: the straight line</span></label>
+          <label class="radio-row"><input type="radio" name="spot-norms" data-why="Any route along the grid that only goes east and north has the same total length, so the order of the turns does not change it."><span>Neither: it depends on the order of the turns</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="norms"></div>
+      <div class="check" data-predict="norms">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-norms">What is the L1 norm of (−2, 5)?</label></p>
+        <div class="row"><input id="p-norms" name="p-norms" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Drop the minus sign on −2, then add the two sizes.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Many problems need “how big is this?” for a whole list of numbers: how large are a model’s weights, how big was the error? A norm gives that single number.</p>
+      <p><strong>Which one.</strong> L2 squares each entry, so one big entry dominates, and it connects to angles and the dot product. L1 treats every entry in proportion to its size, so it is less swayed by one large entry. Neither is “the” length: they answer slightly different questions.</p>
+      <p><strong>When it does not fit.</strong> A norm says how big a vector is, not which way it points. Two very different arrows can have the same length.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-motivated">● Motivated</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> A length should be zero only for the zero vector, never negative, and double when the arrow doubles.</li>
+        <li><strong>Candidate 1: the sum of the entries.</strong> It fails: (3, −3) would have length 0 although it is a long arrow. Dropping signs fixes that, which gives L1.</li>
+        <li><strong>Candidate 2: the straight line.</strong> If a step across and a step up make a right angle, Pythagoras says the straight line is √(across² + up²). That is L2, and it is the one that matches a ruler.</li>
+        <li><strong>What remains.</strong> Both candidates meet the rules. Which one to use is a modelling choice, so L1 and L2 are good fits among several (a third, the largest entry, also works), not a single forced answer.</li>
+      </ol>
+      <p>Before you continue, predict: can the L1 norm of a vector ever be smaller than its L2 norm?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>No. The straight line is the shortest route between two points, and the grid walk is one route, so the L1 length is at least as long as the L2 length. They are equal only when the arrow lies along an axis.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>L2 regularisation.</strong> A common way to discourage large <span class="term" data-term="weight">weights</span> is to add a penalty to the <span class="term" data-term="loss">loss</span> that is proportional to the squared L2 norm of the weights (<span class="term" data-term="l2-regularisation">L2 regularisation</span>): the total loss is the original loss plus (λ/2)‖w‖₂², where λ sets how strong the penalty is.</li>
+        <li><strong>Weight decay.</strong> <span class="term" data-term="weight-decay">Weight decay</span> shrinks every weight directly at each step instead: w ← (1 − ηλ)w − η·(gradient), where η is the learning rate. For plain stochastic gradient descent the two are equivalent once the strength is rescaled by the learning rate. For example, with w = (2, −1), loss gradient (0.5, 0.5), η = 0.1 and λ = 0.01, one penalty step gives <span data-calc="sgdPenalty">…</span> and one decay step gives <span data-calc="sgdDecay">…</span>: the same.</li>
+        <li><strong>Where they differ.</strong> For adaptive optimisers such as Adam, which rescale each weight’s step, the penalty’s gradient is rescaled along with the loss gradient while decoupled weight decay is not, so the two are no longer the same (Loshchilov and Hutter, 2019, “Decoupled Weight Decay Regularization”). AdamW is Adam with decoupled weight decay, and is a common choice for training Transformers.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> The example numbers are made up to show the algebra, not taken from a model. This card does not say which penalty or strength any particular model uses.</p></div>
+      <div class="check explain-back">
+        <h4>Explain it back</h4>
+        <p><label for="e-norms">In your own words: how do the L1 and L2 norms of (3, 4) differ, and what does each one measure?</label></p>
+        <textarea id="e-norms" name="e-norms" autocomplete="off"></textarea>
+        <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
+        <div class="model-answer" hidden><p>The L2 norm is the straight-line length from Pythagoras, √(9 + 16) = 5. The L1 norm adds the sizes of the entries, 3 + 4 = 7, which is how far you walk along the grid. L1 is never shorter than L2, and the two agree only when the arrow lies along an axis.</p></div>
+      </div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“How long is an arrow? You can pull a string tight, that is the L2 length and it comes from Pythagoras. Or you can walk along the grid lines like a taxi, that is the L1 length and you just add up the sizes. Both are norms. They are zero only for the zero vector, and they double when the arrow doubles.”</p>
+      <h4>Everyday analogy</h4>
+      <p>Crow versus taxi: the crow flies straight, the taxi follows the streets. <em>Where it breaks down:</em> a real city has some diagonal roads; the L1 norm assumes you can only move along the two axes.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw an arrow from the origin to (3, 4).</li><li>Draw the right triangle under it and label the legs 3 and 4.</li><li>Write √(3² + 4²) = 5 for the straight line.</li><li>Trace the two legs in a different colour and write 3 + 4 = 7.</li><li>Mark every point at L1 distance 5 from the origin: a diamond. At L2 distance 5: a circle.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Why square the entries for L2?</strong> Pythagoras: lengths along two perpendicular directions combine as squares.</p>
+      <p><strong>Is the L1 norm ever smaller than L2?</strong> Never. The straight line is the shortest route.</p>
+      <p><strong>Can a norm be negative?</strong> No. Zero for the zero vector, positive for every other vector.</p>
+      <h4>Common misconception</h4>
+      <p>“The norm of a vector is its biggest entry.” That is one norm, but not the L1 or L2 norm. For L2 every entry contributes, and for L1 every entry contributes its size.</p>
+    </details>
+    <footer>Further reading: MML Ch 3.1 (norms).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

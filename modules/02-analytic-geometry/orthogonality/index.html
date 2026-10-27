@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m02">
+  <meta name="concept-id" content="m02-orthogonality">
+  <title>Orthogonality - Analytic geometry - ML Math</title>
+  <meta name="description" content="Two arrows are orthogonal when their dot product is zero: a right angle, extended to any number of entries.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/analytic.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li>
+      <a href="../">2 · Analytic geometry</a>
+      <ul class="sub">
+        <li><a href="../norms/">Norms: L1 and L2</a></li>
+        <li><a href="../distance/">Distance</a></li>
+        <li><a href="../dot-product/">Dot product</a></li>
+        <li><a href="../angle-cosine/">Angle and cosine similarity</a></li>
+        <li><a href="./" aria-current="page">Orthogonality</a></li>
+        <li><a href="../projections/">Projections</a></li>
+        <li><a href="../sqrt-dk/">Why attention scores are divided by the square root of d_k</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">3 · Matrix decompositions</span></li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 2: Analytic geometry</a></li>
+      <li><span aria-current="page">Orthogonality</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-orthogonality" data-size="compact">
+    <header>
+      <p class="eyebrow">Compact card · 5 of 7</p>
+      <h1>Orthogonality</h1>
+      <p class="muted">Two arrows are orthogonal when their dot product is zero: a right angle, extended to any number of entries.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>North and east are at right angles: moving east does nothing to how far north you are. Two vectors with that property are <span class="term" data-term="orthogonal">orthogonal</span>. On the Dot product card we saw that at 90° the cosine is 0, so the dot product is 0. Turn that around and make it the definition: a and b are orthogonal when a·b = 0. The definition works for any number of entries, where “a right angle” is hard to draw, and it covers the zero vector: its dot product with anything is 0, so the zero vector counts as orthogonal to every vector.</p>
+      <div class="math-display" data-tex-display="\htmlData{sym=dotAB}{\mathbf{a}\cdot\mathbf{b}}=0">a·b = 0</div>
+    </section>
+
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>The blue arrow a = (2, 1) is fixed. Move b with its two sliders and look for the places where the dot product is exactly 0. A corner mark appears when it is.</p>
+      <div data-widget="ortho">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Find the arrows at right angles</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A grid with a fixed blue arrow a at (2, 1) and a teal arrow b whose two entries you set with sliders. A tick mark appears at the origin when the dot product is exactly zero. The sum, and whether the two arrows are orthogonal, are written below. Setting b to (0, 0) is allowed and counts as orthogonal.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>Two walls meeting at a corner of a room: their directions are at right angles.</li>
+        <li>The x-axis and the y-axis of a graph.</li>
+        <li>A wind blowing due north on a cart rolling due east: it does no work on the cart’s motion (see the Dot product card).</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If the dot product is exactly 0, the arrows are orthogonal.</p>
+      <div class="check spot-it">
+        <fieldset>
+          <legend>Spot it. A cart rolls due east and the wind blows exactly due north. Ignoring friction, does the wind push the cart faster or slower along its path?</legend>
+          <label class="radio-row"><input type="radio" name="spot-ortho" data-correct data-why="The two directions are at right angles, so their dot product is 0 and the wind has no part along the cart’s motion."><span>Neither: east and north are orthogonal</span></label>
+          <label class="radio-row"><input type="radio" name="spot-ortho" data-why="Wind helps only through the part of it that lies along the cart’s path. Due north has no such part."><span>Faster, because wind always helps</span></label>
+          <label class="radio-row"><input type="radio" name="spot-ortho" data-why="It would slow the cart only if it had a backwards part along the path. Due north has none."><span>Slower, because it pushes against the cart</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="ortho"></div>
+      <div class="check" data-predict="ortho">
+        <h4>Predict, then reveal</h4>
+        <p><label for="p-ortho">For which value of k are (2, 1) and (k, 4) orthogonal?</label></p>
+        <div class="row"><input id="p-ortho" name="p-ortho" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
+        <p class="hint-text" hidden>Write out the dot product 2×k + 1×4 and set it equal to 0.</p>
+      </div>
+    </section>
+
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Orthogonal directions do not interfere, so each can be handled separately. That is the idea behind perpendicular axes on a graph: moving along one never changes your position along the other.</p>
+      <p><strong>When it does not fit.</strong> Real computed numbers carry rounding error, so code usually tests that the dot product is very small compared with the lengths rather than exactly 0.</p>
+    </section>
+
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-convention">◆ Convention</span></p>
+      <ol>
+        <li><strong>The idea.</strong> Right angles, where the cosine is 0.</li>
+        <li><strong>The choice.</strong> We could say “the angle is 90°”. That fails for the zero vector and is awkward with many entries, so we define the property by a·b = 0 instead.</li>
+        <li><strong>The consequence.</strong> The zero vector becomes orthogonal to everything. That is a convention that keeps statements simple, not something forced by a picture.</li>
+      </ol>
+      <p>Before you continue, predict: is the zero vector orthogonal to itself?</p>
+      <details class="reveal">
+        <summary>I have made my prediction: show the reasoning</summary>
+        <p>Yes: 0·0 = 0, so the definition holds. The zero vector is orthogonal to every vector, including itself.</p>
+      </details>
+    </section>
+
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Nothing specific to claim.</strong> Orthogonality is a geometric property. This card makes no statement about language models.</li>
+      </ul>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>Everyday analogy</h4>
+      <p>A compass: moving east never changes your north–south position. <em>Where it breaks down:</em> in many dimensions there are more than two perpendicular directions, which a flat compass cannot show.</p>
+      <h4>Common misconception</h4>
+      <p>“Orthogonal means unrelated.” It means the dot product is zero, a statement about directions. Two vectors can be orthogonal and still be tied together in other ways.</p>
+    </details>
+    <footer>Further reading: MML Ch 3.4 (angles and orthogonality).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

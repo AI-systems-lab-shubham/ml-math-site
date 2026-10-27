@@ -3,6 +3,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { posix } from "node:path";
 import { chain, neighbours, termIdsIn, continueTarget, findConcept } from "../assets/js/course.mjs";
 
 const STATUSES = new Set(["built", "planned"]);
@@ -85,6 +86,23 @@ export function checkCourse(course, fs) {
     if (t === null) { if (i !== chain(course).length - 1) errors.push(`${c.id}: Continue has no target but it is not the last concept`); continue; }
     if (fs.read(`${t.path}index.html`) === null) errors.push(`${c.id}: Continue goes to ${t.path}, which does not exist`);
     if (t.kind === "concept" && findConcept(course, t.id)?.module.id !== findConcept(course, c.id).module.id) errors.push(`${c.id}: Continue leaves the module without going to an overview`);
+  }
+
+  // Cards link backward only: no href on a concept page may point at a concept that comes later in the course.
+  {
+    const order = chain(course);
+    const indexOfPath = new Map(order.map((c, i) => [c.path, i]));
+    order.forEach((c, i) => {
+      const html = fs.read(`${c.path}index.html`);
+      if (html === null) return;
+      // The outline fallback lists every concept on purpose; only the card itself is checked.
+      const page = html.slice(html.indexOf("<article"), html.indexOf("</article>") + 1);
+      for (const m of page.matchAll(/<a\b[^>]*\shref="([^"#?]+)(?:[#?][^"]*)?"/g)) {
+        const target = posix.normalize(posix.join(c.path, m[1])).replace(/index\.html$/, "").replace(/\/?$/, "/");
+        const j = indexOfPath.get(target);
+        if (j !== undefined && j > i) errors.push(`${c.id}: links forward to ${target} (cards link backward only)`);
+      }
+    });
   }
 
   // Previous/Next chain: reciprocal and covering every built concept exactly once.
