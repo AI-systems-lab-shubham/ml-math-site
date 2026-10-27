@@ -87,20 +87,20 @@
     <header>
       <p class="eyebrow">Compact card · 7 of 7</p>
       <h1>Why attention scores are divided by the square root of d_k</h1>
-      <p class="muted">Adding more terms makes a dot product spread out; dividing by √d_k exactly undoes that, under a stated assumption.</p>
+      <p class="muted">Adding more terms makes a dot product spread out; dividing by √d<sub>k</sub> exactly undoes that, under a stated assumption.</p>
     </header>
 
     <section data-stage="meaning">
       <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
-      <p>Take a query vector q and a key vector k, each with d_k entries, and compute q·k. It is a sum of d_k products. The more terms you add, the more room the sum has to wander, so the typical size of q·k grows with d_k. Dividing by the right amount keeps the scores the same size however many entries there are. To find that amount, we need four ideas, each in one sentence:</p>
+      <p>Take a query vector q and a key vector k, each with d<sub>k</sub> entries, and compute q·k. It is a sum of d<sub>k</sub> products. The more terms you add, the more room the sum has to wander, so the typical size of q·k grows with d<sub>k</sub>. Dividing by the right amount keeps the scores the same size however many entries there are. To find that amount, we need four ideas, each in one sentence:</p>
       <ul>
         <li>The <span class="term" data-term="mean">mean</span> is the average value: the balance point of the numbers.</li>
         <li>The <span class="term" data-term="variance">variance</span> measures how spread out numbers are around their mean: the average of the squared distances from it.</li>
         <li>Two random numbers are <span class="term" data-term="independent">independent</span> when knowing one tells you nothing about the other, like two separate coin flips.</li>
         <li>The <span class="term" data-term="square-root">square root</span> of a number is the number that multiplies by itself to give it, so √64 = <span data-calc="sqrtDK">…</span>.</li>
       </ul>
-      <p>The assumption: every entry of q and k is independent of the others, with mean 0 and variance 1. Then each product qᵢkᵢ has mean 0 and variance 1, variances of independent numbers add, so q·k has mean 0 and variance d_k. Dividing by √d_k divides the variance by d_k and gives variance 1.</p>
-      <div class="math-display" data-tex-display="\operatorname{Var}(\mathbf{q}\cdot\mathbf{k})=\htmlData{sym=dKsym}{d_k},\qquad \operatorname{Var}\!\left(\dfrac{\mathbf{q}\cdot\mathbf{k}}{\sqrt{\htmlData{sym=dKsym}{d_k}}}\right)=1">Var(q·k) = d_k, Var(q·k / √d_k) = 1</div>
+      <p>The assumption: every entry of q and k is independent of the others, with mean 0 and variance 1. Then each product qᵢkᵢ has mean 0 and variance 1, variances of independent numbers add, so q·k has mean 0 and variance d<sub>k</sub>. Dividing by √d<sub>k</sub> divides the variance by d<sub>k</sub> and gives variance 1.</p>
+      <div class="math-display" data-tex-display="\operatorname{Var}(\mathbf{q}\cdot\mathbf{k})=\htmlData{sym=dKsym}{d_k},\qquad \operatorname{Var}\!\left(\dfrac{\mathbf{q}\cdot\mathbf{k}}{\sqrt{\htmlData{sym=dKsym}{d_k}}}\right)=1">Var(q·k) = d<sub>k</sub>, Var(q·k / √d<sub>k</sub>) = 1</div>
     </section>
 
     <section data-stage="picture">
@@ -138,7 +138,7 @@
       <div data-stepper="sqrt"></div>
       <div class="check" data-predict="sqrt">
         <h4>Predict, then reveal</h4>
-        <p><label for="p-sqrt">Entries have mean 0 and variance 1 and are independent. What is the variance of q·k when d_k = 16?</label></p>
+        <p><label for="p-sqrt">Entries have mean 0 and variance 1 and are independent. What is the variance of q·k when d<sub>k</sub> = 16?</label></p>
         <div class="row"><input id="p-sqrt" name="p-sqrt" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Each of the 16 products has variance 1, and variances of independent numbers add.</p>
       </div>
@@ -146,32 +146,32 @@
 
     <section data-stage="why-when">
       <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
-      <p>Without the division, scores get more spread out as d_k grows, so some scores are very large in size. A model with a different d_k would then have scores of a different size for no good reason. Dividing by √d_k keeps the size steady.</p>
-      <p><strong>When it does not hold.</strong> The result needs the assumption: independent entries with mean 0 and variance 1. If each entry instead has variance 4, the variance of q·k is d_k × 4 × 4: for d_k = 16 that is <span data-calc="varFour">…</span>, and dividing by √16 does not bring it back to 1. Trained queries and keys are made by learned matrices; nothing here says they have unit variance or independent entries, so this is the argument for why the divisor is a sensible default, not a measurement of a trained model.</p>
+      <p>Without the division, scores get more spread out as d<sub>k</sub> grows, so some scores are very large in size. A model with a different d<sub>k</sub> would then have scores of a different size for no good reason. Dividing by √d<sub>k</sub> keeps the size steady.</p>
+      <p><strong>When it does not hold.</strong> The result needs the assumption: independent entries with mean 0 and variance 1. If each entry instead has variance 4, the variance of q·k is d<sub>k</sub> × 4 × 4: for d<sub>k</sub> = 16 that is <span data-calc="varFour">…</span>, and dividing by √16 does not bring it back to 1. Trained queries and keys are made by learned matrices; nothing here says they have unit variance or independent entries, so this is the argument for why the divisor is a sensible default, not a measurement of a trained model.</p>
     </section>
 
     <section data-stage="how-to-arrive">
       <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
-        <li><strong>The requirement.</strong> The size of the scores should not depend on d_k.</li>
-        <li><strong>The spread.</strong> Under the assumption, each product qᵢkᵢ has variance 1 and q·k adds d_k independent such products, so its variance is d_k.</li>
-        <li><strong>The fix.</strong> Dividing a number by c divides its variance by c². We want to divide d_k by something to get 1, so c² = d_k and c = √d_k.</li>
-        <li><strong>The alternatives fail.</strong> Dividing by d_k itself over-corrects: the variance becomes 1/d_k, and scores shrink towards zero as d_k grows. Dividing by √d_k is the one choice that gives exactly 1.</li>
+        <li><strong>The requirement.</strong> The size of the scores should not depend on d<sub>k</sub>.</li>
+        <li><strong>The spread.</strong> Under the assumption, each product qᵢkᵢ has variance 1 and q·k adds d<sub>k</sub> independent such products, so its variance is d<sub>k</sub>.</li>
+        <li><strong>The fix.</strong> Dividing a number by c divides its variance by c². We want to divide d<sub>k</sub> by something to get 1, so c² = d<sub>k</sub> and c = √d<sub>k</sub>.</li>
+        <li><strong>The alternatives fail.</strong> Dividing by d<sub>k</sub> itself over-corrects: the variance becomes 1/d<sub>k</sub>, and scores shrink towards zero as d<sub>k</sub> grows. Dividing by √d<sub>k</sub> is the one choice that gives exactly 1.</li>
       </ol>
-      <p>Before you continue, predict: if we divided by d_k instead of √d_k, would the variance of the scores be bigger or smaller than 1?</p>
+      <p>Before you continue, predict: if we divided by d<sub>k</sub> instead of √d<sub>k</sub>, would the variance of the scores be bigger or smaller than 1?</p>
       <details class="reveal">
         <summary>I have made my prediction: show the reasoning</summary>
-        <p>Smaller: dividing by d_k divides the variance by d_k², giving d_k / d_k² = 1/d_k. For d_k = 64 that is far below 1, so the scores would be squeezed towards zero.</p>
+        <p>Smaller: dividing by d<sub>k</sub> divides the variance by d<sub>k</sub>², giving d<sub>k</sub> / d<sub>k</sub>² = 1/d<sub>k</sub>. For d<sub>k</sub> = 64 that is far below 1, so the scores would be squeezed towards zero.</p>
       </details>
     </section>
 
     <section data-stage="in-an-llm">
       <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
       <ul>
-        <li><strong>In the original Transformer.</strong> The dot products of queries and keys are divided by √d_k, with d_k = <span data-calc="dK">…</span> in the base model, so the divisor is <span data-calc="sqrtDK">…</span> (Vaswani et al., 2017, §3.2.1). The paper’s footnote gives the argument of this card: if the components of q and k are independent random variables with mean 0 and variance 1, then q·k has mean 0 and variance d_k.</li>
-        <li><strong>The paper’s motivation.</strong> For large d_k the dot products grow large in size, which pushes the step that turns a token’s scores into positive weights adding up to 1 (the softmax) into regions where its slope is tiny, so learning is slow. Dividing by √d_k counteracts this.</li>
-        <li><strong>A check you can run.</strong> With <span data-calc="simN">…</span> random pairs at d_k = <span data-calc="dK">…</span> and a fixed seed, the variance of q·k came out as <span data-calc="varNormal">…</span> for normal random entries and <span data-calc="varCoin">…</span> for ±1 entries, near <span data-calc="dK">…</span>; after dividing by <span data-calc="sqrtDK">…</span> it was <span data-calc="varNormalScaled">…</span> and <span data-calc="varCoinScaled">…</span>, near 1.</li>
+        <li><strong>In the original Transformer.</strong> The dot products of queries and keys are divided by √d<sub>k</sub>, with d<sub>k</sub> = <span data-calc="dK">…</span> in the base model, so the divisor is <span data-calc="sqrtDK">…</span> (Vaswani et al., 2017, §3.2.1). The paper’s footnote gives the argument of this card: if the components of q and k are independent random variables with mean 0 and variance 1, then q·k has mean 0 and variance d<sub>k</sub>.</li>
+        <li><strong>The paper’s motivation.</strong> For large d<sub>k</sub> the dot products grow large in size, which pushes the step that turns a token’s scores into positive weights adding up to 1 (the softmax) into regions where its slope is tiny, so learning is slow. Dividing by √d<sub>k</sub> counteracts this.</li>
+        <li><strong>A check you can run.</strong> With <span data-calc="simN">…</span> random pairs at d<sub>k</sub> = <span data-calc="dK">…</span> and a fixed seed, the variance of q·k came out as <span data-calc="varNormal">…</span> for normal random entries and <span data-calc="varCoin">…</span> for ±1 entries, near <span data-calc="dK">…</span>; after dividing by <span data-calc="sqrtDK">…</span> it was <span data-calc="varNormalScaled">…</span> and <span data-calc="varCoinScaled">…</span>, near 1.</li>
       </ul>
       <div class="callout simplified"><p><strong>Simplified.</strong> The simulation draws entries that really are independent with mean 0 and variance 1, which is the assumption, not a property of trained queries and keys. This card makes no claim about the values inside a trained model.</p></div>
     </section>
@@ -181,7 +181,7 @@
       <h4>Everyday analogy</h4>
       <p>Many independent coin flips of ±1 metre: the more flips, the further you typically drift, but only like the square root of the number of flips. <em>Where it breaks down:</em> real queries and keys are not coin flips; the argument holds only under its assumption.</p>
       <h4>Common misconception</h4>
-      <p>“The scores have variance 1 in a trained model.” The card only shows that dividing by √d_k gives variance 1 when the entries are independent with mean 0 and variance 1. Whether trained queries and keys are like that is a separate question.</p>
+      <p>“The scores have variance 1 in a trained model.” The card only shows that dividing by √d<sub>k</sub> gives variance 1 when the entries are independent with mean 0 and variance 1. Whether trained queries and keys are like that is a separate question.</p>
     </details>
     <footer>Further reading: MML Ch 3.2 (inner products), and Vaswani et al., 2017, §3.2.1 (scaled dot-product attention).</footer>
   </article>

@@ -231,7 +231,7 @@ function orthoWidget(host) {
 function projWidget(host) {
   const w = widgetShell({
     title: "Split an arrow into a part along b and a leftover",
-    description: "A grid with two arrows from the origin: a in blue and b in teal, with a faint line through b. The ochre arrow is the projection of a onto b, the part of a that lies along b. A dashed teal arrow runs from the tip of the projection to the tip of a: the leftover, which meets b's line at a right angle, marked with a small square. The coefficient, the projection, the leftover and the dot product of the leftover with b are written below.",
+    description: "A grid with two arrows from the origin: a in blue and b in teal, with a faint line through b. The ochre arrow is the projection of a onto b, the part of a that lies along b. A dashed teal arrow runs from the tip of the projection to the tip of a: the leftover, which meets b’s line at a right angle, marked with a small square. The coefficient, the projection, the leftover and the dot product of the leftover with b are written below.",
     viewBox: PLANE_VIEW,
   });
   const a = [3, 1], b = [1, 1];

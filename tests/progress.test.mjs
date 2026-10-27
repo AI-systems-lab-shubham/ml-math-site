@@ -508,6 +508,11 @@ test("real course: chain is m00 (10), m01 (8) then m02 (7); neighbours link acro
   assert.equal(totalMinutes(real), 8 + 15 + 12 + 12 + 12 + 14 + 10 + 8 + 8 + 8 + 14 + 14 + 14 + 16 + 10 + 14 + 10 + 14 + 14 + 8 + 15 + 14 + 8 + 14 + 9);
 });
 
+test("renderInline turns _{k} into a subscript and leaves a stray underscore alone", () => {
+  assert.equal(renderInline("divide by √d_{k}"), "divide by √d<sub>k</sub>");
+  assert.equal(renderInline("snake_case d_k"), "snake_case d_k");
+});
+
 test("renderInline escapes HTML and turns [[text|id]] into glossary spans", () => {
   assert.equal(renderInline("a <b> [[slope|slope]]"), 'a &lt;b&gt; <span class="term" data-term="slope">slope</span>');
   assert.deepEqual(termIdsIn("[[x|a]] and [[y|b-c]]"), ["a", "b-c"]);

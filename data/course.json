@@ -597,11 +597,11 @@
           "status": "built",
           "objectives": [
             "Show that the [[variance|variance]] of a dot product of d independent entries with mean 0 and variance 1 is d",
-            "Explain why dividing by √d_k brings the variance back to 1, and state the assumption this needs"
+            "Explain why dividing by √d_{k} brings the variance back to 1, and state the assumption this needs"
           ],
           "takeaways": [
-            "If the entries are [[independent|independent]] with [[mean|mean]] 0 and [[variance|variance]] 1, then q·k has mean 0 and variance d_k.",
-            "Dividing by the [[square root|square-root]] of d_k divides the variance by d_k, restoring variance 1.",
+            "If the entries are [[independent|independent]] with [[mean|mean]] 0 and [[variance|variance]] 1, then q·k has mean 0 and variance d_{k}.",
+            "Dividing by the [[square root|square-root]] of d_{k} divides the variance by d_{k}, restoring variance 1.",
             "This holds under that assumption; it is not a claim that trained queries and keys have unit variance."
           ],
           "requires": [
