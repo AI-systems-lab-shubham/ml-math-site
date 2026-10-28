@@ -36,22 +36,30 @@ export function unit(x) {
   return x.map((v) => v / n);
 }
 
+/** Pulls a cosine that rounding pushed a hair outside [−1, 1] back inside, so acos never sees 1.0000000000000002. */
+export const clampCosine = (c) => Math.max(-1, Math.min(1, c));
+
+/** (a·b) / (‖a‖‖b‖) exactly as computed, before any clamping, or null for a zero vector. Rounding can leave it just outside [−1, 1]. */
+export function rawCosine(a, b) {
+  same(a, b);
+  if (isZero(a) || isZero(b)) return null;
+  return dot(a, b) / (norm2(a) * norm2(b));
+}
+
 /**
  * Cosine similarity, (a·b) / (‖a‖‖b‖). It lies in [−1, 1] and ignores length.
  * The zero vector has no direction, so the angle and the cosine are undefined: this returns null for it
  * (never NaN, never 0). Rounding can push the quotient a hair outside [−1, 1]; it is clamped back.
  */
 export function cosineSimilarity(a, b) {
-  same(a, b);
-  if (isZero(a) || isZero(b)) return null;
-  const c = dot(a, b) / (norm2(a) * norm2(b));
-  return Math.max(-1, Math.min(1, c));
+  const c = rawCosine(a, b);
+  return c === null ? null : clampCosine(c);
 }
 
 /** The angle between two vectors in radians, from 0 to π, or null when either is the zero vector. */
 export function angleBetween(a, b) {
-  const c = cosineSimilarity(a, b);
-  return c === null ? null : Math.acos(Math.max(-1, Math.min(1, c)));
+  const c = rawCosine(a, b);
+  return c === null ? null : Math.acos(clampCosine(c));
 }
 
 export const toDegrees = (rad) => (rad * 180) / Math.PI;
@@ -215,3 +223,26 @@ export const sgdStepWithPenalty = (w, g, eta, lambda) => w.map((v, i) => v - eta
 
 /** One plain-SGD step with weight decay applied directly: w ← (1 − ηλ)w − ηg. */
 export const sgdStepWithDecay = (w, g, eta, lambda) => w.map((v, i) => (1 - eta * lambda) * v - eta * g[i]);
+
+/* ---------- random directions in high dimensions ---------- */
+
+/** 1/√d: the spread (standard deviation) of the cosine between two random directions in d dimensions. */
+export const cosineSpread = (d) => 1 / Math.sqrt(d);
+
+/**
+ * The cosine between two directions drawn uniformly on the sphere in d dimensions (a Gaussian vector divided by
+ * its length is uniform on the sphere), repeated `pairs` times from a fixed seed. For such directions the cosine
+ * has mean 0 and variance 1/d. Returns the cosines with their mean, variance and spread (√variance).
+ */
+export function randomDirectionCosines({ d, pairs, seed }) {
+  const rand = seededRandom(seed);
+  const cosines = [];
+  for (let p = 0; p < pairs; p++) {
+    const a = Array.from({ length: d }, () => drawUnit(rand, "normal"));
+    const b = Array.from({ length: d }, () => drawUnit(rand, "normal"));
+    cosines.push(cosineSimilarity(a, b));
+  }
+  const mean = cosines.reduce((s, v) => s + v, 0) / pairs;
+  const variance = cosines.reduce((s, v) => s + (v - mean) ** 2, 0) / (pairs - 1);
+  return { cosines, mean, variance, spread: Math.sqrt(variance) };
+}

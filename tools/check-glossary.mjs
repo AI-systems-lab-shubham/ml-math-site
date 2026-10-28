@@ -3,7 +3,7 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { chain, termIdsIn } from "../assets/js/course.mjs";
+import { chain, termIdsIn, learnMoreVisible } from "../assets/js/course.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const katex = createRequire(import.meta.url)(join(root, "vendor/katex/katex.min.js"));
@@ -95,13 +95,11 @@ while (queue.length) {
 }
 for (const id of byId.keys()) if (!referenced.has(id)) fail(`${id}: never referenced`);
 
-// A "Learn more" link must never point forward: a term shown on a concept page (in its text, in its objectives and
-// takeaways, or reached through a popover's `uses` chain) may only link to that concept or an earlier one.
-// Terms taught later therefore carry no learnMore until every page that shows them comes after the page they link to.
-// Enforced from Module 2 on. Modules 0 and 1 predate the rule and still hold some forward links; they are counted and
-// reported below, not failed, so that this check can guard all new content without rewriting old pages.
-const ENFORCE_FROM = "m02";
-let legacyForward = 0;
+// A "Learn more" link must never point forward. The popover shows one only when `learnMoreVisible` says the target
+// comes strictly before the current card, so for every term a card can show (its text, its objectives and takeaways,
+// or a popover's `uses` chain) this check asks the same function and fails if a link would be shown that points at this
+// card or a later one, or if a forward link is shown at all. Links the rule hides are counted, not failed.
+let hiddenLinks = 0;
 {
   const course = JSON.parse(readFileSync(join(root, "data/course.json"), "utf8"));
   const order = chain(course);
@@ -126,8 +124,11 @@ let legacyForward = 0;
       const target = byId.get(id)?.learnMore?.split("#")[0];
       if (!target) continue;
       const j = indexOfPath.get(target);
-      if (j !== undefined && j > i && c.moduleId < ENFORCE_FROM) { legacyForward++; continue; }
-      if (j !== undefined && j > i) fail(`${c.path}: term "${id}" links forward to ${target} (Learn more must point at this card or an earlier one)`);
+      const visible = learnMoreVisible(course, c.id, target);
+      if (j === undefined) { if (visible) fail(`${c.path}: term "${id}" shows a Learn more link to ${target}, which is not a course page`); else hiddenLinks++; continue; }
+      if (visible && j >= i) fail(`${c.path}: term "${id}" would show a Learn more link to ${target}, which is not before this card`);
+      if (!visible && j < i) fail(`${c.path}: term "${id}" hides its Learn more link to ${target} although it comes before this card`);
+      if (!visible) hiddenLinks++;
     }
   });
 }
@@ -136,5 +137,5 @@ if (errors.length) {
   console.error(errors.map((e) => `✖ ${e}`).join("\n"));
   process.exit(1);
 }
-if (legacyForward) console.log(`note: ${legacyForward} forward Learn more link(s) in Modules 0 and 1 are not enforced (they predate the rule).`);
+if (hiddenLinks) console.log(`note: ${hiddenLinks} Learn more link(s) are hidden on cards where their target is this card or a later one.`);
 console.log(`✓ ${byId.size} glossary entries, ${Object.keys(data.symbols ?? {}).length} symbols, ${pages.length} page(s) checked.`);

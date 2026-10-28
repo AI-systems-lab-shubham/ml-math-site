@@ -36,6 +36,7 @@ const ALL_STEPS = [
   { name: "e2e-widget-inputs", cmd: ["node", "tests/e2e/widget-inputs.mjs"], browser: true, pagesArg: true },
   { name: "e2e-structure", cmd: ["node", "tests/e2e/structure.mjs"], browser: true },
   { name: "e2e-redirects", cmd: ["node", "tests/e2e/redirects.mjs"], browser: true },
+  { name: "e2e-glossary-links", cmd: ["node", "tests/e2e/glossary-links.mjs"], browser: true },
   { name: "e2e-switcher", cmd: ["node", "tests/e2e/module-switcher.mjs"], browser: true },
   { name: "e2e-widgets", cmd: ["node", "tests/e2e/widgets-lazy.mjs"], browser: true, pagesArg: true },
   { name: "e2e-404", cmd: ["node", "tests/e2e/404.mjs"], browser: true },

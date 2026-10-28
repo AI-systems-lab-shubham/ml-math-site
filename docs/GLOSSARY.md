@@ -47,7 +47,7 @@ Follows WCAG 1.4.13 (content on hover or focus must be dismissible, hoverable an
 - **Desktop:** opens after about 250ms on hover or on keyboard focus. Stays open while the pointer is over the term or the popover. Esc closes it and returns focus to the term.
 - **Touch:** tap to open, tap outside to close. Hover does not exist on phones.
 - **Placement:** above or below depending on space. Never covers its own trigger. Max width about 360px.
-- **Contents:** plain-language meaning, mathematical definition, optional "In an LLM" line, "Learn more" link.
+- **Contents:** plain-language meaning, mathematical definition, optional "In an LLM" line, "Learn more" link. The "Learn more" link appears only when its target card comes strictly before the current card in course order (`learnMoreVisible` in `assets/js/course.mjs`); otherwise no link is shown, so a term taught later never sends the learner forward. `learnMore` stays in `glossary.json` as the card that teaches the term.
 - **Chained terms:** technical words inside a definition are also terms. Selecting one stacks a new popover with a Back arrow, so a learner can follow a definition down to its basics.
 - The glossary engine links matching terms from an entry's `uses` list inline in its plain-language and LLM definitions; it also presents the full `uses` list as a fallback.
 - **Accessibility:** the trigger is focusable (`tabindex="0"`), the popover has `role="dialog"` with a label, and the content is readable by screen readers.

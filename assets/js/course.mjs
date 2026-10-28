@@ -52,6 +52,24 @@ export function findConcept(course, id) {
   return null;
 }
 
+// A glossary popover shows "Learn more" only when its target comes strictly before the current concept in course order.
+// A link to a module overview counts as just before that module's first concept. No current concept, or a target that
+// is not a course page, shows no link.
+export function learnMoreVisible(course, currentId, target) {
+  if (!target) return false;
+  const list = chain(course);
+  const here = list.findIndex((c) => c.id === currentId);
+  if (here < 0) return false;
+  const path = target.split("#")[0];
+  let there = list.findIndex((c) => c.path === path);
+  if (there < 0) {
+    const mod = course.modules.find((m) => m.path === path);
+    const first = mod ? list.findIndex((c) => c.moduleId === mod.id) : -1;
+    there = first < 0 ? -1 : first - 0.5;
+  }
+  return there >= 0 && there < here;
+}
+
 export function totalMinutes(course) {
   return builtModules(course).reduce((sum, m) => sum + builtConcepts(m).reduce((s, c) => s + c.minutes, 0), 0);
 }

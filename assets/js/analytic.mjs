@@ -4,7 +4,7 @@ import {
   norm1, norm2, distance, dot, isZero, cosineSimilarity, angleBetween, toDegrees, dotFromAngle, dotSign,
   isOrthogonal, work, polar, project, projectionCoefficient, leftover, shadowLength, unitBall, unit,
   simulateDotVariance, exactCoinDotStats, dotVarianceFormula, attentionScale, baseDK,
-  dotFromLengths, sgdStepWithPenalty, sgdStepWithDecay,
+  dotFromLengths, sgdStepWithPenalty, sgdStepWithDecay, cosineSpread, randomDirectionCosines,
 } from "./analytic-math.mjs";
 import { transformerBase } from "./linalg-math.mjs";
 import { svg, html, slider, radios, widgetShell, nextId } from "./widgets.mjs";
@@ -467,6 +467,10 @@ const calcs = {
   projShape: () => `${baseDK}×${transformerBase.dModel}`,
   projK: () => String(projectionCoefficient([3, 1], [1, 1])),
   simN: () => "20,000",
+  spread64: () => cosineSpread(64).toFixed(3),
+  spread512: () => cosineSpread(512).toFixed(3),
+  measured64: () => randomDirectionCosines({ d: 64, pairs: 4000, seed: 564 }).spread.toFixed(3),
+  measured512: () => randomDirectionCosines({ d: 512, pairs: 4000, seed: 1012 }).spread.toFixed(3),
   exact3: () => String(exactCoinDotStats(3).variance),
 };
 const texCalcs = {};

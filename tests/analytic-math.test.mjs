@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
   norm1, norm2, distance, dot, isZero, unit, cosineSimilarity, angleBetween, toDegrees, toRadians, dotFromAngle,
   dotSign, isOrthogonal, work, polar, project, projectionCoefficient, leftover, shadowLength, unitBall,
-  seededRandom, drawUnit, simulateDotVariance, exactCoinDotStats, dotVarianceFormula, attentionScale, baseDK,
+  clampCosine, rawCosine, seededRandom, drawUnit, simulateDotVariance, exactCoinDotStats, dotVarianceFormula, attentionScale, baseDK,
 } from "../assets/js/analytic-math.mjs";
 
 const close = (a, b, tol = 1e-9) => assert.ok(Math.abs(a - b) <= tol, `${a} is not within ${tol} of ${b}`);
@@ -156,6 +156,35 @@ test("parallel vectors never make acos fail: the argument is clamped to [−1, 1
     assert.ok(Number.isFinite(theta));
     assert.ok(cosineSimilarity(a, b) >= -1 && cosineSimilarity(a, b) <= 1);
   }
+});
+
+// Found by searching 200,000 seeded random vectors (seed 12345, entries to one decimal, scaled by 2, 3, 5, 7, 0.1, 0.3, 10 or −3):
+// the first hit came on try 2, the second on try 10. For these pairs the unclamped quotient is 1.0000000000000002 or its negative.
+const OVERSHOOT = [
+  [[-0.8, -4.8, -4.7, 0.4, 4.4], [-4, -24, -23.5, 2, 22], 0],
+  [[9.5, 5.4, -4, -10, 1.8], [28.5, 16.200000000000003, -12, -30, 5.4], 0],
+  [[9.9, 6.5, -0.8, 8.9, 7.8], [-29.700000000000003, -19.5, 2.4000000000000004, -26.700000000000003, -23.4], Math.PI],
+];
+test("regression: pairs whose unclamped cosine really exceeds 1 by rounding still give a finite angle", () => {
+  for (const [a, b, want] of OVERSHOOT) {
+    assert.ok(Math.abs(rawCosine(a, b)) > 1, "this pair no longer overshoots; the regression case is stale");
+    const c = cosineSimilarity(a, b);
+    assert.ok(c >= -1 && c <= 1);
+    const theta = angleBetween(a, b);
+    assert.ok(Number.isFinite(theta), "angle is NaN");
+    close(theta, want, 1e-7);
+  }
+  // without the clamp, acos of these values is NaN: that is the bug this guards
+  assert.ok(Number.isNaN(Math.acos(rawCosine(OVERSHOOT[0][0], OVERSHOOT[0][1]))));
+});
+
+test("clampCosine leaves values inside [−1, 1] alone and pulls the rest back", () => {
+  assert.equal(clampCosine(0.3), 0.3);
+  assert.equal(clampCosine(-1), -1);
+  assert.equal(clampCosine(1.0000000000000002), 1);
+  assert.equal(clampCosine(-1.0000000000000002), -1);
+  assert.equal(clampCosine(5), 1);
+  assert.equal(rawCosine([0, 0], [1, 2]), null);
 });
 
 test("cosine similarity lies in [−1, 1] for many vectors", () => {
@@ -381,4 +410,35 @@ test("the card examples: (2, 1)·(k, 4) = 0 for k = −2, and a query and key of
   assert.equal(dot([1, 0, 2], [2, 1, 1]), 4);
   assert.equal(norm2([1, 2, 2]), 3);
   assert.equal(dotVarianceFormula(16, 4, 4), 256);
+});
+
+// ---- Random directions are nearly orthogonal in high dimensions ----
+
+import { cosineSpread, randomDirectionCosines } from "../assets/js/analytic-math.mjs";
+
+test("cosineSpread is 1/√d: about 0.125 at d = 64 and 0.044 at d = 512", () => {
+  assert.equal(cosineSpread(64), 0.125);
+  close(cosineSpread(512), 0.0442, 5e-5);
+  assert.equal(cosineSpread(1), 1);
+});
+
+// Tolerance: with `pairs` cosines the standard error of the sample variance is about variance·√(2/pairs)
+// (1.0% for 20,000 pairs, 2.2% for 4,000), and of the spread half that. We allow 5% of the expected spread,
+// at least four standard errors for the smaller sample, so a seeded run cannot fail by bad luck, while a wrong
+// formula (say 1/d, which is 0.0156 at d = 64 instead of 0.125) fails by a mile. The mean has standard error
+// (1/√d)/√pairs; we allow 5 of them.
+for (const [d, pairs] of [[2, 20000], [16, 20000], [64, 20000], [512, 4000], [64, 4000]]) {
+  test(`random directions (d = ${d}, ${pairs} pairs): cosine has mean ≈ 0 and spread ≈ 1/√d = ${cosineSpread(d).toFixed(3)}`, () => {
+    const r = randomDirectionCosines({ d, pairs, seed: 500 + d });
+    assert.equal(r.cosines.length, pairs);
+    assert.ok(r.cosines.every((c) => c >= -1 && c <= 1));
+    assert.ok(Math.abs(r.mean) < (5 * cosineSpread(d)) / Math.sqrt(pairs), `mean ${r.mean}`);
+    assert.ok(Math.abs(r.spread - cosineSpread(d)) < 0.05 * cosineSpread(d), `spread ${r.spread} vs ${cosineSpread(d)}`);
+  });
+}
+
+test("the spread of the cosine shrinks as the dimension grows, and the same seed repeats", () => {
+  const s = [2, 16, 64, 512].map((d) => randomDirectionCosines({ d, pairs: 2000, seed: 9 }).spread);
+  assert.ok(s[0] > s[1] && s[1] > s[2] && s[2] > s[3]);
+  assert.deepEqual(randomDirectionCosines({ d: 8, pairs: 50, seed: 3 }).cosines, randomDirectionCosines({ d: 8, pairs: 50, seed: 3 }).cosines);
 });

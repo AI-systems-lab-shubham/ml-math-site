@@ -1,6 +1,7 @@
 // Glossary engine: marks terms, renders popovers (hover, focus, tap), chains definitions, handles symbols.
 import { renderTex } from "./math-render.mjs";
 import { readStore, writeStore } from "./store.mjs";
+import { learnMoreVisible } from "./course.mjs";
 
 const siteRoot = new URL(document.querySelector('meta[name="site-root"]')?.content ?? "./", document.baseURI);
 const HOVER_DELAY = 250;
@@ -26,12 +27,17 @@ let hoverTimer = 0;
 let leaveTimer = 0;
 let restoringFocus = false;
 
+let course = null;
+const currentConceptId = () => document.querySelector('meta[name="concept-id"]')?.content ?? null;
+
 export async function initGlossary() {
   try {
     const res = await fetch(new URL("data/glossary.json", siteRoot));
     const data = await res.json();
     entries = new Map(data.entries.map((e) => [e.id, e]));
     symbols = data.symbols ?? {};
+    // "Learn more" needs the course order; without it no link is shown (never a link that might point forward).
+    try { course = await (await fetch(new URL("data/course.json", siteRoot))).json(); } catch { course = null; }
   } catch {
     // Without the data file the terms stay readable as plain text.
     return;
@@ -291,7 +297,7 @@ function render() {
   }
   if (ref.kind === "term") {
     const e = entries.get(ref.id);
-    if (e?.learnMore) {
+    if (e?.learnMore && course && learnMoreVisible(course, currentConceptId(), e.learnMore)) {
       const a = document.createElement("a");
       a.href = new URL(e.learnMore, siteRoot).href;
       a.textContent = "Learn more";
