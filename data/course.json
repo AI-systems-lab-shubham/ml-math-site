@@ -614,15 +614,168 @@
       "id": "m03",
       "title": "Matrix decompositions",
       "path": "modules/03-matrix-decompositions/",
-      "status": "planned",
-      "summary": "Determinants, eigenvectors, SVD and low-rank approximation.",
-      "minutes": 0,
+      "status": "built",
+      "summary": "Determinants, trace, eigenvectors, eigendecomposition, the SVD and low-rank approximation: what a matrix does to space, and how to simplify it.",
+      "minutes": 73,
       "prerequisites": [
         "m01",
         "m02"
       ],
-      "outcomes": [],
-      "concepts": []
+      "outcomes": [
+        "Read the determinant of a 2×2 matrix as a signed area scale, and say what a zero or negative value means",
+        "Find the eigenvalues and eigenvectors of a 2×2 matrix and say when there are none, or too few",
+        "Write a matrix as PDP⁻¹, use it to compute powers, and say when it cannot be done",
+        "Describe any matrix as rotate, stretch, rotate with the SVD, and read its singular values as the axes of an ellipse",
+        "Build the best low-rank approximation of a matrix and count the numbers it stores"
+      ],
+      "concepts": [
+        {
+          "id": "m03-determinant",
+          "title": "Determinant as area scaling",
+          "anchor": "concept-determinant",
+          "path": "modules/03-matrix-decompositions/determinant/",
+          "size": "compact",
+          "minutes": 8,
+          "status": "built",
+          "objectives": [
+            "Compute the [[determinant|determinant]] ad − bc of a 2×2 matrix and read it as the signed area that the [[unit square|unit-square]] is scaled to",
+            "Say what a negative determinant means (the [[orientation|orientation]] flips) and what zero means (the square collapses to a line or a point, so the matrix has no [[inverse|inverse-matrix]])"
+          ],
+          "takeaways": [
+            "For a matrix with rows (a, b) and (c, d), the [[determinant|determinant]] ad − bc is the signed area of what the [[unit square|unit-square]] becomes.",
+            "A negative determinant means the [[orientation|orientation]] flips, like a mirror; the area scales by its absolute value.",
+            "A determinant of 0 squashes the square onto a line or a point, so no [[inverse|inverse-matrix]] can undo it.",
+            "Chaining two transformations multiplies their determinants: det(AB) = det(A) det(B)."
+          ],
+          "requires": [
+            "m01-transpose",
+            "m01-transformations"
+          ]
+        },
+        {
+          "id": "m03-trace",
+          "title": "Trace",
+          "anchor": "concept-trace",
+          "path": "modules/03-matrix-decompositions/trace/",
+          "size": "compact",
+          "minutes": 8,
+          "status": "built",
+          "objectives": [
+            "Compute the [[trace|trace]] of a [[square matrix|square-matrix]] as the sum of the entries on its [[diagonal|diagonal]]",
+            "Show that tr(AB) = tr(BA) even when AB and BA are different matrices",
+            "Explain why tr(A^T A) is the sum of all the squared entries, the squared [[Frobenius norm|frobenius-norm]]"
+          ],
+          "takeaways": [
+            "The [[trace|trace]] adds up the [[diagonal|diagonal]] entries of a [[square matrix|square-matrix]]; it is one number.",
+            "tr(AB) = tr(BA), although AB and BA are usually different matrices.",
+            "tr(A^T A) equals the sum of all the squared entries of A, the squared [[Frobenius norm|frobenius-norm]]."
+          ],
+          "requires": [
+            "m01-matmul",
+            "m01-transpose",
+            "m02-norms"
+          ]
+        },
+        {
+          "id": "m03-eigenvectors",
+          "title": "Eigenvalues and eigenvectors",
+          "anchor": "concept-eigenvectors",
+          "path": "modules/03-matrix-decompositions/eigenvectors/",
+          "size": "full",
+          "minutes": 16,
+          "status": "built",
+          "objectives": [
+            "Define an [[eigenvector|eigenvector]] and its [[eigenvalue|eigenvalue]] by Av = λv with v not the zero vector, and explain why an eigenvector is defined only up to scale",
+            "Find the eigenvalues of a 2×2 matrix as (tr ± √(tr² − 4 det))/2 and use the [[discriminant|discriminant]] to say whether there are two, one repeated, or no real eigenvalues",
+            "Name the standard cases: a projection (eigenvalues 1 and 0), a scaling, a rotation (no real eigenvector), and a shear (one eigenvector direction, a [[defective matrix|defective-matrix]]), and check that the eigenvalues add up to the trace and multiply to the determinant"
+          ],
+          "takeaways": [
+            "An [[eigenvector|eigenvector]] v of A satisfies Av = λv with v not zero: A only stretches it by the [[eigenvalue|eigenvalue]] λ, so it stays on its own line. Any non-zero multiple of it is one too, so it is a direction, not a single arrow.",
+            "For a 2×2 matrix the eigenvalues are (tr ± √(tr² − 4 det))/2; the sum is the trace and the product is the determinant.",
+            "If the [[discriminant|discriminant]] tr² − 4 det is negative there are no real eigenvalues, as for a rotation by an angle that is not a multiple of π.",
+            "A shear with rows (1, k) and (0, 1), k not 0, has eigenvalue 1 but only one eigenvector direction."
+          ],
+          "requires": [
+            "m03-determinant",
+            "m03-trace",
+            "m01-transformations"
+          ]
+        },
+        {
+          "id": "m03-eigendecomposition",
+          "title": "Eigendecomposition",
+          "anchor": "concept-eigendecomposition",
+          "path": "modules/03-matrix-decompositions/eigendecomposition/",
+          "size": "compact",
+          "minutes": 10,
+          "status": "built",
+          "objectives": [
+            "Write a matrix with a full set of independent eigenvectors as A = PDP^{-1}, with the eigenvectors as the columns of P and the eigenvalues on the diagonal of D",
+            "Compute A^n as PD^nP^{-1}, and say why the shear cannot be written this way",
+            "State that a [[symmetric matrix|symmetric-matrix]] has real eigenvalues and eigenvectors that can be chosen at right angles, so A = QΛQ^T with Q an [[orthogonal matrix|orthogonal-matrix]]"
+          ],
+          "takeaways": [
+            "[[Eigendecomposition|eigendecomposition]] writes A as PDP^{-1}: change to the eigenvector directions, stretch each by its eigenvalue, change back.",
+            "A^n = PD^nP^{-1}: only the diagonal entries are raised to the power n.",
+            "It needs n independent eigenvectors; a [[defective matrix|defective-matrix]] such as the shear does not have them.",
+            "A [[symmetric matrix|symmetric-matrix]] always has real eigenvalues and orthogonal eigenvectors, so A = QΛQ^T."
+          ],
+          "requires": [
+            "m03-eigenvectors",
+            "m02-orthogonality",
+            "m01-transpose"
+          ]
+        },
+        {
+          "id": "m03-svd",
+          "title": "Singular value decomposition",
+          "anchor": "concept-svd",
+          "path": "modules/03-matrix-decompositions/svd/",
+          "size": "full",
+          "minutes": 16,
+          "status": "built",
+          "objectives": [
+            "Describe any matrix as a rotation or flip, a stretch along the axes, then another rotation or flip: A = UΣV^T",
+            "Read the [[singular values|singular-value]] as the semi-axes of the [[ellipse|ellipse]] the unit circle becomes, and say that the largest is the biggest stretch",
+            "Say that the singular values are the square roots of the eigenvalues of A^T A, that the rank is the number of non-zero ones (up to a stated tolerance), and that U and V are not unique"
+          ],
+          "takeaways": [
+            "The [[SVD|svd]] writes any real matrix as A = UΣV^T, with U and V [[orthogonal|orthogonal-matrix]] and the [[singular values|singular-value]] on the diagonal of Σ, non-negative and largest first.",
+            "The unit circle becomes an [[ellipse|ellipse]] whose semi-axes are σ₁ and σ₂; σ₁ is the largest stretch.",
+            "The singular values are the square roots of the eigenvalues of A^T A; their squares add up to the sum of the squared entries of A.",
+            "The rank is the number of singular values above a small tolerance; U and V are not unique (signs, and equal singular values), and may include flips."
+          ],
+          "requires": [
+            "m03-eigendecomposition",
+            "m01-span",
+            "m02-orthogonality"
+          ]
+        },
+        {
+          "id": "m03-low-rank",
+          "title": "Low-rank approximation",
+          "anchor": "concept-low-rank",
+          "path": "modules/03-matrix-decompositions/low-rank/",
+          "size": "full",
+          "minutes": 15,
+          "status": "built",
+          "objectives": [
+            "Build the rank-k approximation A_k = σ₁u₁v₁^T + … + σₖuₖvₖ^T from the first k terms of the SVD",
+            "State the [[Eckart–Young theorem|eckart-young]]: no other rank-k matrix is closer, and the squared error is the sum of the discarded squared singular values",
+            "Count the numbers stored, k(m + n + 1) against mn, and compare with the 2 × 512 × 8 numbers a LoRA update stores"
+          ],
+          "takeaways": [
+            "A [[low-rank approximation|low-rank-approximation]] keeps the first k terms σᵢuᵢvᵢ^T of the [[SVD|svd]] and drops the rest.",
+            "By the [[Eckart–Young theorem|eckart-young]], A_k is the closest rank-k matrix: the squared Frobenius error is the sum of the squares of the dropped singular values, and the spectral error is σₖ₊₁.",
+            "Storing A_k takes k(m + n + 1) numbers instead of mn; for 512×512 and k = 8 that is 8,200 against 262,144.",
+            "[[LoRA|lora]] trains a low-rank update BA to frozen weights; it is related to low-rank approximation, but it does not compute an SVD."
+          ],
+          "requires": [
+            "m03-svd",
+            "m01-span"
+          ]
+        }
+      ]
     },
     {
       "id": "m04",

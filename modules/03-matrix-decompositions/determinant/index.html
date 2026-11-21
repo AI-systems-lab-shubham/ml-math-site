@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m03">
+  <meta name="concept-id" content="m03-determinant">
+  <title>Determinant as area scaling - Matrix decompositions - ML Math</title>
+  <meta name="description" content="A matrix scales every area by the same factor, its determinant: the signed area that the unit square becomes.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/decomposition.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li><a href="../../02-analytic-geometry/">2 · Analytic geometry</a></li>
+    <li>
+      <a href="../">3 · Matrix decompositions</a>
+      <ul class="sub">
+        <li><a href="./" aria-current="page">Determinant as area scaling</a></li>
+        <li><a href="../trace/">Trace</a></li>
+        <li><a href="../eigenvectors/">Eigenvalues and eigenvectors</a></li>
+        <li><a href="../eigendecomposition/">Eigendecomposition</a></li>
+        <li><a href="../svd/">Singular value decomposition</a></li>
+        <li><a href="../low-rank/">Low-rank approximation</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 3: Matrix decompositions</a></li>
+      <li><span aria-current="page">Determinant as area scaling</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-determinant" data-size="compact">
+    <header>
+      <p class="eyebrow">Compact card · 1 of 6</p>
+      <h1>Determinant as area scaling</h1>
+      <p class="muted">How much a matrix stretches or shrinks area, and whether it flips the page over.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Draw a one-by-one square on a sheet of rubber, then let a matrix stretch, tilt and turn the whole sheet. The square comes out as a slanted shape with two pairs of parallel sides. Because the matrix treats every part of the sheet alike, every patch of the sheet changes in area by the same factor as that square did. That factor is the <span class="term" data-term="determinant">determinant</span>.</p>
+      <p>The square we watch is the <span class="term" data-term="unit-square">unit square</span>, with corners (0, 0), (1, 0), (1, 1) and (0, 1) and area exactly 1, so its new area <em>is</em> the factor. Two more things can happen. If the matrix flips the sheet over, like turning it to read through the back, the corners now run the other way round: the <span class="term" data-term="orientation">orientation</span> is reversed, and we count the area as negative. If the matrix squashes the whole square onto a line or a point, the area is 0.</p>
+      <p>For a matrix with rows (a, b) and (c, d), where a, b, c and d are its four entries, the determinant is ad − bc. The first column, (a, c), is where the arrow (1, 0) lands, and the second, (b, d), is where (0, 1) lands.</p>
+      <div class="math-display" data-tex-display="\det\begin{bmatrix}a&amp;b\\c&amp;d\end{bmatrix}=ad-bc">det = ad − bc</div>
+    </section>
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>The dashed square is the unit square. The filled shape is what the matrix makes of it: teal when the orientation is kept, ochre when it is flipped. The blue and teal arrows are the two columns. Try the named matrices, then move the sliders until the shape flattens into a line.</p>
+      <div data-widget="det">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">What a matrix does to the unit square</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A grid with the unit square drawn as a dashed outline. The matrix you choose sends it to a filled shape: a parallelogram, or a line segment when the determinant is zero. The first column of the matrix is a blue arrow from the origin (where the arrow along x lands) and the second column is a teal arrow (where the arrow along y lands). The determinant ad minus bc, the signed area, and whether the orientation was kept, flipped or lost are written below.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A photocopier set to 200% in both directions: every length doubles, so every area is multiplied by <span data-calc="detCopy">…</span>. A matrix that scales by (2, 2) has that determinant.</li>
+        <li>Reading a page through the back of the sheet, a <span class="term" data-term="reflection">reflection</span>: the same size, but left and right are swapped. Its determinant is <span data-calc="detFlip">…</span>, so the size is kept and the orientation is flipped.</li>
+        <li>Spinning a photo on a table: nothing is stretched, so the determinant is <span data-calc="detRot">…</span>.</li>
+        <li>A square card held edge-on to the sun, casting only a line: all its area is lost, and the determinant is <span data-calc="detProj">…</span>.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If you ask “by what factor does this change area, and does it flip?”, it is a determinant.</p>
+      <div data-checks="spot"></div>
+    </section>
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="det"></div>
+      <div data-checks="predict"></div>
+    </section>
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>One number answers two questions: by what factor are areas scaled, and can the matrix be undone? A determinant that is not 0 means the square keeps some area, so nothing is lost and the <span class="term" data-term="inverse-matrix">inverse</span> exists. A determinant of 0 means the square collapsed, so many different arrows land in the same place and no matrix can send them back.</p>
+      <p><strong>When it does not fit.</strong> The determinant says nothing about <em>shape</em>: a quarter turn and a shear both have determinant <span data-calc="detShear">…</span>, though one keeps every length and the other slants the square. A tiny determinant does not mean a matrix is hard to undo either: scaling every length by 0.001 has determinant <span data-calc="detTiny">…</span>, yet it is easily undone. This card works with 2×2 matrices, where area is something you can draw; for a 3×3 matrix the same number scales volume, with a longer formula.</p>
+    </section>
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> Find the area of the parallelogram with sides (a, c) and (b, d), the two columns.</li>
+        <li><strong>Box it in.</strong> Draw the smallest upright rectangle around the parallelogram, taking all four entries positive with (a, c) the lower side. It is a + b wide and c + d tall, so its area is (a + b)(c + d) = ac + ad + bc + bd.</li>
+        <li><strong>Cut off the corners.</strong> Two triangles with area ½ac, two with area ½bd, and two rectangles with area bc lie outside the parallelogram: that is ac + bd + 2bc.</li>
+        <li><strong>Subtract.</strong> (ac + ad + bc + bd) − (ac + bd + 2bc) = ad − bc.</li>
+        <li><strong>Allow signs.</strong> The same formula still gives the right size when entries are negative, with a minus sign when the corners run clockwise. That sign convention is what we add.</li>
+      </ol>
+      <div data-checks="reveal"></div>
+    </section>
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Conceptual link: a determinant needs a square matrix.</strong> Many of a model's learned matrices are not square. In the original Transformer base model, queries, keys and values come from learned projections from <span data-calc="dModel">…</span> entries down to <span data-calc="dK">…</span> per head, a <span data-calc="projShape">…</span> table (Vaswani et al., 2017, §3.2.2), which has no determinant and cannot be undone. The determinant is not a named step in running a language model.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> This only says what kind of matrix has a determinant. It makes no claim about how any trained model uses or avoids one.</p></div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>Everyday analogy</h4>
+      <p>A photocopier’s zoom control. <em>Where it breaks down:</em> a photocopier never flips the page over or squashes it to a line, but a matrix can do both.</p>
+      <h4>Common misconception</h4>
+      <p>“A zero determinant means the matrix is all zeros.” No: the projection onto the x-axis has the rows (1, 0) and (0, 0), is not all zeros, and still has determinant 0, because it flattens the square onto a line.</p>
+    </details>
+    <footer>Further reading: MML Ch 4.1 (determinant and trace).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

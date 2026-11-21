@@ -2,13 +2,14 @@
 // (tests/decomposition-math.test.mjs); tests/checks.test.mjs pins the value each one returns.
 import {
   det2, trace, eigenvalues2, discriminant2, svd, rankFromSingular, storageTruncated, storageLoRA, storageFull,
-  bestErrorFrobSq, bestErrorSpectral, powerViaEigen, matMul, frobeniusSq, signedArea, unitSquareImage, shapeOf,
+  bestErrorFrobSq, bestErrorSpectral, powerViaEigen, traceOfProduct3, matMul, frobeniusSq, signedArea, unitSquareImage, shapeOf,
 } from "./decomposition-math.mjs";
 
 export const answers = {
   det2: (A) => det2(A),
   trace: (A) => trace(A),
   traceOfProduct: (A, B) => trace(matMul(A, B)),
+  traceOfProduct3: (A, B, C) => traceOfProduct3(A, B, C),
   areaOfUnitSquareImage: (A) => signedArea(unitSquareImage(A)),
   discriminant2: (A) => discriminant2(A),
   largerEigenvalue: (A) => eigenvalues2(A)[0],

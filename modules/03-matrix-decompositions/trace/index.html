@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m03">
+  <meta name="concept-id" content="m03-trace">
+  <title>Trace - Matrix decompositions - ML Math</title>
+  <meta name="description" content="The trace adds up the diagonal of a square matrix, and tr(AB) = tr(BA) even when AB and BA differ.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/decomposition.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li><a href="../../02-analytic-geometry/">2 · Analytic geometry</a></li>
+    <li>
+      <a href="../">3 · Matrix decompositions</a>
+      <ul class="sub">
+        <li><a href="../determinant/">Determinant as area scaling</a></li>
+        <li><a href="./" aria-current="page">Trace</a></li>
+        <li><a href="../eigenvectors/">Eigenvalues and eigenvectors</a></li>
+        <li><a href="../eigendecomposition/">Eigendecomposition</a></li>
+        <li><a href="../svd/">Singular value decomposition</a></li>
+        <li><a href="../low-rank/">Low-rank approximation</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 3: Matrix decompositions</a></li>
+      <li><span aria-current="page">Trace</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-trace" data-size="compact">
+    <header>
+      <p class="eyebrow">Compact card · 2 of 6</p>
+      <h1>Trace</h1>
+      <p class="muted">One number from adding the diagonal, with a surprising rule about products.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Take a square table of numbers and walk down it from the top left corner to the bottom right. The entries you step on are the <span class="term" data-term="diagonal">diagonal</span>. Add them up and you have the <span class="term" data-term="trace">trace</span> of the <span class="term" data-term="square-matrix">square matrix</span>. Nothing else is needed: the entries off the diagonal do not count at all.</p>
+      <p>We write the trace of A as tr(A). The entry in row i and column i is a<sub>ii</sub>, and the trace adds those for every i.</p>
+      <div class="math-display" data-tex-display="\operatorname{tr}(A)=\sum_{i}a_{ii}=a_{11}+a_{22}+\dots+a_{nn}">tr(A) = a₁₁ + a₂₂ + … + aₙₙ</div>
+    </section>
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>The shaded entries are the diagonal. One slider changes a diagonal entry and the other an off-diagonal one. Watch which one the trace listens to.</p>
+      <div data-widget="trace">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Add up the diagonal</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A three by three table of numbers drawn in a grid. The three entries on the diagonal, from top left to bottom right, are shaded ochre; the others are plain. Two sliders change one diagonal entry and one off-diagonal entry. The trace, the sum of the diagonal, is written below, and changes only when the diagonal entry changes.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <p>The trace has no single physical picture; it is a bookkeeping total. It shows up wherever a table has a natural “same row and column” diagonal:</p>
+      <ul>
+        <li>A table of how many people moved between three towns, with “from” down the side and “to” along the top. The diagonal counts the people who stayed where they were, so the trace is the total who stayed.</li>
+        <li>A grid of true labels down the side against guessed labels along the top. The diagonal holds the correct guesses, so the trace is how many were right.</li>
+        <li>A table counting how often each letter is followed by each letter in a text, with the first letter down the side. The diagonal counts doubled letters such as “ll” and “ee”.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If you want the total of a table’s “same row, same column” entries, it is a trace.</p>
+      <div data-checks="spot"></div>
+    </section>
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="trace"></div>
+      <div data-checks="predict"></div>
+    </section>
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>The trace squeezes a whole table into one number that behaves nicely: it adds (tr(A + B) = tr(A) + tr(B)), it scales (tr(cA) = c tr(A)), and it ignores the order of a product: tr(AB) = tr(BA). That last rule is surprising, because AB and BA are usually different matrices, as the worked example showed. It extends to three matrices, but only by moving the last one to the front: tr(ABC) = tr(CAB) = tr(BCA), while swapping two neighbours can change the answer.</p>
+      <p><strong>When it does not fit.</strong> The trace throws away everything off the diagonal, so very different matrices can share a trace, and it can be negative or zero, so it is not a measure of size. For size, use the sum of squared entries: tr(A<sup>T</sup>A) = <span data-calc="squaredEntries">…</span> for the matrix in the worked example, which is the squared <span class="term" data-term="frobenius-norm">Frobenius norm</span>.</p>
+    </section>
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-motivated">◆ Motivated</span></p>
+      <ol>
+        <li><strong>The wish.</strong> A single number from a square table that adds when tables add, scales when they scale, and does not change if we multiply two tables in the other order.</li>
+        <li><strong>The candidates.</strong> The product of the diagonal does not add. The largest entry does not add either. The sum of the diagonal does add and scale.</li>
+        <li><strong>The test.</strong> tr(AB) = Σ<sub>i</sub> Σ<sub>j</sub> a<sub>ij</sub>b<sub>ji</sub>, and tr(BA) = Σ<sub>i</sub> Σ<sub>j</sub> b<sub>ij</sub>a<sub>ji</sub>: the same terms with the names i and j swapped. So the order does not matter.</li>
+        <li><strong>The choice.</strong> The sum of the diagonal is a good fit among several. This is a motivated choice, not a forced one, and we have not shown that it is the only one.</li>
+      </ol>
+      <div data-checks="reveal"></div>
+    </section>
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Conceptual link: the squared size of a weight matrix.</strong> Weight decay penalises the squared L2 norm of the weights (see the <a href="../../02-analytic-geometry/norms/">Norms</a> card), and for a weight matrix W that sum of squared entries is tr(W<sup>T</sup>W). That is an identity about numbers; it does not say how any model is trained beyond what the Norms card states.</li>
+        <li>There is no specific, documented step of a language model that we can point to as a trace.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> The identity holds for any matrix. It is a different way to write a sum, not a claim about a particular model.</p></div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>Everyday analogy</h4>
+      <p>The total on the main diagonal of a seating chart where each person’s row and column share a number. <em>Where it breaks down:</em> a real table has a meaning for each cell, but the trace just adds the diagonal whatever it means.</p>
+      <h4>Common misconception</h4>
+      <p>“The trace measures how big a matrix is.” It can be negative or zero for a big matrix, because it adds signed diagonal entries and ignores the rest.</p>
+    </details>
+    <footer>Further reading: MML Ch 4.1 (determinant and trace).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

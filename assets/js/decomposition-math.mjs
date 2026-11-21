@@ -160,6 +160,12 @@ export const stretchAt = (A, theta) => Math.hypot(...matVec(A, [Math.cos(theta),
 export const eigenAngles = (A) => eigen2(A).vectors.map((v) => { const t = Math.atan2(v[1], v[0]); return t < 0 ? t + Math.PI : t >= Math.PI ? t - Math.PI : t; });
 
 /* ---------- 4. eigendecomposition ---------- */
+/** A = P D P⁻¹ for a chosen P (eigenvectors as columns, any scale) and the matching eigenvalues. */
+export const decomposeWith = (P, values) => ({ P, D: diag(values), Pinv: inverse(P) });
+
+/** tr(ABC), to show that only cyclic shifts of a product keep the trace. */
+export const traceOfProduct3 = (A, B, C) => trace(matMul(matMul(A, B), C));
+
 /** A = P D P⁻¹ when A has two independent eigen-directions; otherwise null with the reason. */
 export function eigendecompose2(A) {
   const e = eigen2(A);
@@ -180,7 +186,7 @@ export const isSymmetric = (A, tol = 0) => A.every((row, i) => row.every((v, j) 
 
 /**
  * Cyclic Jacobi method for a symmetric n×n matrix. Returns eigenvalues, largest first, and Q whose columns are
- * orthonormal eigenvectors: A = Q Λ Qᵀ. Real eigenvalues and orthogonal eigenvectors are guaranteed for symmetric matrices.
+ * orthonormal eigenvectors: A = Q Λ Q^T. Real eigenvalues and orthogonal eigenvectors are guaranteed for symmetric matrices.
  */
 export function symmetricEigen(S) {
   if (!isSymmetric(S, 1e-12 * Math.max(1, frobenius(S)))) throw new RangeError("symmetricEigen needs a symmetric matrix");
@@ -229,7 +235,7 @@ function completeColumns(cols, dim, count) {
 }
 
 /**
- * Thin SVD by one-sided Jacobi rotations: A = U Σ Vᵀ with p = min(m, n). U is m×p and V is n×p with orthonormal
+ * Thin SVD by one-sided Jacobi rotations: A = U Σ V^T with p = min(m, n). U is m×p and V is n×p with orthonormal
  * columns (for a square matrix they are orthogonal matrices), `s` holds the singular values, non-negative and
  * descending. U and V are not unique: a column and its partner can both change sign, and equal singular values allow
  * any rotation inside their shared plane. We fix signs so the first non-zero entry of each column of V is positive.
@@ -277,10 +283,10 @@ export function svd(A) {
   };
 }
 
-/** U Σ Vᵀ, to check the factorisation. */
+/** U Σ V^T, to check the factorisation. */
 export const svdReconstruct = ({ U, s, V }) => matMul(matMul(U, diag(s)), transpose(V));
 
-/** Singular values as √ of the eigenvalues of AᵀA (clamped at 0: they are never negative, rounding can dip a hair below). */
+/** Singular values as √ of the eigenvalues of A^T A (clamped at 0: they are never negative, rounding can dip a hair below). */
 export function singularFromGram(A) {
   const { values } = symmetricEigen(matMul(transpose(A), A));
   return values.map((l) => Math.sqrt(Math.max(l, 0)));
@@ -290,7 +296,7 @@ export function singularFromGram(A) {
 export const circleImage = (A, count = 72) =>
   Array.from({ length: count }, (_, i) => { const t = (2 * Math.PI * i) / count; return matVec(A, [Math.cos(t), Math.sin(t)]); });
 
-/** The unit circle after each stage of Vᵀ, then Σ, then U, for a 2×2 matrix. Stage 0 is the circle itself. */
+/** The unit circle after each stage of V^T, then Σ, then U, for a 2×2 matrix. Stage 0 is the circle itself. */
 export function svdStages(A, count = 72) {
   const { U, s, V } = svd(A);
   const circle = Array.from({ length: count }, (_, i) => { const t = (2 * Math.PI * i) / count; return [Math.cos(t), Math.sin(t)]; });
@@ -301,7 +307,7 @@ export function svdStages(A, count = 72) {
 }
 
 /* ---------- 6. low-rank approximation ---------- */
-/** A_k = Σ_{i<k} σᵢ uᵢ vᵢᵀ. */
+/** A_k = Σ_{i<k} σᵢ uᵢ vᵢ^T. */
 export function truncatedSvd(A, k, f = svd(A)) {
   const [m, n] = shapeOf(A);
   const kk = Math.max(0, Math.min(k, f.s.length));

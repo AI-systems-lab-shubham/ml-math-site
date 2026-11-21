@@ -1,0 +1,81 @@
+{
+  "concept": "m03-eigenvectors",
+  "items": [
+    {
+      "id": "eig-a",
+      "slot": "predict",
+      "prompt": "A matrix has rows (1, 2) and (2, 1). What is its larger eigenvalue?",
+      "answer": {
+        "fn": "largerEigenvalue",
+        "args": [
+          [
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ]
+          ]
+        ]
+      },
+      "hint": "Find the trace and the determinant, then use λ = (tr ± √(tr² − 4 det)) / 2.",
+      "explain": "From the trace and determinant, the two roots of the quadratic are the eigenvalues. The larger one is {answer}."
+    },
+    {
+      "id": "eig-b",
+      "slot": "predict",
+      "prompt": "A quarter turn has rows (0, −1) and (1, 0). What is tr² − 4 det for it?",
+      "answer": {
+        "fn": "discriminant2",
+        "args": [
+          [
+            [
+              0,
+              -1
+            ],
+            [
+              1,
+              0
+            ]
+          ]
+        ]
+      },
+      "hint": "The trace is the sum of the diagonal; the determinant is ad − bc.",
+      "explain": "tr² − 4 det is {answer}. It is negative, so a quarter turn has no real eigenvalues: no real arrow keeps its line."
+    },
+    {
+      "id": "line",
+      "slot": "spot",
+      "prompt": "You push on a rubber sheet. One drawn line stays on itself as a line, with points sliding along it, while all other lines tilt. What do the arrows along that line form?",
+      "choices": [
+        {
+          "text": "An eigenvector direction",
+          "why": "An arrow along a line that stays on itself comes out along the same line, only stretched or flipped: that is an eigenvector.",
+          "correct": true
+        },
+        {
+          "text": "A rotation",
+          "why": "A rotation turns arrows; an eigenvector is an arrow that is not turned."
+        },
+        {
+          "text": "The zero vector",
+          "why": "The zero vector has no direction and is excluded; the arrows along the line are not zero."
+        }
+      ]
+    },
+    {
+      "id": "noinverse",
+      "slot": "reveal",
+      "prompt": "Before you continue, predict: if A − λI had an inverse, which v would satisfy (A − λI) v = 0?",
+      "reasoning": "Only the zero vector, since a matrix with an inverse sends nothing else to zero. An eigenvector must not be zero, so A − λI must have no inverse, and so its determinant is 0."
+    },
+    {
+      "id": "rotation",
+      "slot": "explain",
+      "prompt": "In your own words: why can a rotation by 60° not have a real eigenvector?",
+      "model": "A rotation by 60° turns every arrow by 60°, so no arrow stays on its own line. In numbers, tr² − 4 det is negative for it, so the quadratic that gives λ has no real solution."
+    }
+  ]
+}

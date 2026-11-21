@@ -1,0 +1,75 @@
+{
+  "concept": "m03-determinant",
+  "items": [
+    {
+      "id": "det-a",
+      "slot": "predict",
+      "prompt": "A matrix has rows (3, 1) and (2, 4). What is its determinant?",
+      "answer": {
+        "fn": "det2",
+        "args": [
+          [
+            [
+              3,
+              1
+            ],
+            [
+              2,
+              4
+            ]
+          ]
+        ]
+      },
+      "hint": "Multiply the pair on the main diagonal, then subtract the product of the other pair: ad − bc.",
+      "explain": "ad − bc with a = 3, b = 1, c = 2 and d = 4 gives {answer}. The unit square’s area is multiplied by that."
+    },
+    {
+      "id": "det-b",
+      "slot": "predict",
+      "prompt": "A matrix has rows (2, 4) and (1, 2). What is its determinant?",
+      "answer": {
+        "fn": "det2",
+        "args": [
+          [
+            [
+              2,
+              4
+            ],
+            [
+              1,
+              2
+            ]
+          ]
+        ]
+      },
+      "hint": "Compare the two columns, (2, 1) and (4, 2). Do they point the same way?",
+      "explain": "ad − bc gives {answer}. The second column is twice the first, so the square is squashed flat and the matrix has no inverse."
+    },
+    {
+      "id": "mirror",
+      "slot": "spot",
+      "prompt": "A copier prints a page at the same size, but with left and right swapped, as if read through the back of the sheet. What does its matrix’s determinant look like?",
+      "choices": [
+        {
+          "text": "Negative, with an absolute value of 1",
+          "why": "The size is kept, so the absolute value is 1, and the flip makes it negative.",
+          "correct": true
+        },
+        {
+          "text": "Zero, because left and right swap",
+          "why": "Zero would mean the page is flattened to a line. Swapping left and right keeps every part of the page; it only reverses the orientation."
+        },
+        {
+          "text": "Positive, because no area is lost",
+          "why": "No area is lost, but a positive determinant also means the orientation is kept. A mirror image reverses it."
+        }
+      ]
+    },
+    {
+      "id": "same-line",
+      "slot": "reveal",
+      "prompt": "Before you continue, predict: if the two columns point along the same line, what is the area of the parallelogram?",
+      "reasoning": "Zero. Both sides of the parallelogram lie along one line, so it is flat, and ad − bc is 0 for any such pair of columns. A matrix like that squashes the whole square onto a line, so it has no inverse."
+    }
+  ]
+}

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m03">
+  <meta name="concept-id" content="m03-eigenvectors">
+  <title>Eigenvalues and eigenvectors - Matrix decompositions - ML Math</title>
+  <meta name="description" content="Directions a matrix only stretches: Av = λv, found from the trace and determinant, with every case: two, one repeated, or none.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/decomposition.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li><a href="../../02-analytic-geometry/">2 · Analytic geometry</a></li>
+    <li>
+      <a href="../">3 · Matrix decompositions</a>
+      <ul class="sub">
+        <li><a href="../determinant/">Determinant as area scaling</a></li>
+        <li><a href="../trace/">Trace</a></li>
+        <li><a href="./" aria-current="page">Eigenvalues and eigenvectors</a></li>
+        <li><a href="../eigendecomposition/">Eigendecomposition</a></li>
+        <li><a href="../svd/">Singular value decomposition</a></li>
+        <li><a href="../low-rank/">Low-rank approximation</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 3: Matrix decompositions</a></li>
+      <li><span aria-current="page">Eigenvalues and eigenvectors</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-eigenvectors" data-size="full">
+    <header>
+      <p class="eyebrow">Full card · 3 of 6</p>
+      <h1>Eigenvalues and eigenvectors</h1>
+      <p class="muted">Directions that a transformation only stretches, shrinks or flips, and what to do when there are none.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Push on a sheet of rubber so that it stretches and slants. Most lines drawn on it tilt to new directions. But some line may stay exactly where it was, as a line: points slide along it and never leave. An arrow lying along that line comes out pointing along the same line, longer, shorter or reversed. Such an arrow is an <span class="term" data-term="eigenvector">eigenvector</span> of the matrix, and the factor by which it is stretched is its <span class="term" data-term="eigenvalue">eigenvalue</span>.</p>
+      <p>In symbols, A v = λv: applying the matrix A to v gives the same arrow multiplied by the number λ (the Greek letter lambda). We insist that v is not the zero vector, because the zero vector fits for every λ and tells us nothing. And only the direction matters: if v works then so does 2v, or −3v. Only a square matrix can have eigenvectors, because the output must live in the same space as the input.</p>
+      <div class="math-display" data-tex-display="A\mathbf{v}=\lambda\mathbf{v},\qquad \mathbf{v}\neq\mathbf{0}">A v = λ v, v ≠ 0</div>
+    </section>
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>The blue arrow v has length 1 and points the way you set. The ochre arrow is Av. Slide v round and watch the angle between them. When it reaches 0° (or 180°, when the arrow flips), v is an eigenvector. Then try the other matrices, including the rotation and the shear, where something different happens.</p>
+      <div data-widget="eigen">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Find the arrows a matrix only stretches</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A grid with a unit arrow v in blue, whose direction you set with a slider from 0 to 180 degrees, and the arrow Av in ochre, where the matrix sends it. A faint line runs through v. When Av lies along that line, v is an eigenvector, and a corner mark appears. The angle between v and Av and the stretch factor are written below. You can pick a matrix, and jump the slider to each eigenvector the matrix has, if it has any.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>The patterns in which a guitar string or a bridge vibrates. In the standard simple model, each pattern keeps its shape and only swells and shrinks, and it is an eigenvector of the matrix that describes the system; its eigenvalue sets how fast it vibrates.</li>
+        <li>The axes about which a spinning object turns smoothly. For a book or a wheel, they are the eigenvectors of its inertia matrix, and spinning about one means the angular momentum points along the same line as the spin.</li>
+        <li>Ranking web pages. Imagine someone who keeps clicking links at random. The share of time they spend on each page, in the long run, is a vector that one more click leaves unchanged: an eigenvector with eigenvalue 1 of the matrix of link-following chances. <span class="term" data-term="pagerank">PageRank</span>, published by Page, Brin, Motwani and Winograd in 1999, scores pages this way.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If something keeps its direction while everything else tilts, or keeps its shape while it repeats, look for an eigenvector.</p>
+      <div data-checks="spot"></div>
+    </section>
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="eigen"></div>
+      <div data-checks="predict"></div>
+    </section>
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Eigenvectors turn a complicated transformation into one-dimensional pieces: along each eigenvector the matrix is just a number. For a 2×2 matrix the eigenvalues come from the trace and determinant: λ = (tr ± √(tr² − 4 det)) / 2, so their sum is the trace and their product is the determinant (<span data-calc="eigSum">…</span> and <span data-calc="eigProd">…</span> for the worked example).</p>
+      <p><strong>When it does not fit.</strong> The <span class="term" data-term="discriminant">discriminant</span> tr² − 4 det decides which case you are in. Every number in this table comes from tested code:</p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="The cases for a 2 by 2 matrix, scrolls sideways on narrow screens">
+      <table>
+        <thead><tr><th scope="col">Matrix</th><th scope="col">tr² − 4 det</th><th scope="col">Real eigenvalues</th><th scope="col">Eigenvector directions</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Rows (4, 1) and (2, 3)</th><td><span data-calc="discTwo">…</span></td><td>two: <span data-calc="valsTwo">…</span></td><td>two</td></tr>
+          <tr><th scope="row">Scaling by 2 and 3</th><td><span data-calc="discScale">…</span></td><td>two: <span data-calc="scaleEig">…</span></td><td>two (the axes)</td></tr>
+          <tr><th scope="row">Projection onto the x-axis</th><td><span data-calc="discProj">…</span></td><td>two: <span data-calc="projEig">…</span></td><td>two (one is squashed to 0)</td></tr>
+          <tr><th scope="row">Rotation by 60°</th><td><span data-calc="rotDisc">…</span></td><td>none</td><td>none: every arrow is turned</td></tr>
+          <tr><th scope="row">Shear, k = 1</th><td><span data-calc="discShear">…</span></td><td>one, repeated: <span data-calc="shearEig">…</span></td><td>only one: <span class="term" data-term="defective-matrix">defective</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>A rotation by an angle that is not a multiple of π has no real eigenvalues, because its tr² − 4 det is negative (here tr = <span data-calc="rotTrace">…</span> and det = 1), and no real arrow keeps its line. The shear with k not 0 has its eigenvalue 1 repeated, and only the arrows along the x-axis stay on their line, so it has too few eigenvectors to span the plane.</p>
+    </section>
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>The requirement.</strong> Find v, not zero, with A v = λv. Move everything to one side: (A − λI) v = 0, where I is the identity matrix.</li>
+        <li><strong>What that demands.</strong> The matrix A − λI sends a non-zero arrow to zero. A matrix with an inverse only sends the zero vector to zero, so A − λI must have no inverse: its determinant is 0.</li>
+        <li><strong>Write it out.</strong> det(A − λI) = (a − λ)(d − λ) − bc = λ² − (a + d)λ + (ad − bc) = λ² − tr λ + det.</li>
+        <li><strong>Solve.</strong> Set it to 0 and use the quadratic formula: λ = (tr ± √(tr² − 4 det)) / 2. For each λ, solve (A − λI) v = 0 for v.</li>
+      </ol>
+      <div data-checks="reveal"></div>
+    </section>
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Nothing specific to claim.</strong> Eigenvalues and eigenvectors are not a named step in how a transformer processes text, and this card makes no claim that they are. The real-life examples above are where this card’s idea is used.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> This card works with 2×2 matrices. Larger matrices have as many eigenvalues as they have rows, but finding them takes more than a quadratic formula.</p></div>
+      <div data-checks="explain"></div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>60-second explanation</h4>
+      <p>“A matrix usually tilts arrows. An eigenvector is an arrow it does not tilt: it only stretches or flips it, by a number called the eigenvalue. To find them, ask when A minus λ times the identity has no inverse, set its determinant to zero, and solve the quadratic. The two answers add to the trace and multiply to the determinant. If the discriminant is negative there are none; if the eigenvalue repeats there may be only one direction.”</p>
+      <h4>Everyday analogy</h4>
+      <p>A spinning merry-go-round seen from above: everything turns except the pole at the centre. <em>Where it breaks down:</em> an eigenvector is a direction kept, not a point at rest, and it can be stretched along the way.</p>
+      <h4>Whiteboard sequence</h4>
+      <ol><li>Draw v and Av from one point, tilted differently.</li><li>Rotate v until Av lies along it.</li><li>Write A v = λ v beside the two parallel arrows.</li><li>Compute tr and det and the discriminant.</li><li>Solve for λ, then find v for each λ.</li></ol>
+      <h4>Questions learners ask</h4>
+      <p><strong>Can an eigenvalue be negative or zero?</strong> Yes. Negative means the arrow is flipped as well as stretched; zero means it is squashed to nothing.</p>
+      <p><strong>Why must v not be zero?</strong> Because A·0 = λ·0 for every λ, so it would make every number an eigenvalue and tell us nothing.</p>
+      <p><strong>Does every matrix have eigenvectors?</strong> Not real ones: a rotation by an angle that is not a multiple of π has none, and a shear has too few.</p>
+      <h4>Common misconception</h4>
+      <p>“An eigenvector is one particular arrow.” It is a direction: every non-zero multiple of it is an eigenvector too.</p>
+    </details>
+    <footer>Further reading: MML Ch 4.2 (eigenvalues and eigenvectors).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

@@ -1,0 +1,85 @@
+{
+  "concept": "m03-trace",
+  "items": [
+    {
+      "id": "tr-a",
+      "slot": "predict",
+      "prompt": "A matrix has rows (3, 1) and (4, 6). What is its trace?",
+      "answer": {
+        "fn": "trace",
+        "args": [
+          [
+            [
+              3,
+              1
+            ],
+            [
+              4,
+              6
+            ]
+          ]
+        ]
+      },
+      "hint": "Add the entries from top left to bottom right.",
+      "explain": "The diagonal entries are 3 and 6, so the trace is {answer}. The entries 1 and 4 are off the diagonal and do not count."
+    },
+    {
+      "id": "tr-b",
+      "slot": "predict",
+      "prompt": "A has rows (2, 0) and (1, 3), and B has rows (1, 1) and (0, 2). What is the trace of BA?",
+      "answer": {
+        "fn": "traceOfProduct",
+        "args": [
+          [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          [
+            [
+              2,
+              0
+            ],
+            [
+              1,
+              3
+            ]
+          ]
+        ]
+      },
+      "hint": "You may use the rule tr(BA) = tr(AB) and multiply in whichever order you prefer.",
+      "explain": "Because tr(BA) = tr(AB), either order gives the same trace: {answer}, even though AB and BA are different matrices."
+    },
+    {
+      "id": "table",
+      "slot": "spot",
+      "prompt": "A table counts photos, with the true label down the side and the guessed label across the top. Which single total is the number of photos labelled correctly?",
+      "choices": [
+        {
+          "text": "The trace: add the diagonal",
+          "why": "The diagonal holds the photos whose guessed label equals the true label, so their total is the trace.",
+          "correct": true
+        },
+        {
+          "text": "The determinant",
+          "why": "The determinant is a signed area scale, not a count of anything in a table."
+        },
+        {
+          "text": "The sum of the first row",
+          "why": "The first row counts only photos whose true label is the first one, whatever they were guessed as."
+        }
+      ]
+    },
+    {
+      "id": "cyclic",
+      "slot": "reveal",
+      "prompt": "Before you continue, predict: is tr(ABC) always equal to tr(BAC)?",
+      "reasoning": "No. Moving the first matrix to the back, or the last to the front, keeps the trace: tr(ABC) = tr(BCA) = tr(CAB). Swapping two neighbours can change it, and the tests include an example where it does."
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F1E7">
+  <meta name="site-root" content="../../../">
+  <meta name="module-id" content="m03">
+  <meta name="concept-id" content="m03-eigendecomposition">
+  <title>Eigendecomposition - Matrix decompositions - ML Math</title>
+  <meta name="description" content="A matrix with enough independent eigenvectors is A = PDP⁻¹, and a symmetric one is A = QΛQ^T; either makes powers easy.">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../../../vendor/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Fraunces-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../vendor/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <link rel="stylesheet" href="../../../assets/css/widget-reserve.css">
+  <noscript><style>[data-nav-toggle], [data-highlight-toggle], [data-page-toc], [data-page-tools] { display: none; } .topbar-progress-text { visibility: hidden; }</style></noscript>
+  <script src="../../../assets/js/rail-init.js"></script>
+  <script src="../../../vendor/katex/katex.min.js"></script>
+  <script type="module" src="../../../assets/js/decomposition.mjs"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar" id="site-header">
+  <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="outline-toggle-text">Outline</span></button>
+  <a class="brand" translate="no" href="../../../index.html">ML Math</a>
+  <div class="topbar-actions">
+    <a class="topbar-progress" href="../../../index.html#syllabus" data-course-progress aria-label="Course progress"><svg class="ring" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--rule)" stroke-width="3"/></svg><span class="topbar-progress-text">– of – complete</span></a>
+      <button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>
+  </div>
+</header>
+<noscript><p class="notice">This course uses JavaScript for its widgets, outline and progress. The text still reads without it. <a href="../../../index.html">Course home</a></p></noscript>
+
+<div class="layout">
+<nav class="site-nav" id="site-nav" aria-label="Course outline">
+  <h2>Modules</h2>
+  <ol>
+    <li><a href="../../00-foundations/">0 · Foundations</a></li>
+    <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
+    <li><a href="../../02-analytic-geometry/">2 · Analytic geometry</a></li>
+    <li>
+      <a href="../">3 · Matrix decompositions</a>
+      <ul class="sub">
+        <li><a href="../determinant/">Determinant as area scaling</a></li>
+        <li><a href="../trace/">Trace</a></li>
+        <li><a href="../eigenvectors/">Eigenvalues and eigenvectors</a></li>
+        <li><a href="./" aria-current="page">Eigendecomposition</a></li>
+        <li><a href="../svd/">Singular value decomposition</a></li>
+        <li><a href="../low-rank/">Low-rank approximation</a></li>
+      </ul>
+    </li>
+    <li><span class="soon">4 · Vector calculus</span></li>
+    <li><span class="soon">5 · Probability and distributions</span></li>
+    <li><span class="soon">6 · Continuous optimisation</span></li>
+    <li><span class="soon">7 · Information theory</span></li>
+    <li><span class="soon">8 · When models meet data</span></li>
+    <li><span class="soon">9 · Models</span></li>
+    <li><span class="soon">10 · Capstone: a tiny language model</span></li>
+  </ol>
+</nav>
+
+<main id="main">
+  <nav class="page-toc" id="page-toc" aria-label="On this page" data-page-toc>
+    <button class="page-toc-toggle" type="button" aria-expanded="false" aria-controls="page-toc-panel"><span class="page-toc-label">On this page</span><span class="page-toc-current" data-toc-current></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="page-toc-panel" id="page-toc-panel" data-toc-panel><p class="page-toc-title">On this page</p></div>
+  </nav>
+
+  <div class="column page-hero">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+      <li><a href="../../../index.html">Course</a></li>
+      <li><a href="../">Module 3: Matrix decompositions</a></li>
+      <li><span aria-current="page">Eigendecomposition</span></li></ol></nav>
+    <script src="../../../assets/js/first-hint.js"></script>
+    <div class="page-tools" data-page-tools>
+      <button class="button-secondary button-small" type="button" data-expand-all>Expand all</button>
+      <button class="button-secondary button-small" type="button" data-collapse-all>Collapse all</button>
+      <p class="page-tools-status" role="status" data-tools-status></p>
+    </div>
+  </div>
+
+  <article class="concept-card" id="concept-eigendecomposition" data-size="compact">
+    <header>
+      <p class="eyebrow">Compact card · 4 of 6</p>
+      <h1>Eigendecomposition</h1>
+      <p class="muted">Change to the eigenvector directions, stretch each, change back: and what that makes easy.</p>
+    </header>
+
+    <section data-stage="meaning">
+      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <p>Suppose a matrix has two independent <span class="term" data-term="eigenvector">eigenvectors</span>. Then you can describe any arrow in terms of them, and in those directions the matrix does nothing more than multiply by a number. So to apply the matrix: switch to the eigenvector directions, stretch each by its <span class="term" data-term="eigenvalue">eigenvalue</span>, then switch back. Written as a product, that is the <span class="term" data-term="eigendecomposition">eigendecomposition</span> A = P D P<sup>−1</sup>.</p>
+      <p>P has the eigenvectors as its columns, so P<sup>−1</sup> switches into their directions. D is a <span class="term" data-term="diagonal-matrix">diagonal matrix</span> holding the eigenvalues, which stretches each direction on its own. P then switches back. It only works when there are enough independent eigenvectors to fill the columns of P; the shear from the last card does not have them.</p>
+      <div class="math-display" data-tex-display="A=PDP^{-1}">A = P D P⁻¹</div>
+    </section>
+    <section data-stage="picture">
+      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <p>This matrix is symmetric, which makes the picture simple: its eigenvectors are along the two diagonals, at right angles. The faint circle is the unit circle; the filled shape is what A<sup>n</sup> makes of it. Raise n and see the longer axis grow with the bigger eigenvalue and the shorter one shrink with the smaller one.</p>
+      <div data-widget="powers">
+        <div class="widget widget-placeholder">
+          <p class="widget-title">Powers of a symmetric matrix</p>
+          <figure class="widget-draw"><figcaption class="widget-desc">A grid with a faint unit circle and the ellipse that the circle becomes after the matrix is applied n times. The two eigenvector directions, along the diagonals, are drawn as dashed lines. The ellipse is stretched along them by the eigenvalue raised to the power n. The entries of the matrix power, worked out as P D to the n P inverse, and checked against repeated multiplication, are written below.</figcaption></figure>
+          <div class="widget-reserve" aria-hidden="true"></div>
+        </div>
+      </div><!-- /widget -->
+    </section>
+    <section data-stage="real-life">
+      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <ul>
+        <li>A table of year-to-year rates between a few groups, such as the young, adult and old members of a population. Applying one year’s table n years in a row is the matrix power A<sup>n</sup>.</li>
+        <li>A savings account where interest is added each year: the amount after n years is the starting amount times a growth factor raised to the power n. Eigendecomposition does the same for a whole table of growth factors at once.</li>
+        <li>A change of units: to work in kilometres, compute, and convert back, which is the same switch-in, act, switch-out pattern as P, D, P<sup>−1</sup>.</li>
+      </ul>
+      <p class="recognise"><strong>Recognition rule.</strong> If a task has the shape “change to better coordinates, do something simple, change back”, think of P D P<sup>−1</sup>.</p>
+      <div data-checks="spot"></div>
+    </section>
+    <section data-stage="worked-example">
+      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <div data-stepper="eigendecomp"></div>
+      <div data-checks="predict"></div>
+    </section>
+    <section data-stage="why-when">
+      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <p>Powers become cheap: A<sup>n</sup> = P D<sup>n</sup> P<sup>−1</sup>, because the P<sup>−1</sup>P pairs in the middle cancel and a diagonal matrix is raised to a power entry by entry. After many steps the largest eigenvalue dominates, so an arrow that is repeatedly multiplied by A turns towards the matching eigenvector.</p>
+      <p><strong>A symmetric matrix always works.</strong> A <span class="term" data-term="symmetric-matrix">symmetric matrix</span> has real eigenvalues, and its eigenvectors can be chosen at right angles (see the <a href="../../02-analytic-geometry/orthogonality/">Orthogonality</a> card in Module 2), so P can be an <span class="term" data-term="orthogonal-matrix">orthogonal matrix</span> Q whose inverse is just its transpose: A = Q Λ Q<sup>T</sup>.</p>
+      <p><strong>When it does not fit.</strong> A matrix with too few independent eigenvectors, like the shear, cannot be written as P D P<sup>−1</sup>, and neither can a rotation, which has no real eigenvalues. A matrix that is not square has no eigenvectors. The next card gives a decomposition that works for every matrix.</p>
+    </section>
+    <section data-stage="how-to-arrive">
+      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <p><span class="badge badge-derived">✓ Derived</span></p>
+      <ol>
+        <li><strong>Start from the eigen-equations.</strong> A v₁ = λ₁v₁ and A v₂ = λ₂v₂.</li>
+        <li><strong>Stack them side by side.</strong> A [v₁ v₂] = [λ₁v₁ λ₂v₂]. The right side is [v₁ v₂] times the diagonal matrix of eigenvalues. In symbols, A P = P D.</li>
+        <li><strong>Undo P.</strong> If P has an inverse, which needs the eigenvectors to be independent, multiply on the right by P<sup>−1</sup>: A = P D P<sup>−1</sup>.</li>
+        <li><strong>If P has no inverse</strong>, there are too few independent eigenvectors and the step fails: that is exactly the defective case.</li>
+      </ol>
+      <div data-checks="reveal"></div>
+    </section>
+    <section data-stage="in-an-llm">
+      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <ul>
+        <li><strong>Nothing specific to claim.</strong> One caution: A<sup>n</sup> applies the <em>same</em> matrix n times, whereas the layers of a transformer each have their own learned weights (Vaswani et al., 2017), so powers of a single matrix do not describe how a transformer’s depth works.</li>
+      </ul>
+      <div class="callout simplified"><p><strong>Simplified.</strong> This is a note on what the idea does not describe. It makes no claim about any trained model.</p></div>
+    </section>
+
+    <details class="teach-it">
+      <summary>Teach it</summary>
+      <h4>Everyday analogy</h4>
+      <p>Cooking in your friend’s kitchen, with your friend’s units: convert the recipe, cook, convert back. <em>Where it breaks down:</em> the conversion here is a matrix, and if it has no inverse the trick fails.</p>
+      <h4>Common misconception</h4>
+      <p>“Every square matrix can be written as P D P⁻¹.” No: the shear has only one eigenvector direction, and a rotation has no real eigenvectors.</p>
+    </details>
+    <footer>Further reading: MML Ch 4.4 (eigendecomposition and diagonalisation).</footer>
+  </article>
+</main>
+</div>
+<footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

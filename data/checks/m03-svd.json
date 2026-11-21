@@ -1,0 +1,104 @@
+{
+  "concept": "m03-svd",
+  "items": [
+    {
+      "id": "svd-a",
+      "slot": "predict",
+      "prompt": "A has rows (3, 0) and (4, 0). What is its largest singular value?",
+      "answer": {
+        "fn": "singularValue",
+        "args": [
+          [
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ]
+          ],
+          0
+        ]
+      },
+      "hint": "Find where the arrow (1, 0) lands and measure its length. The other column is zero.",
+      "explain": "A sends (1, 0) to (3, 4) and (0, 1) to the zero vector, so the ellipse is a line segment of half-length {answer}. That is σ₁; σ₂ is 0, so the rank is 1."
+    },
+    {
+      "id": "svd-b",
+      "slot": "predict",
+      "prompt": "A shear has rows (1, 2) and (0, 1). What is the product σ₁σ₂ of its singular values?",
+      "answer": {
+        "fn": "singularProduct",
+        "args": [
+          [
+            [
+              1,
+              2
+            ],
+            [
+              0,
+              1
+            ]
+          ]
+        ]
+      },
+      "hint": "The product of the singular values of a 2×2 matrix is the absolute value of its determinant.",
+      "explain": "The product of the singular values is |det A|. For any shear the determinant is 1, so the product is {answer}."
+    },
+    {
+      "id": "svd-c",
+      "slot": "predict",
+      "prompt": "What is the rank of the matrix with rows (1, 2) and (2, 4)?",
+      "answer": {
+        "fn": "rank",
+        "args": [
+          [
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              4
+            ]
+          ]
+        ]
+      },
+      "hint": "Is the second row a multiple of the first? Count the non-zero singular values.",
+      "explain": "The second row is twice the first, so there is only one independent direction: the rank is {answer}. One singular value is 0, within the rank tolerance."
+    },
+    {
+      "id": "semi",
+      "slot": "spot",
+      "prompt": "A matrix turns the unit circle into an ellipse. What do the lengths of the ellipse’s semi-axes give?",
+      "choices": [
+        {
+          "text": "The singular values",
+          "why": "The semi-axes are the biggest and smallest stretches the matrix gives, which are σ₁ and σ₂.",
+          "correct": true
+        },
+        {
+          "text": "The eigenvalues, always",
+          "why": "For a matrix that is not symmetric, the eigenvalues and the semi-axes differ, and some matrices have no real eigenvalues at all."
+        },
+        {
+          "text": "The determinant",
+          "why": "The determinant is the product of the semi-axes (up to sign), not either of them."
+        }
+      ]
+    },
+    {
+      "id": "nonneg",
+      "slot": "reveal",
+      "prompt": "Before you continue, predict: why can a singular value never be negative?",
+      "reasoning": "Each one is the square root of an eigenvalue of A^T A, and A^T A is a sum of squares, so its eigenvalues are never negative. A singular value is also a length, the length of A v for a unit arrow v along an axis of the ellipse."
+    },
+    {
+      "id": "moves",
+      "slot": "explain",
+      "prompt": "In your own words: what are the three moves of the SVD, and what does each do to the unit circle?",
+      "model": "V^T turns or flips the circle, and it stays a circle. Σ stretches it along the two axes by σ₁ and σ₂, making an ellipse. U turns or flips the ellipse into its final place. Together they do exactly what A does."
+    }
+  ]
+}

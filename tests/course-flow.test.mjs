@@ -30,14 +30,28 @@ test("Continue: each Module 2 concept continues to the next one", () => {
   assert.deepEqual(course.modules.find((m) => m.id === "m02").concepts.map((c) => c.id), ids);
   ids.slice(0, -1).forEach((id, i) => assert.equal(continueTarget(course, id).id, ids[i + 1]));
 });
-test("Continue: the last concept of the course so far (Why divide by the square root of d_k) has no target", () => {
-  assert.equal(continueTarget(course, "m02-sqrt-dk"), null);
-  assert.equal(chain(course).at(-1).id, "m02-sqrt-dk");
+test("Continue: Why divide by the square root of d_k, the last concept of Module 2, continues to the Module 3 overview", () => {
+  assert.deepEqual(continueTarget(course, "m02-sqrt-dk"), { kind: "module", path: "modules/03-matrix-decompositions/", title: "Matrix decompositions", id: "m03" });
+});
+test("Continue: each Module 3 concept continues to the next one", () => {
+  const ids = ["m03-determinant", "m03-trace", "m03-eigenvectors", "m03-eigendecomposition", "m03-svd", "m03-low-rank"];
+  assert.deepEqual(course.modules.find((m) => m.id === "m03").concepts.map((c) => c.id), ids);
+  ids.slice(0, -1).forEach((id, i) => assert.equal(continueTarget(course, id).id, ids[i + 1]));
+});
+test("Continue: the last concept of the course so far (Low-rank approximation) has no target", () => {
+  assert.equal(continueTarget(course, "m03-low-rank"), null);
+  assert.equal(chain(course).at(-1).id, "m03-low-rank");
+});
+test("Continue: with Module 3 planned again, the Module 2 last concept is the end of the course", () => {
+  const partial = structuredClone(course);
+  partial.modules.find((m) => m.id === "m03").status = "planned";
+  assert.equal(continueTarget(partial, "m02-sqrt-dk"), null);
 });
 test("Continue: with the last four Module 1 concepts planned again, Matrix multiplication is the end of the course", () => {
   const partial = structuredClone(course);
   for (const c of partial.modules[1].concepts.slice(4)) c.status = "planned";
   partial.modules[2].status = "planned";   // Module 2 is not built yet in this scenario
+  partial.modules[3].status = "planned";
   assert.equal(continueTarget(partial, "m01-matmul"), null);
 });
 test("Continue: unknown id has no target", () => assert.equal(continueTarget(course, "nope"), null));

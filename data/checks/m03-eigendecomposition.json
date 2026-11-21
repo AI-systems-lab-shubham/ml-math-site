@@ -1,0 +1,56 @@
+{
+  "concept": "m03-eigendecomposition",
+  "items": [
+    {
+      "id": "pow-a",
+      "slot": "predict",
+      "prompt": "A has rows (4, 1) and (2, 3). What is the top-left entry of A³?",
+      "answer": {
+        "fn": "powerEntry",
+        "args": [
+          [
+            [
+              4,
+              1
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          3,
+          0,
+          0
+        ]
+      },
+      "hint": "You can multiply A by itself three times, or use A³ = P D³ P⁻¹.",
+      "explain": "Raising D to the third power cubes each eigenvalue on its diagonal, and P D³ P⁻¹ then has the top-left entry {answer}, the same as multiplying A by itself three times."
+    },
+    {
+      "id": "years",
+      "slot": "spot",
+      "prompt": "A table of year-to-year rates between a few groups is applied 20 years in a row. Which idea makes the 20-year result easy to compute?",
+      "choices": [
+        {
+          "text": "Eigendecomposition: A^n = P D^n P⁻¹",
+          "why": "Only the diagonal entries are raised to the 20th power, and P and P⁻¹ switch into and out of the eigenvector directions.",
+          "correct": true
+        },
+        {
+          "text": "The trace",
+          "why": "The trace is one number from the diagonal; it does not give the 20-year table."
+        },
+        {
+          "text": "The determinant",
+          "why": "The determinant tells how areas scale, not what the table becomes after repeated years."
+        }
+      ]
+    },
+    {
+      "id": "shear-not",
+      "slot": "reveal",
+      "prompt": "Before you continue, predict: can the shear with rows (1, 1) and (0, 1) be written as P D P⁻¹?",
+      "reasoning": "No. It has only one eigenvector direction, so there are not enough independent eigenvectors to fill the columns of P, and P would have no inverse."
+    }
+  ]
+}

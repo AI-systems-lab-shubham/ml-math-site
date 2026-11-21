@@ -6,7 +6,7 @@ import {
   discriminant2, eigenvalues2, isEigenpair, eigen2, parallelGap, stretchAt, eigenAngles, eigendecompose2, powerViaEigen,
   isSymmetric, symmetricEigen, rankTolerance, rankFromSingular, svd, svdReconstruct, singularFromGram, circleImage, svdStages,
   truncatedSvd, bestErrorFrobSq, bestErrorSpectral, storageTruncated, storageFull, storageLoRA, breakEvenRank, loraUpdate, mergeUpdate,
-  pattern16, randomMatrix,
+  pattern16, randomMatrix, decomposeWith, traceOfProduct3,
 } from "../assets/js/decomposition-math.mjs";
 
 const close = (a, b, tol = 1e-9) => assert.ok(Math.abs(a - b) <= tol, `${a} is not within ${tol} of ${b}`);
@@ -388,4 +388,64 @@ test("LoRA-shaped update: B (m×r) times A (r×n) has rank at most r, and mergin
   const x = randomMatrix(8, 1, 8).map((r) => r[0]);
   const split = matVec(W0, x).map((v, i) => v + matVec(B, matVec(A, x))[i]);
   matVec(W, x).forEach((v, i) => close(v, split[i], 1e-12));
+});
+
+test("tr(A^T A) is the sum of all squared entries (the squared Frobenius norm); tr(ABC) = tr(BCA) = tr(CAB) but not always tr(BAC)", () => {
+  for (let i = 0; i < 50; i++) {
+    const A = randomMatrix(3, 4, 60 + i);
+    close(trace(matMul(transpose(A), A)), frobeniusSq(A), 1e-9);
+  }
+  const A = [[1, 2], [3, 4]], B = [[0, 1], [1, 0]], C = [[2, 0], [1, 1]];
+  assert.equal(traceOfProduct3(A, B, C), traceOfProduct3(B, C, A));
+  assert.equal(traceOfProduct3(A, B, C), traceOfProduct3(C, A, B));
+  assert.notEqual(traceOfProduct3(A, B, C), traceOfProduct3(B, A, C));
+});
+test("tr(P⁻¹AP) = tr(A): re-expressing a matrix with P⁻¹AP leaves the trace unchanged", () => {
+  for (let i = 0; i < 50; i++) {
+    const A = randomMatrix(3, 3, 80 + i), P = matAdd(randomMatrix(3, 3, 90 + i), matScaleI(3, 9));
+    close(trace(matMul(matMul(inverse(P), A), P)), trace(A), 1e-9);
+  }
+});
+const matScaleI = (n, c) => identity(n).map((r) => r.map((v) => v * c));
+test("decomposeWith: integer eigenvectors (1,1) and (1,−2) of [[4,1],[2,3]] give A = P D P⁻¹; A³ = P D³ P⁻¹", () => {
+  const A = [[4, 1], [2, 3]];
+  const f = decomposeWith([[1, 1], [1, -2]], [5, 2]);
+  closeM(matMul(matMul(f.P, f.D), f.Pinv), A, 1e-12);
+  closeM(matMul(matMul(f.P, diag([125, 8])), f.Pinv), matPower(A, 3), 1e-10);
+});
+test("the biggest eigenvalue takes over: A^n x lines up with the dominant eigenvector (1,1) of [[4,1],[2,3]]", () => {
+  const A = [[4, 1], [2, 3]];
+  let x = [1, -0.5];
+  const gap = (v) => Math.abs(v[0] - v[1]) / Math.hypot(...v);
+  const g0 = gap(x);
+  for (let i = 0; i < 10; i++) x = matVec(A, x);
+  assert.ok(gap(x) < g0 / 100 && gap(x) < 1e-3);
+});
+test("a times table is rank 1: the outer product of (1..n) with itself", () => {
+  const T = Array.from({ length: 6 }, (_, i) => Array.from({ length: 6 }, (_, j) => (i + 1) * (j + 1)));
+  const s = svd(T).s;
+  assert.equal(rankFromSingular(s, 6, 6), 1);
+  close(frobeniusSq(matSub(T, truncatedSvd(T, 1))), 0, 1e-9);
+});
+test("the card examples: [[4,0],[3,−5]] has σ² = 40 and 10; dropping σ₂ leaves squared error 10 of a total 50", () => {
+  const A = [[4, 0], [3, -5]];
+  const { s } = svd(A);
+  close(s[0] ** 2, 40, 1e-12); close(s[1] ** 2, 10, 1e-12);
+  close(frobeniusSq(A), 50, 1e-12);
+  close(frobeniusSq(matSub(A, truncatedSvd(A, 1))), 10, 1e-12);
+  const B = [[3, 0], [4, 0]];
+  close(svd(B).s[0], 5, 1e-12); close(svd(B).s[1], 0, 1e-12);
+  assert.equal(rankFromSingular(svd(B).s, 2, 2), 1);
+});
+
+test("the product of the singular values is |det A| (2×2), and for a symmetric matrix the singular values are |eigenvalues|", () => {
+  for (let i = 0; i < 100; i++) {
+    const A = randomMatrix(2, 2, 500 + i), s = svd(A).s;
+    close(s[0] * s[1], Math.abs(det2(A)), 1e-10);
+    const B = matAdd(A, transpose(A)), vals = symmetricEigen(B).values.map(Math.abs).sort((a, b) => b - a), t = svd(B).s;
+    close(t[0], vals[0], 1e-10); close(t[1], vals[1], 1e-10);
+  }
+  assert.equal(String(Number(det2(scaling(0.001, 0.001)).toPrecision(6))), "0.000001");
+  assert.equal(det2(scaling(2, 2)), 4);
+  assert.deepEqual([discriminant2([[4, 1], [2, 3]]), discriminant2(scaling(2, 3)), discriminant2(projectionX()), discriminant2(shear(1))], [9, 1, 1, 0]);
 });

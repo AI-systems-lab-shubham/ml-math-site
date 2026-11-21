@@ -1,0 +1,90 @@
+{
+  "concept": "m03-low-rank",
+  "items": [
+    {
+      "id": "store-a",
+      "slot": "predict",
+      "prompt": "How many numbers does a rank-8 truncated SVD of a 512×512 matrix store?",
+      "answer": {
+        "fn": "storageTruncated",
+        "args": [
+          512,
+          512,
+          8
+        ]
+      },
+      "hint": "It stores 8 columns of U, 8 columns of V and 8 singular values.",
+      "explain": "k(m + n + 1) with k = 8 and m = n = 512 gives {answer}, against 512 × 512 for the whole matrix."
+    },
+    {
+      "id": "err-a",
+      "slot": "predict",
+      "prompt": "A has rows (4, 0) and (3, −5). Keeping only the first layer of its SVD, what is the squared Frobenius error?",
+      "answer": {
+        "fn": "errorFrobSq",
+        "args": [
+          [
+            [
+              4,
+              0
+            ],
+            [
+              3,
+              -5
+            ]
+          ],
+          1
+        ]
+      },
+      "hint": "The squared error is the sum of the squared singular values you dropped.",
+      "explain": "The only dropped singular value is σ₂, so the squared error is σ₂² = {answer}."
+    },
+    {
+      "id": "lora-a",
+      "slot": "predict",
+      "prompt": "B is 512×8 and A is 8×512. How many numbers do B and A hold together?",
+      "answer": {
+        "fn": "storageLoRA",
+        "args": [
+          512,
+          512,
+          8
+        ]
+      },
+      "hint": "Count the entries of each factor and add them.",
+      "explain": "B has 512 × 8 entries and A has 8 × 512, so together they hold {answer}, with no singular values to store."
+    },
+    {
+      "id": "photo",
+      "slot": "spot",
+      "prompt": "The columns of a photo are mostly mixtures of a few patterns. Which idea saves space by keeping only those patterns?",
+      "choices": [
+        {
+          "text": "Low-rank approximation",
+          "why": "It keeps the few biggest layers of the matrix and drops the rest, with the smallest possible error for the rank.",
+          "correct": true
+        },
+        {
+          "text": "The determinant",
+          "why": "The determinant is a single number about area scaling; it cannot rebuild the photo."
+        },
+        {
+          "text": "The trace",
+          "why": "The trace adds the diagonal; it throws away almost everything about the photo."
+        }
+      ]
+    },
+    {
+      "id": "full",
+      "slot": "reveal",
+      "prompt": "Before you continue, predict: what is the error if you keep every layer?",
+      "reasoning": "Zero. Nothing is dropped, so the sum of the dropped squared singular values is an empty sum, and the approximation is the matrix itself."
+    },
+    {
+      "id": "lora",
+      "slot": "explain",
+      "prompt": "In your own words: how is LoRA similar to a low-rank approximation, and how is it different?",
+      "model": "Both write a big matrix, or a change to one, as a product of two thin matrices, so the result has rank at most r and is cheap to store. A low-rank approximation is computed from the SVD of a known matrix. LoRA never computes an SVD: it learns the two thin matrices by training, while the pre-trained weights stay frozen."
+    }
+  ]
+}

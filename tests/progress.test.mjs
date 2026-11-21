@@ -480,13 +480,14 @@ test("real course: Module 1 lists 8 concepts and all 8 are built; progress count
   p.setStatus("m01-vectors", "not-started");
   p.setStatus("m00-variables", "complete");                         // 1 of 10 built in m00 = 10%
   assert.equal(p.moduleProgress("m00").percent, 10);
-  assert.equal(p.courseProgress().percent, Math.round(100 / 25));   // 1 of 25 = 4
+  assert.equal(p.courseProgress().percent, Math.round(100 / 31));   // 1 of 31 = 3.2 -> 3
 });
 
 test("progress is over built concepts only: planned ones are left out of totals (the real course with the last four Module 1 concepts planned again)", () => {
   const partial = structuredClone(real);
   for (const c of partial.modules.find((m) => m.id === "m01").concepts.slice(4)) c.status = "planned";
-  partial.modules.find((m) => m.id === "m02").status = "planned";   // Module 2 is left out of this scenario
+  partial.modules.find((m) => m.id === "m02").status = "planned";   // Modules 2 and 3 are left out of this scenario
+  partial.modules.find((m) => m.id === "m03").status = "planned";
   const p = createProgress({ course: partial, storage: fakeStorage(), now: clock, target: null });
   p.setStatus("m01-vectors", "complete");
   const r = p.moduleProgress("m01");
@@ -495,17 +496,18 @@ test("progress is over built concepts only: planned ones are left out of totals 
   assert.equal(neighbours(partial, "m01-matmul").next, null, "planned concepts are not in the chain");
 });
 
-test("real course: chain is m00 (10), m01 (8) then m02 (7); neighbours link across modules and the last concept has no next", () => {
+test("real course: chain is m00 (10), m01 (8), m02 (7) then m03 (6); neighbours link across modules and the last concept has no next", () => {
   const list = chain(real);
-  assert.equal(list.length, 25);
+  assert.equal(list.length, 31);
   assert.equal(neighbours(real, "m00-variables").prev, null);
   assert.equal(neighbours(real, "m00-notation").next.id, "m01-vectors");
   assert.equal(neighbours(real, "m01-matmul").next.id, "m01-transpose", "Matrix multiplication now has a next concept");
   assert.deepEqual(list.slice(10, 18).slice(-4).map((c) => c.id), ["m01-transpose", "m01-systems", "m01-span", "m01-transformations"]);
   assert.equal(neighbours(real, "m01-transformations").next.id, "m02-norms", "Module 1 now leads into Module 2");
   assert.equal(neighbours(real, "m01-transformations").prev.id, "m01-span");
-  assert.equal(neighbours(real, "m02-sqrt-dk").next, null);
-  assert.equal(totalMinutes(real), 8 + 15 + 12 + 12 + 12 + 14 + 10 + 8 + 8 + 8 + 14 + 14 + 14 + 16 + 10 + 14 + 10 + 14 + 14 + 8 + 15 + 14 + 8 + 14 + 9);
+  assert.equal(neighbours(real, "m02-sqrt-dk").next.id, "m03-determinant", "Module 2 now leads into Module 3");
+  assert.equal(neighbours(real, "m03-low-rank").next, null);
+  assert.equal(totalMinutes(real), 8 + 15 + 12 + 12 + 12 + 14 + 10 + 8 + 8 + 8 + 14 + 14 + 14 + 16 + 10 + 14 + 10 + 14 + 14 + 8 + 15 + 14 + 8 + 14 + 9 + 8 + 8 + 16 + 10 + 16 + 15);
 });
 
 test("renderInline turns _{k} into a subscript and leaves a stray underscore alone", () => {

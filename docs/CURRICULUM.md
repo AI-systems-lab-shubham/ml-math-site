@@ -49,12 +49,14 @@ _All seven concepts built, one page each under `modules/02-analytic-geometry/` (
 - Projections (F)
 - **Why divide by √d_k** (C, "How to arrive" = Derived): dot products of d-dimensional vectors with independent, zero-mean, unit-variance components have variance d, so scaling by √d keeps them stable before the softmax.
 
-## [ ] Module 3: Matrix decompositions. MML Ch 4
-- Determinant as area or volume scaling (C); trace (C)
-- Eigenvalues and eigenvectors (F): directions a transformation only stretches. *LLM:* indirect; covariance eigenvectors underlie PCA; Hessian eigenvalues describe training curvature.
-- Eigendecomposition (C)
-- **SVD** (F): any matrix is rotate, stretch, rotate.
-- Low-rank approximation (F). *LLM:* LoRA fine-tuning adds a low-rank update to weight matrices (Hu et al., 2021).
+## [x] Module 3: Matrix decompositions. MML Ch 4
+_All six concepts built, one page each under `modules/03-matrix-decompositions/` (the overview). Cards link backward only, so no card names or previews a later topic. The Predict, Spot it, reveal and Explain-it-back items are data in `data/checks/<concept-id>.json`, drawn by `assets/js/checks.mjs` (the first module to use them). Claims are in `docs/CLAIMS.md`._
+- Determinant as area scaling (C), with orientation and the zero case. *LLM:* conceptual only (a determinant needs a square matrix; the learned projections are not square).
+- Trace (C): sum of the diagonal, tr(AB) = tr(BA), tr(AᵀA) = sum of squared entries. No eigenvalue mention on this card.
+- Eigenvalues and eigenvectors (F): directions a transformation only stretches; every 2×2 case (two, repeated and defective, none). Real life: vibration modes, principal axes, PageRank. *LLM:* nothing specific to claim.
+- Eigendecomposition (C): A = PDP⁻¹, A^n = PD^nP⁻¹, symmetric A = QΛQᵀ.
+- **SVD** (F): any matrix is rotate, stretch, rotate; singular values, rank tolerance, non-uniqueness. *LLM:* nothing specific to claim.
+- Low-rank approximation (F): Eckart–Young, storage k(m + n + 1). *LLM:* LoRA (Hu et al., 2021), related to low-rank approximation but it does not compute an SVD.
 
 ## [ ] Module 4: Vector calculus. MML Ch 5
 - Functions and limits (C)
