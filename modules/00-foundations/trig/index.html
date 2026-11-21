@@ -36,7 +36,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li>
       <a href="../">0 · Foundations</a>
@@ -93,13 +93,13 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Draw a circle of radius 1, the <span class="term" data-term="unit-circle">unit circle</span>, and an arrow from its centre to a point on the rim. Turn the arrow through an <span class="term" data-term="angle">angle</span> <span class="math" data-tex="\htmlData{sym=theta}{\theta}">θ</span> from the rightward direction. Shine a light from above and from the side: the arrow's shadows on the axes are what we study.</p>
       <p>The horizontal shadow is the <span class="term" data-term="cosine">cosine</span>, <span class="math" data-tex="\htmlData{sym=cos}{\cos\theta}">cos θ</span>. The vertical shadow is the <span class="term" data-term="sine">sine</span>, <span class="math" data-tex="\htmlData{sym=sin}{\sin\theta}">sin θ</span>. Angles are measured in degrees (a full turn is 360°) or <span class="term" data-term="radian">radians</span> (a full turn is 2π).</p>
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>Turn the arrow with the slider. Blue is the cosine, teal dots the sine. Watch them change sign as the arrow crosses an axis.</p>
       <div data-widget="circle">
         <div class="widget widget-placeholder">
@@ -111,7 +111,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>The height of a seat on a Ferris wheel as it turns.</li>
         <li>A sled pulled by a rope at an angle: only the horizontal part pulls it forward.</li>
@@ -130,10 +130,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="trig"></div>
       <div class="check" data-predict="trig">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-trig">Half a turn (180°) points the arrow left. What is cos 180°?</label></p>
         <div class="row"><input id="p-trig" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Cosine is the horizontal position on the unit circle. Where is the arrow's tip horizontally?</p>
@@ -141,19 +141,19 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Cosine and sine split a slanted quantity into the part along an axis and the part across it, and they describe anything that cycles. Without them, tilted arrows and repeating waves have no simple handle.</p>
       <p>They suit rotation and oscillation; steady growth or decay needs exponents instead.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-motivated">● Motivated</span> <span class="badge badge-convention">◆ Convention</span></p>
       <p>In a right triangle, “adjacent over hypotenuse” gives cosine for angles up to 90°. Defining it on the unit circle is Motivated: it extends the same idea to every angle, including those past 90°, where the old triangle picture breaks. The unit of angle is a Convention: 360 degrees is a historical choice, while radians are the unit that makes later formulas simplest.</p>
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <p>Cosine is how we compare vectors: <span class="term" data-term="cosine-similarity">cosine similarity</span> of two vectors is the cosine of the angle between them, built from the dot product (Module 2).</p>
       <p>Sine and cosine also appear directly. The original Transformer added fixed <span class="term" data-term="positional-encoding">positional encodings</span> made of sines and cosines to its token vectors, so the model can tell positions apart; for position 1, the first pair (the highest frequency, with a wavelength of 2π) is (sin 1, cos 1) = (<span data-calc="posSin">…</span>, <span data-calc="posCos">…</span>) (Vaswani et al., 2017). The paper also tried learned position vectors and reported nearly identical results.</p>
       <div class="callout simplified"><p><strong>Simplified.</strong> The full encoding uses many frequencies across the vector (with d_model = 512 in the base model). Many later models use other ways of encoding position.</p></div>
@@ -161,9 +161,9 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>The shadow of a stick held at a slant: from above you see its horizontal part, from the side its vertical part. <em>Where it breaks down:</em> a real shadow has no sign, but cosine and sine can be negative.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“Sine and cosine are only for triangles.” They describe the position on a circle at any angle, and triangles are just the first case.</p>
     </details>
     <footer>Further reading: MML Ch 3 (angles and inner products), and the Ch 1 opening for notation.</footer>

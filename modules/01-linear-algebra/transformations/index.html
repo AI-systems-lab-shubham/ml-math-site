@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li>
@@ -92,7 +92,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Draw a grid on a rubber sheet, pin the origin, and then move the sheet. If you only turn it, stretch it evenly along its axes, lean it sideways, or squash it onto a line, then straight lines stay straight, the grid squares stay equally spaced parallelograms, and the origin stays put. A rule that moves the plane like that is a <span class="term" data-term="linear-transformation">linear transformation</span>.</p>
       <p>On the <a href="../matrices/">Matrices card</a> we saw that a matrix sends the unit arrows (1, 0) and (0, 1) to its two columns, and that fixes where every other point goes. So every linear transformation of the plane is a 2×2 matrix, and the matrix is just the record of where the two unit arrows land. Four standard ones:</p>
       <ul>
@@ -105,7 +105,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>The dashed square is the unit square before; the filled shape is where it lands. The teal arrow is where (1, 0) lands (column 1) and the blue arrow is where (0, 1) lands (column 2). Pick a transformation and drag its slider. For a rotation, the burgundy arc shows the turn: positive angles go counter-clockwise on the screen, negative ones clockwise. Try “Project onto the x-axis” and see the square collapse.</p>
       <div data-widget="transform">
         <div class="widget widget-placeholder">
@@ -118,7 +118,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>Rotating a photo in an editor: every pixel position is turned about the centre.</li>
         <li>Zooming a map along one direction only: a stretch in x or y.</li>
@@ -137,10 +137,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="transformations"></div>
       <div class="check" data-predict="transformations">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-tf">A shear with k = 2 sends (x, y) to (x + 2y, y). What is the first entry of the image of (3, 2)?</label></p>
         <div class="row"><input id="p-tf" name="p-tf" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Row 1 of the shear matrix is (1, 2). Pair it with (3, 2) and add.</p>
@@ -148,14 +148,14 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Thinking of a matrix as a motion of space gives it a shape you can see: is it a turn, a stretch, a lean, a squash, or a mix? Chaining motions is multiplying matrices, and undoing a motion is taking the inverse, so the earlier cards come together here.</p>
       <p><strong>Invertible or not.</strong> A rotation loses no information, so it can be undone by turning back. A projection squashes the plane onto a line, so many points share one image: its rank is 1 and it has no inverse. Scaling by 0 does the same.</p>
       <p><strong>When it does not fit.</strong> Motions that move the origin (a slide), bend lines (a curve), or have limits (a maximum) are not linear. A translation can be written with an extra number added on, which is a different, slightly larger idea.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> A rotation by θ must keep lengths and angles, so the arrow (1, 0) lands at length 1, at angle θ.</li>
@@ -171,14 +171,14 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>Every linear layer is a linear map, plus a shift.</strong> The projections and feed-forward matrices of the original Transformer are matrices, so (ignoring biases) each one is a linear transformation, and it moves a whole space of vectors at once (Vaswani et al., 2017, §3.2 and §3.3). With a bias added it is a linear map followed by a slide, which is no longer linear in the strict sense.</li>
         <li><strong>Why there is a nonlinearity in between.</strong> Two linear maps with nothing between them collapse into one matrix: applying <span class="math" data-tex-calc="stackedProduct"></span> in a single step to (3, −1) gives <span data-calc="stackedCheck">…</span>, the same as applying the two in turn (<span data-calc="stackedTwo">…</span>). The feed-forward layer of the original Transformer therefore puts a ReLU between its two matrices (Vaswani et al., 2017, §3.3).</li>
       </ul>
       <div class="callout simplified"><p><strong>Simplified.</strong> The example matrices are small made-up numbers, not weights from a model. Real layers also add biases and use many heads or very wide matrices.</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-tf">In your own words: why does knowing where (1, 0) and (0, 1) land tell you everything about a linear transformation of the plane, and why can a projection not be undone?</label></p>
         <textarea id="e-tf" name="e-tf" autocomplete="off"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -188,17 +188,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“A matrix moves the whole plane. Look at where the two unit arrows land: those landing places are the columns. A rotation turns, a scaling stretches, a shear leans, a projection squashes onto a line. Rotations, scalings with no zero and shears can be undone. A projection cannot, because many points end up in the same place.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>A rubber sheet with a grid drawn on it: pin the middle, then turn, stretch, lean or flatten it. <em>Where it breaks down:</em> a real sheet can be folded or torn; a linear transformation cannot fold, only squash flat.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Draw the unit square with arrows (1, 0) and (0, 1).</li><li>Choose a motion and sketch where each arrow lands.</li><li>Write the two landing points as columns.</li><li>Sketch the image of the square.</li><li>Ask: can it be undone? Check whether the image is flat.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Does the order of two transformations matter?</strong> Yes: the matrices are multiplied, and a product usually changes when its factors are swapped.</p>
       <p><strong>Why counter-clockwise?</strong> It is the standard convention for positive angles; the opposite direction is just a negative angle.</p>
       <p><strong>What does a negative determinant mean?</strong> Here: the square is flipped over like a mirror image.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“A transformation moves each point independently.” A linear transformation moves all points by one consistent rule: the landing places of the two unit arrows decide everything.</p>
     </details>
     <footer>Further reading: MML Ch 2.7 (linear mappings).</footer>

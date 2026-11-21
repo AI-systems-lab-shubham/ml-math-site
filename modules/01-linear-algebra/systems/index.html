@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li>
@@ -92,7 +92,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Two glasses hold 4 litres in total. That alone does not say how much is in each: one <span class="term" data-term="equation">equation</span>, two <span class="term" data-term="unknown">unknowns</span>, a whole line of answers. Now add a second fact: the first glass holds 2 litres more than the second. Two facts, both true at once, are a <span class="term" data-term="system-of-equations">system of equations</span>, and a <span class="term" data-term="solution">solution</span> must satisfy every equation in it.</p>
       <div class="bridge">
         <p><strong>Back to x + y = 4.</strong> The one-row matrix [1 1] times (x, y) is x + y, so x + y = 4 is a system with a single row. The picture on that card was a line of solutions. Adding a second equation adds a second line, and the solutions are the points on both. See <a href="../../00-foundations/equations/">Equations in Module 0</a>, and the product [1 1](1, 3) = <span data-calc="eqRow">…</span> from the multiplication card.</p>
@@ -103,7 +103,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>Each equation draws a line. The burgundy dot marks the solution when the lines cross once. Try the four buttons, then change the numbers: make the second equation a doubled copy of the first, then nudge one total so they separate.</p>
       <div data-widget="systems">
         <div class="widget widget-placeholder">
@@ -115,7 +115,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>Two shops sell the same two fruits at different prices; two receipts let you find each price.</li>
         <li>A mixture problem: how much 10% and 30% juice makes a 20% drink?</li>
@@ -134,10 +134,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="systems"></div>
       <div class="check" data-predict="systems">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-sys">x + y = 4 and x − y = 2. What is x?</label></p>
         <div class="row"><input id="p-sys" name="p-sys" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Add the two equations. What happens to the y terms?</p>
@@ -145,14 +145,14 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Real questions have many facts and many unknowns. Writing them as Ax = b gives one object to reason about, and the tools of the earlier cards apply: if A has an <span class="term" data-term="inverse-matrix">inverse</span>, the answer is x = A⁻¹b.</p>
       <p><strong>When it does not fit.</strong> If A has no inverse, you cannot use that formula. You then get either no solution or infinitely many, depending on whether the equations contradict each other or repeat each other. The same happens when there are fewer equations than unknowns: one equation in two unknowns, like x + y = 4, leaves a line of answers.</p>
       <p><strong>What to reach for instead.</strong> Elimination (add multiples of one equation to another, as in the worked example) works for any linear system, with or without an inverse.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> Write “these totals, from these weighted sums of the same unknowns” as one statement.</li>
@@ -168,13 +168,13 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>Next-token probabilities are one linear equation.</strong> A model’s next-token probabilities p₁, …, p<sub>V</sub> must add up to 1 (a defining property of a probability distribution). As a system that is one row [1 1 … 1] with total 1. With V = 4 unknowns it leaves <span data-calc="probFree">…</span> free choices. A real vocabulary has tens of thousands of tokens, so almost all of the probabilities are free, apart from this one equation (and each being at least 0, which this card does not cover).</li>
       </ul>
       <div class="callout simplified"><p><strong>Simplified.</strong> The probabilities also have to be non-negative, which is an inequality, not an equation. The count of free choices above ignores that.</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-sys">In your own words: what are the three things that can happen when you solve two equations in two unknowns, and what does each look like as lines?</label></p>
         <textarea id="e-sys" name="e-sys" autocomplete="off"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -184,17 +184,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“A system of equations is several facts about the same unknown numbers. Each fact is a row of weights. Stack the rows and you get Ax = b. With two unknowns, each fact is a line. If the lines cross once, you have exactly one answer. If they never meet, none. If they are the same line, infinitely many. Never exactly two.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>Two witnesses describing where a stranger stood. Their descriptions cross at one spot, or they conflict, or they say the same thing twice. <em>Where it breaks down:</em> witnesses can be wrong in many ways; lines only cross, miss or coincide.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Write the two equations one under the other.</li><li>Draw both lines on a grid.</li><li>Mark where they meet and read off (x, y).</li><li>Rewrite as a matrix equation Ax = b.</li><li>Draw a second picture where the lines are parallel and one where they coincide.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Is elimination the same as using the inverse?</strong> Both give the same answer when it is unique. Elimination also works when there is no inverse.</p>
       <p><strong>What about three unknowns?</strong> Each equation is a flat sheet instead of a line. The same three outcomes still hold.</p>
       <p><strong>Why does a repeated equation not help?</strong> It says nothing new, so it removes no possibilities.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“Two equations always give a unique answer.” Only if they are genuinely different facts. A repeated or contradictory pair does not.</p>
     </details>
     <footer>Further reading: MML Ch 2.3 (solving systems of linear equations).</footer>

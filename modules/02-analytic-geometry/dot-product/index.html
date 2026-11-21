@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
@@ -91,14 +91,14 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Shine a lamp straight down on arrow a so its shadow falls on the line along arrow b. The shadow has a length, and the <span class="term" data-term="dot-product">dot product</span> is that shadow length multiplied by the length of b. If a leans the same way as b, the shadow points forwards along b and the number is positive. If a is at right angles to b it casts no shadow and the number is zero. If a leans against b the shadow points backwards and the number is negative.</p>
       <p>To compute it, multiply the matching <span class="term" data-term="component">entries</span> and add the products. For a = (3, 2) and b = (4, 0) that is 3×4 + 2×0 = <span data-calc="dotMain">…</span>. The same number comes from the lengths and the angle: ‖a‖‖b‖ cos θ, where θ is the <span class="term" data-term="angle">angle</span> between the arrows (the <a href="../../00-foundations/trig/">Sine and cosine</a> card explains cosine). The two formulas always give the same number (the site’s tests check this on hundreds of random pairs).</p>
       <div class="math-display" data-tex-display="\htmlData{sym=dotAB}{\mathbf{a}\cdot\mathbf{b}}=\sum_i a_ib_i=\|\mathbf{a}\|\,\|\mathbf{b}\|\cos\htmlData{sym=angleAB}{\theta}">a·b = Σ aᵢbᵢ = ‖a‖‖b‖ cos θ</div>
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>Change the four sliders. The ochre bar is the shadow of a on the line through b. Watch the sign of the dot product flip as a swings past right angles to b, and make b point the other way.</p>
       <div data-widget="dot">
         <div class="widget widget-placeholder">
@@ -110,7 +110,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li><strong>Work.</strong> Work is force · displacement. A sled pulled by a rope with a force of 20 N at 30° to the ground over 5 m: 20 × 5 × cos 30° ≈ <span data-calc="work">…</span> J. If the pull were at right angles to the motion it would do <span data-calc="workZero">…</span> J of work.</li>
         <li><strong>A shadow.</strong> The shadow of a stick on the ground, when the sun is overhead, is the stick’s part along the ground.</li>
@@ -130,10 +130,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="dot"></div>
       <div class="check" data-predict="dot">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-dot">What is the dot product of (2, 3) and (4, −1)?</label></p>
         <div class="row"><input id="p-dot" name="p-dot" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Multiply the first entries, multiply the second entries, then add. Mind the minus sign.</p>
@@ -141,13 +141,13 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>The dot product turns two lists into one number that says how much they agree. It also gives a length: a·a is the squared length of a, so every norm on the earlier card hides a dot product. It is also the building block of matrix multiplication, which is a table of dot products.</p>
       <p><strong>One thing to watch.</strong> The dot product grows with the lengths of the arrows as well as with how well they line up, so a long arrow gives a big number even if it is only slightly aligned.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> We want a number f(a, b) that is the same whichever arrow comes first, scales when either arrow scales and adds when either arrow adds, and that gives the squared length when both arrows are the same: f(a, a) = ‖a‖².</li>
@@ -163,14 +163,14 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>The attention score is a dot product.</strong> In the original Transformer, each token has a query vector and a key vector, and the <span class="term" data-term="attention-score">attention score</span> between two tokens is the dot product of one token’s query with the other’s key (Vaswani et al., 2017, §3.2). With the made-up three-entry vectors q = (1, 0, 2) and k = (2, 1, 1), the score is <span data-calc="qk3">…</span>. A large positive score means the query and key lean the same way.</li>
         <li><strong>Matrix products are dot products.</strong> Computing all the scores at once is a matrix multiplication, which is why the Matrix-vector card matters.</li>
       </ul>
       <div class="callout simplified"><p><strong>Simplified.</strong> The vectors above are made up. Real queries and keys come from learned matrices and have tens of entries (64 in the original base model). This card only covers the score itself, not what is done with it afterwards.</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-dot">In your own words: why can the dot product be positive, zero or negative, and what does each sign tell you?</label></p>
         <textarea id="e-dot" name="e-dot" autocomplete="off"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -180,17 +180,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“Multiply matching entries and add: that is the dot product. It is also the shadow of one arrow on another, times the length of the other. Positive means they lean the same way, zero means right angles, negative means opposite. It is the way a computer asks how much two lists agree.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>A shadow at noon: the lamp is overhead and the shadow is the part of a stick that lies along the ground. <em>Where it breaks down:</em> a shadow has no sign; the dot product gets a minus sign when the arrow leans backwards.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Draw two arrows from one point.</li><li>Drop a perpendicular from the tip of a onto the line of b and mark the shadow.</li><li>Write a·b = shadow × ‖b‖.</li><li>Next to it, write a₁b₁ + a₂b₂ for the same example.</li><li>Rotate b to 90° and show the shadow shrink to nothing.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Is the dot product an arrow?</strong> No. It is one number.</p>
       <p><strong>Why does it equal both formulas?</strong> Both come from the requirements on the card: linear in each arrow and equal to the squared length for a·a.</p>
       <p><strong>Does order matter?</strong> No: a·b = b·a.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“A big dot product means the arrows point the same way.” It may only mean the arrows are long. To compare direction alone, you divide the lengths out.</p>
     </details>
     <footer>Further reading: MML Ch 3.2 (inner products).</footer>

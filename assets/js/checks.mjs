@@ -15,7 +15,7 @@ function predictBox(item, cid) {
   const hint = html("p", { class: "hint-text", text: item.hint });
   hint.hidden = true;
   return html("div", { class: "check", "data-predict": item.id },
-    html("h4", { text: "Predict, then reveal" }),
+    html("h3", { text: "Predict, then reveal" }),
     html("p", {}, html("label", { for: id, text: item.prompt })),
     html("div", { class: "row" },
       html("input", { id, name: id, type: "number", inputmode: "decimal", autocomplete: "off" }),
@@ -46,7 +46,7 @@ function explainBox(item, cid) {
   const model = html("div", { class: "model-answer" }, html("p", { text: item.model }));
   model.hidden = true;
   return html("div", { class: "check explain-back" },
-    html("h4", { text: "Explain it back" }),
+    html("h3", { text: "Explain it back" }),
     html("p", {}, html("label", { for: id, text: item.prompt })),
     html("textarea", { id, name: id, autocomplete: "off" }),
     html("div", { class: "row" }, html("button", { type: "button", class: "button-secondary button-small", "data-reveal": "", text: "Show a model answer" })),

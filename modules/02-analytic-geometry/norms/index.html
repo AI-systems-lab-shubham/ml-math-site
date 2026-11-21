@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
@@ -91,7 +91,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>How long is an arrow? Walk 3 steps across and 4 steps up. You could answer by pulling a string tight from start to finish (the straight line), or by counting the steps you actually walked along the grid lines (3 + 4). Both are fair answers to “how far?”, and each one is a <span class="term" data-term="norm">norm</span>: a rule that turns a <span class="term" data-term="vector">vector</span> into a single length. Write the norm of x as ‖x‖.</p>
       <p>The straight-line length is the <span class="term" data-term="l2-norm">L2 norm</span>. The two walked legs and the straight line make a right triangle, so Pythagoras gives the length: square each <span class="term" data-term="component">entry</span>, add the squares, take the <span class="term" data-term="square-root">square root</span>. For (3, 4) that is <span data-calc="l2_34">…</span>. In three entries the same idea repeats: (1, 2, 2) has length <span data-calc="l2_122">…</span>.</p>
       <p>The grid-walk length is the <span class="term" data-term="l1-norm">L1 norm</span>: ignore the signs and add the sizes of the entries. For (3, 4) it is <span data-calc="l1_34">…</span>. A step backwards is still a step you walked, so it counts as positive.</p>
@@ -100,7 +100,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>Move the two sliders to change the arrow. The navy line is the straight-line (L2) length; the thick ochre path is the walk along the grid (L1). The dashed shape is every point whose length matches the arrow’s for the norm you pick: a circle for L2, a diamond for L1. Try an arrow along an axis, where the two lengths agree.</p>
       <div data-widget="norms">
         <div class="widget widget-placeholder">
@@ -113,7 +113,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>Flying versus driving: the straight-line distance between two cities is an L2 length, the street-grid distance in a city laid out in blocks is an L1 length.</li>
         <li>Pacing out a room: the diagonal across the floor is L2, walking along two walls is L1.</li>
@@ -132,10 +132,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="norms"></div>
       <div class="check" data-predict="norms">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-norms">What is the L1 norm of (−2, 5)?</label></p>
         <div class="row"><input id="p-norms" name="p-norms" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Drop the minus sign on −2, then add the two sizes.</p>
@@ -143,14 +143,14 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Many problems need “how big is this?” for a whole list of numbers: how large are a model’s weights, how big was the error? A norm gives that single number.</p>
       <p><strong>Which one.</strong> L2 squares each entry, so one big entry dominates, and it connects to angles and the dot product. L1 treats every entry in proportion to its size, so it is less swayed by one large entry. Neither is “the” length: they answer slightly different questions.</p>
       <p><strong>When it does not fit.</strong> A norm says how big a vector is, not which way it points. Two very different arrows can have the same length.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-motivated">● Motivated</span></p>
       <ol>
         <li><strong>The requirement.</strong> A length should be zero only for the zero vector, never negative, and double when the arrow doubles.</li>
@@ -166,7 +166,7 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>L2 regularisation.</strong> A common way to discourage large <span class="term" data-term="weight">weights</span> is to add a penalty to the <span class="term" data-term="loss">loss</span> that is proportional to the squared L2 norm of the weights (<span class="term" data-term="l2-regularisation">L2 regularisation</span>): the total loss is the original loss plus (λ/2)‖w‖₂², where λ sets how strong the penalty is.</li>
         <li><strong>Weight decay.</strong> <span class="term" data-term="weight-decay">Weight decay</span> shrinks every weight directly at each step instead: w ← (1 − ηλ)w − η·(gradient), where η is the learning rate. For plain stochastic gradient descent the two are equivalent once the strength is rescaled by the learning rate. For example, with w = (2, −1), loss gradient (0.5, 0.5), η = 0.1 and λ = 0.01, one penalty step gives <span data-calc="sgdPenalty">…</span> and one decay step gives <span data-calc="sgdDecay">…</span>: the same.</li>
@@ -174,7 +174,7 @@
       </ul>
       <div class="callout simplified"><p><strong>Simplified.</strong> The example numbers are made up to show the algebra, not taken from a model. This card does not say which penalty or strength any particular model uses.</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-norms">In your own words: how do the L1 and L2 norms of (3, 4) differ, and what does each one measure?</label></p>
         <textarea id="e-norms" name="e-norms" autocomplete="off"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -184,17 +184,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“How long is an arrow? You can pull a string tight, that is the L2 length and it comes from Pythagoras. Or you can walk along the grid lines like a taxi, that is the L1 length and you just add up the sizes. Both are norms. They are zero only for the zero vector, and they double when the arrow doubles.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>Crow versus taxi: the crow flies straight, the taxi follows the streets. <em>Where it breaks down:</em> a real city has some diagonal roads; the L1 norm assumes you can only move along the two axes.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Draw an arrow from the origin to (3, 4).</li><li>Draw the right triangle under it and label the legs 3 and 4.</li><li>Write √(3² + 4²) = 5 for the straight line.</li><li>Trace the two legs in a different colour and write 3 + 4 = 7.</li><li>Mark every point at L1 distance 5 from the origin: a diamond. At L2 distance 5: a circle.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Why square the entries for L2?</strong> Pythagoras: lengths along two perpendicular directions combine as squares.</p>
       <p><strong>Is the L1 norm ever smaller than L2?</strong> Never. The straight line is the shortest route.</p>
       <p><strong>Can a norm be negative?</strong> No. Zero for the zero vector, positive for every other vector.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“The norm of a vector is its biggest entry.” That is one norm, but not the L1 or L2 norm. For L2 every entry contributes, and for L1 every entry contributes its size.</p>
     </details>
     <footer>Further reading: MML Ch 3.1 (norms).</footer>

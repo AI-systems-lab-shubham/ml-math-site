@@ -37,6 +37,8 @@ const MUTATIONS = [
   { name: "console: uncaught error and 404 image", check: "console", pages: "m00-equations", widths: "1280", apply: (dir) => edit(dir, M0, (s) => s.replace("</body>", '<img src="nope.png" alt=""><script>throw new Error("boom")</script></body>')) },
   { name: "glossary-ids: misspelt term", check: "glossary-ids", pages: "m00-equations", widths: "1280", apply: (dir) => edit(dir, M0, (s) => s.replace('data-term="equation"', 'data-term="equaton"')) },
   { name: "structure: a stage renamed", check: "structure", pages: "m00-equations", widths: "1280", apply: (dir) => edit(dir, M0, (s) => s.replace('data-stage="why-when"', 'data-stage="whywhen"')) },
+  { name: "headings: a second h1", check: "headings", pages: "m00-equations", widths: "1280", apply: intoMain("<h1>Another title</h1>") },
+  { name: "headings: a stage heading drops two levels", check: "headings", pages: "m03-svd", widths: "1280", apply: (dir) => edit(dir, "modules/03-matrix-decompositions/svd/index.html", (s) => s.replace('<h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>', '<h4 class="stage-heading"><span class="stage-number">02</span> Picture</h4>')) },
   { name: "motion: autoplaying spinner", check: "motion", pages: "m00-equations", widths: "1280", apply: css("@keyframes spin{to{transform:rotate(1turn)}}.brand{display:inline-block;animation:spin 2s linear infinite!important}") },
   { name: "reduced-motion: spinner ignores preference", check: "reduced-motion", pages: "m00-equations", widths: "1280", apply: css("@keyframes spin{to{transform:rotate(1turn)}}.brand{display:inline-block;animation:spin 2s linear infinite!important}") },
 ];

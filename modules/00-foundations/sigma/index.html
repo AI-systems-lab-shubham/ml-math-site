@@ -36,7 +36,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li>
       <a href="../">0 · Foundations</a>
@@ -93,7 +93,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Think of a shop receipt. To get the total you go down the lines and add each price. A <span class="term" data-term="sum">sum</span> written with the Greek capital letter Σ (sigma) is that same instruction, packed small.</p>
       <p>Under the Σ sits a counter, called the <span class="term" data-term="index">index</span>, and where it <span class="math" data-tex="\htmlData{sym=lo}{\text{starts}}">starts</span>. Above it sits where the counter <span class="math" data-tex="\htmlData{sym=hi}{\text{stops}}">stops</span>. To the right is the recipe for each term. For example:</p>
       <div class="math-display" data-tex-display="\sum_{\htmlData{sym=i}{i}=1}^{4} \htmlData{sym=i}{i}^{2}=1^{2}+2^{2}+3^{2}+4^{2}">Σ i² = 1² + 2² + 3² + 4²</div>
@@ -101,7 +101,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>Each bar is one term. Filled bars are inside the range and are added; outlined bars are skipped. Change where the counter starts and stops, or the recipe, and watch the expanded sum below.</p>
       <div data-widget="sigma">
         <div class="widget widget-placeholder">
@@ -113,7 +113,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>A receipt total: one term per line.</li>
         <li>Steps walked in a week: one term per day.</li>
@@ -132,10 +132,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="sigma"></div>
       <div class="check" data-predict="sigma">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-sig">What is the sum of i, for i from 1 to 4?</label></p>
         <div class="row"><input id="p-sig" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Write the four terms for i = 1, 2, 3, 4, then add them.</p>
@@ -143,24 +143,24 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Without Σ you would write “a₁ + a₂ + … + a₁₀₀₀” and hope the reader fills in the dots correctly. Σ states the rule exactly and works for any length, including a length n that is not yet known.</p>
       <p>Use it for adding a family of terms that follow one recipe. If the terms have no pattern, just list them. If a stop value is below the start, the sum is empty and equals 0.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-convention">◆ Convention</span></p>
       <p>The idea, a loop that adds terms, is not optional: any long sum needs some way to say “continue the pattern”. The symbols are a Convention: Σ for “sum”, i as the usual counter, start below and stop above. A book could swap them, and some do write the range after the symbol. What matters is that the rule, the start and the stop are all stated.</p>
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <p>Two Σ's carry most of the load. The <span class="term" data-term="dot-product">dot product</span> of a list of <span class="term" data-term="weight">weights</span> with a list of inputs is a sum of products: with w = (2, −1, 3) and x = (4, 5, 1), it is 2·4 + (−1)·5 + 3·1 = <span data-calc="dotExample">…</span>. A neuron computes this, and attention scores in a transformer are dot products too (Module 2).</p>
       <p>The second is the <span class="term" data-term="loss">loss</span>. The total surprise of a text is the sum of −log₂ p over its tokens. For three tokens with probabilities ½, ¼ and ⅛ that is 1 + 2 + 3 = <span data-calc="surpriseBits">…</span> bits, or <span data-calc="surpriseMean">…</span> bits per token on average. Dividing by the number of tokens is the idea behind the per-token training loss for next-token prediction.</p>
       <div class="callout simplified"><p><strong>Simplified.</strong> Real training losses are usually reported in nats (natural logs) and averaged over many tokens and many texts, but the structure is the same: a sum of a per-token term.</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-sig">In your own words: what do the start, the stop and the expression on the right of a Σ each tell you?</label></p>
         <textarea id="e-sig"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -170,17 +170,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“Σ means ‘add these up’. Underneath is a counter and where it starts, on top is where it stops, and on the right is the recipe for each term. Run the counter, work out each term, add. It is just a for-loop that keeps a running total.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>Adding up a receipt. <em>Where it breaks down:</em> a receipt lines are arbitrary prices; a Σ's terms come from one rule.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Write Σ with start 1 and stop 4.</li><li>Write the recipe i² on the right.</li><li>Expand into 1² + 2² + 3² + 4².</li><li>Work out each term.</li><li>Add.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Does the counter have to be i?</strong> No, j, k or t work; it is just a label.</p>
       <p><strong>Can the start be 0?</strong> Yes, and in computing it often is.</p>
       <p><strong>What if the stop is smaller than the start?</strong> The sum is empty and equals 0.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“Σ i² is the same as (Σ i)².” It is not: 1 + 4 + 9 + 16 is not 10 squared.</p>
     </details>
     <footer>Further reading: MML Ch 2 (dot products arise in Ch 3) and Ch 1 for notation.</footer>

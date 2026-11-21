@@ -36,7 +36,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li>
       <a href="../">0 · Foundations</a>
@@ -93,7 +93,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Pour 4 litres of water into two glasses. However you split it, what is in the first glass plus what is in the second glass is 4 litres. That sentence is an <span class="term" data-term="equation">equation</span>: a statement that two expressions have the same value.</p>
       <p>Give the amounts letters, <span class="math" data-tex="\htmlData{sym=x}{x}">x</span> and <span class="math" data-tex="\htmlData{sym=y}{y}">y</span>, and the rule becomes</p>
       <div class="math-display" data-tex-display="\htmlData{sym=x}{x}+\htmlData{sym=y}{y}=4">x + y = 4</div>
@@ -101,7 +101,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>A pair (x, y) is a point on a sheet, described by its <span class="term" data-term="coordinate">coordinates</span>. Plot every solution of x + y = 4 and the points fall on a straight <span class="term" data-term="line">line</span>. Slide x to walk along it. Then add a second equation and watch where the two lines meet.</p>
       <div data-widget="equations">
         <div class="widget widget-placeholder">
@@ -113,7 +113,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>Splitting 4 litres of water between two glasses (volume is conserved).</li>
         <li>A 24-hour day divided between sleep and everything else.</li>
@@ -132,11 +132,11 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <p>Two facts about the same pair: they add to 4, and the first exceeds the second by 2. Find the pair.</p>
       <div data-stepper="equations"></div>
       <div class="check" data-predict="equations">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-eq">x + y = 4, and x is 1. What is y?</label></p>
         <div class="row"><input id="p-eq" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Put 1 where x is, then ask what must be added to 1 to reach 4.</p>
@@ -144,14 +144,14 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>An equation lets you state a relationship before you know the numbers, then use it to find the missing ones. Without it you would be guessing pairs one after another.</p>
       <p><strong>The counting rule.</strong> One equation with two unknowns leaves a whole line of solutions. A second equation usually pins down a single point. Two things can go wrong, and the widget shows both: the second line can be parallel, so nothing satisfies both, or it can be the first line rescaled, so it adds no new information.</p>
       <p>An equation does not fit a relationship that is “at most” or “at least”. Those describe a region, not a line.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> Say “the two parts always total 4” without choosing numbers.</li>
@@ -166,7 +166,7 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>Probabilities add to 1.</strong> A language model gives every <span class="term" data-term="token">token</span> in its <span class="term" data-term="vocabulary">vocabulary</span> a <span class="term" data-term="probability">probability</span>, and together they total 1. If three tokens have 0.5, 0.25 and 0.125, the rest of the vocabulary shares the remaining <span data-calc="missingProbability">…</span>. This is the same “parts of a fixed total” idea as x + y = 4. The softmax function that produces the probabilities is built so that they add to 1.</li>
         <li><strong>The context window is a total.</strong> The prompt plus the reply must fit within the <span class="term" data-term="context-window">context window</span>. GPT-3 (2020) had a window of 2,048 tokens (Brown et al., 2020); with a 1,500-token prompt, <span data-calc="contextLeft">…</span> tokens remain for the reply.</li>
@@ -175,7 +175,7 @@
       <div class="callout simplified"><p><strong>Simplified.</strong> The third point describes a single unit in a small classifier. A real layer has thousands of inputs, so its boundary is a flat sheet in a very high-dimensional space, and the units in a transformer are not read as individual boundaries.</p></div>
 
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-eq">In your own words: why does one equation with two unknowns have many solutions, and what does a second equation do?</label></p>
         <textarea id="e-eq"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -185,17 +185,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“An equation is a promise that two things are equal. Say two glasses hold 4 litres together. If I tell you the first glass has 1 litre, you know the second has 3. But if I only tell you the total, there are endless ways to split it. Draw them all and you get a straight line. A second fact, like ‘the first has 2 more than the second’, draws a second line, and the glasses can only be where the lines cross.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>A balanced see-saw: whatever you do to one side, you must do to the other. <em>Where it breaks down:</em> a see-saw has two sides to balance, but an equation can have unknowns on both sides, and a see-saw does not show you the whole family of solutions.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Draw two glasses and write 4 L above them.</li><li>Write x and y under the glasses, then x + y = 4.</li><li>List three pairs that work.</li><li>Plot the pairs and join them into a line.</li><li>Draw a second line and circle the crossing.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Is “=” an instruction to calculate?</strong> No. It states that both sides are the same value. Calculating is one way to use it.</p>
       <p><strong>Can x and y be negative or fractions?</strong> Yes, unless the problem says otherwise. That is why the line continues past the axes.</p>
       <p><strong>Why do two equations sometimes fail?</strong> If they say contradictory things (parallel lines) there is no pair; if one repeats the other, there is no new information.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“The answer must be on the right of the equals sign.” The equals sign only says both sides match; the unknown can be anywhere.</p>
     </details>
     <footer>Further reading: MML Ch 2.3 (solving systems of linear equations).</footer>

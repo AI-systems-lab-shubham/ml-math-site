@@ -73,7 +73,7 @@ function navHtml(course, here, conceptId) {
     return `    <li>${open ? "\n      " : ""}<a href="${rel(dir, m.path)}"${modCur}>${label}</a>${sub}</li>`;
   }).join("\n");
   return `<nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
 ${items}
   </ol>
@@ -137,6 +137,8 @@ export function buildPages(course, readSource = (p) => readOld(SOURCE_REV, p)) {
       let { html: art, changes } = rewriteLinks(old.articles[i].html, course, dir);
       for (const ch of changes) links.push({ page: dir, ...ch });
       art = art.replace(/(<header>[\s\S]*?)<h2>([\s\S]*?)<\/h2>/, "$1<h1>$2</h1>");
+      // Heading levels: title h1; the seven stages h2 (were h3 inside the old module page); sub-parts h3 (were h4).
+      art = art.replace(/<h3 class="stage-heading">([\s\S]*?)<\/h3>/g, '<h2 class="stage-heading">$1</h2>').replace(/<h4>([\s\S]*?)<\/h4>/g, "<h3>$1</h3>");
       if (i === 0 && old.callout) art = art.replace(/(<\/header>)/, `$1\n\n    ${old.callout}`);
       const description = (art.match(/<header>[\s\S]*?<p class="muted">([\s\S]*?)<\/p>/)?.[1] ?? m.summary).replace(/<[^>]+>/g, "");
       const page = `${headFor(old.head, { toRoot, title: `${c.title} - ${m.title} - ML Math`, description, moduleId: m.id, conceptId: c.id, script: old.head.match(/assets\/js\/([a-z]+\.mjs)"/)[1], katex: true })}

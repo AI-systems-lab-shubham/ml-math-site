@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li>
@@ -92,7 +92,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Walk 3 blocks east and 1 north. Then walk 1 block west and 2 north. Doing the two walks one after the other is <span class="term" data-term="vector-addition">vector addition</span>: put the second arrow where the first one ends, and the total trip is the arrow from the very start to the very end. In numbers, add the first entries together and the second entries together.</p>
       <p><span class="term" data-term="scaling">Scaling</span> is doing the same walk several times: twice as far in the same direction, or half as far. A negative number sends you backwards. Every entry is multiplied by the same <span class="term" data-term="scalar">scalar</span>, which is just the name for an ordinary number when it is used to scale a vector.</p>
       <p>Put the two moves together and you get a <span class="term" data-term="linear-combination">linear combination</span>: scale some arrows, then add them.</p>
@@ -100,7 +100,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>The dashed arrows are a (teal) and b (blue). Choose c₁ and c₂. The thick teal arrow is c₁a, the thick blue arrow starts at its tip, and the burgundy arrow from the origin to the very end is the sum. Use the “Build it up” choice to see one piece at a time.</p>
       <div data-widget="combine">
         <div class="widget widget-placeholder">
@@ -112,7 +112,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>A boat steers across a river while the current pushes it downstream: the path over the ground is the sum of the two velocities.</li>
         <li>Two people push a heavy box in different directions: the net push is the sum of the two force arrows.</li>
@@ -131,10 +131,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="combine"></div>
       <div class="check" data-predict="combine">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-comb">With a = (2, 1) and b = (−1, 2), what is the first entry of 2a − b?</label></p>
         <div class="row"><input id="p-comb" name="p-comb" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Double the first entry of a, then subtract the first entry of b. Mind the signs.</p>
@@ -142,14 +142,14 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Adding and scaling are the only two things a vector space needs, and they build a huge family of vectors from a few. A question like “which arrows can I reach from a and b?” is a question about linear combinations.</p>
       <p>Adding vectors (and so linear combinations) needs the same number of entries: you cannot add (1, 2) to (1, 2, 3). Scaling one vector does not. Adding also assumes entries mean the same thing in each vector, position by position.</p>
       <p><strong>Many dimensions.</strong> Both rules work unchanged for any number of entries. Only the arrow picture runs out.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> Adding two arrows must give the arrow of doing one walk and then the other.</li>
@@ -164,7 +164,7 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>Positions are added to token vectors.</strong> The original Transformer adds a position vector to each token's embedding, which works because both have the same dimension (Vaswani et al., 2017, §3.5).</li>
         <li><strong>Layers add their output to their input.</strong> Each sub-layer's output is added to the vector that went into it, then normalised (Vaswani et al., 2017, §3.1). This is vector addition, applied once per sub-layer.</li>
@@ -175,7 +175,7 @@
       </div>
       <div class="callout simplified"><p><strong>Simplified.</strong> Real vectors have <span data-calc="dModel">…</span> entries, and the paper applies layer normalisation after the addition, which this card does not cover.</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-comb">In your own words: what does 2a − b mean as a walk, and why do the entries just add?</label></p>
         <textarea id="e-comb" name="e-comb" autocomplete="off"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -185,17 +185,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“There are two moves. Scaling stretches an arrow: times 2 makes it twice as long, times −1 flips it. Adding puts one arrow after another: go along the first, then along the second. In numbers both are easy: scale multiplies every entry; add adds entries in the same position. Mix them and you get a recipe such as 2a minus b.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>Following two sets of directions in a row: “2 blocks that way, then 1 block back along the other road”. <em>Where it breaks down:</em> real walks can be blocked by buildings; arrows can pass through anything.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Draw a and b from the origin.</li><li>Draw 2a, longer in the same direction.</li><li>Draw −b from the tip of 2a, pointing the other way.</li><li>Draw the arrow from the origin to the end.</li><li>Write the same thing with numbers, entry by entry.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Why does the order of adding not matter?</strong> Adding entries is ordinary number adding, which does not care about order. As walks, either order reaches the same place.</p>
       <p><strong>What does scaling by 0 give?</strong> The zero vector, an arrow of no length at the origin.</p>
       <p><strong>Can I add vectors of different dimensions?</strong> No. There would be nothing to pair some entries with.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“Adding two vectors adds their lengths.” Not in general. Two arrows at an angle give a total shorter than the sum of their lengths.</p>
     </details>
     <footer>Further reading: MML Ch 2.4 (vector spaces).</footer>

@@ -181,9 +181,17 @@ function buildOutline(shell) {
       <ul class="sub" id="ol-sub-${m.id}"${open ? "" : " hidden"}>${rows}</ul></li>`;
   }).join("");
   const legend = STATUSES.map((st) => `<li><span class="outline-state state-${st}">${stateIcon(st)}</span>${stateLabel(st)}</li>`).join("");
-  body.innerHTML = `<p class="outline-heading" id="outline-title">Course outline</p><ul class="outline-legend" aria-label="Legend">${legend}</ul><ol aria-labelledby="outline-title">${modules}</ol>`;
+  body.innerHTML = `<p class="outline-heading" id="outline-title">Course outline</p><ul class="outline-legend" aria-label="Legend">${legend}</ul><ol aria-labelledby="outline-title">${modules}</ol><p class="outline-help"><a href="${hrefTo("index.html#how")}" data-show-hint>How to use this site</a></p>`;
   nav.setAttribute("aria-label", "Course outline");
   if (conceptId) nav.querySelector(`a[data-cid="${conceptId}"]`)?.setAttribute("aria-current", "page");
+
+  // On a concept page the link shows the first-visit hint again; anywhere else (or without scripts) it goes to the home page's "How this course works".
+  nav.querySelector("[data-show-hint]")?.addEventListener("click", (ev) => {
+    if (!window.mlmathHint) return;
+    ev.preventDefault();
+    if (nav.classList.contains("is-open")) document.querySelector("[data-nav-toggle]")?.click();
+    window.mlmathHint.show();
+  });
 
   nav.querySelectorAll(".outline-mod-toggle").forEach((t) => t.addEventListener("click", () => {
     const open = t.getAttribute("aria-expanded") !== "true";

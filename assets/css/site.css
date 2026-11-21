@@ -71,6 +71,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 }
 .site-nav.is-open { overscroll-behavior: contain; display: block; position: fixed; z-index: 40; inset: var(--topbar-h) auto 0 0; width: min(320px, 88vw); overflow-y: auto; border-right: 1px solid var(--line-strong); }
 .site-nav h2, .outline-heading { font-size: 1rem; font-family: var(--font-body); font-weight: 600; color: var(--muted); margin-bottom: var(--s3); }
+.site-nav .outline-help { margin: var(--s5) 0 0; padding-top: var(--s3); border-top: 1px solid var(--rule); font-size: .9375rem; }
+.site-nav .outline-help a { display: inline-flex; align-items: center; min-height: 44px; color: var(--burgundy); font-weight: 600; }
 .site-nav ol { list-style: none; padding: 0; margin: 0; }
 .site-nav li + li { margin-top: 0; }
 .site-nav a { display: flex; align-items: center; min-height: 44px; padding: var(--s1) var(--s3); border-radius: 8px; text-decoration: none; color: var(--navy); font-size: 1rem; line-height: 1.3; }
@@ -133,7 +135,7 @@ main { padding: var(--s7) var(--s4) var(--s9); min-width: 0; }
 details > summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; color: var(--burgundy); }
 details.teach-it { border: 1px solid var(--rule); border-radius: 12px; padding: 0 var(--s4); background: var(--bone); }
 details.teach-it[open] { padding-bottom: var(--s4); }
-details.teach-it h4 { margin-top: var(--s4); font-size: 1.1rem; }
+details.teach-it h3 { margin-top: var(--s4); font-size: 1.1rem; }
 
 /* ---------- widgets ---------- */
 .widget { border: 1px solid var(--line-strong); border-radius: 12px; background: #fff; padding: var(--s4); margin-bottom: var(--s4); }
@@ -181,7 +183,7 @@ svg .label { font-size: calc(14.5px * var(--ts, 1)); font-weight: 600; }
 .check { border: 1px solid var(--rule); background: var(--bone); border-radius: 12px; padding: var(--s4); margin: 0 0 var(--s4); max-width: 68ch; }
 .check fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 .check legend { font-weight: 600; margin-bottom: var(--s2); padding: 0; }
-.check h4 { font-size: 1.1rem; margin-bottom: var(--s2); }
+.check h3 { font-size: 1.1rem; margin-bottom: var(--s2); }
 .check .row { display: flex; gap: var(--s3); flex-wrap: wrap; align-items: center; margin-bottom: var(--s2); }
 .feedback { margin: var(--s3) 0 0; padding: var(--s3) var(--s4); border-radius: 8px; border-left: 4px solid; }
 .feedback[hidden] { display: none; }

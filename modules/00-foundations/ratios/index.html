@@ -36,7 +36,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li>
       <a href="../">0 · Foundations</a>
@@ -93,13 +93,13 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>A <span class="term" data-term="ratio">ratio</span> compares two amounts by dividing: 3 cups of flour to 1 cup of water is a ratio of 3 to 1. A <span class="term" data-term="percentage">percentage</span> is a ratio written out of 100: <span data-calc="percentOf15">…</span>% means 15 out of 60.</p>
       <p>An <span class="term" data-term="mean">average</span> squeezes a list into one number. The mean shares the total out evenly; the <span class="term" data-term="median">median</span> is the middle value of the sorted list. They answer different questions.</p>
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>Four values stay fixed. Drag the fifth outward: the mean ▲ chases it, while the median ■ stays put.</p>
       <div data-widget="average">
         <div class="widget widget-placeholder">
@@ -111,7 +111,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>A recipe scaled up keeps the same ratio of ingredients.</li>
         <li>A 20% discount: multiply the price by 0.8.</li>
@@ -129,10 +129,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="ratios"></div>
       <div class="check" data-predict="ratios">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-rat">What is the mean of 2, 4 and 9?</label></p>
         <div class="row"><input id="p-rat" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Add the three values, then divide by how many there are.</p>
@@ -140,27 +140,27 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Ratios and percentages let you compare things of different sizes: 30 out of 40 and 60 out of 100 can be put side by side. Averages let you describe a pile of numbers with one. Without them, comparing needs the whole raw list.</p>
       <p>Use the mean for fairly symmetric data and when the total matters; use the median when a few extreme values would mislead. An <span class="term" data-term="outlier">outlier</span> is such a value.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-convention">◆ Convention</span> <span class="badge badge-motivated">● Motivated</span></p>
       <p>“Out of 100” is a Convention: we could have used out of 10 or 1,000. Choosing the mean or the median is Motivated by the question: the mean when you care about the total, the median when you care about the typical case. There is no single correct average.</p>
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <p>A training or validation loss is a mean: the per-token loss averaged over the tokens (and texts) in a batch. Benchmark scores are usually percentages: correct answers as a share of all questions. The link is direct, but the details of which tokens are averaged and how vary between training setups.</p>
     </section>
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>The mean is where a see-saw balances; the median is the person in the middle of a queue. <em>Where it breaks down:</em> a queue has no weights, so a very tall person at the end doesn't tip anything.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“Up from 2% to 3% is a 1% rise.” It is one percentage point, which is a 50% rise relative to the old rate.</p>
     </details>
     <footer>Further reading: MML Ch 6 (means and variances arrive properly with probability).</footer>

@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
@@ -91,14 +91,14 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>The <span class="term" data-term="projection">projection</span> of a onto b is the shadow of a on the line through b, drawn as an arrow. It is some number of copies of b: the same direction as b, or the opposite one if the dot product is negative. What is left of a once you take that shadow away is the <em>leftover</em>, and it meets b at a right angle, so it is <span class="term" data-term="orthogonal">orthogonal</span> to b.</p>
       <p>To find the number of copies, divide the dot product by b·b. For a = (3, 1) and b = (1, 1) the projection is <span data-calc="projVec">…</span>, and the leftover a minus that is <span data-calc="projLeft">…</span>. Projecting onto the x-axis direction (1, 0), as on the <a href="../../01-linear-algebra/transformations/">Linear transformations</a> card, sends (3, 2) to <span data-calc="projX">…</span>.</p>
       <div class="math-display" data-tex-display="\operatorname{proj}_{\mathbf{b}}\mathbf{a}=\htmlData{sym=projCoef}{\dfrac{\mathbf{a}\cdot\mathbf{b}}{\mathbf{b}\cdot\mathbf{b}}}\,\mathbf{b}">proj_b a = ((a·b) / (b·b)) b</div>
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>The ochre arrow is the projection of a onto b. The dashed teal arrow is the leftover, and the small square marks the right angle where it meets b’s line. Change a and b. Set b to (0, 0) to see why there is nothing to project onto.</p>
       <div data-widget="proj">
         <div class="widget widget-placeholder">
@@ -110,7 +110,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>The shadow of a pole on a straight road: its length along the road is the projection.</li>
         <li>Wind on a cyclist: only the part of the wind along the road helps or hinders; the sideways part does not.</li>
@@ -129,10 +129,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="proj"></div>
       <div class="check" data-predict="proj">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-proj">Project a = (2, 6) onto b = (0, 3). What is the second entry of the projection?</label></p>
         <div class="row"><input id="p-proj" name="p-proj" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Find a·b and b·b first. The coefficient is their quotient. Multiply (0, 3) by it.</p>
@@ -140,13 +140,13 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Projection answers “what is the closest point on this line to a?”: the projection, because the leftover is as short as it can be when it is at right angles. That is the idea behind fitting a line to data.</p>
       <p><strong>When it does not fit.</strong> Projecting onto the zero vector is undefined: it has no direction, so there is no line to project onto, and the code must check. Projection also throws information away: many arrows share one projection, so it cannot be undone, as the Linear transformations card showed for the x-axis.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> Write a as some number k of copies of b, plus a leftover r that is orthogonal to b: a = k b + r with r·b = 0.</li>
@@ -162,13 +162,13 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>The word “projection” has a second meaning here.</strong> Transformer papers use “linear projections” for learned linear maps: in the original Transformer, queries, keys and values are made by multiplying by learned matrices (Vaswani et al., 2017, §3.2.2). Those are not orthogonal projections. An orthogonal projection onto a line is a square operation you can repeat without changing the result; a learned projection from <span data-calc="dModel">…</span> entries down to <span data-calc="dK">…</span> has a <span data-calc="projShape">…</span> shape and cannot even be applied twice.</li>
       </ul>
       <div class="callout simplified"><p><strong>Simplified.</strong> This only separates two uses of one word. It makes no claim about what a trained projection matrix has learned.</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-proj">In your own words: why is the leftover a − projection orthogonal to b?</label></p>
         <textarea id="e-proj" name="e-proj" autocomplete="off"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -178,17 +178,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“The projection of a onto b is the shadow of a on b’s line. To find it, divide a·b by b·b to see how many copies of b you need, then multiply b by that. What is left, a minus the shadow, meets b at a right angle.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>A flagpole’s shadow on flat ground at noon. <em>Where it breaks down:</em> a real shadow cannot point backwards, but a projection onto b points opposite to b when a leans against it.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Draw b and a from one point.</li><li>Drop a perpendicular from a’s tip to b’s line.</li><li>Mark the foot: that is the projection.</li><li>Write k = (a·b)/(b·b) and projection = k b.</li><li>Mark the right angle and call the dashed segment the leftover.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Is the projection longer than a?</strong> Never. It is at most as long as a.</p>
       <p><strong>What if b is the zero vector?</strong> There is no line, so the projection is undefined.</p>
       <p><strong>Does it matter how long b is?</strong> No: only b’s direction counts; doubling b halves k but leaves k b unchanged.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“Projecting onto b means taking the dot product.” The dot product is one number; the projection is an arrow, that number divided by b·b and multiplied by b.</p>
     </details>
     <footer>Further reading: MML Ch 3.8 (orthogonal projections).</footer>

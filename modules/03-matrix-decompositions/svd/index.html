@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
@@ -90,13 +90,13 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Press a round lump of dough through any matrix and what comes out is an <span class="term" data-term="ellipse">ellipse</span> (or, if the matrix flattens it, a line). That is true even when the matrix has no eigenvectors, and even when it is not square. The ellipse has a longest and a shortest direction, at right angles to each other, and the matrix can be seen as three simple moves: turn or flip the input so that the right two directions line up with the axes, stretch along the axes, then turn or flip the result into place.</p>
       <p>That is the <span class="term" data-term="svd">singular value decomposition</span>, A = U Σ V<sup>T</sup>. V<sup>T</sup> and U are <span class="term" data-term="orthogonal-matrix">orthogonal matrices</span>: they turn or flip without stretching. Σ (capital sigma) is a <span class="term" data-term="diagonal-matrix">diagonal matrix</span> holding the <span class="term" data-term="singular-value">singular values</span> σ₁ ≥ σ₂ ≥ … ≥ 0, which are the semi-axes of the ellipse. The columns of V and of U are the <span class="term" data-term="singular-vector">singular vectors</span>, with A v = σ u.</p>
       <div class="math-display" data-tex-display="A=U\Sigma V^{\top}">A = U Σ V^T</div>
     </section>
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>The dashed circle is the unit circle. Step through the three moves: V^T turns or flips the circle (it stays a circle), Σ stretches it into an ellipse along the axes, and U turns or flips the ellipse into its final place, which is exactly what A does. The ochre and navy arrows are the two right singular vectors carried through each stage; at the end they are σ₁u₁ and σ₂u₂. The widget shows 2×2 matrices; for an m×n matrix the circle becomes an ellipsoid in a space of a different size.</p>
       <div data-widget="svd">
         <div class="widget widget-placeholder">
@@ -107,7 +107,7 @@
       </div><!-- /widget -->
     </section>
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>A round rubber seal squeezed between two fingers into an oval: the oval’s long and short axes are the stretch directions, and their lengths are the singular values.</li>
         <li>A circular plate seen at a slant: the circle appears as an ellipse whose long axis is the plate’s width and whose short axis is that width times the cosine of the tilt.</li>
@@ -117,19 +117,19 @@
       <div data-checks="spot"></div>
     </section>
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="svd"></div>
       <p>Check by hand: the shear has det = 1, and σ₁σ₂ = <span data-calc="sigmaProd">…</span>, as it must, since the product of the singular values is |det A|. Its entries squared add to <span data-calc="sigmaSq">…</span>, which equals σ₁² + σ₂².</p>
       <div data-checks="predict"></div>
     </section>
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>The SVD works for <em>every</em> real matrix, which is its strength. It gives the largest stretch (σ₁, also called the <span class="term" data-term="spectral-norm">spectral norm</span>), the <span class="term" data-term="rank">rank</span> (the number of non-zero singular values), and the sum of squared entries (σ₁² + σ₂² + …). The singular values are the square roots of the <span class="term" data-term="eigenvalue">eigenvalues</span> of A<sup>T</sup>A, which are never negative.</p>
       <p><strong>Rank, with a tolerance.</strong> On a computer a singular value that should be 0 comes out as a tiny number. The <span class="term" data-term="numerical-rank">numerical rank</span> counts the singular values above max(m, n) × ε × σ₁, where ε = <span data-calc="epsilon">…</span> is the rounding size of double-precision numbers. For the shear this tolerance is <span data-calc="tol22">…</span>, far below σ₂.</p>
       <p><strong>When it does not fit, and what is not unique.</strong> U and V are not unique: you can flip the sign of a matching column of each, and if two singular values are equal any rotation inside their plane works. U and V may include flips, not only rotations (determinant −1). The singular values themselves are unique.</p>
     </section>
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-motivated">◆ Motivated</span></p>
       <ol>
         <li><strong>The wish.</strong> Find perpendicular input directions that A sends to perpendicular output directions, so that A acts as a pure stretch between them.</li>
@@ -140,7 +140,7 @@
       <div data-checks="reveal"></div>
     </section>
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>Nothing specific to claim.</strong> The SVD is a tool for understanding and approximating matrices. This card makes no claim about where it appears inside a language model; the next card gives one documented use of a related idea.</li>
       </ul>
@@ -150,17 +150,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“Any matrix turns a circle into an ellipse. The SVD says exactly how: turn or flip so the ellipse’s axes line up, stretch by the singular values along the axes, then turn or flip again. The singular values are the ellipse’s semi-axes, the biggest is the largest stretch, and the number of non-zero ones is the rank.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>Squashing a round pizza base into an oval by pulling along two perpendicular lines. <em>Where it breaks down:</em> the matrix can also flip the base over and can squash it to a line, which dough does not do.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Draw the unit circle and a matrix’s ellipse beside it.</li><li>Draw the ellipse’s two axes and mark their lengths σ₁ and σ₂.</li><li>Write A = U Σ V^T under it.</li><li>Label V^T ‘turn’, Σ ‘stretch’, U ‘turn’.</li><li>Mark that σ₂ = 0 flattens the ellipse to a line.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Does it work for non-square matrices?</strong> Yes. U and V then have different sizes, and the circle becomes an ellipsoid in the output space.</p>
       <p><strong>How is it different from eigendecomposition?</strong> It always exists, uses two different orthogonal matrices, and has no negative or complex numbers; eigendecomposition needs enough eigenvectors.</p>
       <p><strong>Are U and V unique?</strong> No: signs can be flipped in matching pairs, and repeated singular values leave a free rotation.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“The singular values are the eigenvalues.” They are the square roots of the eigenvalues of A^T A. For a symmetric matrix they are the absolute values of its eigenvalues, but for a general matrix the two lists differ.</p>
     </details>
     <footer>Further reading: MML Ch 4.5 (singular value decomposition).</footer>

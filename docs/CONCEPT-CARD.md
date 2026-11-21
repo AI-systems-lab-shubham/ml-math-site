@@ -42,11 +42,14 @@ Give it wherever one genuinely exists (dot product as shadow, gradient as steepe
 - Link every technical term through the glossary system.
 - Cite MML chapters as further reading, in the card footer. Do not copy text or figures.
 
+## Heading levels
+One h1 per page (the concept title). The objectives box, the key-takeaways box and each of the seven stages are h2 (the stages carry `class="stage-heading"`). Sub-parts inside a stage, such as the predict-then-reveal and explain-it-back checks, are h3, and so are the parts of the Teach it panel. Never skip a level and never pick a level for its size: sizes come from classes in `site.css` (`.stage-heading`, `.box-title`, `details.teach-it h3`, `.check h3`). `node tools/ui-verify.mjs` (check `headings`) fails on a second h1 or a skipped level.
+
 ## Skeleton
 ```html
 <article class="concept-card" id="concept-dot-product" data-size="full">
-  <h2>Dot product</h2>
-  <section data-stage="meaning">…</section>
+  <header><h1>Dot product</h1>…</header>   <!-- the page title: the only h1 -->
+  <section data-stage="meaning"><h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>…</section>
   <section data-stage="picture"><div class="widget">…</div></section>
   <section data-stage="real-life">…<div class="spot-it">…</div></section>
   <section data-stage="worked-example">…</section>

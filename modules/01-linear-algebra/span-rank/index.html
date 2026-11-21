@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li>
@@ -92,7 +92,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Picture a robot on a flat floor with two controls. One control drives it along one direction, the other along a second direction, and you can use each control by any amount, forwards or backwards. The set of floor points it can reach is the <span class="term" data-term="span">span</span> of those two directions: everything you can make as a <span class="term" data-term="linear-combination">linear combination</span> of them.</p>
       <p>If the two directions are really different, the robot reaches the whole floor. If they are the same line (one control is just a multiple of the other), it reaches only that line: one control is redundant. Vectors where none is redundant are <span class="term" data-term="linearly-independent">linearly independent</span>. Independent vectors whose span is the whole space are a <span class="term" data-term="basis">basis</span>: no redundancy, and nothing out of reach. In the plane, two independent arrows are a basis.</p>
       <p>Count the directions in a matrix by looking at its columns. The <span class="term" data-term="rank">rank</span> is the number of independent columns. A 2×2 matrix has rank 2, 1 or 0.</p>
@@ -100,7 +100,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>The tinted plane is the span. Change v₁ and v₂, or press “Same line” to make them dependent: the tint shrinks to a line. The burgundy dot w is a target. When it can be reached, the dashed arrows show a recipe, and the text gives the amounts of v₁ and v₂.</p>
       <div data-widget="span">
         <div class="widget widget-placeholder">
@@ -112,7 +112,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>Mixing paint from red, yellow and blue: the colours you can mix are the span of the three, and a fourth tin that is just a mix of the first three adds nothing.</li>
         <li>A crane that moves along a rail and hoists up and down: two independent controls reach every point in its vertical plane.</li>
@@ -131,10 +131,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="span"></div>
       <div class="check" data-predict="span">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-span">What is the rank of [[1, 2], [2, 4]]?</label></p>
         <div class="row"><input id="p-span" name="p-span" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Compare column 2 with column 1. Is one a multiple of the other?</p>
@@ -142,13 +142,13 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>These ideas answer “can I reach it?” and “am I wasting effort?”. In the last card, Ax = b has a solution exactly when b is in the span of the columns of A. A basis gives every point exactly one recipe, so coordinates mean something. Rank measures how much a matrix really does.</p>
       <p><strong>When it does not fit.</strong> These are about linear recipes only (scaling and adding). They say nothing about curves or limits on amounts.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-motivated">● Motivated</span></p>
       <ol>
         <li><strong>The question.</strong> Which targets can I reach by scaling and adding my vectors?</li>
@@ -165,7 +165,7 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>A low-rank update.</strong> LoRA (Hu et al., 2021) adjusts a large weight matrix by adding the product of two thin matrices, a d×r one times an r×k one, with r much smaller than d and k. That product has rank at most r. For a <span data-calc="dModel">…</span>×<span data-calc="dModel">…</span> matrix (<span data-calc="loraFull">…</span> entries) and an illustrative r = 8, the two thin matrices hold <span data-calc="loraThin">…</span> numbers in all.</li>
         <li><strong>A small example of the rank bound.</strong> A 4×1 times a 1×3 matrix is 4×3 with <span data-calc="loraSmallFull">…</span> entries but rank <span data-calc="loraRank">…</span>, and can be stored with <span data-calc="loraSmallThin">…</span> numbers.</li>
@@ -175,9 +175,9 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>A music mixer with sliders: the sounds you can make are the span of the channels. If two channels carry the same signal, one slider is redundant. <em>Where it breaks down:</em> real sliders have limits; a span allows any amount, positive or negative.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“More vectors always reach more.” Only independent ones do. A vector already in the span adds nothing, and the rank does not grow.</p>
     </details>
     <footer>Further reading: MML Ch 2.5 (linear independence), Ch 2.6 (basis and rank).</footer>

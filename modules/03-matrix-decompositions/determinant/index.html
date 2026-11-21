@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
@@ -90,14 +90,14 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Draw a one-by-one square on a sheet of rubber, then let a matrix stretch, tilt and turn the whole sheet. The square comes out as a slanted shape with two pairs of parallel sides. Because the matrix treats every part of the sheet alike, every patch of the sheet changes in area by the same factor as that square did. That factor is the <span class="term" data-term="determinant">determinant</span>.</p>
       <p>The square we watch is the <span class="term" data-term="unit-square">unit square</span>, with corners (0, 0), (1, 0), (1, 1) and (0, 1) and area exactly 1, so its new area <em>is</em> the factor. Two more things can happen. If the matrix flips the sheet over, like turning it to read through the back, the corners now run the other way round: the <span class="term" data-term="orientation">orientation</span> is reversed, and we count the area as negative. If the matrix squashes the whole square onto a line or a point, the area is 0.</p>
       <p>For a matrix with rows (a, b) and (c, d), where a, b, c and d are its four entries, the determinant is ad − bc. The first column, (a, c), is where the arrow (1, 0) lands, and the second, (b, d), is where (0, 1) lands.</p>
       <div class="math-display" data-tex-display="\det\begin{bmatrix}a&amp;b\\c&amp;d\end{bmatrix}=ad-bc">det = ad − bc</div>
     </section>
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>The dashed square is the unit square. The filled shape is what the matrix makes of it: teal when the orientation is kept, ochre when it is flipped. The blue and teal arrows are the two columns. Try the named matrices, then move the sliders until the shape flattens into a line.</p>
       <div data-widget="det">
         <div class="widget widget-placeholder">
@@ -108,7 +108,7 @@
       </div><!-- /widget -->
     </section>
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>A photocopier set to 200% in both directions: every length doubles, so every area is multiplied by <span data-calc="detCopy">…</span>. A matrix that scales by (2, 2) has that determinant.</li>
         <li>Reading a page through the back of the sheet, a <span class="term" data-term="reflection">reflection</span>: the same size, but left and right are swapped. Its determinant is <span data-calc="detFlip">…</span>, so the size is kept and the orientation is flipped.</li>
@@ -119,17 +119,17 @@
       <div data-checks="spot"></div>
     </section>
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="det"></div>
       <div data-checks="predict"></div>
     </section>
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>One number answers two questions: by what factor are areas scaled, and can the matrix be undone? A determinant that is not 0 means the square keeps some area, so nothing is lost and the <span class="term" data-term="inverse-matrix">inverse</span> exists. A determinant of 0 means the square collapsed, so many different arrows land in the same place and no matrix can send them back.</p>
       <p><strong>When it does not fit.</strong> The determinant says nothing about <em>shape</em>: a quarter turn and a shear both have determinant <span data-calc="detShear">…</span>, though one keeps every length and the other slants the square. A tiny determinant does not mean a matrix is hard to undo either: scaling every length by 0.001 has determinant <span data-calc="detTiny">…</span>, yet it is easily undone. This card works with 2×2 matrices, where area is something you can draw; for a 3×3 matrix the same number scales volume, with a longer formula.</p>
     </section>
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> Find the area of the parallelogram with sides (a, c) and (b, d), the two columns.</li>
@@ -141,7 +141,7 @@
       <div data-checks="reveal"></div>
     </section>
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>Conceptual link: a determinant needs a square matrix.</strong> Many of a model's learned matrices are not square. In the original Transformer base model, queries, keys and values come from learned projections from <span data-calc="dModel">…</span> entries down to <span data-calc="dK">…</span> per head, a <span data-calc="projShape">…</span> table (Vaswani et al., 2017, §3.2.2), which has no determinant and cannot be undone. The determinant is not a named step in running a language model.</li>
       </ul>
@@ -150,9 +150,9 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>A photocopier’s zoom control. <em>Where it breaks down:</em> a photocopier never flips the page over or squashes it to a line, but a matrix can do both.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“A zero determinant means the matrix is all zeros.” No: the projection onto the x-axis has the rows (1, 0) and (0, 0), is not all zeros, and still has determinant 0, because it flattens the square onto a line.</p>
     </details>
     <footer>Further reading: MML Ch 4.1 (determinant and trace).</footer>

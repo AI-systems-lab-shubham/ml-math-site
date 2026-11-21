@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li>
@@ -96,7 +96,7 @@
     </div>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Tell a friend where a hidden treasure is: “walk 3 steps east, then 2 steps north”. Two numbers, in a fixed order, describe the whole trip. The list (3, 2) is a <span class="term" data-term="vector">vector</span>. Swap the order and you get (2, 3), a different trip.</p>
       <p>The same trip is also an arrow. Start at the <span class="term" data-term="origin">origin</span>, draw a straight arrow to the point 3 across and 2 up. Two pictures, one object: the list is easy to calculate with, the arrow is easy to see.</p>
       <p>Each number in the list is a <span class="term" data-term="component">component</span> (or entry), found by its position. Counting from 1, the vector below has entries v₁, v₂, …, vₙ, and n is its <span class="term" data-term="dimension">dimension</span>: how many numbers it holds.</p>
@@ -104,7 +104,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>Change the entries, or drag the tip of the arrow. The blue dots show how far across, the teal dots how far up. Then switch to 3 or 5 entries and see what stays and what has to go.</p>
       <div data-widget="vectors">
         <div class="widget widget-placeholder">
@@ -116,7 +116,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>Where you are on a map: latitude and longitude, two numbers in a fixed order.</li>
         <li>Wind: a speed and a direction, which is exactly an arrow.</li>
@@ -135,10 +135,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="vectors"></div>
       <div class="check" data-predict="vectors">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-vec">v = (3, 2, 7). What is v₃?</label></p>
         <div class="row"><input id="p-vec" name="p-vec" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>The small 3 is a position, not a number to multiply by. Count to the third entry from the left.</p>
@@ -146,27 +146,27 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>One name for a whole list lets you write one rule that works on every entry at once. Without it, a record with 512 numbers would need 512 names.</p>
       <p>Use a vector when position carries meaning and the entries belong together. Be careful when the entries use different units, such as an age and an income: the list is still a fine record, but the arrow picture and the idea of “how far apart” then mix unlike things.</p>
       <p><strong>What carries over to many dimensions.</strong> Everything we do with entries (adding, scaling, taking dot products) works for any dimension. <strong>What cannot be drawn:</strong> more than three entries. So the arrow is a way to build intuition, not a requirement.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-convention">◆ Convention</span></p>
       <p>Both the list and the arrow are choices of how to write down the same trip. We write the entries in a column or a row, number them from 1, and write bold or with an arrow on top. None of that is forced; another book can do it differently and the maths is unchanged. What is not a choice is that the order of entries must be fixed, or you could not compare two vectors.</p>
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <p>A language model does not work with words directly. It first turns each <span class="term" data-term="token">token</span> into a vector of numbers, called an <span class="term" data-term="embedding">embedding</span>. In the original Transformer base model that vector has <span data-calc="dModel">…</span> entries (Vaswani et al., 2017, §3.4 and Table 3).</p>
       <div class="illustration">
         <p><strong>Made-up illustration numbers, not real model weights.</strong> A token such as “cat” might be stored as a list like <span data-calc="embText">…</span>. That is only <span data-calc="embDim">…</span> entries instead of <span data-calc="dModel">…</span>, and the numbers are invented to show the shape of the idea.</p>
       </div>
       <div class="callout simplified"><p><strong>Simplified.</strong> The embedding values are learned during training. Individual entries do not have a neat meaning you can read off, such as “catness”. The useful fact is that the list is a vector, so the rules of this module apply to it.</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-vec">In your own words: why can the same vector be both a list and an arrow, and when can you no longer draw it?</label></p>
         <textarea id="e-vec" name="e-vec" autocomplete="off"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -176,17 +176,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“A vector is a list of numbers where the order matters. Say ‘3 east, 2 north’. That is two numbers, and it is also an arrow from where you start. If the list has more numbers we cannot draw it, but we can still add and scale it, because we do it one number at a time. A language model turns every word-piece into a long list like this, hundreds of numbers, so it can do arithmetic on words.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>A postal address: street number, street, city, in a fixed order. <em>Where it breaks down:</em> you cannot meaningfully add two addresses, but you can add two vectors.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Draw two axes and mark the origin.</li><li>Write (3, 2) and plot the point.</li><li>Draw the arrow from the origin to the point.</li><li>Write (2, 3) and draw it too, to show order matters.</li><li>Write a 5-entry list and say “no picture, same rules”.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Is a vector the arrow or the list?</strong> Both are the same object seen two ways. The list is how we compute; the arrow is how we picture.</p>
       <p><strong>Does the arrow have to start at the origin?</strong> For this module, yes. Moving an arrow without turning it does not change what it means as a displacement, which we use when adding.</p>
       <p><strong>What is a 1-entry vector?</strong> A single number written as a list. It is the case where the arrow sits on a line.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“A vector is an arrow, so I need a picture.” It is a list first. Most of the vectors in machine learning have too many entries to draw.</p>
     </details>
     <footer>Further reading: MML Ch 2.1 and 2.4 (vector spaces, vectors as lists).</footer>

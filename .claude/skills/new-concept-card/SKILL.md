@@ -12,6 +12,7 @@ Read `docs/CONCEPT-CARD.md` (template and skeleton) and `docs/GLOSSARY.md` befor
 2. **Maths code and tests first.** Any number shown (worked example, widget output, stepper) is computed by code in `assets/js/*-math.mjs` and covered by `tests/`. No hand-typed results.
 3. **Write the article** with exactly these sections, in this order, using `data-stage`:
    `meaning`, `picture`, `real-life`, `worked-example`, `why-when`, `how-to-arrive`, `in-an-llm`.
+   Heading levels: the card title is the page's only `h1`; each stage opens with `<h2 class="stage-heading">`; sub-parts inside a stage are `h3`. Never skip a level (see `docs/CONCEPT-CARD.md`).
    - `real-life`: three to five everyday scenarios, a recognition rule, and a `.spot-it` exercise.
    - `picture`: a widget with the drawing on top and controls below (see DESIGN.md); keyboard-operable and labelled; describe the diagram in text or `aria-label`.
    - `how-to-arrive`: a guided "reinvent it" sequence with predict-then-reveal, tagged with one `.badge`: Derived, Motivated, Convention or Design choice.

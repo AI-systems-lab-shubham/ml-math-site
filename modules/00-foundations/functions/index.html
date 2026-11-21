@@ -36,7 +36,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li>
       <a href="../">0 · Foundations</a>
@@ -93,7 +93,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Think of a vending machine. Press the same button and you always get the same snack. The button you press is the <span class="term" data-term="input">input</span>; the snack that drops is the <span class="term" data-term="output">output</span>. A <span class="term" data-term="function">function</span> is any rule that behaves like that: one input in, exactly one output out, the same every time.</p>
       <p>We write the machine as a name and a recipe. For “double it, then add 1”:</p>
       <div class="math-display" data-tex-display="f(\htmlData{sym=x}{x})=2\htmlData{sym=x}{x}+1">f(x) = 2x + 1</div>
@@ -101,7 +101,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>A <span class="term" data-term="graph">graph</span> draws the machine's whole behaviour: for each input, mark a point at the height of its output. Choose a rule, then slide the input and watch the point trace the curve.</p>
       <div data-widget="functions">
         <div class="widget widget-placeholder">
@@ -113,7 +113,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>A price list: item in, price out.</li>
         <li>A speedometer: moment in time in, speed out.</li>
@@ -132,10 +132,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="functions"></div>
       <div class="check" data-predict="functions">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-fn">Using f(x) = 2x + 1, what is f(5)?</label></p>
         <div class="row"><input id="p-fn" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Replace x with 5 and follow the recipe: double, then add 1.</p>
@@ -143,13 +143,13 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Naming a rule lets us treat “how the output depends on the input” as one object that we can draw, compare, combine and improve. Without the idea you would have only a pile of separate facts.</p>
       <p>It fits whenever each input has a single predictable output. It does not fit a rule where the same input can give different outcomes, such as a dice roll. For that you describe a spread of possible outputs with probabilities (Module 5).</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-motivated">● Motivated</span></p>
       <ol>
         <li><strong>The requirement.</strong> A machine you can rely on: tell it what you put in and know what comes out.</li>
@@ -164,11 +164,11 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <p>Seen from outside, a <span class="term" data-term="language-model">language model</span> is a function. Its input is the sequence of tokens so far; its output is a probability for every token in the vocabulary being the next one. Feed it the same tokens and the same settings, and the function gives the same probabilities.</p>
       <div class="callout simplified"><p><strong>Simplified.</strong> When you chat, the system then <em>samples</em> a token from those probabilities. That random step happens outside the function, which is why the same prompt can produce different replies. Sampling comes in Module 5.</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-fn">In your own words: what makes something a function, and why is “exactly one output” important?</label></p>
         <textarea id="e-fn"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -178,17 +178,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“A function is a vending machine for numbers. You press a button, the machine follows its rule, and out comes one result. Press the same button again, same result. The graph is just a picture of every button and what it gives: left to right the input, up and down the output.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>A recipe: ingredients in, dish out. <em>Where it breaks down:</em> a real recipe can turn out differently each time; a function never does.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Draw a box with an arrow in and an arrow out.</li><li>Write the rule inside: double, then add 1.</li><li>Feed in 0, 1, 2 and write the outputs.</li><li>Draw axes and plot the three points.</li><li>Join them; ask what happens between the points.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Is f(x) the same as f times x?</strong> No. f(x) means “the output of f at x”. The brackets mean “apply”.</p>
       <p><strong>Can two inputs give the same output?</strong> Yes. Both 2 and −2 give 4 under “multiply it by itself”. A function only forbids one input giving two outputs.</p>
       <p><strong>Why draw a graph at all?</strong> Because patterns such as steepness or turning points are easier to see than to read from a table.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“A function must have a formula.” A lookup table or a learned model is a function too, as long as each input has one output.</p>
     </details>
     <footer>Further reading: MML Ch 2 and Ch 5 introduce functions on vectors; Module 4 returns to them.</footer>

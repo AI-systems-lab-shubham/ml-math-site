@@ -36,7 +36,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li>
       <a href="../">0 · Foundations</a>
@@ -93,7 +93,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Walk up a ramp. For every step you take forward, you rise by the same amount. How steep the ramp is, how much you go up per step forward, is its <span class="term" data-term="slope">slope</span>: a steady <span class="term" data-term="rate-of-change">rate of change</span>. Where the ramp starts, its height at the very beginning, is the <span class="term" data-term="intercept">intercept</span>.</p>
       <p>A <span class="term" data-term="linear-function">linear function</span> packs both facts into one rule:</p>
       <div class="math-display" data-tex-display="\htmlData{sym=y}{y}=\htmlData{sym=m}{m}\,\htmlData{sym=x}{x}+\htmlData{sym=b}{b}">y = mx + b</div>
@@ -101,7 +101,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>Change the slope and the line tilts; change the intercept and it slides up or down. The small burgundy triangle shows “run 1, rise m” at the start. The ochre dot is the intercept.</p>
       <div data-widget="slope">
         <div class="widget widget-placeholder">
@@ -113,7 +113,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>A tank that starts with some water and fills at a steady number of litres per minute.</li>
         <li>A cyclist at constant speed who starts some distance down the road.</li>
@@ -132,10 +132,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="slope"></div>
       <div class="check" data-predict="slope">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-sl">A line passes through (0, 1) and (2, 5). What is its slope?</label></p>
         <div class="row"><input id="p-sl" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>How far up does it go, and how far across? Divide the first by the second.</p>
@@ -143,13 +143,13 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>A straight line is the simplest relationship that still has a direction and a size. It is the baseline we compare other shapes to. Zoom in far enough on almost any smooth curve and it looks like a line, which is the idea behind derivatives (Module 4).</p>
       <p>It does not fit processes where the step depends on the current size, or where an effect levels off.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> Each equal step across changes the height by the same amount, m.</li>
@@ -164,13 +164,13 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <p>A single artificial <span class="term" data-term="neuron">neuron</span> computes a weighted sum plus a bias. With one input it is exactly this line:</p>
       <div class="math-display" data-tex-display="z=w\,x+b">z = w x + b</div>
       <p>The <span class="term" data-term="weight">weight</span> w plays the role of the slope and the <span class="term" data-term="bias">bias</span> b plays the role of the intercept. With many inputs the same pattern becomes a sum of weight times input over all the inputs, plus the bias. Transformer layers are built from such weighted sums (Vaswani et al., 2017).</p>
       <div class="callout simplified"><p><strong>Simplified.</strong> Most units apply an activation function after this step, which bends the output. We meet that in Module 10. “Neuron” is a metaphor; the unit is just this formula.</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-sl">In your own words: what do m and b each tell you about a line?</label></p>
         <textarea id="e-sl"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -180,17 +180,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“Imagine a ramp. How far up it starts is b. How steep it is is m: each step forward lifts you by m. After x steps forward you have gone up x times m, plus the b you started with. That is y = mx + b. A neuron in an AI is the same recipe with weights and a bias.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>A taxi fare: pick-up fee plus a price per kilometre. <em>Where it breaks down:</em> real fares often have minimums or caps, which bend the line.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Draw axes and mark a dot at height b on the vertical axis.</li><li>Draw one step across and one rise of m.</li><li>Repeat the step three times.</li><li>Join the points into a line.</li><li>Write y = mx + b and label each part.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>What if the slope is negative?</strong> The line goes down as you move right.</p>
       <p><strong>What if the slope is zero?</strong> A flat line: the output never changes.</p>
       <p><strong>Why is it called linear?</strong> Because the graph is a line.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“Slope is the angle.” Slope is rise over run, a ratio. Doubling the slope does not double the angle.</p>
     </details>
     <footer>Further reading: MML Ch 2.7 (linear mappings) for the generalisation to many inputs.</footer>

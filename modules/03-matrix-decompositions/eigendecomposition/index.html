@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
@@ -90,13 +90,13 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Suppose a matrix has two independent <span class="term" data-term="eigenvector">eigenvectors</span>. Then you can describe any arrow in terms of them, and in those directions the matrix does nothing more than multiply by a number. So to apply the matrix: switch to the eigenvector directions, stretch each by its <span class="term" data-term="eigenvalue">eigenvalue</span>, then switch back. Written as a product, that is the <span class="term" data-term="eigendecomposition">eigendecomposition</span> A = P D P<sup>−1</sup>.</p>
       <p>P has the eigenvectors as its columns, so P<sup>−1</sup> switches into their directions. D is a <span class="term" data-term="diagonal-matrix">diagonal matrix</span> holding the eigenvalues, which stretches each direction on its own. P then switches back. It only works when there are enough independent eigenvectors to fill the columns of P; the shear from the last card does not have them.</p>
       <div class="math-display" data-tex-display="A=PDP^{-1}">A = P D P⁻¹</div>
     </section>
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>This matrix is symmetric, which makes the picture simple: its eigenvectors are along the two diagonals, at right angles. The faint circle is the unit circle; the filled shape is what A<sup>n</sup> makes of it. Raise n and see the longer axis grow with the bigger eigenvalue and the shorter one shrink with the smaller one.</p>
       <div data-widget="powers">
         <div class="widget widget-placeholder">
@@ -107,7 +107,7 @@
       </div><!-- /widget -->
     </section>
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>A table of year-to-year rates between a few groups, such as the young, adult and old members of a population. Applying one year’s table n years in a row is the matrix power A<sup>n</sup>.</li>
         <li>A savings account where interest is added each year: the amount after n years is the starting amount times a growth factor raised to the power n. Eigendecomposition does the same for a whole table of growth factors at once.</li>
@@ -117,18 +117,18 @@
       <div data-checks="spot"></div>
     </section>
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="eigendecomp"></div>
       <div data-checks="predict"></div>
     </section>
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Powers become cheap: A<sup>n</sup> = P D<sup>n</sup> P<sup>−1</sup>, because the P<sup>−1</sup>P pairs in the middle cancel and a diagonal matrix is raised to a power entry by entry. After many steps the largest eigenvalue dominates, so an arrow that is repeatedly multiplied by A turns towards the matching eigenvector.</p>
       <p><strong>A symmetric matrix always works.</strong> A <span class="term" data-term="symmetric-matrix">symmetric matrix</span> has real eigenvalues, and its eigenvectors can be chosen at right angles (see the <a href="../../02-analytic-geometry/orthogonality/">Orthogonality</a> card in Module 2), so P can be an <span class="term" data-term="orthogonal-matrix">orthogonal matrix</span> Q whose inverse is just its transpose: A = Q Λ Q<sup>T</sup>.</p>
       <p><strong>When it does not fit.</strong> A matrix with too few independent eigenvectors, like the shear, cannot be written as P D P<sup>−1</sup>, and neither can a rotation, which has no real eigenvalues. A matrix that is not square has no eigenvectors. The next card gives a decomposition that works for every matrix.</p>
     </section>
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>Start from the eigen-equations.</strong> A v₁ = λ₁v₁ and A v₂ = λ₂v₂.</li>
@@ -139,7 +139,7 @@
       <div data-checks="reveal"></div>
     </section>
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>Nothing specific to claim.</strong> One caution: A<sup>n</sup> applies the <em>same</em> matrix n times, whereas the layers of a transformer each have their own learned weights (Vaswani et al., 2017), so powers of a single matrix do not describe how a transformer’s depth works.</li>
       </ul>
@@ -148,9 +148,9 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>Cooking in your friend’s kitchen, with your friend’s units: convert the recipe, cook, convert back. <em>Where it breaks down:</em> the conversion here is a matrix, and if it has no inverse the trick fails.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“Every square matrix can be written as P D P⁻¹.” No: the shear has only one eigenvector direction, and a rotation has no real eigenvectors.</p>
     </details>
     <footer>Further reading: MML Ch 4.4 (eigendecomposition and diagonalisation).</footer>

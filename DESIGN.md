@@ -30,6 +30,7 @@ Contrast ratios were computed against the page background (WCAG 2 formula).
 ## 3. Typography
 - Headings: **Fraunces**, weight 600. Body and UI: **Inter**. Formulas in prose, code and live numbers in widgets: **JetBrains Mono**. Maths: KaTeX (vendored fonts).
 - Body 18px / 1.65. Reading measure max 68ch.
+- Heading levels follow the document outline, not size: one h1 (page title), h2 for the objectives and takeaways boxes and the seven stages, h3 for sub-parts. Sizes are set by classes (`.stage-heading` 1.5rem, `.box-title`, `.check h3` and `details.teach-it h3` 1.1rem), so a level change never changes the look.
 - Scale (ratio about 1.25): h1 `clamp(2.25rem, 5vw, 3.25rem)` / 1.1, h2 2rem, h3 1.5rem, h4 1.2rem. Nothing below 0.875rem.
 - Inter was my pick for readability. Swap it if you prefer a serif body.
 
@@ -135,7 +136,7 @@ Contrast ratios below were computed with the WCAG 2 formula against `--paper` (t
 
 **One thing at a time (Session S1)**: a concept page shows only its concept; a module overview shows only its module. Nothing on a concept page previews what comes next: no "Up next", no list of later concepts. The page ends with one filled button ("Mark complete and continue", or "Continue" when already Complete; on the last concept of the course "Mark complete" plus a "Back to course home" text link at 44px). Previous may show the previous concept's title. "Builds on" signposts point backwards only.
 **Overview page**: breadcrumb, eyebrow, h1, lede (and, for Module 1, one muted line), "About N min · M concepts", outcomes list, module progress line, one filled Start / Continue / Review from the start button, then the built concepts as 44px bordered rows (status icon with text, title, minutes). Planned concepts are not listed.
-**First-visit hint** (`.first-hint`): one bordered `--paper` block of 0.9375rem `--muted` text with a secondary Dismiss button, shown under the breadcrumb of a concept page until dismissed. A classic script (`assets/js/first-hint.js`) inserts it while the page is parsed, so it is in the first paint and moves nothing. Dismissal is remembered on `mlmath:ui:v1` (`hintDismissed`).
+**First-visit hint** (`.first-hint`): one bordered `--paper` block of 0.9375rem `--muted` text with a secondary Dismiss button, shown under the breadcrumb of a concept page on the first two different concept pages a learner visits, then hidden automatically (and for good once dismissed). A classic script (`assets/js/first-hint.js`) inserts it while the page is parsed, so it is in the first paint and moves nothing. The pages shown are remembered on `mlmath:ui:v1` (`hintPages`) and dismissal as `hintDismissed`. A permanent **How to use this site** link ends the outline (`.outline-help`, a 44px-high burgundy link under a rule): on a concept page it shows the hint again (closing the phone drawer, moving focus to the hint, saving nothing); on any other page, or without scripts, it goes to the home page's "How this course works".
 **Outline module rows**: a 44px chevron button (shows or hides that module's concepts; not remembered) beside a link to the module overview. Only the current module is open on load.
 
 ## Prompt for Claude Code

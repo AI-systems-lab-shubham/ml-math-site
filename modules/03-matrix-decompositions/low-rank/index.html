@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
@@ -90,13 +90,13 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>The SVD writes a matrix as a sum of simple layers: A = σ₁u₁v₁<sup>T</sup> + σ₂u₂v₂<sup>T</sup> + …, ordered from the biggest stretch to the smallest. Each layer is a column times a row, so it has rank 1. If the later layers are tiny, leaving them out changes the matrix very little. Keeping only the first k layers gives a <span class="term" data-term="low-rank-approximation">low-rank approximation</span> A<sub>k</sub>, a matrix of rank at most k.</p>
       <p>The <span class="term" data-term="eckart-young">Eckart–Young theorem</span> says this is the best you can do: no other matrix of rank k is closer to A. The error is exactly the layers you dropped.</p>
       <div class="math-display" data-tex-display="A_k=\sum_{i=1}^{k}\sigma_i\mathbf{u}_i\mathbf{v}_i^{\top},\qquad \|A-A_k\|_F^2=\sum_{i>k}\sigma_i^2,\qquad \|A-A_k\|_2=\sigma_{k+1}">A_k = σ₁u₁v₁^T + … + σₖuₖvₖ^T; squared error = σₖ₊₁² + σₖ₊₂² + …</div>
     </section>
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>The left grid is a 16 by 16 pattern made in code: a bright disc, a diagonal stripe and a soft ramp. The middle grid is the best rank-k version. The bars are the 16 singular values, with the ones kept in colour. Raise k from 0 and watch where the error falls fast and where it hardly moves. Then look at the numbers stored: at rank <span data-calc="rank8of16">…</span> storing the layers takes more numbers than the picture itself.</p>
       <div data-widget="lowrank">
         <div class="widget widget-placeholder">
@@ -107,7 +107,7 @@
       </div><!-- /widget -->
     </section>
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>A multiplication table: the entry in row i and column j is i × j, a column times a row, so the whole table has rank <span data-calc="timesTableRank">…</span>. One layer rebuilds it exactly.</li>
         <li>A photograph with a big smooth sky: most of its columns look alike, so a few layers capture most of it and the many small ones are fine detail.</li>
@@ -117,17 +117,17 @@
       <div data-checks="spot"></div>
     </section>
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="lowrank"></div>
       <div data-checks="predict"></div>
     </section>
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Storing a rank-k approximation of an m×n matrix takes k columns of U, k of V and k singular values: k(m + n + 1) numbers, against mn for the matrix itself. For 512×512 and k = 8 that is <span data-calc="storage8">…</span> against <span data-calc="storageFull512">…</span>.</p>
       <p><strong>When it does not fit.</strong> The saving needs k(m + n + 1) to be less than mn. For the 16×16 pattern each layer costs <span data-calc="per16">…</span> numbers against <span data-calc="storage16">…</span> for the picture, so ranks above <span data-calc="breakEven16">…</span> store more than the picture (rank 8 stores <span data-calc="rank8of16">…</span>). Low rank also only helps when the singular values fall quickly: if they are all about equal, dropping any of them loses a lot.</p>
     </section>
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> Among all matrices of rank at most k, find the one closest to A, measuring distance by the sum of squared entry differences (squared Frobenius norm).</li>
@@ -138,7 +138,7 @@
       <div data-checks="reveal"></div>
     </section>
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong><span class="term" data-term="lora">LoRA</span> (low-rank adaptation).</strong> To <span class="term" data-term="fine-tuning">fine-tune</span> a large model cheaply, Hu et al. (2021, arXiv:2106.09685) freeze the pre-trained weights and inject trainable rank-decomposition matrices: the weight matrix W₀ becomes W₀ + ΔW = W₀ + BA, where B is d×r and A is r×k with r small. Here, for a 512×512 matrix and r = <span data-calc="loraRank">…</span>, B is <span data-calc="loraBMatrix">…</span> and A is <span data-calc="loraAMatrix">…</span>.</li>
         <li><strong>The hypothesis.</strong> The paper’s hypothesis is that the weight updates made during fine-tuning have a low <span class="term" data-term="intrinsic-rank">intrinsic rank</span>, which is why a low-rank update can be enough. In its experiments, a rank of one or two can suffice for GPT-3 175B, whose full rank is 12,288. The trainable parameters can be as small as 0.01% of those of GPT-3 175B, and the update can be merged into the frozen weights, so it adds no inference latency.</li>
@@ -150,17 +150,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“Break a matrix into layers with the SVD, biggest first. Keep the first k and you have the best rank-k copy there can be. The squared error is the sum of the squares of the layers you dropped, and it costs k times (m plus n plus one) numbers instead of m times n. LoRA uses the same shape of idea, a thin product BA, but learns the two thin matrices instead of computing an SVD.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>A compressed photo: keep the broad shapes and drop fine detail. <em>Where it breaks down:</em> the layers here are ordered by a precise size, and the loss is exactly the dropped layers, which is not true of every compression method.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Write A as a sum of three layers with σ₁ > σ₂ > σ₃.</li><li>Cross out the last layer to get A₂.</li><li>Write error² = σ₃².</li><li>Draw A (m×n) as a tall thin box times a wide thin box.</li><li>Count the numbers in the thin boxes against m×n.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Is the approximation exact at full rank?</strong> Yes. With k equal to the number of singular values, nothing is dropped and the error is 0.</p>
       <p><strong>Why does a rank-8 update of 512×512 store so little?</strong> Because it is stored as two thin matrices, 512×8 and 8×512, not as 262,144 separate entries.</p>
       <p><strong>Does LoRA compute an SVD?</strong> No. It trains the two factors directly; low-rank approximation is the related idea.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“LoRA is a truncated SVD of the weights.” It is not: LoRA learns the low-rank update by training, and it never computes an SVD of the weights.</p>
     </details>
     <footer>Further reading: MML Ch 4.6 (matrix approximation).</footer>

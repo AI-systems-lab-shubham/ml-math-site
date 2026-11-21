@@ -230,6 +230,23 @@ const probes = {
     return out.slice(0, 12);
   },
 
+  // Exactly one h1, it comes first, and no heading level is skipped going down the page (going up any number of levels is fine).
+  // The glossary popover is a dialog opened on demand, so it is not part of the page outline.
+  headings() {
+    const hs = [...document.querySelectorAll("h1, h2, h3, h4, h5, h6")].filter((h) => !h.closest(".glossary-popover"));
+    const out = [];
+    const h1s = hs.filter((h) => h.tagName === "H1").length;
+    if (h1s !== 1) out.push(`${h1s} <h1> headings (want exactly 1)`);
+    if (hs[0] && hs[0].tagName !== "H1") out.push(`the first heading is <${hs[0].tagName.toLowerCase()} "${hs[0].textContent.trim().slice(0, 30)}">, not the <h1>`);
+    let prev = 0;
+    for (const h of hs) {
+      const lvl = Number(h.tagName[1]);
+      if (prev && lvl > prev + 1) out.push(`<h${lvl}> "${h.textContent.trim().slice(0, 30)}" follows <h${prev}>: skips a level`);
+      prev = lvl;
+    }
+    return out.slice(0, 12);
+  },
+
   // Every landmark on the page (all cards, not just the first) must have a name no other landmark of its kind shares.
   landmarks() {
     const roleOf = (el) => {
@@ -403,6 +420,7 @@ async function runPage(pg) {
     if (want("clipped")) { for (const e of await run(page, "clipped")) add("clipped", pg, width, e); ran.add("clipped"); }
     if (want("tap-target")) { for (const e of await run(page, "targets", probes.interactiveSel, MIN_TARGET)) add("tap-target", pg, width, e); ran.add("tap-target"); }
     if (want("small-text")) { for (const e of await run(page, "smallText", MIN_TEXT)) add("small-text", pg, width, e); ran.add("small-text"); }
+    if (want("headings") && width === WIDTHS[WIDTHS.length - 1]) { for (const e of await run(page, "headings")) add("headings", pg, "all", e, e.replace(/"[^"]*"/, "")); ran.add("headings"); }
     if (want("landmark-unique") && width === WIDTHS[WIDTHS.length - 1]) { for (const e of await run(page, "landmarks")) add("landmark-unique", pg, "all", e, e.replace(/\d+ /, "")); ran.add("landmark-unique"); }
     if (want("primary-action") && pg.kind !== "404") {
       // One primary action per screen (DESIGN.md section 9): step down the page and count the filled buttons in view.

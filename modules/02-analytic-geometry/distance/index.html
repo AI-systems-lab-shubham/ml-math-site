@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
@@ -91,14 +91,14 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>To find how far apart two places are, you first find the arrow that goes from one to the other. That arrow is the <em>difference</em>: subtract the start point from the end point entry by entry. Then you measure the arrow with a <span class="term" data-term="norm">norm</span>, as on the Norms card. That is the <span class="term" data-term="distance">distance</span>: the norm of the difference.</p>
       <p>From A = (1, 2) to B = (4, 6) the difference is (3, 4). Its L2 length is <span data-calc="dist5">…</span>, the straight-line distance. Its L1 length is <span data-calc="dist7">…</span>, the walk along the grid. Swap A and B and the difference flips sign, but the norm does not change, so distance has no direction.</p>
       <div class="math-display" data-tex-display="d(\mathbf{a},\mathbf{b})=\|\mathbf{a}-\mathbf{b}\|">d(a, b) = ‖a − b‖</div>
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>The two dots are fixed. Choose how to travel from A to B and compare the two lengths.</p>
       <div data-widget="distance">
         <div class="widget widget-placeholder">
@@ -110,7 +110,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>Two phones on a map: the straight-line gap is an L2 distance of their positions.</li>
         <li>Two students’ marks in the same four tests: subtract test by test and measure the gap between the two lists.</li>
@@ -128,10 +128,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="distance"></div>
       <div class="check" data-predict="distance">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-distance">What is the L1 distance between (2, 5) and (6, 2)?</label></p>
         <div class="row"><input id="p-distance" name="p-distance" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Subtract entry by entry: 6 − 2 and 2 − 5. Drop the signs and add.</p>
@@ -139,13 +139,13 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>Distance turns “how similar are these two things?” into one number, as long as each thing is a list of numbers. It is how a program decides which examples are neighbours.</p>
       <p><strong>When it does not fit.</strong> If one entry is measured in huge units (millimetres) and another in small ones (years), the big units swamp the sum. Put entries on comparable scales first.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-motivated">● Motivated</span></p>
       <ol>
         <li><strong>The requirement.</strong> A distance should be zero when the two points are the same, never negative, and the same from A to B as from B to A.</li>
@@ -160,7 +160,7 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>Conceptual link only.</strong> A token’s <span class="term" data-term="embedding">embedding</span> is a vector, so the distance between two embeddings is defined by the formula on this card. This card makes no claim about which measure a particular model or search system uses.</li>
       </ul>
@@ -168,9 +168,9 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>Two pins on a map and a string between them: the string’s length is the distance. <em>Where it breaks down:</em> the string is always the straight line, but a norm can also measure a grid walk.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“Distance is the difference.” The difference is an arrow with a direction and can be negative; the distance is its length and never is.</p>
     </details>
     <footer>Further reading: MML Ch 3.3 (distances and metrics).</footer>

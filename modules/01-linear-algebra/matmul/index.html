@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li>
@@ -92,7 +92,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>In the last card, each output entry was “a row paired with the input, multiplied entry by entry, then added”. That is the <span class="term" data-term="dot-product">dot product</span> from the Σ card, and the whole recipe is the <span class="term" data-term="matrix-vector-product">matrix-vector product</span>: one dot product per row.</p>
       <div class="bridge">
         <p><strong>Back to x + y = 4.</strong> The one-row matrix [1 1] times the vector (x, y) is the single number x + y. For (x, y) = (1, 3) the product is <span data-calc="eqRowCheck">…</span>, so that pair solves the equation. Each equation is one row of weights; stack two equations and you have a two-row matrix. See <a href="../../00-foundations/equations/">Equations in Module 0</a>.</p>
@@ -103,7 +103,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>Pick an example, then step through the output entries. The outlined row of the left matrix and the outlined column of the right matrix pair up to fill one cell of the answer (burgundy). Try the two swap examples: the same two matrices in the opposite order give different answers. Try “shapes that do not fit” too.</p>
       <div data-widget="multiply">
         <div class="widget widget-placeholder">
@@ -115,7 +115,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>Total cost of a menu: ingredients per dish, then cost per ingredient, combined into cost per dish.</li>
         <li>Chained unit conversions: kilometres to miles, then miles to something else, folded into one conversion.</li>
@@ -134,10 +134,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="matmul"></div>
       <div class="check" data-predict="matmul">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-mul">With A = [[1, 2, 3], [4, 5, 6]] and B = [[7, 8], [9, 10], [11, 12]], what is the entry in row 2, column 1 of AB?</label></p>
         <div class="row"><input id="p-mul" name="p-mul" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Row 2 of A is (4, 5, 6). Column 1 of B is (7, 9, 11). Pair them up and add.</p>
@@ -145,14 +145,14 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>It lets you fold many chained steps into one machine, and it lets a computer do all the dot products in one regular pattern. Without the rule, “apply B then A” would need to be spelled out every time.</p>
       <p><strong>When it does not fit.</strong> The inner sizes must match. The order matters: AB and BA are usually different, and one can exist without the other. Multiplying matching entries of two same-shaped tables is a different operation, so do not confuse the two.</p>
       <p><strong>Cost.</strong> An m×n times n×p product takes m·n·p multiplications; the widget shows the count for each example.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> The product AB must be the machine that does B first, then A: (AB)v = A(Bv) for every v.</li>
@@ -168,7 +168,7 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>Projections and feed-forward layers are matrix products.</strong> The query, key and value <span class="term" data-term="learned-projection">projections</span> and the two <span class="term" data-term="feed-forward-layer">feed-forward</span> matrices all work by matrix multiplication (Vaswani et al., 2017, §3.2 and §3.3). A <span data-calc="ffShape">…</span> matrix times one <span data-calc="dModel">…</span>-entry vector takes <span data-calc="ffMults">…</span> multiplications.</li>
         <li><strong>A large share of the arithmetic.</strong> Much of a transformer's computation is matrix multiplication, including these layers and the attention-score step. We do not give a percentage here, since it depends on the model size and the sequence length.</li>
@@ -176,7 +176,7 @@
       </ul>
       <div class="callout simplified"><p><strong>Simplified.</strong> Real systems process many tokens at once, so the right-hand matrix has many columns instead of one. The attention scores multiply two matrices built from the same inputs (Module 2 and Module 10 build this up).</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-mul">In your own words: why do the inner sizes have to match, and why does the order of two matrices matter?</label></p>
         <textarea id="e-mul" name="e-mul" autocomplete="off"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -186,17 +186,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“Multiplying a matrix by a vector means: take each row, pair it with the vector, multiply matching numbers and add. Multiplying two matrices means chaining two machines into one. To fill each cell of the answer, take a row from the left matrix and a column from the right matrix, pair them off and add. The sizes must fit: columns on the left equal rows on the right. And the order matters, because the right machine runs first.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>Two currency converters in a row: euros to pounds, then pounds to dollars. One combined converter does both. <em>Where it breaks down:</em> currency rates are single numbers, and single numbers can be multiplied in either order; matrices cannot.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Draw A and B side by side and write their shapes under them.</li><li>Check the inner sizes match and circle them.</li><li>Draw the empty answer table of the outer sizes.</li><li>Pick a cell, outline its row in A and column in B.</li><li>Pair, multiply, add, and write the number in the cell.</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>Why is it not just entry times entry?</strong> That would not chain machines. Row-by-column is what makes “B then A” correct.</p>
       <p><strong>Is AB always the same as BA?</strong> No. Often one does not even exist.</p>
       <p><strong>Is a vector a matrix?</strong> It can be treated as a matrix with one column, which is why matrix-vector is a special case.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“Matrix multiplication multiplies matching entries.” That is a different operation. Matrix multiplication pairs a row with a column and adds.</p>
     </details>
     <footer>Further reading: MML Ch 2.2 (matrix multiplication), including the shape rule and the failure of commutativity.</footer>

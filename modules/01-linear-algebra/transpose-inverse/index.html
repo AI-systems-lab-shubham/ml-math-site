@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li>
@@ -92,7 +92,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>A table of marks has a row for each student and a column for each test. Turn it on its side and you have a row for each test and a column for each student: same numbers, flipped over the diagonal. That flip is the <span class="term" data-term="transpose">transpose</span>. Every row becomes a column, so a table with 2 rows and 3 columns becomes one with 3 rows and 2 columns.</p>
       <p>Next, a machine that does nothing. Multiplying a number by 1 leaves it unchanged. The matrix version is the <span class="term" data-term="identity-matrix">identity matrix</span>: 1s down the diagonal and 0s elsewhere. It sends every vector to itself.</p>
       <p>Finally, a machine that undoes another. If a <span class="term" data-term="matrix">matrix</span> A turns v into Av, the <span class="term" data-term="inverse-matrix">inverse</span> A⁻¹ turns Av back into v. Not every machine can be undone. The inverse exists only for a <span class="term" data-term="square-matrix">square matrix</span> (as many rows as columns) whose <span class="term" data-term="determinant">determinant</span> is not zero. For a 2×2 matrix with rows (a, b) and (c, d), the determinant is ad − bc; on this card we use it only as that test.</p>
@@ -100,7 +100,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>Change the four numbers of M. The outlined row of M becomes the outlined column of M<sup>T</sup>. On the right is M⁻¹ in exact fractions, with a check that M⁻¹M gives the identity. Press “No inverse” and watch what happens when the determinant reaches zero.</p>
       <div data-widget="inverse">
         <div class="widget widget-placeholder">
@@ -112,7 +112,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>A timetable read by day instead of by subject: the same table, flipped.</li>
         <li>Pressing “undo” after one edit: the inverse of that edit.</li>
@@ -131,10 +131,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="transpose"></div>
       <div class="check" data-predict="transpose">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-tr">A = [[1, 2, 3], [4, 5, 6]]. What is the entry in row 3, column 1 of A<sup>T</sup>?</label></p>
         <div class="row"><input id="p-tr" name="p-tr" type="number" inputmode="decimal" autocomplete="off"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Entry (3, 1) of A<sup>T</sup> is entry (1, 3) of A: swap the two positions.</p>
@@ -142,14 +142,14 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>The transpose lets you pair rows with rows when a formula wants a row against a row. The identity is the starting point of every “undo”: an inverse is defined as the matrix that brings you back to the identity. The inverse lets you reverse a step exactly.</p>
       <p><strong>When it does not fit.</strong> An inverse exists only for a square matrix with a nonzero determinant. A tall or wide matrix, or a square one that squashes different inputs together, has none. Do not write A⁻¹ as “1/A”: it is a matrix, not a reciprocal of every entry.</p>
       <p><strong>Order.</strong> Reversing a chain reverses the order: (AB)<sup>T</sup> = B<sup>T</sup>A<sup>T</sup> and (AB)⁻¹ = B⁻¹A⁻¹. The tempting A<sup>T</sup>B<sup>T</sup> and A⁻¹B⁻¹ are wrong in general; the worked example shows a case where they differ.</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> A machine B that undoes A must satisfy B(Av) = v for every v. So BA must act like multiplying by 1: it must be the identity.</li>
@@ -166,7 +166,7 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>Transpose in attention.</strong> In the original Transformer, the attention scores are computed from QK<sup>T</sup>, the queries times the transpose of the keys (Vaswani et al., 2017, §3.2.1). For 4 tokens with key size <span data-calc="dK">…</span> (illustrative: the paper's sizes, but 4 tokens), Q is 4×<span data-calc="dK">…</span>, K<sup>T</sup> is <span data-calc="dK">…</span>×4, and the product is <span data-calc="qkShape">…</span>: one score for every pair of tokens, using <span data-calc="qkMults">…</span> multiplications.</li>
         <li><strong>No inverse for a narrowing projection.</strong> The query projection in that paper maps a <span data-calc="dModel">…</span>-entry vector to a <span data-calc="dK">…</span>-entry one, so its matrix is <span data-calc="projShape">…</span>, which is not square. A matrix that is not square has no inverse, so that step cannot be undone exactly. This follows from the shapes alone; it says nothing about what any trained model learns.</li>
@@ -176,9 +176,9 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>The transpose is turning a page of a table on its side. The inverse is the “undo” button, which only works if no information was lost. <em>Where it breaks down:</em> “undo” in an app remembers history; a matrix inverse uses only the output.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“A⁻¹ is 1 divided by A, entry by entry.” It is a different matrix, defined by A A⁻¹ = I, and for some matrices it does not exist.</p>
     </details>
     <footer>Further reading: MML Ch 2.2.2 (inverse and transpose).</footer>

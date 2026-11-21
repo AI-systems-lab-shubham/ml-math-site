@@ -36,7 +36,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li>
       <a href="../">0 · Foundations</a>
@@ -93,7 +93,7 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Fold a sheet of paper in half, then in half again. Each fold doubles the thickness. Adding the same amount each time makes steady progress; multiplying by the same number each time makes progress that speeds up (or slows down) with the size.</p>
       <p>Writing “2 × 2 × 2 × 2 × 2” gets tiresome, so we count the copies with a small raised number, the <span class="term" data-term="exponent">exponent</span>. The number being multiplied is the <span class="term" data-term="base">base</span>:</p>
       <div class="math-display" data-tex-display="2^{5}=2\times2\times2\times2\times2">2⁵ = 2 × 2 × 2 × 2 × 2</div>
@@ -103,7 +103,7 @@
     </section>
 
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>Burgundy bars multiply by the factor at every step. Ochre diamonds show what you would get by adding the first step's change every time instead. Raise the number of steps and watch which one runs away.</p>
       <div data-widget="exponents">
         <div class="widget widget-placeholder">
@@ -115,7 +115,7 @@
     </section>
 
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <ul>
         <li>A lily patch that doubles its coverage of a pond each day.</li>
         <li>Savings with compound interest: each year's interest is added to the base for next year's.</li>
@@ -134,10 +134,10 @@
     </section>
 
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="exponents"></div>
       <div class="check" data-predict="exponents">
-        <h4>Predict, then reveal</h4>
+        <h3>Predict, then reveal</h3>
         <p><label for="p-ex">Start with 1 and double five times. What do you reach?</label></p>
         <div class="row"><input id="p-ex" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
         <p class="hint-text" hidden>Write the sequence one step at a time: 1, then double it, then double again, and so on.</p>
@@ -145,13 +145,13 @@
     </section>
 
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>The exponent compresses “multiply this many times” into one symbol and exposes how startlingly fast repeated multiplication runs away, or fades. Without it, long products are error-prone and the speed is hidden.</p>
       <p>It fits changes proportional to current size. It does not fit steady changes (use a line) or processes that level off (those need other curves).</p>
     </section>
 
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
       <ol>
         <li><strong>The requirement.</strong> The change at each step should be in proportion to the current amount.</li>
@@ -166,12 +166,12 @@
     </section>
 
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <p>With a vocabulary of V tokens, the number of possible sequences of n tokens is Vⁿ. In the original Transformer's English–German translation experiment, the shared vocabulary was about 37,000 tokens; the English–French experiment used a 32,000 word-piece vocabulary (Vaswani et al., 2017). Even a sequence of just two tokens already has <span data-calc="pairCount">…</span> possibilities.</p>
       <p>That explosion is why a language model cannot store a table of answers for every sequence. It computes a probability from a formula instead.</p>
       <div class="callout simplified"><p><strong>Simplified.</strong> This is a counting argument, not a description of how any particular model works. Many sequences are nonsense, and models never visit most of them.</p></div>
       <div class="check explain-back">
-        <h4>Explain it back</h4>
+        <h3>Explain it back</h3>
         <p><label for="e-ex">In your own words: how is multiplying by a factor different from adding, and what does the exponent count?</label></p>
         <textarea id="e-ex"></textarea>
         <div class="row"><button type="button" class="button-secondary button-small" data-reveal>Show a model answer</button></div>
@@ -181,17 +181,17 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>60-second explanation</h4>
+      <h3>60-second explanation</h3>
       <p>“Adding is like walking: the same distance every step. Multiplying is like a snowball rolling downhill: the bigger it gets, the more snow it picks up. We write ‘multiply 5 times’ as a small 5 above the number. Doubling just ten times from 1 gets you past a thousand.”</p>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>Folding paper. <em>Where it breaks down:</em> real paper cannot be folded more than a handful of times, so the pattern stops being physical long before the formula does.</p>
-      <h4>Whiteboard sequence</h4>
+      <h3>Whiteboard sequence</h3>
       <ol><li>Write 1, 2, 4, 8, 16 in a row and arrows labelled ×2.</li><li>Below it write 1, 2, 3, 4, 5 with arrows labelled +1.</li><li>Draw both as bars.</li><li>Label the doubling bars 2⁰ … 2⁴.</li><li>Ask: which one is ahead after 10 steps?</li></ol>
-      <h4>Questions learners ask</h4>
+      <h3>Questions learners ask</h3>
       <p><strong>What is 2⁰?</strong> 1: zero multiplications leaves the start untouched.</p>
       <p><strong>Can an exponent be negative?</strong> Yes; it means dividing instead of multiplying. We meet that with logarithms.</p>
       <p><strong>Why does decay never reach zero?</strong> Halving leaves half of what remains, which is never nothing.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“2⁵ means 2 × 5.” It means 2 multiplied by itself five times: 32, not 10.</p>
     </details>
     <footer>Further reading: MML Ch 1 and the opening of Ch 5; logarithms (the inverse of this idea) come next in this module.</footer>

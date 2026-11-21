@@ -37,7 +37,7 @@
 
 <div class="layout">
 <nav class="site-nav" id="site-nav" aria-label="Course outline">
-  <h2>Modules</h2>
+  <p class="outline-heading">Modules</p>
   <ol>
     <li><a href="../../00-foundations/">0 · Foundations</a></li>
     <li><a href="../../01-linear-algebra/">1 · Linear algebra</a></li>
@@ -90,13 +90,13 @@
     </header>
 
     <section data-stage="meaning">
-      <h3 class="stage-heading"><span class="stage-number">01</span> Meaning</h3>
+      <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
       <p>Take a square table of numbers and walk down it from the top left corner to the bottom right. The entries you step on are the <span class="term" data-term="diagonal">diagonal</span>. Add them up and you have the <span class="term" data-term="trace">trace</span> of the <span class="term" data-term="square-matrix">square matrix</span>. Nothing else is needed: the entries off the diagonal do not count at all.</p>
       <p>We write the trace of A as tr(A). The entry in row i and column i is a<sub>ii</sub>, and the trace adds those for every i.</p>
       <div class="math-display" data-tex-display="\operatorname{tr}(A)=\sum_{i}a_{ii}=a_{11}+a_{22}+\dots+a_{nn}">tr(A) = a₁₁ + a₂₂ + … + aₙₙ</div>
     </section>
     <section data-stage="picture">
-      <h3 class="stage-heading"><span class="stage-number">02</span> Picture</h3>
+      <h2 class="stage-heading"><span class="stage-number">02</span> Picture</h2>
       <p>The shaded entries are the diagonal. One slider changes a diagonal entry and the other an off-diagonal one. Watch which one the trace listens to.</p>
       <div data-widget="trace">
         <div class="widget widget-placeholder">
@@ -107,7 +107,7 @@
       </div><!-- /widget -->
     </section>
     <section data-stage="real-life">
-      <h3 class="stage-heading"><span class="stage-number">03</span> Real life</h3>
+      <h2 class="stage-heading"><span class="stage-number">03</span> Real life</h2>
       <p>The trace has no single physical picture; it is a bookkeeping total. It shows up wherever a table has a natural “same row and column” diagonal:</p>
       <ul>
         <li>A table of how many people moved between three towns, with “from” down the side and “to” along the top. The diagonal counts the people who stayed where they were, so the trace is the total who stayed.</li>
@@ -118,17 +118,17 @@
       <div data-checks="spot"></div>
     </section>
     <section data-stage="worked-example">
-      <h3 class="stage-heading"><span class="stage-number">04</span> Worked example</h3>
+      <h2 class="stage-heading"><span class="stage-number">04</span> Worked example</h2>
       <div data-stepper="trace"></div>
       <div data-checks="predict"></div>
     </section>
     <section data-stage="why-when">
-      <h3 class="stage-heading"><span class="stage-number">05</span> Why and when</h3>
+      <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>The trace squeezes a whole table into one number that behaves nicely: it adds (tr(A + B) = tr(A) + tr(B)), it scales (tr(cA) = c tr(A)), and it ignores the order of a product: tr(AB) = tr(BA). That last rule is surprising, because AB and BA are usually different matrices, as the worked example showed. It extends to three matrices, but only by moving the last one to the front: tr(ABC) = tr(CAB) = tr(BCA), while swapping two neighbours can change the answer.</p>
       <p><strong>When it does not fit.</strong> The trace throws away everything off the diagonal, so very different matrices can share a trace, and it can be negative or zero, so it is not a measure of size. For size, use the sum of squared entries: tr(A<sup>T</sup>A) = <span data-calc="squaredEntries">…</span> for the matrix in the worked example, which is the squared <span class="term" data-term="frobenius-norm">Frobenius norm</span>.</p>
     </section>
     <section data-stage="how-to-arrive">
-      <h3 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h3>
+      <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-motivated">◆ Motivated</span></p>
       <ol>
         <li><strong>The wish.</strong> A single number from a square table that adds when tables add, scales when they scale, and does not change if we multiply two tables in the other order.</li>
@@ -139,7 +139,7 @@
       <div data-checks="reveal"></div>
     </section>
     <section data-stage="in-an-llm">
-      <h3 class="stage-heading"><span class="stage-number">07</span> In an LLM</h3>
+      <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
         <li><strong>Conceptual link: the squared size of a weight matrix.</strong> Weight decay penalises the squared L2 norm of the weights (see the <a href="../../02-analytic-geometry/norms/">Norms</a> card), and for a weight matrix W that sum of squared entries is tr(W<sup>T</sup>W). That is an identity about numbers; it does not say how any model is trained beyond what the Norms card states.</li>
         <li>There is no specific, documented step of a language model that we can point to as a trace.</li>
@@ -149,9 +149,9 @@
 
     <details class="teach-it">
       <summary>Teach it</summary>
-      <h4>Everyday analogy</h4>
+      <h3>Everyday analogy</h3>
       <p>The total on the main diagonal of a seating chart where each person’s row and column share a number. <em>Where it breaks down:</em> a real table has a meaning for each cell, but the trace just adds the diagonal whatever it means.</p>
-      <h4>Common misconception</h4>
+      <h3>Common misconception</h3>
       <p>“The trace measures how big a matrix is.” It can be negative or zero for a big matrix, because it adds signed diagonal entries and ignores the rest.</p>
     </details>
     <footer>Further reading: MML Ch 4.1 (determinant and trace).</footer>
