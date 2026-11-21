@@ -44,6 +44,9 @@ export function collectFiles(root) {
   };
   if (existsSync(mods)) walk(mods, "modules");
   for (const f of ["data/course.json", "data/glossary.json"]) if (existsSync(join(root, f))) files.push(f);
+  // Questions as data: every data/checks/<concept-id>.json is linted like page text.
+  const checks = join(root, "data/checks");
+  if (existsSync(checks)) for (const f of readdirSync(checks).sort()) if (f.endsWith(".json")) files.push(`data/checks/${f}`);
   return files;
 }
 
