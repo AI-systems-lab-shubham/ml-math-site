@@ -18,6 +18,7 @@ const JOBS = Number(arg("--jobs") ?? 3);   // pages checked at the same time
 const ONLY_CHECKS = arg("--checks")?.split(",") ?? null;
 const SHOTS = !process.argv.includes("--no-shots");
 const REPORT_DIR = path.resolve(process.env.REPORT_DIR ?? path.join(siteRoot, "reports"));
+const CROP_WIDTHS = [375, 900, 1280]; // widget crops at native size are written at these widths (those that are also in --widths)
 const AXE_PATH = process.env.AXE_PATH ?? "";
 const AXE_WIDTHS = [375, 768, 900, 1280, 1440]; // axe runs at these widths (those that are also in --widths)
 const CLS_BUDGET = 0.1;
@@ -44,6 +45,20 @@ async function mountWidgets(page) {
   await page.evaluate(async () => { (await import(new URL("assets/js/widgets.mjs", document.querySelector('meta[name="site-root"]')?.content ? new URL(document.querySelector('meta[name="site-root"]').content, document.baseURI) : location.href))).mountAllLazy(); });
   await page.waitForFunction(() => [...document.querySelectorAll("[data-widget]")].every((h) => h.dataset.lazy === "mounted"), null, { timeout: 5000 });
   await page.waitForTimeout(200);
+}
+
+// One PNG per widget at native size (1 CSS px = 1 image px), so the reviewer sees the drawing and controls without the downscaling of a full-page shot.
+async function widgetCrops(page, pg, width) {
+  const widgets = page.locator("[data-widget]");
+  const n = await widgets.count();
+  // The sticky header and "On this page" bar would be drawn over the crop; hide them for the shot only.
+  const hidden = await page.evaluate(() => [...document.querySelectorAll("body *")].filter((e) => ["fixed", "sticky"].includes(getComputedStyle(e).position) && e.closest("[data-widget]") === null).map((e) => (e.dataset.cropHidden = e.style.opacity || "", e.style.opacity = "0", 1)).length);
+  for (let i = 0; i < n; i++) {
+    const w = widgets.nth(i);
+    const id = ((await w.getAttribute("data-widget")) ?? "widget").replace(/[^\w-]/g, "");
+    await w.screenshot({ path: path.join(REPORT_DIR, "shots", `${pg.key}-${width}-widget-${i + 1}-${id}.png`) }).catch(() => {});
+  }
+  if (hidden) await page.evaluate(() => document.querySelectorAll("[data-crop-hidden]").forEach((e) => { e.style.opacity = e.dataset.cropHidden; delete e.dataset.cropHidden; }));
 }
 
 const pages = [{ key: "home", kind: "home", label: "Home", url: "", concept: null }];
@@ -434,6 +449,7 @@ async function runPage(pg) {
       for (const v of res.violations) for (const n of v.nodes) add("axe", pg, width, `${v.id} (${v.impact}): ${v.help}`, n.target.join(" "));
       ran.add("axe");
     }
+    if (SHOTS && CROP_WIDTHS.includes(width)) await widgetCrops(page, pg, width);
     if (want("focus-ring") || want("keyboard-trap") || want("tab-reach")) await tabWalk(page, pg, width);
     if (want("esc-popover")) { await page.goto(new URL(pg.url, base).href, { waitUntil: "networkidle" }); await page.waitForTimeout(400); await escapeChecks(page, pg, width); }
     if (SHOTS) await page.screenshot({ path: path.join(REPORT_DIR, "shots", `${pg.key}-${width}.png`), fullPage: true });
@@ -517,7 +533,7 @@ for (const c of checks) {
   lines.push("");
 }
 lines.push(`## Allow-lists (not counted as findings)`, ``, `- overlap: fixed or sticky elements (header, open drawer), the glossary popover, the skip link, screen-reader-only text; ancestors and descendants; line boxes are compared so wrapped inline text is not "overlap".`, `- tap-target: inline links and terms inside a sentence (WCAG 2.5.8), symbols inside KaTeX, screen-reader-only text.`, `- small-text: KaTeX output (its sub- and superscripts are sized by KaTeX); SVG text is measured at its rendered size.`, `- focus-ring: focus covered by another element inside the same KaTeX formula.`, ``);
-lines.push(`Screenshots: ${SHOTS ? "reports/shots/<page>-<width>.png (full page)" : "not taken (--no-shots)"}`);
+lines.push(`Screenshots: ${SHOTS ? "reports/shots/<page>-<width>.png (full page); widget crops at native size: reports/shots/<page>-<width>-widget-<n>-<id>.png at 375, 900 and 1280px" : "not taken (--no-shots)"}`);
 fs.writeFileSync(path.join(REPORT_DIR, "report.md"), lines.join("\n") + "\n");
 fs.writeFileSync(path.join(REPORT_DIR, "results.json"), JSON.stringify({ checks, findings }, null, 1));
 const counts = Object.fromEntries(checks.map((c) => [c, findings.filter((f) => f.check === c).length]));

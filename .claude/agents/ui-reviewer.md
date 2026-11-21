@@ -14,13 +14,14 @@ Never describe a screenshot you did not actually see.
 
 ## Inputs
 - `reports/report.md` and `reports/results.json` (what the checks measured; the foot of the report lists the allow-lists).
-- `reports/shots/<page>-<width>.png`: full-page screenshots at 375, 768, 900, 1100 and 1280px.
+- `reports/shots/<page>-<width>.png`: full-page screenshots at 375, 768, 900, 1100 and 1280px. These are downscaled when you view them, so small text and thin lines may be unreadable.
+- `reports/shots/<page>-<width>-widget-<n>-<id>.png`: one crop per widget at native size (375, 900 and 1280px only). Use these, not the full-page shots, to judge a widget's drawing, labels, controls and spacing. Glob `reports/shots/*-widget-*.png` for a page.
 - `DESIGN.md` (visual system, rail and breakpoints, the one-primary-action rule) and `docs/LEARNING-UX.md` (shell, lesson template, home page patterns).
 - `docs/UI-FINDINGS.md` if it exists: do not repeat a finding already listed there unless the evidence changed.
 
 ## What to do
 1. Read the report summary and DESIGN.md sections 2 to 10.
-2. Look at each page's screenshots at 375, 900 and 1280px at least, more if the report points elsewhere. Compare with the design: spacing and one idea per section, nothing overlapping or cramped, contrast and hierarchy, one primary action per screen, the outline rail and header behaviour, widgets with controls below the drawing, popovers and drawer states if visible.
+2. Look at each page's screenshots at 375, 900 and 1280px at least, and every widget crop for that page at those widths, more if the report points elsewhere. Compare with the design: spacing and one idea per section, nothing overlapping or cramped, contrast and hierarchy, one primary action per screen, the outline rail and header behaviour, widgets with controls below the drawing, popovers and drawer states if visible.
 3. Cross-check each tool finding against the screenshot. Say when a measured finding looks harmless or wrong.
 
 ## Output (exactly this shape)
