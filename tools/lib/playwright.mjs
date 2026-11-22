@@ -45,7 +45,9 @@ export async function serveStatic(dir = siteRoot) {
     if (p.endsWith("/")) p += "index.html";
     const file = path.join(dir, p);
     if (!file.startsWith(dir) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404, { "content-type": "text/plain" }).end("not found"); return; }
-    res.writeHead(200, { "content-type": TYPES[path.extname(file)] ?? "application/octet-stream" });
+    // "connection: close": a kept-alive socket that Node closes just as the browser reuses it left a document request pending
+    // for minutes (a page that never loaded, then every later navigation timing out). One connection per request avoids that race.
+    res.writeHead(200, { "content-type": TYPES[path.extname(file)] ?? "application/octet-stream", connection: "close" });
     fs.createReadStream(file).pipe(res);
   });
   await new Promise((r) => server.listen(0, "127.0.0.1", r));

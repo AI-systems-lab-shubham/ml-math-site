@@ -146,21 +146,33 @@ async function open(width, { url = M0, ctxOpts = {}, init } = {}) {
   check([...seen].every((id) => id === null || id.startsWith("m00") || id === "m01" || id === "m02" || id === "m03" || id.startsWith("ol-sub-")), `Tab in the outline should reach only module 0 rows and module headers (got ${[...seen]})`);
   check([...seen].some((id) => id === "m00-notation"), "Tab reaches the last built row of the open module");
 
-  // 6. Closes when the module collapses or the row is removed.
+  // 6. Closes when the module collapses or the row is removed. Each wait is for the event itself (no fixed pause).
+  const menuGone = () => page.locator(".status-menu").waitFor({ state: "hidden", timeout: 3000 }).then(() => true, () => false);
+  const onChevron = () => page.waitForFunction(() => document.activeElement?.classList.contains("outline-mod-toggle"), null, { timeout: 3000 }).then(() => true, () => false);
+  const collapse = () => page.evaluate(() => { document.getElementById("ol-sub-m00").hidden = true; });
   await btn(page, "m00-slope").focus();
   await page.keyboard.press("Enter");
   check(await menuVisible(page), "menu open for the collapse test");
-  await page.evaluate(() => { document.getElementById("ol-sub-m00").hidden = true; });
-  await page.waitForTimeout(100);
-  check(!(await menuVisible(page)), "menu closes when its module collapses");
-  a = await active(page);
-  check(await page.evaluate(() => document.activeElement.classList.contains("outline-mod-toggle")), `focus moves to the module's chevron button after the collapse (got ${JSON.stringify(a)})`);
+  await collapse();
+  check(await menuGone(), "menu closes when its module collapses");
+  check(await onChevron(), `focus moves to the module's chevron button after the collapse (got ${JSON.stringify(await active(page))})`);
   await page.evaluate(() => { document.getElementById("ol-sub-m00").hidden = false; });
+
+  // 6b. The order of the two events must not matter: if the browser drops focus (focusout with no target) before the
+  // collapse is noticed, focus still has to end on the chevron, not on <body>. Here focus is dropped right after the list is hidden,
+  // in the same task, so focusout arrives before the observer's callback.
+  await btn(page, "m00-slope").focus();
+  await page.keyboard.press("Enter");
+  check(await menuVisible(page), "menu open for the focus-lost-first collapse test");
+  await page.evaluate(() => { const a = document.activeElement; document.getElementById("ol-sub-m00").hidden = true; a.blur(); });
+  check(await menuGone(), "focus dropped first: the menu is closed");
+  check(await onChevron(), `focus dropped first: focus still ends on the module's chevron button (got ${JSON.stringify(await active(page))})`);
+  await page.evaluate(() => { document.getElementById("ol-sub-m00").hidden = false; });
+
   await btn(page, "m00-slope").click();
   check(await menuVisible(page), "menu opens on click");
   await page.evaluate(() => document.querySelector('#site-nav [data-status-of="m00-slope"]').closest("li").remove());
-  await page.waitForTimeout(100);
-  check(!(await menuVisible(page)), "menu closes when its row is removed");
+  check(await menuGone(), "menu closes when its row is removed");
   check((await page.locator(".status-menu").count()) === 1, "the menu element survives the row's removal");
   await ctx.close();
 }

@@ -89,11 +89,20 @@ export function createStatusMenu({ nav, progress, titleOf }) {
     close({ returnFocus: true });
     progress.setStatus(id, item.dataset.status);
   });
+  // The chevron button of the module whose list holds the menu's row.
+  const chevronOf = (list) => (list ? nav.querySelector(`[aria-controls="${list.id}"]`) : null);
   menu.addEventListener("focusout", (ev) => {
     if (!isOpen()) return;
     const to = ev.relatedTarget;
     const stays = to && (menu.contains(to) || to.closest?.(".outline-state-btn"));
-    if (tabbing || !stays) close();
+    if (tabbing || !stays) {
+      // When the module's list has just been hidden, the browser may drop focus (relatedTarget null) before the observer below
+      // runs. Whichever comes first, focus must end on the chevron, so decide that here too, before close() forgets the owner.
+      const list = owner.closest("ul.sub");
+      const toChevron = !to && list?.hidden ? chevronOf(list) : null;
+      close();
+      toChevron?.focus();
+    }
   });
   document.addEventListener("pointerdown", (ev) => {
     if (isOpen() && !menu.contains(ev.target) && !ev.target.closest?.(".outline-state-btn")) close();
@@ -105,7 +114,7 @@ export function createStatusMenu({ nav, progress, titleOf }) {
     if (!isOpen() || !list?.hidden) return;
     const hadFocus = menu.contains(document.activeElement) || document.activeElement === owner || document.activeElement === document.body;
     close();
-    if (hadFocus) nav.querySelector(`[aria-controls="${list.id}"]`)?.focus();
+    if (hadFocus) chevronOf(list)?.focus();
   }).observe(nav, { attributes: true, attributeFilter: ["hidden"], subtree: true });
   // The row is removed from the outline.
   new MutationObserver(() => { if (owner && !nav.contains(owner)) close(); }).observe(nav, { childList: true, subtree: true });

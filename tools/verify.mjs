@@ -107,6 +107,9 @@ if (flag("--plan")) process.exit(0);
 // axe-core for ui-verify: AXE_PATH if set, else the copy in ~/.dev-tools/axe, else /tmp/axe. Missing means ui-verify reports SKIPPED, which fails.
 const axePath = [process.env.AXE_PATH, join(homedir(), ".dev-tools/axe/node_modules/axe-core/axe.min.js"), "/tmp/axe/node_modules/axe-core/axe.min.js"].find((p) => p && existsSync(p));
 
+// Browser processes started by Playwright (its own downloaded browsers live under ms-playwright) that are still running between steps.
+// A step that leaves some behind can slow or break the next one, so the count is logged after every step.
+const browsersRunning = () => { const r = spawnSync("pgrep", ["-f", "ms-playwright"], { encoding: "utf8" }); return r.status === 0 ? r.stdout.split("\n").filter(Boolean).length : 0; };
 const startedClean = treeClean();
 const results = [];
 const t0 = performance.now();
@@ -122,15 +125,17 @@ for (const step of steps) {
   if (r.status !== 0 && /SKIPPED:/.test(out)) { status = "SKIPPED"; note = "did not run; counts as a failure"; }
   else if (r.status === 0 && step.skipWhen?.(out)) { status = "SKIPPED"; note = out.trim().split("\n")[0]; }
   else if (r.status !== 0) note = out.trim().split("\n").slice(-6).join("\n    ");
-  results.push({ name: step.name, status, note, ms });
+  results.push({ name: step.name, status, note, ms, browsers: step.browser ? browsersRunning() : null });
 }
 const total = performance.now() - t0;
 
 const secs = (ms) => `${(ms / 1000).toFixed(1)}s`;
 const showTimes = flag("--timings");
-for (const r of results) console.log(`${r.status.padEnd(8)} ${r.name}${showTimes ? `  ${secs(r.ms)}` : ""}${r.note ? `\n    ${r.note}` : ""}`);
+const orphaned = results.filter((r) => r.browsers > 0);
+for (const r of results) console.log(`${r.status.padEnd(8)} ${r.name}${showTimes ? `  ${secs(r.ms)}` : ""}${showTimes && r.browsers !== null ? `  browsers left: ${r.browsers}` : ""}${r.note ? `\n    ${r.note}` : ""}`);
 if (showTimes) console.log(`\ntotal    ${secs(total)}`);
 const failed = results.filter((r) => r.status === "FAIL" || (r.status === "SKIPPED" && r.note.includes("counts as a failure")));
+if (orphaned.length) console.log(`\nbrowser processes left running after: ${orphaned.map((r) => `${r.name} (${r.browsers})`).join(", ")}`);
 console.log(failed.length ? `\n${failed.length} step(s) failed` : "\nAll steps that ran passed" + (results.some((r) => r.status === "SKIPPED") ? " (some were SKIPPED, see above)" : ""));
 
 // Record the commit of a complete, passing --full run on a clean tree (a skipped e2e or ui step never qualifies).
