@@ -177,6 +177,49 @@ async function open(width, { url = M0, ctxOpts = {}, init } = {}) {
   await ctx.close();
 }
 
+// 6c. Scrolling the outline. focus() on a button that is out of view scrolls the outline, and the browser delivers that scroll
+// event a frame later: on a slow machine it can arrive after Enter has opened the menu. That must not close the menu
+// (it did: CI failed "menu open for the collapse test"). A scroll repositions the menu; it closes only when its button
+// has left the outline's visible area.
+{
+  const { ctx, page } = await open(1280);
+  const frame = () => page.evaluate(() => new Promise((r) => requestAnimationFrame(r)));
+  const geo = () => page.evaluate(() => {
+    const o = document.querySelector('#site-nav [data-status-of="m00-slope"]').getBoundingClientRect();
+    const m = document.querySelector(".status-menu").getBoundingClientRect();
+    return { ownerBottom: o.bottom, menuTop: m.top };
+  });
+  const attached = (p) => p.evaluate(() => document.querySelector(".status-menu").previousElementSibling === document.querySelector('#site-nav [data-status-of="m00-slope"]'));
+  await btn(page, "m00-slope").focus();
+  await page.keyboard.press("Enter");
+  check(await menuVisible(page), "scroll test: menu opens");
+  // (a) Deterministic: a scroll event delivered late, with the outline where it was, must not close the menu.
+  await page.evaluate(() => document.getElementById("site-nav").dispatchEvent(new Event("scroll")));
+  check(await menuVisible(page), "a late scroll event (outline did not move) leaves the menu open");
+  // (b) Real scroll: move the outline a little, wait one animation frame; the menu follows its button.
+  const before = await geo();
+  const moved = await page.evaluate(() => { const n = document.getElementById("site-nav"); const t = n.scrollTop; n.scrollTop = t + 24; return n.scrollTop - t; });
+  check(moved > 0, `scroll test: the outline can scroll (moved ${moved}px)`);
+  await frame();
+  const after = await geo();
+  check(await menuVisible(page), "a small real scroll leaves the menu open");
+  check(Math.abs((before.ownerBottom - after.ownerBottom) - moved) <= 1, `the button moved with the scroll (${before.ownerBottom} to ${after.ownerBottom})`);
+  check(Math.abs(after.menuTop - (after.ownerBottom + 4)) <= 1, `the menu follows its button after the scroll (menu top ${after.menuTop}, button bottom ${after.ownerBottom})`);
+  check(await attached(page), "the menu is still the button's next sibling after the scroll");
+  // (c) Scroll the button out of the visible outline: now it closes.
+  await page.evaluate(() => { const n = document.getElementById("site-nav"); n.scrollTop = n.scrollHeight; });
+  await frame();
+  const out = await page.evaluate(() => {
+    const n = document.getElementById("site-nav").getBoundingClientRect();
+    const o = document.querySelector('#site-nav [data-status-of="m00-slope"]').getBoundingClientRect();
+    return o.top + o.height / 2 < n.top || o.top + o.height / 2 > n.bottom;
+  });
+  check(out, "scroll test: the button is now outside the visible outline");
+  check(!(await menuVisible(page)), "the menu closes when its button leaves the visible outline");
+  check((await page.locator("#site-nav [data-status-of=\"m00-slope\"]").getAttribute("aria-expanded")) === "false", "and the button reports aria-expanded=false");
+  await ctx.close();
+}
+
 // 7. Reduced motion: no menu animation.
 {
   const { ctx, page } = await open(1280, { ctxOpts: { reducedMotion: "reduce" } });

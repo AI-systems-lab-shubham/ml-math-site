@@ -1,5 +1,5 @@
 // One command for the module checklist: unit tests, course, glossary, claims, e2e, ui-verify, email hygiene.
-// Usage: node tools/verify.mjs [--fast | --changed | --full] [--timings] [--plan] [--only <name>] [--skip-e2e] [--skip-ui]
+// Usage: node tools/verify.mjs [--fast | --changed | --full] [--timings] [--plan] [--only a,b,c] [--skip-e2e] [--skip-ui]
 //   --fast     unit, course, glossary, claims, fonts. No browser. Use after every change.
 //   --changed  the --fast steps, then the e2e tests and ui-verify (375, 900, 1280 px) for the pages that depend on the files
 //              changed since the last passing --full (reports/last-full-pass), plus uncommitted and untracked files.
@@ -48,7 +48,9 @@ const ALL_STEPS = [
   { name: "ui", cmd: ["node", "tools/ui-verify.mjs"], browser: true, ui: true },
   { name: "email", cmd: ["node", "tools/check-email.mjs"], skipWhen: (out) => /^skipped:/m.test(out) },
 ];
-const only = opt("--only");
+const only = opt("--only")?.split(",").filter(Boolean) ?? null;   // step names; they run in the order given
+const unknown = (only ?? []).filter((n) => !ALL_STEPS.some((s) => s.name === n));
+if (unknown.length) { console.error(`--only: unknown step(s) ${unknown.join(", ")}. Known: ${ALL_STEPS.map((s) => s.name).join(", ")}`); process.exit(2); }
 
 const git = (...a) => spawnSync("git", a, { cwd: root, encoding: "utf8" });
 const treeClean = () => { const r = git("status", "--porcelain"); return r.status === 0 && r.stdout.trim() === ""; };
@@ -103,7 +105,7 @@ if (plan) {
   }
   console.log(plan.pages.length ? `  pages: ${plan.pages.join(", ")}` : "  no page affected: only the --fast steps run");
 }
-if (only) steps = steps.filter((s) => s.name === only);
+if (only) steps = only.map((n) => steps.find((s) => s.name === n)).filter(Boolean);   // in the order given
 console.log(`tier: ${tier}${plan ? " (partial)" : ""}; steps: ${steps.map((s) => s.name).join(", ")}\n`);
 if (flag("--plan")) process.exit(0);
 

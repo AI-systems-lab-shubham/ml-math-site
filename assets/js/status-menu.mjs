@@ -118,7 +118,15 @@ export function createStatusMenu({ nav, progress, titleOf }) {
   }).observe(nav, { attributes: true, attributeFilter: ["hidden"], subtree: true });
   // The row is removed from the outline.
   new MutationObserver(() => { if (owner && !nav.contains(owner)) close(); }).observe(nav, { childList: true, subtree: true });
-  nav.addEventListener("scroll", () => close());
+  // Scrolling the outline (also caused by focus() moving a button into view, and delivered a frame later) keeps the menu open
+  // and moves it with its button. It closes only when the button's centre has left the outline's visible area.
+  nav.addEventListener("scroll", () => {
+    if (!isOpen()) return;
+    const n = nav.getBoundingClientRect();
+    const r = owner.getBoundingClientRect();
+    const cy = r.top + r.height / 2;
+    if (cy < n.top || cy > n.bottom) close(); else place();
+  });
   addEventListener("resize", () => close());
   progress.subscribe(() => { if (isOpen()) markChecked(); });
 
