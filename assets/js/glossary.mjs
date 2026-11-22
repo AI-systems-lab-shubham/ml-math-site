@@ -120,6 +120,7 @@ function addSymbolLists(root) {
       b.dataset.sym = id;
       b.dataset.ready = "1";
       b.setAttribute("aria-haspopup", "dialog");
+      b.setAttribute("aria-expanded", "false");
       b.setAttribute("aria-label", `Symbol ${text}`);
       b.textContent = text;
       const color = symbols[id]?.color;
@@ -145,11 +146,25 @@ function markFirstUses(root) {
       if (!seen.has(el.dataset.term)) {
         seen.add(el.dataset.term);
         el.classList.add("is-marked");
-        el.tabIndex = 0;
+        makeFocusable(el);
       }
     });
   });
 }
+
+// A term in running text becomes a tab stop only when it is highlighted (first use in a section, or Highlight all terms).
+// A tab stop needs a role: it is a button that opens a dialog, so it also reports whether that dialog is open.
+function makeFocusable(el) {
+  el.tabIndex = 0;
+  el.setAttribute("role", "button");
+  if (!el.hasAttribute("aria-expanded")) el.setAttribute("aria-expanded", String(trigger === el && !pop.hidden));
+}
+function removeFocusable(el) {
+  el.removeAttribute("tabindex");
+  el.removeAttribute("role");
+  el.removeAttribute("aria-expanded");
+}
+const setExpanded = (el, on) => { if (el?.hasAttribute("aria-expanded")) el.setAttribute("aria-expanded", String(on)); };
 
 function bind(el, makeRef) {
   el.setAttribute("aria-haspopup", "dialog");
@@ -187,7 +202,9 @@ function scheduleClose() {
 
 function open(el, ref, pin) {
   clearTimeout(leaveTimer);
+  if (trigger && trigger !== el) setExpanded(trigger, false);
   trigger = el;
+  setExpanded(el, true);
   pinned = pin;
   stack = [ref];
   render();
@@ -205,6 +222,7 @@ function close(returnFocus) {
   stack = [];
   const t = trigger;
   trigger = null;
+  setExpanded(t, false);
   pinned = false;
   if (returnFocus && t) {
     restoringFocus = true; // returning focus must not reopen the popover
@@ -362,8 +380,8 @@ function linkedText(target, text, uses = []) {
 function applyHighlightAll(on) {
   document.body.classList.toggle("highlight-all", on);
   document.querySelectorAll("[data-term]").forEach((el) => {
-    if (on) el.tabIndex = 0;
-    else if (!el.classList.contains("is-marked")) el.removeAttribute("tabindex");
+    if (on) makeFocusable(el);
+    else if (!el.classList.contains("is-marked")) removeFocusable(el);
   });
   document.querySelectorAll("[data-highlight-toggle]").forEach((b) => b.setAttribute("aria-pressed", String(on)));
 }

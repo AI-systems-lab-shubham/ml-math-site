@@ -113,7 +113,7 @@ export function e2eFor(pages) {
   const kinds = new Set();
   for (const k of pages) kinds.add(k === "home" ? "home" : k === "404" ? "404" : /^m\d+$/.test(k) ? "overview" : "concept");
   const names = new Set();
-  if (kinds.has("concept")) ["e2e-structure", "e2e-redirects", "e2e-lesson-nav", "e2e-first-hint", "e2e-symbols", "e2e-widget-inputs", "e2e-widgets", "e2e-checks"].forEach((n) => names.add(n));
+  if (kinds.has("concept")) ["e2e-structure", "e2e-redirects", "e2e-lesson-nav", "e2e-first-hint", "e2e-a11y-names", "e2e-symbols", "e2e-widget-inputs", "e2e-widgets", "e2e-checks"].forEach((n) => names.add(n));
   if (kinds.has("overview")) ["e2e-structure", "e2e-lesson-nav", "e2e-switcher"].forEach((n) => names.add(n));
   if (kinds.has("home")) ["e2e-structure", "e2e-nav", "e2e-progress-menu"].forEach((n) => names.add(n));
   if (kinds.has("404")) names.add("e2e-404");

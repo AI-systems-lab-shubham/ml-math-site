@@ -98,7 +98,7 @@ function mountHeader(moduleId) {
     <button class="button-secondary button-small outline-toggle" type="button" data-nav-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Show outline">${OUTLINE_ICON}<span class="outline-toggle-text">Outline</span></button>
     <a class="brand" translate="no" href="${hrefTo("index.html")}">ML Math</a>
     <div class="topbar-actions">
-      <a class="topbar-progress" href="${hrefTo("index.html#syllabus")}" data-course-progress aria-label="Course progress">${ringSvg(0)}<span class="topbar-progress-text">– of – complete</span></a>
+      <a class="topbar-progress" href="${hrefTo("index.html#syllabus")}" data-course-progress aria-label="– of – complete, course progress">${ringSvg(0)}<span class="topbar-progress-text">– of – complete</span></a>
       ${moduleId ? '<button class="button-secondary button-small" type="button" data-highlight-toggle aria-label="Highlight all terms" aria-pressed="false"><span class="long">Highlight all terms</span><span class="short">Terms</span></button>' : ""}
     </div>`;
   }
@@ -110,7 +110,8 @@ function fillProgress({ progress }) {
   if (!slot) return;
   const paint = () => {
     const p = progress.courseProgress();
-    slot.setAttribute("aria-label", `Course progress: ${p.done} of ${p.total} available concepts complete. Go to the syllabus.`);
+    // The accessible name begins with the visible text (WCAG 2.5.3, Label in Name) and then says what it is.
+    slot.setAttribute("aria-label", `${p.done} of ${p.total} complete, course progress`);
     slot.innerHTML = `${ringSvg(p.percent)}<span class="topbar-progress-text">${p.done} of ${p.total} complete</span>`;
   };
   paint();
