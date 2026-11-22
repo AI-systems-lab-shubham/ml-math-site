@@ -1,14 +1,13 @@
 // Splits the old one-page-per-module files into one page per concept plus a module overview page.
-// The source is the last commit that still had the long module pages (SOURCE_REV), read with `git show`
-// (local only), so the tool gives the same output every time. Usage: node tools/split-modules.mjs [--check]
+// The source is the frozen copy of the old long module pages in tests/fixtures/old-pages (hash-checked against
+// manifest.json; no git history is read), so the tool gives the same output every time. Usage: node tools/split-modules.mjs [--check]
 //   (no flag) writes the pages; --check only reports whether the files on disk match what would be written.
-import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, posix } from "node:path";
 import { editArticle, editOverviewPart, isDroppedLeftover } from "./lib/post-split-edits.mjs";
 
-export const SOURCE_REV = "fbf615d";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 // The two sentences that used to sit in a module's hero now live on the home page and in the first-visit hint.
@@ -25,8 +24,18 @@ const up = (dir) => dir.replace(/\/$/, "").split("/").map(() => "..").join("/") 
 const modNum = (course, m) => course.modules.indexOf(m);
 const slugOf = (c) => c.path.split("/").filter(Boolean).pop();
 
-export function readOld(rev, path) {
-  return execFileSync("git", ["show", `${rev}:${path}`], { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+// The old page of the module at `path` ("modules/01-linear-algebra/index.html"), from the committed fixture.
+// Throws if there is no fixture for that module, or if the fixture no longer matches its recorded SHA-256.
+const FIXTURES = join(root, "tests/fixtures/old-pages");
+export const hasOld = (path) => existsSync(join(FIXTURES, `${path.split("/")[1]}.html`));
+export function readOld(path) {
+  const name = `${path.split("/")[1]}.html`;
+  const manifest = JSON.parse(readFileSync(join(FIXTURES, "manifest.json"), "utf8"));
+  if (!manifest.files[name]) throw new Error(`no old-page fixture for ${path}`);
+  const text = readFileSync(join(FIXTURES, name));
+  const sha = createHash("sha256").update(text).digest("hex");
+  if (sha !== manifest.files[name]) throw new Error(`fixture ${name} does not match its recorded SHA-256 (${sha})`);
+  return text.toString("utf8");
 }
 
 // Pulls the parts of an old module page apart.
@@ -115,13 +124,14 @@ export function rewriteLinks(articleHtml, course, fromConceptPath) {
   return { html: out, changes };
 }
 
-export function buildPages(course, readSource = (p) => readOld(SOURCE_REV, p)) {
+export function buildPages(course, readSource = readOld) {
   const files = new Map();
   const links = [];
   for (const m of course.modules.filter((x) => x.status === "built")) {
     // Modules written after the split (Module 2 on) have no old long page; their pages are written by hand.
     let source;
-    try { source = readSource(`${m.path}index.html`); } catch { continue; }
+    if (!hasOld(`${m.path}index.html`)) continue;
+    source = readSource(`${m.path}index.html`);
     const old = parseOld(source);
     const num = modNum(course, m);
     const built = m.concepts.filter((c) => c.status === "built");

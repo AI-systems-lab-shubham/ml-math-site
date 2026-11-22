@@ -1,9 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { join, dirname } from "node:path";
-import { readOld, SOURCE_REV } from "../tools/split-modules.mjs";
+import { readOld, hasOld } from "../tools/split-modules.mjs";
 import { comparePreservation } from "../tools/lib/preservation.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -13,7 +14,7 @@ const homeHtml = read("index.html");
 const hintJs = read("assets/js/first-hint.js");
 
 function inputs(m) {
-  const oldHtml = readOld(SOURCE_REV, `${m.path}index.html`);
+  const oldHtml = readOld(`${m.path}index.html`);
   return {
     oldHtml,
     // Only the concepts that were split out of the old page; later concepts were written by hand.
@@ -24,7 +25,7 @@ function inputs(m) {
 }
 // Only modules that were split out of the old long pages have a source revision to compare with;
 // later modules (Module 2 on) are written one page at a time and have nothing to preserve.
-const existedInSource = (m) => { try { readOld(SOURCE_REV, `${m.path}index.html`); return true; } catch { return false; } };
+const existedInSource = (m) => hasOld(`${m.path}index.html`);
 const built = course.modules.filter((m) => m.status === "built" && existedInSource(m));
 
 for (const m of built) {
@@ -33,6 +34,24 @@ for (const m of built) {
     assert.deepEqual(problems, [], problems.join("\n"));
   });
 }
+
+// The fixtures are the only record of the old pages: their hashes must match, and a tampered copy must be refused.
+test("old-page fixtures match their recorded SHA-256", () => {
+  const manifest = JSON.parse(read("tests/fixtures/old-pages/manifest.json"));
+  assert.ok(Object.keys(manifest.files).length >= 2);
+  for (const [name, sha] of Object.entries(manifest.files)) {
+    assert.equal(createHash("sha256").update(readFileSync(join(root, "tests/fixtures/old-pages", name))).digest("hex"), sha, `${name} changed`);
+  }
+});
+test("mutation caught: a changed fixture is refused by readOld", () => {
+  const dir = join(root, "tests/fixtures/old-pages");
+  const f = join(dir, "00-foundations.html");
+  const orig = readFileSync(f);
+  try {
+    writeFileSync(f, Buffer.concat([orig, Buffer.from(" ")]));
+    assert.throws(() => readOld("modules/00-foundations/index.html"), /SHA-256/);
+  } finally { writeFileSync(f, orig); }
+});
 
 // Mutation tests: each change below must be caught.
 const mutants = {
@@ -45,7 +64,7 @@ const mutants = {
   "home page loses the note": (i) => { i.homeHtml = i.homeHtml.replace(/Expand all and Collapse all open or close[^<]*/, ""); },
   "hint loses the sentence": (i) => { i.hintJs = i.hintJs.replace("Terms with a dotted underline are a tap or hover away from a plain-language and a mathematical definition.", ""); },
 };
-const withCallout = built.find((m) => readOld(SOURCE_REV, `${m.path}index.html`).includes('<div class="callout">'));
+const withCallout = built.find((m) => readOld(`${m.path}index.html`).includes('<div class="callout">'));
 for (const [name, mutate] of Object.entries(mutants)) {
   test(`mutation caught: ${name}`, () => {
     const i = inputs(built[0]);

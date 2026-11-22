@@ -1,0 +1,7 @@
+{
+  "note": "Old long module pages, frozen verbatim. Source: git revision fbf615d (provenance only; nothing reads git). Changing a fixture requires updating its hash here, deliberately.",
+  "files": {
+    "00-foundations.html": "20536cccc623d045f490ad2e0f8dddfba6832d4ef9a303fdceff062151b32b7a",
+    "01-linear-algebra.html": "a8294e7463b866e16cb7681bb78c1bf3c11609c8e0cea83436c2fb23d5db235c"
+  }
+}
