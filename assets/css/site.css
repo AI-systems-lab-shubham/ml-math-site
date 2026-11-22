@@ -591,3 +591,27 @@ main:focus { outline: none; }
 .phone-details > summary::after { content: "+"; margin-left: var(--s2); font-weight: 400; }
 .phone-details[open] > summary::after { content: "\2212"; }
 .footer-details > summary::after { content: ""; }
+
+/* Fixed readout rows (setReadoutRows in widgets.mjs): the number of rows is constant and each row's height is set here, per widget
+   and per widget width, from the worst case over every slider state (tests/e2e/widget-readout.mjs checks that nothing clips).
+   The height never depends on how the text happens to wrap on one platform. */
+.readout-rows .readout-row { display: block; overflow-wrap: anywhere; }
+
+/* angle widget (analytic.mjs angleWidget): lines per row from the worst case over all 72 x 13 slider states at every widget
+   width, from 254 px (a 320 px phone) to 846 px. Each step down in the line count starts 16 px later than it was measured, so
+   a platform whose text is a few px wider keeps the taller row a little longer instead of clipping. Row height = lines x 1.6em. */
+[data-widget="angle"] .readout-row { height: calc(var(--lines) * 1.6em); }
+[data-widget="angle"] .readout-row:nth-child(1) { --lines: 6; }
+[data-widget="angle"] .readout-row:nth-child(2) { --lines: 5; }
+[data-widget="angle"] .readout-row:nth-child(3) { --lines: 5; }
+@container (min-width: 310px) { [data-widget="angle"] .readout-row:nth-child(1) { --lines: 5; } }
+@container (min-width: 334px) { [data-widget="angle"] .readout-row:nth-child(1) { --lines: 4; } }
+@container (min-width: 406px) { [data-widget="angle"] .readout-row:nth-child(1) { --lines: 3; } }
+@container (min-width: 562px) { [data-widget="angle"] .readout-row:nth-child(1) { --lines: 2; } }
+@container (min-width: 282px) { [data-widget="angle"] .readout-row:nth-child(2) { --lines: 4; } }
+@container (min-width: 346px) { [data-widget="angle"] .readout-row:nth-child(2) { --lines: 3; } }
+@container (min-width: 442px) { [data-widget="angle"] .readout-row:nth-child(2) { --lines: 2; } }
+@container (min-width: 802px) { [data-widget="angle"] .readout-row:nth-child(2) { --lines: 1; } }
+@container (min-width: 318px) { [data-widget="angle"] .readout-row:nth-child(3) { --lines: 4; } }
+@container (min-width: 362px) { [data-widget="angle"] .readout-row:nth-child(3) { --lines: 3; } }
+@container (min-width: 490px) { [data-widget="angle"] .readout-row:nth-child(3) { --lines: 2; } }

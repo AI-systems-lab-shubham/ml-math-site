@@ -70,6 +70,24 @@ jobs:
       - name: Verify (full)
         run: node tools/verify.mjs --full --timings
 
+      # On failure only: the Linux numbers for the widget reserve (assets/css/widget-reserve.css is measured on macOS).
+      # Read-only (no --write): appends reserved vs measured height per widget and width to the job summary, with the runner's
+      # image, CPU count and memory. Not a retry and not a threshold: the verify step above has already failed the job.
+      - name: Widget reserve report (on failure)
+        if: failure()
+        timeout-minutes: 20
+        run: |
+          {
+            echo "### Runner"
+            echo ""
+            echo "- image: ${ImageOS:-unknown} ${ImageVersion:-unknown}"
+            echo "- os: $(. /etc/os-release && echo "$PRETTY_NAME"), kernel $(uname -r)"
+            echo "- cpus: $(nproc)"
+            echo "- memory: $(free -m | awk '/^Mem:/ {print $2 " MB total, " $7 " MB available"}')"
+            echo "- node: $(node -v), MLMATH_JOBS=$MLMATH_JOBS"
+          } >> "$GITHUB_STEP_SUMMARY"
+          node tools/measure-widgets.mjs --widths 320,360,375,390,414,480,600,768,900,1000,1100,1280,1500 --report-md "$GITHUB_STEP_SUMMARY"
+
       - name: Upload reports
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

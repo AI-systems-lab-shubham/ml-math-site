@@ -50,6 +50,14 @@ export function radios({ legend, name, options, value, onChange, columns = 1 }) 
   return html("div", { class: "control" }, group);
 }
 
+/** Fill a readout with a fixed number of rows (always rows.length spans, an unused row is empty), so the readout's height is set
+ *  by CSS (`.readout-rows .readout-row` heights per widget in site.css) and never by how the text wraps on this platform. */
+export function setReadoutRows(readout, rows) {
+  readout.classList.add("readout-rows");
+  while (readout.children.length < rows.length) readout.append(html("span", { class: "readout-row" }));
+  rows.forEach((t, i) => { readout.children[i].textContent = t; });
+}
+
 /** Build a widget shell: title, drawing area (with aria-label), controls, readout.
  *  narrowViewBox (optional): a tighter view used while the drawing is narrower than NARROW_FIGURE px, so a phone shows a bigger picture of the middle. */
 const NARROW_FIGURE = 480;

@@ -7,7 +7,7 @@ import {
   dotFromLengths, sgdStepWithPenalty, sgdStepWithDecay, cosineSpread, randomDirectionCosines,
 } from "./analytic-math.mjs";
 import { transformerBase } from "./linalg-math.mjs";
-import { svg, html, slider, radios, widgetShell, nextId } from "./widgets.mjs";
+import { svg, html, slider, radios, widgetShell, nextId, setReadoutRows } from "./widgets.mjs";
 import {
   n, tup, paren, bm, colTex, stroke, fillOf, text, OX, OY, PLANE_VIEW, px, py, drawPlane, arrow, bootPage,
 } from "./linalg-shared.mjs";
@@ -175,14 +175,19 @@ function angleWidget(host) {
       svg("path", { d: `M ${px(0) + r} ${py(0)} A ${r} ${r} 0 ${theta > Math.PI ? 1 : 0} ${sgn < 0 ? 0 : 1} ${ex} ${ey}`, style: stroke("burgundy", 3) }, c);
     }
     const cs = cosineSimilarity(A_FIXED, b);
-    w.readout.style.whiteSpace = "pre-line";
+    // Always three rows; the height of each is fixed in site.css ([data-widget="angle"] .readout-row), not by wrapping.
     if (cs === null) {
-      w.readout.textContent = `b = ${tup(b)} is the zero vector: it has no direction, so the angle and the cosine similarity are undefined.\nThe dot product a·b is still 0.`;
+      setReadoutRows(w.readout, [
+        `b = ${tup(b)} is the zero vector: it has no direction, so the angle and the cosine similarity are undefined.`,
+        "The dot product a·b is still 0.",
+        "",
+      ]);
     } else {
-      w.readout.textContent =
-        `b = ${tup(b.map(r2))}, ‖b‖ = ${n(r2(norm2(b)))}.\n` +
-        `Angle θ = ${n(r2(toDegrees(theta)))}°. Cosine similarity = a·b / (‖a‖‖b‖) = ${n(r2(dot(A_FIXED, b)))} / (${n(r2(norm2(A_FIXED)))} × ${n(r2(norm2(b)))}) = ${n(r3(cs))}.\n` +
-        `Dot product ${n(r2(dot(A_FIXED, b)))} changes when you change the length; cosine similarity ${n(r3(cs))} does not.`;
+      setReadoutRows(w.readout, [
+        `b = ${tup(b.map(r2))}, ‖b‖ = ${n(r2(norm2(b)))}.`,
+        `Angle θ = ${n(r2(toDegrees(theta)))}°. Cosine similarity = a·b / (‖a‖‖b‖) = ${n(r2(dot(A_FIXED, b)))} / (${n(r2(norm2(A_FIXED)))} × ${n(r2(norm2(b)))}) = ${n(r3(cs))}.`,
+        `Dot product ${n(r2(dot(A_FIXED, b)))} changes when you change the length; cosine similarity ${n(r3(cs))} does not.`,
+      ]);
     }
   };
   const dir = slider({ label: "Direction of b", min: 0, max: 355, step: 5, value: s.dir, format: (t) => `${t}°`, onInput: (t) => { s.dir = t; draw(); } });

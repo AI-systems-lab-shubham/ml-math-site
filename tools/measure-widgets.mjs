@@ -1,6 +1,8 @@
 // Measures every lazy widget and writes its static placeholder and reserved height.
-// Usage: node tools/measure-widgets.mjs [--write] [--pages m00-slope,m01-vectors] [--widths 375,900,1280]
+// Usage: node tools/measure-widgets.mjs [--write] [--pages m00-slope,m01-vectors] [--widths 375,900,1280] [--report-md <file>]
 // Without --write it only reports. Pages come from data/course.json (one per built concept) and are measured in parallel.
+// --report-md <file> appends a Markdown table of the height reserved in assets/css/widget-reserve.css against the height measured on this machine,
+//   per widget and width (CI runs it on failure so the job summary shows the Linux numbers). It never writes the CSS or the pages.
 // --pages and --widths narrow a checkpoint run (they cannot be combined with --write). Run it after adding or changing a widget; tests/e2e/widgets-lazy.mjs fails if a placeholder is stale.
 // For each widget it mounts the real thing, then sweeps the viewport width. At each width it records the widget's own
 // width and the height of everything below the drawing (controls + readout). That height is a step function of the
@@ -13,6 +15,8 @@ import { defaultJobs } from "./lib/jobs.mjs";
 
 const arg = (name) => (process.argv.includes(name) ? process.argv[process.argv.indexOf(name) + 1] : null);
 const WRITE = process.argv.includes("--write");
+const REPORT_MD = arg("--report-md");
+if (REPORT_MD && WRITE) { console.error("--report-md only reports: do not combine it with --write"); process.exit(1); }
 const course = JSON.parse(fs.readFileSync(path.join(siteRoot, "data/course.json"), "utf8"));
 const only = arg("--pages")?.split(",") ?? null;       // concept ids; default is every built concept page in course.json
 const WIDTHS = arg("--widths")?.split(",").map(Number) ?? null;   // sample only these widths (checkpoint runs; cannot --write)
@@ -48,7 +52,7 @@ async function measure(page) {
     }));
     for (const r of rows) {
       const e = info.get(r.name) ?? { title: r.title, desc: r.desc, samples: [] };
-      e.samples.push([Math.floor(r.hostWidth), Math.ceil(r.reserve)]);
+      e.samples.push([Math.floor(r.hostWidth), Math.ceil(r.reserve), width]);   // [widget width, reserve, viewport width]
       info.set(r.name, e);
     }
   }
@@ -99,6 +103,26 @@ PAGES.forEach((page, i) => {
   if (WRITE) fs.writeFileSync(file, html);
 });
 if (WRITE) fs.writeFileSync(path.join(siteRoot, "assets/css/widget-reserve.css"), `${css.join("\n")}\n`);
+if (REPORT_MD) {
+  // The reserve the page uses at a widget width: the base min-height, then the last @container rule whose min-width fits.
+  const reserveCss = fs.readFileSync(path.join(siteRoot, "assets/css/widget-reserve.css"), "utf8");
+  const reservedAt = (name, w) => {
+    const q = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    let h = Number(new RegExp(`^\\[data-widget="${q}"\\] \\.widget-reserve \\{ min-height: (\\d+)px`, "m").exec(reserveCss)?.[1] ?? NaN);
+    for (const m of reserveCss.matchAll(new RegExp(`@container \\(min-width: (\\d+)px\\) \\{ \\[data-widget="${q}"\\] \\.widget-reserve \\{ min-height: (\\d+)px`, "g"))) if (Number(m[1]) <= w) h = Number(m[2]);
+    return h;
+  };
+  const rows = [];
+  PAGES.forEach((page, i) => { for (const [name, e] of results[i]) for (const [host, measured, vp] of e.samples) rows.push({ name, vp, host, measured, reserved: reservedAt(name, host) }); });
+  const bad = rows.filter((r) => Math.abs(r.reserved - r.measured) > 1.5);
+  const lines = ["", "### Widget reserve: reserved vs measured on this runner", "",
+    `${rows.length} samples (${[...new Set(rows.map((r) => r.vp))].join(", ")} px viewports); **${bad.length}** where reserved and measured differ by more than 1.5 px (the e2e-widgets tolerance).`, "",
+    "| widget | viewport | widget width | reserved (px) | measured (px) | measured - reserved |", "|---|---:|---:|---:|---:|---:|"];
+  for (const r of rows.filter((x) => bad.includes(x) || [320, 375, 768, 1280].includes(x.vp))) lines.push(`| ${r.name} | ${r.vp} | ${r.host} | ${r.reserved} | ${r.measured} | ${r.measured - r.reserved}${bad.includes(r) ? " **differs**" : ""} |`);
+  lines.push("", "Rows shown: every difference, plus all widgets at 320, 375, 768 and 1280 px.", "");
+  fs.appendFileSync(REPORT_MD, lines.join("\n"));
+  console.log(`report appended to ${REPORT_MD}: ${rows.length} samples, ${bad.length} differing`);
+}
 await browser.close();
 await server.close();
 process.exit(failed ? 1 : 0);
