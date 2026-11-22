@@ -1,0 +1,8 @@
+{
+  "name": "ml-math-site-ci",
+  "private": true,
+  "description": "CI-only tools. Playwright comes from the global @playwright/cli, as on the maintainer's machine.",
+  "dependencies": {
+    "axe-core": "4.10.2"
+  }
+}

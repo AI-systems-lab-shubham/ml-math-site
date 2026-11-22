@@ -1,0 +1,79 @@
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      MLMATH_JOBS: "2"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: .github/ci/package-lock.json
+
+      # Same Playwright as the maintainer's machine: the copy bundled with @playwright/cli 0.1.22
+      # (tools/lib/playwright.mjs falls back to the global @playwright/cli).
+      - name: Install Playwright (global @playwright/cli 0.1.22) and Chromium
+        run: |
+          npm install -g --ignore-scripts @playwright/cli@0.1.22
+          PW="$(npm root -g)/@playwright/cli/node_modules/playwright/cli.js"
+          node "$PW" install --with-deps chromium
+
+      # axe-core 4.10.2, pinned by .github/ci/package-lock.json, installed in a temp directory.
+      - name: Install axe-core
+        run: |
+          mkdir -p "$RUNNER_TEMP/axe"
+          cp .github/ci/package.json .github/ci/package-lock.json "$RUNNER_TEMP/axe/"
+          npm ci --ignore-scripts --prefix "$RUNNER_TEMP/axe"
+          echo "AXE_PATH=$RUNNER_TEMP/axe/node_modules/axe-core/axe.min.js" >> "$GITHUB_ENV"
+
+      - name: Print tool versions
+        run: |
+          echo "node: $(node -v)"
+          echo "npm: $(npm -v)"
+          echo "@playwright/cli: $(npm ls -g --depth=0 @playwright/cli | grep @playwright/cli)"
+          node -e '
+            const { createRequire } = require("node:module");
+            const { execFileSync } = require("node:child_process");
+            const g = execFileSync("npm", ["root", "-g"], { encoding: "utf8" }).trim();
+            const req = createRequire(g + "/@playwright/cli/package.json");
+            console.log("playwright:", req("playwright/package.json").version);
+            (async () => {
+              const b = await req("playwright").chromium.launch();
+              console.log("browser:", "chromium", b.version());
+              await b.close();
+              console.log("axe-core:", require(process.env.AXE_PATH.replace(/axe\.min\.js$/, "package.json")).version);
+            })();
+          '
+
+      # No retries: a failure or a TimeoutError fails the run. The email check is skipped (NOREPLY_EMAIL is not set; no secrets).
+      - name: Verify (full)
+        run: node tools/verify.mjs --full --timings
+
+      - name: Upload reports
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: verify-reports
+          path: reports/
+          retention-days: 7
+          if-no-files-found: ignore
