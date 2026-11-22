@@ -9,6 +9,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { requirePlaywright, serveStatic, siteRoot } from "./lib/playwright.mjs";
+import { defaultJobs } from "./lib/jobs.mjs";
 
 const arg = (name) => (process.argv.includes(name) ? process.argv[process.argv.indexOf(name) + 1] : null);
 const WRITE = process.argv.includes("--write");
@@ -18,7 +19,7 @@ const WIDTHS = arg("--widths")?.split(",").map(Number) ?? null;   // sample only
 if (WRITE && (WIDTHS || only)) { console.error("--write needs the full sweep: do not combine it with --pages or --widths"); process.exit(1); }
 const PAGES = course.modules.flatMap((m) => m.concepts.filter((c) => m.status === "built" && c.status === "built" && (!only || only.includes(c.id))).map((c) => c.path));
 const STEP = 1; // 1px: the controls wrap at exact widths, and a coarser sweep leaves a window where the reserve is one line off
-const JOBS = 4; // pages measured at the same time
+const JOBS = defaultJobs(); // pages measured at the same time (default 2, MLMATH_JOBS overrides)
 const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 const pw = await requirePlaywright("measure-widgets");

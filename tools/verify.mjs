@@ -7,12 +7,14 @@
 //              --base <ref> diffs from that ref instead of the marker (for example origin/main).
 //   --full     everything (the default). On a clean tree where nothing failed it records HEAD in reports/last-full-pass.
 //   --timings  print the time of every step.   --plan  print what would run and exit.
+// Parallelism: ui-verify, measure-widgets and node --test run 2 at a time; MLMATH_JOBS=N overrides.
 // Exit 0 only if nothing failed. Browser and email steps that could not run are listed as SKIPPED.
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { homedir } from "node:os";
+import { homedir, platform } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { defaultJobs, isTimeout } from "./lib/jobs.mjs";
 import { buildGraph, changedSince, classify, e2eFor, listFiles } from "./lib/deps.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -24,7 +26,7 @@ const CHANGED_WIDTHS = "375,900,1280";
 
 // Node 24 treats a directory argument as a file, so the test files are listed explicitly (tests/e2e is not included).
 const ALL_STEPS = [
-  { name: "unit", fast: true, cmd: ["node", "--test", ...readdirSync(join(root, "tests")).filter((f) => f.endsWith(".test.mjs")).map((f) => `tests/${f}`)] },
+  { name: "unit", fast: true, cmd: ["node", "--test", `--test-concurrency=${defaultJobs()}`, ...readdirSync(join(root, "tests")).filter((f) => f.endsWith(".test.mjs")).map((f) => `tests/${f}`)] },
   { name: "course", fast: true, cmd: ["node", "tools/check-course.mjs"] },
   { name: "glossary", fast: true, cmd: ["node", "tools/check-glossary.mjs"] },
   { name: "fonts", fast: true, cmd: ["node", "tools/check-fonts.mjs"] },
@@ -105,6 +107,18 @@ if (only) steps = steps.filter((s) => s.name === only);
 console.log(`tier: ${tier}${plan ? " (partial)" : ""}; steps: ${steps.map((s) => s.name).join(", ")}\n`);
 if (flag("--plan")) process.exit(0);
 
+// macOS only: show swap and memory pressure first, because a busy machine makes browser steps time out.
+if (platform() === "darwin") {
+  const sh = (c, a) => { const r = spawnSync(c, a, { encoding: "utf8" }); return r.status === 0 ? r.stdout : ""; };
+  const sw = sh("sysctl", ["-n", "vm.swapusage"]).match(/total = ([\d.]+)M\s+used = ([\d.]+)M/);
+  const free = sh("memory_pressure", ["-Q"]).match(/free percentage: (\d+)%/);
+  const usedPct = sw ? (Number(sw[2]) / Number(sw[1])) * 100 : null;
+  const freePct = free ? Number(free[1]) : null;
+  console.log(`memory: swap ${sw ? `${Math.round(sw[2])} of ${Math.round(sw[1])} MB used (${Math.round(usedPct)}%)` : "unknown"}; memory free ${freePct ?? "unknown"}%; jobs ${defaultJobs()}`);
+  if ((usedPct ?? 0) > 75 || (freePct ?? 100) < 15) console.log("WARNING: memory pressure is high. Close apps before the browser steps, or expect TimeoutErrors (reported as 'environment busy').\n");
+  else console.log("");
+}
+
 // axe-core for ui-verify: AXE_PATH if set, else the copy in ~/.dev-tools/axe, else /tmp/axe. Missing means ui-verify reports SKIPPED, which fails.
 const axePath = [process.env.AXE_PATH, join(homedir(), ".dev-tools/axe/node_modules/axe-core/axe.min.js"), "/tmp/axe/node_modules/axe-core/axe.min.js"].find((p) => p && existsSync(p));
 
@@ -125,7 +139,10 @@ for (const step of steps) {
   let note = "";
   if (r.status !== 0 && /SKIPPED:/.test(out)) { status = "SKIPPED"; note = "did not run; counts as a failure"; }
   else if (r.status === 0 && step.skipWhen?.(out)) { status = "SKIPPED"; note = out.trim().split("\n")[0]; }
-  else if (r.status !== 0) note = out.trim().split("\n").slice(-6).join("\n    ");
+  else if (r.status !== 0) {
+    note = out.trim().split("\n").slice(-6).join("\n    ");
+    if (isTimeout(out)) note = `environment busy: TimeoutError (still a failure; free memory or rerun)\n    ${note}`;
+  }
   results.push({ name: step.name, status, note, ms, browsers: step.browser ? browsersRunning() : null });
 }
 const total = performance.now() - t0;

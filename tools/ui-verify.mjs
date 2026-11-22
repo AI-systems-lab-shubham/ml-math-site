@@ -1,5 +1,5 @@
 // UI verification for every built page: layout, keyboard, console, structure, glossary and motion checks.
-// Usage: node tools/ui-verify.mjs [--pages home,m00,m00-slope,m01-*,404] [--widths 375,900] [--checks hscroll,overlap,...] [--no-shots] [--jobs 3]
+// Usage: node tools/ui-verify.mjs [--pages home,m00,m00-slope,m01-*,404] [--widths 375,900] [--checks hscroll,overlap,...] [--no-shots] [--jobs 2]
 // Pages come from data/course.json: home, each built module's overview (key mNN), each built concept page (key mNN-slug), 404.
 // A key ending in * selects every page that starts with it (m01-* is all of Module 1's concept pages).
 // Env:   BASE_URL   run against a live site (default: serve this repo locally)
@@ -10,11 +10,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { requirePlaywright, serveStatic, siteRoot } from "./lib/playwright.mjs";
+import { defaultJobs } from "./lib/jobs.mjs";
 
 const arg = (name) => (process.argv.includes(name) ? process.argv[process.argv.indexOf(name) + 1] : null);
 const WIDTHS = (arg("--widths") ?? "375,768,900,1100,1280,1440").split(",").map(Number);
 const ONLY_PAGES = arg("--pages")?.split(",") ?? null;
-const JOBS = Number(arg("--jobs") ?? 3);   // pages checked at the same time
+const JOBS = Number(arg("--jobs") ?? defaultJobs());   // pages checked at the same time (default 2, MLMATH_JOBS overrides)
 const ONLY_CHECKS = arg("--checks")?.split(",") ?? null;
 const SHOTS = !process.argv.includes("--no-shots");
 const REPORT_DIR = path.resolve(process.env.REPORT_DIR ?? path.join(siteRoot, "reports"));

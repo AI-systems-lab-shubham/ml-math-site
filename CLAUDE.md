@@ -60,6 +60,12 @@ An interactive static website that teaches the maths behind machine learning and
 5. Fix what you find, commit as `Module N: <summary>`, and tick the module in `docs/CURRICULUM.md`.
 6. Keep replies short. No recaps of files already read.
 
+## CI and where to run what
+- GitHub Actions (`.github/workflows/verify.yml`) runs `node tools/verify.mjs --full --timings` on every push to main, on pull requests and on manual dispatch. It uploads `reports/` on failure (7 days). No secrets, so the email check is skipped there.
+- Locally use `--fast` after every change and `--changed` at checkpoints. Run `--full` locally only before milestones (CI covers it otherwise).
+- Parallelism is capped at 2 (ui-verify pages, measure-widgets pages, `node --test` files). `MLMATH_JOBS=N` overrides it. `verify.mjs` prints swap and memory pressure on macOS and warns when high; a `TimeoutError` is labelled "environment busy" but is still a failure.
+- CI uses the same Playwright as the local machine (global `@playwright/cli@0.1.22`) and axe-core 4.10.2 from `.github/ci/package-lock.json`. Actions are pinned by full commit SHA with a `# vX.Y.Z` comment; update them by hand.
+
 ## Check tools
 - `node tools/verify.mjs`: three tiers; add `--timings` to print each step's time and `--plan` to print what would run.
   - `--fast` (unit tests, check-course, check-glossary, check-claims, check-fonts; no browser): after every change.
