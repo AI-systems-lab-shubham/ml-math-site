@@ -153,6 +153,11 @@ sup { font-size: max(0.8em, 14px); line-height: 0; vertical-align: baseline; pos
 .control output { font: 500 1rem var(--font-mono); color: var(--navy); }
 .control input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--burgundy); margin: 0; }
 .control fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.radio-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s3); }
+.radio-grid > legend { grid-column: 1 / -1; }
+.jump-row { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--s2) var(--s3); }
+.jump-row > .button-small { width: 100%; text-align: center; }
+.jump-row > p { grid-column: 1 / -1; margin: 0; }
 .radio-row { display: flex; align-items: center; gap: var(--s3); min-height: 44px; cursor: pointer; }
 .radio-row input { width: 22px; height: 22px; accent-color: var(--burgundy); flex: none; }
 select, input[type="number"], input[type="text"], textarea {

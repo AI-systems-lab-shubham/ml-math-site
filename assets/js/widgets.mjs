@@ -38,8 +38,8 @@ export function slider({ label, min, max, step, value, format = String, onInput,
 }
 
 /** A radio group. options: [{value,label}]. */
-export function radios({ legend, name, options, value, onChange }) {
-  const group = html("fieldset", {}, html("legend", { text: legend }));
+export function radios({ legend, name, options, value, onChange, columns = 1 }) {
+  const group = html("fieldset", columns > 1 ? { class: "radio-grid" } : {}, html("legend", { text: legend }));
   options.forEach((o) => {
     const id = nextId("radio");
     const input = html("input", { type: "radio", name, id, value: o.value });
@@ -50,8 +50,10 @@ export function radios({ legend, name, options, value, onChange }) {
   return html("div", { class: "control" }, group);
 }
 
-/** Build a widget shell: title, drawing area (with aria-label), controls, readout. */
-export function widgetShell({ title, description, viewBox = "0 0 640 400" }) {
+/** Build a widget shell: title, drawing area (with aria-label), controls, readout.
+ *  narrowViewBox (optional): a tighter view used while the drawing is narrower than NARROW_FIGURE px, so a phone shows a bigger picture of the middle. */
+const NARROW_FIGURE = 480;
+export function widgetShell({ title, description, viewBox = "0 0 640 400", narrowViewBox = null }) {
   const root = html("div", { class: "widget" });
   root.append(html("p", { class: "widget-title", text: title }));
   const figure = html("figure", { class: "widget-draw", role: "img", "aria-label": description });
@@ -61,8 +63,10 @@ export function widgetShell({ title, description, viewBox = "0 0 640 400" }) {
   const readout = html("p", { class: "readout", "aria-live": "polite" });
   root.append(figure, controls, readout);
   // Keep drawn text readable when the 640-unit drawing is squeezed onto a phone.
-  const [, , viewWidth, viewHeight] = viewBox.split(" ").map(Number);
   const rescale = () => {
+    const box = narrowViewBox && figure.clientWidth > 0 && figure.clientWidth < NARROW_FIGURE ? narrowViewBox : viewBox;
+    if (canvas.getAttribute("viewBox") !== box) canvas.setAttribute("viewBox", box);
+    const [, , viewWidth, viewHeight] = box.split(" ").map(Number);
     // preserveAspectRatio "meet" scales by the tighter of the two axes.
     const scale = Math.min(figure.clientWidth / viewWidth, figure.clientHeight / viewHeight);
     figure.style.setProperty("--ts", scale > 0 ? String(Math.max(1, 1 / scale)) : "1");

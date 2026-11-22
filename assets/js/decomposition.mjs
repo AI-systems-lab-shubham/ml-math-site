@@ -14,11 +14,29 @@ import { svg, html, slider, radios, widgetShell, nextId } from "./widgets.mjs";
 import { n, tup, bm, stroke, fillOf, text, PLANE_VIEW, px, py, drawPlane, arrow, bootPage } from "./linalg-shared.mjs";
 import { renderChecks } from "./checks.mjs";
 
+// The shared plane (linalg-shared.mjs) with 10 more units of room above, so the "6" tick label is not cut off; and a tighter ±5 view for a phone.
+const VIEW = "110 5 420 390";
+const VIEW_NARROW = "170 50 300 300";
+// Keep an equals sign with the numbers on both sides, and an operator with the operand after it (non-breaking spaces), so a line
+// breaks only before an operator and a result is never left alone on the next line.
+const glue = (s) => s.replace(/ = (?=\S)/g, "\u00a0=\u00a0").replace(/([−+×]) (?=\S)/g, "$1\u00a0");
 const r2 = (x) => Math.round(x * 100) / 100;
 const f2 = (x) => n(x);                                       // 2 decimals, real minus sign
 const f3 = (x) => String(Math.round(x * 1000) / 1000).replace("-", "−");
 const tag = (parent, p, str, color, dx = 8, dy = -8, anchor = "start") =>
   text(parent, px(p[0]) + dx, py(p[1]) + dy, str, { "text-anchor": anchor, style: `fill:var(--c-${color})` });
+// A label just past an arrow's tip, on the line from the origin through the tip, so it never sits on its own arrow.
+// "taken" holds the labels already placed; one that would land on top of them is moved down. A halo in the page colour keeps it readable over grid lines.
+function tipLabel(parent, p, str, color, taken) {
+  const sx = px(p[0]) - px(0), sy = py(p[1]) - py(0), len = Math.hypot(sx, sy);
+  const [ux, uy] = len > 1 ? [sx / len, sy / len] : [0.7, -0.7];
+  const x = px(p[0]) + ux * 14;
+  // An arrow lying along an axis would put its label on the axis line: lift it clear of the line.
+  let y = py(p[1]) + uy * 14 + 4 - (Math.abs(uy) < 0.5 ? 10 : 0);
+  while (taken.some((t) => Math.abs(t.x - x) < 64 && Math.abs(t.y - y) < 15)) y += 16;
+  taken.push({ x, y });
+  text(parent, x, y, str, { "text-anchor": ux > 0.35 ? "start" : ux < -0.35 ? "end" : "middle", style: `fill:var(--c-${color});paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round` });
+}
 const poly = (parent, pts, style, closed = true) =>
   svg(closed ? "polygon" : "polyline", { points: pts.map((p) => `${px(p[0])},${py(p[1])}`).join(" "), style }, parent);
 const matTex = (M) => bm(M.map((r) => r.map((v) => Math.round(v * 1000) / 1000)));
@@ -37,7 +55,8 @@ function detWidget(host) {
   const w = widgetShell({
     title: "What a matrix does to the unit square",
     description: "A grid with the unit square drawn as a dashed outline. The matrix you choose sends it to a filled shape: a parallelogram, or a line segment when the determinant is zero. The first column of the matrix is a blue arrow from the origin (where the arrow along x lands) and the second column is a teal arrow (where the arrow along y lands). The determinant ad minus bc, the signed area, and whether the orientation was kept, flipped or lost are written below.",
-    viewBox: PLANE_VIEW,
+    viewBox: VIEW,
+    narrowViewBox: VIEW_NARROW,
   });
   const m = { a: 1, b: 1, c: 0, d: 1 };
   const draw = () => {
@@ -56,18 +75,19 @@ function detWidget(host) {
     }
     arrow(plot, [0, 0], [m.a, m.c], "blue", { width: 4 });
     arrow(plot, [0, 0], [m.b, m.d], "teal", { width: 4 });
-    tag(c, [m.a, m.c], "column 1", "blue", 8, -8);
-    tag(c, [m.b, m.d], "column 2", "teal", 8, -8);
+    const taken = [];
+    tipLabel(c, [m.a, m.c], "column 1", "blue", taken);
+    tipLabel(c, [m.b, m.d], "column 2", "teal", taken);
     w.readout.style.whiteSpace = "pre-line";
     const area = signedArea(img);
-    w.readout.textContent =
+    w.readout.textContent = glue(
       `det = ad − bc = ${f2(m.a)}×${f2(m.d)} − ${f2(m.b)}×${f2(m.c)} = ${f2(d)}.\n` +
       `The unit square (area 1) became ${imageShape(A)}; its signed area is ${f2(area)}.\n` +
-      (o === "keeps" ? `Orientation kept: areas are multiplied by ${f2(d)}.` : o === "flips" ? `Orientation flipped, like a mirror: areas are multiplied by ${f2(Math.abs(d))}.` : "Determinant 0: the square collapsed, so this matrix has no inverse.");
+      (o === "keeps" ? `Orientation kept: areas are multiplied by ${f2(d)}.` : o === "flips" ? `Orientation flipped, like a mirror: areas are multiplied by ${f2(Math.abs(d))}.` : "Determinant 0: the square collapsed, so this matrix has no inverse."));
   };
   const sl = {};
   const mk = (key, label) => (sl[key] = slider({ label, min: -2.5, max: 2.5, step: 0.5, value: m[key], format: f2, onInput: (t) => { m[key] = t; draw(); } }));
-  const presets = radios({ legend: "Try a named matrix", name: nextId("det-preset"), options: [...DET_PRESETS.map((p) => ({ value: p.value, label: p.label })), { value: "own", label: "My own (use the sliders)" }], value: "shear", onChange: (v) => {
+  const presets = radios({ legend: "Try a named matrix", name: nextId("det-preset"), options: [...DET_PRESETS.map((p) => ({ value: p.value, label: p.label })), { value: "own", label: "My own (use the sliders)" }], value: "shear", columns: 2, onChange: (v) => {
     const p = DET_PRESETS.find((q) => q.value === v);
     if (!p) return;
     [m.a, m.b, m.c, m.d] = p.m;
@@ -99,7 +119,7 @@ function traceWidget(host) {
       svg("rect", { x: x0 + j * cw, y: y0 + i * ch, width: cw - 6, height: ch - 6, rx: 6, style: `${onDiag ? "fill:var(--c-ochre);fill-opacity:0.3;" : "fill:none;"}stroke:var(--c-${changing ? "teal" : "navy"});stroke-width:${changing ? 3 : 1.5}` }, c);
       text(c, x0 + j * cw + (cw - 6) / 2, y0 + i * ch + ch / 2 + 6, f2(v), { "text-anchor": "middle" });
     }));
-    w.readout.textContent = `tr = ${M.map((r, i) => f2(r[i])).join(" + ")} = ${f2(trace(M))}. The outlined teal entries are the two the sliders change; only the one on the diagonal moves the trace.`;
+    w.readout.textContent = glue(`tr = ${M.map((r, i) => f2(r[i])).join(" + ")} = ${f2(trace(M))}. The outlined teal entries are the two the sliders change; only the one on the diagonal moves the trace.`);
   };
   const a = slider({ label: "Diagonal entry (row 2, column 2)", min: -5, max: 9, step: 1, value: st.diag, format: f2, onInput: (t) => { st.diag = t; draw(); } });
   const b = slider({ label: "Off-diagonal entry (row 1, column 2)", min: -5, max: 9, step: 1, value: st.off, format: f2, onInput: (t) => { st.off = t; draw(); } });
@@ -120,11 +140,12 @@ function eigenWidget(host) {
   const w = widgetShell({
     title: "Find the arrows a matrix only stretches",
     description: "A grid with a unit arrow v in blue, whose direction you set with a slider from 0 to 180 degrees, and the arrow Av in ochre, where the matrix sends it. A faint line runs through v. When Av lies along that line, v is an eigenvector, and a corner mark appears. The angle between v and Av and the stretch factor are written below. You can pick a matrix, and jump the slider to each eigenvector the matrix has, if it has any.",
-    viewBox: PLANE_VIEW,
+    viewBox: VIEW,
+    narrowViewBox: VIEW_NARROW,
   });
   const st = { preset: "two", theta: Math.PI / 6 };
   let A = EIG_PRESETS[0].A();
-  const jump = html("div", { class: "row" });
+  const jump = html("div", { class: "jump-row" });
   const sl = slider({ label: "Direction of v", min: 0, max: 180, step: 1, value: 30, format: (v) => `${v}°`, onInput: (v) => { st.theta = (v * Math.PI) / 180; draw(); } });
   const draw = () => {
     const c = w.canvas;
@@ -142,15 +163,15 @@ function eigenWidget(host) {
     const phi = (Math.atan2(gap, dotv) * 180) / Math.PI;
     const onLine = len <= 1e-9 || Math.abs(gap) <= 1e-9 * Math.max(1, len);
     w.readout.style.whiteSpace = "pre-line";
-    w.readout.textContent =
+    w.readout.textContent = glue(
       `v = ${tup(v.map(r2))}, Av = ${tup(Av.map(r2))}.\n` +
       (len <= 1e-9 ? "Av is the zero vector: this matrix squashes v to nothing, so v is an eigenvector with eigenvalue 0." :
         onLine ? `Av lies along v: Av = λv with λ = ${f3(dotv)}. v is an eigenvector.` :
-          `The angle from v to Av is ${f2(phi)}°, not 0° or 180°, so v is not an eigenvector. Av is ${f2(len)} times as long as v.`);
+          `The angle from v to Av is ${f2(phi)}°, not 0° or 180°, so v is not an eigenvector. Av is ${f2(len)} times as long as v.`));
     const e = eigen2(A);
     const note = e.kind === "none" ? "This matrix has no real eigenvalues: tr² − 4 det is negative, so every arrow is turned and none stays on its line." :
       e.defective ? "This matrix has the eigenvalue 1 repeated but only one eigenvector direction: it is defective." : "";
-    if (note) w.readout.textContent += `\n${note}`;
+    if (note) w.readout.textContent += glue(`\n${note}`);
   };
   const setPreset = (value) => {
     st.preset = value;
@@ -177,7 +198,8 @@ function powersWidget(host) {
   const w = widgetShell({
     title: "Powers of a symmetric matrix",
     description: "A grid with a faint unit circle and the ellipse that the circle becomes after the matrix is applied n times. The two eigenvector directions, along the diagonals, are drawn as dashed lines. The ellipse is stretched along them by the eigenvalue raised to the power n. The entries of the matrix power, worked out as P D to the n P inverse, and checked against repeated multiplication, are written below.",
-    viewBox: PLANE_VIEW,
+    viewBox: VIEW,
+    narrowViewBox: VIEW_NARROW,
   });
   const st = { n: 1 };
   const draw = () => {
@@ -193,10 +215,10 @@ function powersWidget(host) {
     const { values } = symmetricEigen(SYM);
     const viaEigen = powerViaEigen(SYM, st.n);
     w.readout.style.whiteSpace = "pre-line";
-    w.readout.textContent =
+    w.readout.textContent = glue(
       `A^${st.n} = ${rows(viaEigen)} (from P D^${st.n} P⁻¹).\n` +
       `The eigenvalues ${f2(values[0])} and ${f2(values[1])} become ${f3(values[0] ** st.n)} and ${f3(values[1] ** st.n)}: the ellipse is that long along the teal diagonal and that short along the blue one.\n` +
-      `Largest difference from multiplying A by itself ${st.n} time${st.n === 1 ? "" : "s"}: ${maxAbsDiff(viaEigen, An) < 1e-12 ? "0 (to 12 decimals)" : maxAbsDiff(viaEigen, An).toExponential(1)}.`;
+      `Largest difference from multiplying A by itself ${st.n} time${st.n === 1 ? "" : "s"}: ${maxAbsDiff(viaEigen, An) < 1e-12 ? "0 (to 12 decimals)" : maxAbsDiff(viaEigen, An).toExponential(1)}.`);
   };
   const sl = slider({ label: "Power n", min: 0, max: 3, step: 1, value: 1, format: String, onInput: (v) => { st.n = v; draw(); } });
   w.controls.append(sl.el);
@@ -207,22 +229,23 @@ const identityLike = () => [[1, 0], [0, 1]];
 
 /* ---------- 5. SVD ---------- */
 const SVD_PRESETS = [
-  { value: "shear", label: "Shear, rows (1, 1) and (0, 1)", A: () => shear(1) },
-  { value: "two", label: "Rows (4, 1) and (2, 3)", A: () => [[4, 1], [2, 3]] },
-  { value: "flip", label: "Mirror and stretch, rows (0, 2) and (1, 0)", A: () => [[0, 2], [1, 0]] },
-  { value: "flat", label: "Rank 1: rows (3, 0) and (4, 0)", A: () => [[3, 0], [4, 0]] },
+  { value: "shear", label: "Shear: (1, 1), (0, 1)", A: () => shear(1) },
+  { value: "two", label: "Stretch: (4, 1), (2, 3)", A: () => [[4, 1], [2, 3]] },
+  { value: "flip", label: "Mirror: (0, 2), (1, 0)", A: () => [[0, 2], [1, 0]] },
+  { value: "flat", label: "Rank 1: (3, 0), (4, 0)", A: () => [[3, 0], [4, 0]] },
 ];
 const STAGES = [
-  { value: "0", label: "Start: the unit circle" },
-  { value: "1", label: "1. Turn or flip with V^T" },
-  { value: "2", label: "2. Stretch with Σ" },
-  { value: "3", label: "3. Turn or flip with U (that is A)" },
+  { value: "0", label: "Start: unit circle" },
+  { value: "1", label: "1. Turn or flip, V^T" },
+  { value: "2", label: "2. Stretch, Σ" },
+  { value: "3", label: "3. Turn or flip, U (now A)" },
 ];
 function svdWidget(host) {
   const w = widgetShell({
     title: "Rotate, stretch, rotate",
     description: "A grid with the unit circle drawn as a dashed outline and the circle after each stage of the SVD as a filled shape: first V^T, which only turns or flips the circle, then Σ, which stretches it along the two axes into an ellipse, then U, which turns or flips the ellipse. Two arrows, ochre and navy, follow the right singular vectors through every stage, so you can see the semi-axes. A radio group picks the stage and another picks the matrix. The singular values, their product against the determinant, and the sum of their squares against the sum of the squared entries are written below.",
-    viewBox: PLANE_VIEW,
+    viewBox: VIEW,
+    narrowViewBox: VIEW_NARROW,
   });
   const st = { stage: 0, preset: "shear" };
   const draw = () => {
@@ -244,14 +267,14 @@ function svdWidget(host) {
     arrow(plot, [0, 0], carry(v1), "ochre", { width: 5 });
     w.readout.style.whiteSpace = "pre-line";
     const detA = det2(A), detUV = det2(U) * det2(V);
-    w.readout.textContent =
+    w.readout.textContent = glue(
       `Singular values: σ₁ = ${f3(s[0])}, σ₂ = ${f3(s[1])}. The ellipse has those semi-axes; σ₁ is the biggest stretch.\n` +
       `σ₁σ₂ = ${f3(s[0] * s[1])} and |det A| = ${f3(Math.abs(detA))}. σ₁² + σ₂² = ${f3(s[0] ** 2 + s[1] ** 2)} and the sum of squared entries is ${f3(frobeniusSq(A))}.\n` +
       `U and V together ${detUV < 0 ? "include one flip (determinants multiply to −1)" : "contain no net flip (determinants multiply to +1)"}.` +
-      (rankFromSingular(s, 2, 2) < 2 ? "\nσ₂ is 0 (below the rank tolerance): the ellipse is a line segment and the rank is 1." : "");
+      (rankFromSingular(s, 2, 2) < 2 ? "\nσ₂ is 0 (below the rank tolerance): the ellipse is a line segment and the rank is 1." : ""));
   };
-  const stage = radios({ legend: "Stage", name: nextId("svd-stage"), options: STAGES, value: "0", onChange: (v) => { st.stage = Number(v); draw(); } });
-  const preset = radios({ legend: "Choose a matrix", name: nextId("svd-preset"), options: SVD_PRESETS.map((p) => ({ value: p.value, label: p.label })), value: "shear", onChange: (v) => { st.preset = v; draw(); } });
+  const stage = radios({ legend: "Stage", name: nextId("svd-stage"), options: STAGES, value: "0", columns: 2, onChange: (v) => { st.stage = Number(v); draw(); } });
+  const preset = radios({ legend: "Choose a matrix (its two rows)", name: nextId("svd-preset"), options: SVD_PRESETS.map((p) => ({ value: p.value, label: p.label })), value: "shear", columns: 2, onChange: (v) => { st.preset = v; draw(); } });
   w.controls.append(stage, preset);
   draw();
   host.append(w.root);
@@ -288,14 +311,14 @@ function lowRankWidget(host) {
       const h = (v / f.s[0]) * hmax;
       svg("rect", { x: bx + i * (bw + 1), y: top + hmax - h, width: bw, height: Math.max(h, 1), style: fillOf(i < st.k ? "ochre" : "navy") + (i < st.k ? "" : ";fill-opacity:0.25") }, c);
     });
-    text(c, bx + 80, 28, "Singular values", { "text-anchor": "middle" });
+    text(c, bx + 16 * (bw + 1) - 1, 28, "Singular values", { "text-anchor": "end" });   // right-aligned to the last bar: centred, the title ran off the edge on a phone
     const rel = Math.sqrt(bestErrorFrobSq(f.s, st.k) / frobeniusSq(P));
     const stored = storageTruncated(16, 16, st.k);
     w.readout.style.whiteSpace = "pre-line";
-    w.readout.textContent =
+    w.readout.textContent = glue(
       `Rank ${st.k}: relative error ${f2(rel * 100)}%. Squared error ${f3(bestErrorFrobSq(f.s, st.k))} = the sum of the ${16 - st.k} dropped squared singular values.\n` +
       `Spectral error σ${subscript(st.k + 1)} = ${st.k < 16 ? f3(bestErrorSpectral(f.s, st.k)) : "0"}.\n` +
-      `Numbers stored: ${st.k} × (16 + 16 + 1) = ${stored}, against ${storageFull(16, 16)} for the picture itself${stored >= 256 ? ": no saving at this rank." : "."}`;
+      `Numbers stored: ${st.k} × (16 + 16 + 1) = ${stored}, against ${storageFull(16, 16)} for the picture itself${stored >= 256 ? ": no saving at this rank." : "."}`);
   };
   const sl = slider({ label: "Rank k", min: 0, max: 16, step: 1, value: st.k, format: String, onInput: (v) => { st.k = v; draw(); } });
   w.controls.append(sl.el);
