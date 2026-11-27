@@ -86,13 +86,13 @@
     <header>
       <p class="eyebrow">Full card · 3 of 6</p>
       <h1>Eigenvalues and eigenvectors</h1>
-      <p class="muted">Some arrows a transformation never turns: it only stretches, shrinks or flips them. And what to do when there are none.</p>
+      <p class="muted">Arrows that a transformation keeps on their own line: it only stretches, shrinks or flips them. And what to do when there are none.</p>
     </header>
 
     <section data-stage="meaning">
       <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
-      <p>Picture a sheet of rubber with a grid drawn on it. Push on it so that it stretches and slants. Most of the lines you drew tilt to new directions. But some line may stay exactly where it was, as a line: points slide along it and never leave it. An arrow lying along that line comes out pointing along the same line, longer, shorter or reversed. Such an arrow is an <span class="term" data-term="eigenvector">eigenvector</span> of the matrix, and the factor by which it is stretched is its <span class="term" data-term="eigenvalue">eigenvalue</span>. The picture below lets you do the pushing yourself.</p>
-      <p>Now the symbols. We write A v = λv and read it aloud as “A times v equals lambda times v”. In words: applying the matrix A to v gives the same arrow multiplied by the number λ (the Greek letter lambda). Three small rules go with it. First, v must not be the zero vector, because the zero vector fits for every λ and tells us nothing. Second, only the direction matters: if v works then so does 2v, or −3v. Third, only a square matrix can have eigenvectors, because the output must live in the same space as the input.</p>
+      <p>Picture a sheet of rubber with a grid drawn on it. Push on it so that it stretches and slants. Most of the lines you drew tilt to new directions. But some line may stay exactly where it was, as a line: points slide along it and never leave it. An arrow lying along that line comes out pointing along the same line, longer, shorter or reversed. Such an arrow is an <span class="term" data-term="eigenvector">eigenvector</span> of the matrix, and the factor by which it is stretched is its <span class="term" data-term="eigenvalue">eigenvalue</span>. The picture below lets you try this on a matrix yourself.</p>
+      <p>Now the symbols. We write A v = λv and read it aloud as “A times v equals lambda times v”. In words: applying the matrix A to v gives the same arrow multiplied by the number λ (the Greek letter lambda). Three details go with it. First, v must not be the zero vector, because the zero vector fits for every λ and tells us nothing. Second, only the direction matters: if v works then so does 2v, or −3v. Third, only a square matrix can have eigenvectors, because the output must live in the same space as the input.</p>
       <div class="math-display" data-tex-display="A\mathbf{v}=\lambda\mathbf{v},\qquad \mathbf{v}\neq\mathbf{0}">A v = λ v, v ≠ 0</div>
     </section>
     <section data-stage="picture">
@@ -124,7 +124,7 @@
     <section data-stage="why-when">
       <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
       <p>You reach for eigenvectors when a transformation looks complicated and you want to break it into simple pieces. They turn it into one-dimensional pieces: along each eigenvector the matrix acts as a single number. For a 2×2 matrix the eigenvalues come from the trace and determinant: λ = (tr ± √(tr² − 4 det)) / 2, so their sum is the trace and their product is the determinant (<span data-calc="eigSum">…</span> and <span data-calc="eigProd">…</span> for the worked example).</p>
-      <p><strong>When it does not fit.</strong> Here is each kind of 2×2 case in one table, with an example. The <span class="term" data-term="discriminant">discriminant</span> tr² − 4 det tells you which row you are in.</p>
+      <p><strong>When it does not fit.</strong> Here are some 2×2 cases side by side in one table. The <span class="term" data-term="discriminant">discriminant</span> tr² − 4 det tells you which row you are in.</p>
       <div class="table-scroll" tabindex="0" role="region" aria-label="The cases for a 2 by 2 matrix, scrolls sideways on narrow screens">
       <table>
         <thead><tr><th scope="col">Matrix</th><th scope="col">tr² − 4 det</th><th scope="col">Real eigenvalues</th><th scope="col">Eigenvector directions</th></tr></thead>

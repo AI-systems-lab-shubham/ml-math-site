@@ -19,7 +19,7 @@
       "date": "2026-11-26",
       "baseline": "4b98d5d",
       "note": "Voice pilot (docs/VOICE.md, docs/TONE-PASS.md): tagline, stages 1, 5, 6, 7 and Teach it reworded. Module 3 was never frozen; listed so the page hash is pinned and facts-preserved runs on it.",
-      "sha256": "a11bb378ad7adaa25cae48b17e009a37b741fa4ada711b5aaac643bfc312a1a0"
+      "sha256": "f7e75a306fe083254141cbdc72d46b3e17192758df7e943007f15389f8a570e0"
     }
   ]
 }
