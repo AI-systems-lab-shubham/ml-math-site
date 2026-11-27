@@ -9,7 +9,7 @@ import {
   storageTruncated, storageFull, storageLoRA, breakEvenRank, pattern16,
 } from "./decomposition-math.mjs";
 import { transformerBase } from "./linalg-math.mjs";
-import { baseDK } from "./analytic-math.mjs";
+import { baseDK, denoise } from "./analytic-math.mjs";
 import { svg, html, slider, radios, widgetShell, nextId } from "./widgets.mjs";
 import { n, tup, bm, stroke, fillOf, text, PLANE_VIEW, px, py, drawPlane, arrow, bootPage } from "./linalg-shared.mjs";
 import { renderChecks } from "./checks.mjs";
@@ -353,19 +353,20 @@ const stepperData = {
     const A = [[4, 1], [2, 3]], e = eigen2(A), tr = trace(A), dt = det2(A), disc = discriminant2(A);
     return [
       { title: "Trace and determinant", text: `A has rows (4, 1) and (2, 3). The trace is 4 + 3 = ${tr} and the determinant is 4×3 − 1×2 = ${dt}.`, tex: `\\operatorname{tr}A=${tr},\\quad \\det A=${dt}` },
-      { title: "The discriminant", text: `tr² − 4 det = ${tr}² − 4×${dt} = ${disc}. It is positive, so there are two real eigenvalues; its square root is ${Math.sqrt(disc)}.`, tex: `\\Delta=${tr}^2-4\\cdot${dt}=${disc}` },
-      { title: "The eigenvalues", text: `(${tr} ± ${Math.sqrt(disc)}) / 2 gives ${e.values[0]} and ${e.values[1]}. Their sum is ${e.values[0] + e.values[1]}, the trace, and their product is ${e.values[0] * e.values[1]}, the determinant.`, tex: `\\lambda=\\dfrac{${tr}\\pm${Math.sqrt(disc)}}{2}=${e.values[0]},\\ ${e.values[1]}` },
+      { title: "The discriminant", text: `tr² − 4 det = ${tr}² − 4×${dt} = ${disc}. It is positive, so there are two real eigenvalues; its square root is ${denoise(Math.sqrt(disc))}.`, tex: `\\Delta=${tr}^2-4\\cdot${dt}=${disc}` },
+      { title: "The eigenvalues", text: `(${tr} ± ${denoise(Math.sqrt(disc))}) / 2 gives ${e.values[0]} and ${e.values[1]}. Their sum is ${e.values[0] + e.values[1]}, the trace, and their product is ${e.values[0] * e.values[1]}, the determinant.`, tex: `\\lambda=\\dfrac{${tr}\\pm${denoise(Math.sqrt(disc))}}{2}=${e.values[0]},\\ ${e.values[1]}` },
       { title: "An eigenvector for each", text: `For λ = ${e.values[0]}, the arrow (1, 1) works: A(1, 1) = ${tup(matVec(A, [1, 1]))} = ${e.values[0]}×(1, 1). For λ = ${e.values[1]}, the arrow (1, −2) works: A(1, −2) = ${tup(matVec(A, [1, -2]))} = ${e.values[1]}×(1, −2).`, tex: `A\\begin{bmatrix}1\\\\1\\end{bmatrix}=${e.values[0]}\\begin{bmatrix}1\\\\1\\end{bmatrix},\\quad A\\begin{bmatrix}1\\\\-2\\end{bmatrix}=${e.values[1]}\\begin{bmatrix}1\\\\-2\\end{bmatrix}` },
     ];
   },
   eigendecomp() {
     const A = [[4, 1], [2, 3]], f = decomposeWith([[1, 1], [1, -2]], [5, 2]);
     const A3 = matMul(matMul(f.P, diag([5 ** 3, 2 ** 3])), f.Pinv);
-    const { values, Q } = symmetricEigen(SYM);
+    const { values: rawValues, Q } = symmetricEigen(SYM);
+    const values = rawValues.map(denoise);   // display only: 1.9999999999999996 becomes 2
     return [
       { title: "Stack the eigenvectors", text: `From the last card, A has eigenvectors (1, 1) and (1, −2) with eigenvalues 5 and 2. Put the eigenvectors in the columns of P and the eigenvalues on the diagonal of D.`, tex: `P=${bm(f.P)},\\quad D=${bm(f.D)}` },
       { title: "Check A = P D P⁻¹", text: `P⁻¹ has rows ${rows(f.Pinv.map((r) => r.map((v) => Math.round(v * 1000) / 1000)))} (thirds, rounded). Multiplying P D P⁻¹ gives back the rows ${rows(matMul(matMul(f.P, f.D), f.Pinv).map((r) => r.map((v) => Math.round(v))))}, which are the rows of A.`, tex: `A=PDP^{-1}=${bm(A)}` },
-      { title: "A cube costs one cube per diagonal entry", text: `D³ is just ${5}³ = ${5 ** 3} and ${2}³ = ${2 ** 3} on the diagonal. P D³ P⁻¹ has rows ${rows(A3.map((r) => r.map(Math.round)))}, the same as multiplying A by itself three times: ${rows(matPower(A, 3))}.`, tex: `A^3=PD^3P^{-1}=${bm(matPower(A, 3))}` },
+      { title: "A cube costs one cube per diagonal entry", text: `D³ is just ${5}³ = ${5 ** 3 /* num-ok: exact integer */} and ${2}³ = ${2 ** 3 /* num-ok: exact integer */} on the diagonal. P D³ P⁻¹ has rows ${rows(A3.map((r) => r.map(Math.round)))}, the same as multiplying A by itself three times: ${rows(matPower(A, 3))}.`, tex: `A^3=PD^3P^{-1}=${bm(matPower(A, 3))}` },
       { title: "A symmetric matrix does it with a rotation", text: `S with rows ${rows(SYM)} is symmetric. Its eigenvalues are ${values[0]} and ${values[1]}, and its eigenvectors, (1, 1) and (1, −1) scaled to length 1, are at right angles. With those in the columns of Q, Q^T is Q⁻¹.`, tex: `S=Q\\Lambda Q^{\\top},\\quad Q=\\tfrac{1}{\\sqrt2}${bm([[1, 1], [1, -1]])},\\ \\Lambda=${bm(diag(values))}` },
     ];
   },

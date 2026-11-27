@@ -3,7 +3,7 @@
 import {
   norm1, norm2, distance, dot, isZero, cosineSimilarity, angleBetween, toDegrees, dotFromAngle, dotSign,
   isOrthogonal, work, polar, project, projectionCoefficient, leftover, shadowLength, unitBall, unit,
-  simulateDotVariance, exactCoinDotStats, dotVarianceFormula, attentionScale, baseDK,
+  denoise, simulateDotVariance, exactCoinDotStats, dotVarianceFormula, attentionScale, baseDK,
   dotFromLengths, sgdStepWithPenalty, sgdStepWithDecay, cosineSpread, randomDirectionCosines,
 } from "./analytic-math.mjs";
 import { transformerBase } from "./linalg-math.mjs";
@@ -345,10 +345,10 @@ const stepperData = {
   norms() {
     const v = [3, 4], u = [-2, 5];
     return [
-      { title: "The straight-line length", text: `Walk 3 across and 4 up. The straight line back is the long side of a right triangle, so Pythagoras gives √(3² + 4²) = √${norm2(v) ** 2} = ${norm2(v)}.`, tex: `\\|\\mathbf{x}\\|_2=\\sqrt{3^2+4^2}=\\sqrt{${norm2(v) ** 2}}=${norm2(v)}` },
+      { title: "The straight-line length", text: `Walk 3 across and 4 up. The straight line back is the long side of a right triangle, so Pythagoras gives √(3² + 4²) = √${denoise(norm2(v) ** 2)} = ${denoise(norm2(v))}.`, tex: `\\|\\mathbf{x}\\|_2=\\sqrt{3^2+4^2}=\\sqrt{${denoise(norm2(v) ** 2)}}=${denoise(norm2(v))}` },
       { title: "The grid-walk length", text: `If you can only walk along the grid lines you travel 3 + 4 = ${norm1(v)} blocks, however you order the two legs.`, tex: `\\|\\mathbf{x}\\|_1=|3|+|4|=${norm1(v)}` },
-      { title: "Signs are dropped", text: `For (−2, 5) the L1 norm is |−2| + |5| = ${norm1(u)} and the L2 norm is √(4 + 25) = √${norm2(u) ** 2} ≈ ${r3(norm2(u))}. A negative entry is still a step you walk.`, tex: `\\|(-2,5)\\|_1=${norm1(u)},\\qquad\\|(-2,5)\\|_2\\approx${r3(norm2(u))}` },
-      { title: "L1 is never shorter", text: `For (3, 4): L1 is ${norm1(v)} and L2 is ${norm2(v)}. The straight line is the shortest way, so L2 ≤ L1 always. They match only when the arrow lies along an axis.`, tex: `\\|\\mathbf{x}\\|_2\\le\\|\\mathbf{x}\\|_1` },
+      { title: "Signs are dropped", text: `For (−2, 5) the L1 norm is |−2| + |5| = ${norm1(u)} and the L2 norm is √(4 + 25) = √${denoise(norm2(u) ** 2)} ≈ ${r3(norm2(u))}. A negative entry is still a step you walk.`, tex: `\\|(-2,5)\\|_1=${norm1(u)},\\qquad\\|(-2,5)\\|_2\\approx${r3(norm2(u))}` },
+      { title: "L1 is never shorter", text: `For (3, 4): L1 is ${norm1(v)} and L2 is ${denoise(norm2(v))}. The straight line is the shortest way, so L2 ≤ L1 always. They match only when the arrow lies along an axis.`, tex: `\\|\\mathbf{x}\\|_2\\le\\|\\mathbf{x}\\|_1` },
     ];
   },
   distance() {
@@ -363,15 +363,15 @@ const stepperData = {
     const a = [3, 2], b = [4, 0], c = [3, 1], d = [2, 2];
     return [
       { title: "Multiply entry by entry, then add", text: `For a = ${tup(a)} and b = ${tup(b)}: ${a[0]}×${b[0]} + ${a[1]}×${b[1]} = ${dot(a, b)}.`, tex: `\\mathbf{a}\\cdot\\mathbf{b}=3\\cdot4+2\\cdot0=${dot(a, b)}` },
-      { title: "The same number from lengths and an angle", text: `‖a‖ = √${norm2(a) ** 2} ≈ ${r3(norm2(a))}, ‖b‖ = ${norm2(b)}, and the angle between them is about ${r2(toDegrees(angleBetween(a, b)))}°. Multiply: ${r3(norm2(a))} × ${norm2(b)} × cos ${r2(toDegrees(angleBetween(a, b)))}° ≈ ${r2(dotFromAngle(a, b))}.`, tex: `\\|\\mathbf{a}\\|\\|\\mathbf{b}\\|\\cos\\theta\\approx${r2(dotFromAngle(a, b))}` },
-      { title: "Read it as a shadow", text: `The shadow of a on the line of b is ${r2(shadowLength(a, b))} long. Multiply it by the length of b: ${r2(shadowLength(a, b))} × ${norm2(b)} = ${r2(shadowLength(a, b) * norm2(b))}, the dot product again.`, tex: `\\text{shadow}\\times\\|\\mathbf{b}\\|=${r2(shadowLength(a, b))}\\times${norm2(b)}=${r2(shadowLength(a, b) * norm2(b))}` },
+      { title: "The same number from lengths and an angle", text: `‖a‖ = √${denoise(norm2(a) ** 2)} ≈ ${r3(norm2(a))}, ‖b‖ = ${denoise(norm2(b))}, and the angle between them is about ${r2(toDegrees(angleBetween(a, b)))}°. Multiply: ${r3(norm2(a))} × ${denoise(norm2(b))} × cos ${r2(toDegrees(angleBetween(a, b)))}° ≈ ${r2(dotFromAngle(a, b))}.`, tex: `\\|\\mathbf{a}\\|\\|\\mathbf{b}\\|\\cos\\theta\\approx${r2(dotFromAngle(a, b))}` },
+      { title: "Read it as a shadow", text: `The shadow of a on the line of b is ${r2(shadowLength(a, b))} long. Multiply it by the length of b: ${r2(shadowLength(a, b))} × ${denoise(norm2(b))} = ${r2(shadowLength(a, b) * norm2(b))}, the dot product again.`, tex: `\\text{shadow}\\times\\|\\mathbf{b}\\|=${r2(shadowLength(a, b))}\\times${denoise(norm2(b))}=${r2(shadowLength(a, b) * norm2(b))}` },
       { title: "The sign tells the direction", text: `${tup(c)}·${tup(d)} = ${dot(c, d)} (positive: same way). (1, 0)·(0, 5) = ${dot([1, 0], [0, 5])} (right angles). (1, 0)·(−2, 1) = ${dot([1, 0], [-2, 1])} (opposite ways).`, tex: `${dot(c, d)}>0,\\quad ${dot([1, 0], [0, 5])}=0,\\quad ${dot([1, 0], [-2, 1])}<0` },
     ];
   },
   angle() {
     const a = [1, 0], b = [1, 1], b10 = [10, 10], z = [0, 0];
     return [
-      { title: "Divide the dot product by both lengths", text: `a = ${tup(a)}, b = ${tup(b)}: a·b = ${dot(a, b)}, ‖a‖ = ${norm2(a)}, ‖b‖ = √${norm2(b) ** 2} ≈ ${r3(norm2(b))}. So the cosine is ${dot(a, b)} / ${r3(norm2(b))} ≈ ${r3(cosineSimilarity(a, b))}.`, tex: `\\cos\\theta=\\dfrac{\\mathbf{a}\\cdot\\mathbf{b}}{\\|\\mathbf{a}\\|\\|\\mathbf{b}\\|}\\approx${r3(cosineSimilarity(a, b))}` },
+      { title: "Divide the dot product by both lengths", text: `a = ${tup(a)}, b = ${tup(b)}: a·b = ${dot(a, b)}, ‖a‖ = ${denoise(norm2(a))}, ‖b‖ = √${denoise(norm2(b) ** 2)} ≈ ${r3(norm2(b))}. So the cosine is ${dot(a, b)} / ${r3(norm2(b))} ≈ ${r3(cosineSimilarity(a, b))}.`, tex: `\\cos\\theta=\\dfrac{\\mathbf{a}\\cdot\\mathbf{b}}{\\|\\mathbf{a}\\|\\|\\mathbf{b}\\|}\\approx${r3(cosineSimilarity(a, b))}` },
       { title: "Turn the cosine into an angle", text: `The angle whose cosine is ${r3(cosineSimilarity(a, b))} is ${r2(toDegrees(angleBetween(a, b)))}°: the diagonal of a square sits halfway between the two axes.`, tex: `\\theta=\\arccos(${r3(cosineSimilarity(a, b))})=${r2(toDegrees(angleBetween(a, b)))}^\\circ` },
       { title: "Scaling does not change it", text: `Replace b with ${tup(b10)}, ten times as long. The dot product becomes ${dot(a, b10)} but the cosine similarity is still ${r3(cosineSimilarity(a, b10))}.`, tex: `\\cos\\theta\\ \\text{for}\\ (1,0),(10,10)=${r3(cosineSimilarity(a, b10))}` },
       { title: "The zero vector has no angle", text: `For ${tup(z)} the quotient would be 0/0, which means nothing. A direction needs a length above zero, so cosine similarity is undefined here. Code must check for it instead of dividing.`, tex: `\\cos\\theta=\\dfrac{0}{0}\\ \\text{is undefined}` },
@@ -402,8 +402,8 @@ const stepperData = {
     return [
       { title: "One product has variance 1", text: `Take one entry of q and one of k, independent, each with mean 0 and variance 1. Their product also has mean 0, and variance 1 × 1 = 1.`, tex: `\\operatorname{Var}(q_ik_i)=1\\cdot1=1` },
       { title: "A sum of d independent products adds the variances", text: `q·k adds d such products. Independent variances add, so the variance of q·k is d. Check it exactly for d = 3 with every ±1 choice: mean ${ex.mean}, variance ${ex.variance}.`, tex: `\\operatorname{Var}(\\mathbf{q}\\cdot\\mathbf{k})=d\\cdot1=d` },
-      { title: "Dividing by √d divides the variance by d", text: `Dividing a quantity by c divides its variance by c². With c = √d the variance becomes d / d = 1. For d = ${baseDK}, √${baseDK} = ${Math.sqrt(baseDK)}.`, tex: `\\operatorname{Var}\\!\\left(\\dfrac{\\mathbf{q}\\cdot\\mathbf{k}}{\\sqrt d}\\right)=\\dfrac{d}{d}=1` },
-      { title: "A simulation agrees", text: `With ${N.toLocaleString("en-US")} random pairs at d = ${baseDK} (seed 2017): normal entries gave variance ${sN.rawStats.variance.toFixed(1)} before and ${sN.scaledStats.variance.toFixed(2)} after dividing by ${Math.sqrt(baseDK)}; coin-flip entries gave ${sC.rawStats.variance.toFixed(1)} and ${sC.scaledStats.variance.toFixed(2)}.`, tex: `${sN.rawStats.variance.toFixed(1)}\\to${sN.scaledStats.variance.toFixed(2)}\\ (\\text{normal}),\\quad ${sC.rawStats.variance.toFixed(1)}\\to${sC.scaledStats.variance.toFixed(2)}\\ (\\text{coins})` },
+      { title: "Dividing by √d divides the variance by d", text: `Dividing a quantity by c divides its variance by c². With c = √d the variance becomes d / d = 1. For d = ${baseDK}, √${baseDK} = ${denoise(Math.sqrt(baseDK))}.`, tex: `\\operatorname{Var}\\!\\left(\\dfrac{\\mathbf{q}\\cdot\\mathbf{k}}{\\sqrt d}\\right)=\\dfrac{d}{d}=1` },
+      { title: "A simulation agrees", text: `With ${N.toLocaleString("en-US")} random pairs at d = ${baseDK} (seed 2017): normal entries gave variance ${sN.rawStats.variance.toFixed(1)} before and ${sN.scaledStats.variance.toFixed(2)} after dividing by ${denoise(Math.sqrt(baseDK))}; coin-flip entries gave ${sC.rawStats.variance.toFixed(1)} and ${sC.scaledStats.variance.toFixed(2)}.`, tex: `${sN.rawStats.variance.toFixed(1)}\\to${sN.scaledStats.variance.toFixed(2)}\\ (\\text{normal}),\\quad ${sC.rawStats.variance.toFixed(1)}\\to${sC.scaledStats.variance.toFixed(2)}\\ (\\text{coins})` },
     ];
   },
 };

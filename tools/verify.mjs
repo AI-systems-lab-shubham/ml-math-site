@@ -1,6 +1,6 @@
 // One command for the module checklist: unit tests, course, glossary, claims, e2e, ui-verify, email hygiene.
 // Usage: node tools/verify.mjs [--fast | --changed | --full] [--timings] [--plan] [--only a,b,c] [--skip-e2e] [--skip-ui]
-//   --fast     unit, course, glossary, claims, fonts. No browser. Use after every change.
+//   --fast     unit, course, glossary, claims, numbers-static, fonts. No browser. Use after every change.
 //   --changed  the --fast steps, then the e2e tests and ui-verify (375, 900, 1280 px) for the pages that depend on the files
 //              changed since the last passing --full (reports/last-full-pass), plus uncommitted and untracked files.
 //              A shared, core, unused or unclassifiable file, a missing or unusable marker: runs --full instead.
@@ -31,6 +31,8 @@ const ALL_STEPS = [
   { name: "glossary", fast: true, cmd: ["node", "tools/check-glossary.mjs"] },
   { name: "fonts", fast: true, cmd: ["node", "tools/check-fonts.mjs"] },
   { name: "claims", fast: true, cmd: ["node", "tools/check-claims.mjs"] },
+  { name: "numbers-static", fast: true, cmd: ["node", "tools/check-numbers.mjs", "--static"] },
+  { name: "numbers", cmd: ["node", "tools/check-numbers.mjs", "--browser"], browser: true },
   { name: "e2e-nav", cmd: ["node", "tests/e2e/nav-reachable.mjs"], browser: true },
   { name: "e2e-symbols", cmd: ["node", "tests/e2e/symbols.mjs"], browser: true },
   { name: "e2e-progress-menu", cmd: ["node", "tests/e2e/progress-menu.mjs"], browser: true },

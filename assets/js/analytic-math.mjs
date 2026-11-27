@@ -9,6 +9,9 @@ const same = (a, b) => {
 /** Euclidean norm, ‖x‖₂ = √(Σ xᵢ²). Pythagoras in as many dimensions as there are entries. */
 export const norm2 = (x) => Math.sqrt(x.reduce((s, v) => s + v * v, 0));
 
+/** Removes float noise for display only (2.0000000000000004 becomes 2). It keeps 12 significant digits, so a precision a card shows on purpose is never changed. */
+export const denoise = (x) => Number(Number(x).toPrecision(12));
+
 /** Sum of absolute values, ‖x‖₁ = Σ |xᵢ|: the length of a walk along the grid lines. */
 export const norm1 = (x) => x.reduce((s, v) => s + Math.abs(v), 0);
 

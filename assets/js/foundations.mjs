@@ -389,7 +389,7 @@ function circleWidget(host) {
     const a = ((deg % 360) + 360) % 360;
     if (a > 0) {
       const r2 = 36, end = (a * Math.PI) / 180;
-      svg("path", { d: `M ${cx + r2} ${cy} A ${r2} ${r2} 0 ${a > 180 ? 1 : 0} 0 ${cx + r2 * Math.cos(end)} ${cy - r2 * Math.sin(end)}`, style: stroke("burgundy", 2) }, c);
+      svg("path", { d: `M ${cx + r2} ${cy} A ${r2} ${r2} 0 ${a > 180 ? 1 : 0} 0 ${cx + r2 * Math.cos(end) /* num-ok: svg coordinate */} ${cy - r2 * Math.sin(end) /* num-ok: svg coordinate */}`, style: stroke("burgundy", 2) }, c);
     }
     svg("circle", { cx: px, cy: py, r: 9, style: `${fill("burgundy")};stroke:#fff;stroke-width:2` }, c);
     text(c, cx + R + 22, cy - 8, "1", { class: "tick-label", "text-anchor": "start" });
