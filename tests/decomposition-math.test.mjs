@@ -400,6 +400,13 @@ test("tr(A^T A) is the sum of all squared entries (the squared Frobenius norm); 
   assert.equal(traceOfProduct3(A, B, C), traceOfProduct3(C, A, B));
   assert.notEqual(traceOfProduct3(A, B, C), traceOfProduct3(B, A, C));
 });
+test("the Trace card's counterexample: A (0,1;0,0), B (0,0;1,0), C (1,0;0,0) give tr(ABC) = 1 but tr(BAC) = 0, while the cyclic orders agree", () => {
+  const A = [[0, 1], [0, 0]], B = [[0, 0], [1, 0]], C = [[1, 0], [0, 0]];
+  assert.equal(traceOfProduct3(A, B, C), 1);
+  assert.equal(traceOfProduct3(B, A, C), 0);
+  assert.equal(traceOfProduct3(B, C, A), 1);
+  assert.equal(traceOfProduct3(C, A, B), 1);
+});
 test("tr(P⁻¹AP) = tr(A): re-expressing a matrix with P⁻¹AP leaves the trace unchanged", () => {
   for (let i = 0; i < 50; i++) {
     const A = randomMatrix(3, 3, 80 + i), P = matAdd(randomMatrix(3, 3, 90 + i), matScaleI(3, 9));

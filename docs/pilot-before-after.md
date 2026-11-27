@@ -1,6 +1,6 @@
 # Voice pilot: before and after
 
-Two cards, rewritten in the voice of `docs/VOICE.md`, starting from `docs/TONE-PASS.md` section 6. Branch `voice-pilot`. The original text is taken from commit `4b98d5d` (what is on `main`).
+Three cards (Variables, Eigenvalues and eigenvectors, and Trace, added on branch `voice-trace`), rewritten in the voice of `docs/VOICE.md`, starting from `docs/TONE-PASS.md` section 6. Branch `voice-pilot`. The original text is taken from commit `4b98d5d` (what is on `main`).
 
 **Scope.** Tagline, objectives, stages 1, 5, 6 and 7, takeaways, Teach it, Predict hints, and the “Before this” line. Nothing else changed: no number, formula, symbol, citation, provenance tag, worked-example value, widget, check question or answer, glossary term, table, or the seven-stage structure.
 
@@ -13,6 +13,8 @@ Two cards, rewritten in the voice of `docs/VOICE.md`, starting from `docs/TONE-P
 **Second pass (this version).** Four fixes you gave, then: natural contractions in prose (not in definitions, formulas, stage 7 or the Simplified notes); one question asked aloud in Variables stage 5 and one in Eigenvectors stage 6; and a backward link to the Determinant card. The rules went into `docs/VOICE.md` as rules 11 and 12.
 
 **Contraction counter.** The export already counted the curly apostrophe (’), but it also counted possessives (“card’s”), which are not contractions. It now counts n’t, ’re, ’ve, ’ll, ’d, ’m and the ’s of it, that, there, here, let, what, who, where, how, he and she. “Before” below is recomputed with the corrected counter on the original pages (under the old counter it was 2 and 2).
+
+**Trace (added later).** Written in Build mode from `docs/TRACE-REWRITE-DRAFT.md`: tagline and stages 1, 5, 6, 7, plus one string in `data/checks/m03-trace.json` (the stage 6 reveal reasoning). Objectives, stages 2 to 4, takeaways, Teach it, numbers, TeX lines, widgets and check answers are untouched. The “Before this” line is generated for every card by `assets/js/lesson.mjs`, so it shows the full card titles, not the draft’s shortened ones.
 
 
 ## Variables and expressions (`m00-variables`)
@@ -229,4 +231,125 @@ Two cards, rewritten in the voice of `docs/VOICE.md`, starting from `docs/TONE-P
 
 
 **Facts preserved.** Every number, every formula (A v = λv, λ = (tr ± √(tr² − 4 det))/2, (A − λI) v = 0, the determinant expansion, the table of cases), the PageRank citation (Page, Brin, Motwani and Winograd, 1999), the MML Ch 4.2 reference, the Derived tag, the Simplified caveat, the “Where it breaks down” caveat, the glossary terms (including defective matrix and discriminant), the five Teach-it headings, and the Spot it, Predict, Reveal and Explain questions with their answers are unchanged. Checked by tests/facts-preserved.test.mjs; the only exceptions are the stage 7 lead-in label (below).
+
+
+## Trace (Build mode) (`m03-trace`)
+
+| | Words | “you/your” | per 1,000 words | Contractions |
+|---|---|---|---|---|
+| Before | 1199 | 9 | 7.5 | 1 |
+| After | 1314 | 19 | 14.5 | 6 |
+
+
+#### Tagline
+
+| Before | After |
+|---|---|
+| One number from adding the diagonal, with a surprising rule about products. | One number from the diagonal, and a rule about products that looks wrong at first. |
+
+**What changed.** Draft wording: “looks wrong at first” replaces “surprising”.
+
+
+#### “By the end of this card” (objectives)
+
+| Before | After |
+|---|---|
+| Compute the trace of a square matrix as the sum of the entries on its diagonal<br><br>Show that tr(AB) = tr(BA) even when AB and BA are different matrices<br><br>Explain why tr(A^T A) is the sum of all the squared entries, the squared Frobenius norm | Compute the trace of a square matrix as the sum of the entries on its diagonal<br><br>Show that tr(AB) = tr(BA) even when AB and BA are different matrices<br><br>Explain why tr(A^T A) is the sum of all the squared entries, the squared Frobenius norm |
+
+**What changed.** Unchanged.
+
+
+#### Stage 1 Meaning
+
+| Before | After |
+|---|---|
+| Take a square table of numbers and walk down it from the top left corner to the bottom right. The entries you step on are the diagonal. Add them up and you have the trace of the square matrix. Nothing else is needed: the entries off the diagonal do not count at all.<br><br>We write the trace of A as tr(A). The entry in row i and column i is aii, and the trace adds those for every i. | Is there one number that sums up a square table? There are plenty, and the trace is one of the simplest. Walk down the table from the top left corner to the bottom right and add the entries you step on. Those entries are the diagonal, and their sum is the trace. Everything off the diagonal is ignored.<br><br>You already have what you need to see why this is worth having: matrix multiplication, transposes, and the sum of squared entries from the Norms card. The trace is where those three meet.<br><br>We write the trace of A as tr(A). Read aii as “a-i-i”: the entry in row i and column i. The trace adds those for every i. |
+
+**What changed.** Build mode: opens with the question (“Is there one number that sums up a square table?”), then one recall line naming three earlier cards, each now a backward link (Matrix multiplication, Transpose, Norms), then the symbols read aloud (“a-i-i”). The formula line is unchanged. “Nothing else is needed… do not count at all” became “Everything off the diagonal is ignored”.
+
+**CHECK.** “There are plenty, and the trace is one of the simplest.” is new. “Plenty” and “one of the simplest” are judgements, not facts from the card or the tests. You kept “plenty” and asked for “one of the simplest” (the draft said “the simplest”).
+
+**CHECK.** The recall line names Matrix multiplication, Transpose and Norms, the three the card’s “Before this” line lists. The brief for Trace names Matrices instead (CARD-BRIEFS.md). The draft chose the three the card actually uses.
+
+**CHECK.** “The trace is where those three meet.” True of tr(AᵀA), which uses a product, a transpose and a sum of squares; it is not a general statement about the trace. The sentence just before says what the three are for (“why this is worth having”). Kept as drafted.
+
+**CHECK.** The old text said “the trace of the square matrix” with the glossary term square matrix. The draft says “a square table”, so the page no longer highlights that term in stage 1. The term is still in the objectives.
+
+
+#### Stage 5 Why and when
+
+| Before | After |
+|---|---|
+| The trace squeezes a whole table into one number that behaves nicely: it adds (tr(A + B) = tr(A) + tr(B)), it scales (tr(cA) = c tr(A)), and it ignores the order of a product: tr(AB) = tr(BA). That last rule is surprising, because AB and BA are usually different matrices, as the worked example showed. It extends to three matrices, but only by moving the last one to the front: tr(ABC) = tr(CAB) = tr(BCA), while swapping two neighbours can change the answer.<br><br>**When it does not fit.** The trace throws away everything off the diagonal, so very different matrices can share a trace, and it can be negative or zero, so it is not a measure of size. For size, use the sum of squared entries: tr(ATA) = ⟨calc⟩ for the matrix in the worked example, which is the squared Frobenius norm. | Why keep a number that throws most of the table away? Because it behaves well. It adds: tr(A + B) = tr(A) + tr(B). It scales: tr(cA) = c·tr(A). And it ignores the order of a product: tr(AB) = tr(BA).<br><br>That last one should make you suspicious. AB and BA are usually different matrices, as the worked example showed, and yet their traces match. It reaches three matrices in only one way: you can move the last matrix to the front, so tr(ABC) = tr(CAB) = tr(BCA), but swapping two neighbours can change the answer.<br><br>**When it does not fit.** The trace ignores everything off the diagonal, so very different matrices can share a trace. It can also be negative or zero, so it is not a measure of size. For size, use tr(ATA), the sum of all the squared entries, which is ⟨calc⟩ for the matrix in the worked example (1 + 4 + 9 + 16). That is the squared Frobenius norm. |
+
+**What changed.** Opens with a question aloud (“Why keep a number that throws most of the table away?”), splits one long sentence into three short ones, and adds “That last one should make you suspicious.” The sum-of-squares sentence now starts “For size, use tr(AᵀA)”, with 30 still the calc and (1 + 4 + 9 + 16) added as in the draft.
+
+**CHECK.** “It reaches three matrices in only one way” replaces “It extends to three matrices, but only by moving the last one to the front”. Same fact: the allowed move is to take the last matrix to the front. “Only one way” is slightly looser (moving the first to the back is the same move repeated).
+
+**CHECK.** “Because it behaves well” is a judgement word for the three properties that follow. They are the facts.
+
+
+#### Stage 6 How to arrive at it
+
+| Before | After |
+|---|---|
+| [tag: ◆ Motivated]<br><br>• **The wish.** A single number from a square table that adds when tables add, scales when they scale, and does not change if we multiply two tables in the other order.<br><br>• **The candidates.** The product of the diagonal does not add. The largest entry does not add either. The sum of the diagonal does add and scale.<br><br>• **The test.** tr(AB) = Σi Σj aijbji, and tr(BA) = Σi Σj bijaji: the same terms with the names i and j swapped. So the order does not matter.<br><br>• **The choice.** The sum of the diagonal is a good fit among several. This is a motivated choice, not a forced one, and we have not shown that it is the only one. | [tag: ◆ Motivated]<br><br>• **The wish.** Suppose you want to squeeze a square table into one number, and you have three wishes. If you add two tables, the numbers add. If you scale a table, the number scales. And if you multiply two tables, the number doesn’t care which order you did it in.<br><br>• **The candidates.** Try some candidates. The product of the diagonal entries doesn’t add. The largest entry doesn’t add either. The sum of the diagonal adds and scales.<br><br>• **The test.** Does it ignore the order? Write the product out entry by entry: tr(AB) = Σi Σj aijbji, and tr(BA) = Σi Σj bijaji. These are the same terms with the names i and j swapped, so the order doesn’t matter.<br><br>• **The choice.** An honest limit: this is a motivated choice, not a forced one. The diagonal sum fits the wishes, and we haven’t shown it is the only number that does. |
+
+**What changed.** Told as a story (“Suppose you want to squeeze a square table into one number, and you have three wishes”). Still Motivated. Per your answer the four bold labels (The wish, The candidates, The test, The choice) and the list are kept, with the draft’s sentences after each. “Does it ignore the order?” is asked aloud in the test step; the honest limit is named first in the choice step.
+
+**CHECK.** The wish is now written as three wishes: the numbers add, the number scales, and the number doesn’t care about the order. The old text said the same three things in one sentence.
+
+**CHECK.** “The diagonal sum fits the wishes, and we haven’t shown it is the only number that does” replaces “a good fit among several … not shown that it is the only one”. Same limit; “among several” is dropped.
+
+
+#### Stage 7 In an LLM
+
+| Before | After |
+|---|---|
+| • **Conceptual link: the squared size of a weight matrix.** Weight decay penalises the squared L2 norm of the weights (see the Norms card), and for a weight matrix W that sum of squared entries is tr(WTW). That is an identity about numbers; it does not say how any model is trained beyond what the Norms card states.<br><br>• There is no specific, documented step of a language model that we can point to as a trace.<br><br>**Simplified.** The identity holds for any matrix. It is a different way to write a sum, not a claim about a particular model. | • **Conceptual link: the squared size of a weight matrix.** Weight decay penalises the squared L2 norm of the weights (see the Norms card), and for a weight matrix W that sum of squared entries is tr(WTW). That is an identity about numbers. It does not say how any model is trained beyond what the Norms card states.<br><br>• To be straight with you: no specific, documented step of a language model is a trace.<br><br>**Simplified.** The identity holds for any matrix. It is a different way of writing a sum, not a claim about a particular model. |
+
+**What changed.** Draft wording, with “does not” in the claim sentence (Rule 11 keeps stage 7 uncontracted). The second bullet now reads “To be straight with you: no specific, documented step of a language model is a trace.” The Simplified note now says “a different way of writing a sum”.
+
+**CHECK.** “no specific, documented step of a language model is a trace” replaces “there is no specific, documented step … that we can point to as a trace”. Same claim: none is claimed. CLAIMS.md line 180 still describes it correctly.
+
+
+#### Key takeaways
+
+| Before | After |
+|---|---|
+| The trace adds up the diagonal entries of a square matrix; it is one number.<br><br>tr(AB) = tr(BA), although AB and BA are usually different matrices.<br><br>tr(A^T A) equals the sum of all the squared entries of A, the squared Frobenius norm. | The trace adds up the diagonal entries of a square matrix; it is one number.<br><br>tr(AB) = tr(BA), although AB and BA are usually different matrices.<br><br>tr(A^T A) equals the sum of all the squared entries of A, the squared Frobenius norm. |
+
+**What changed.** Unchanged.
+
+
+#### Teach it
+
+| Before | After |
+|---|---|
+| **Everyday analogy**<br><br>The total on the main diagonal of a seating chart where each person’s row and column share a number. *Where it breaks down:* a real table has a meaning for each cell, but the trace just adds the diagonal whatever it means.<br><br>**Common misconception**<br><br>“The trace measures how big a matrix is.” It can be negative or zero for a big matrix, because it adds signed diagonal entries and ignores the rest. | **Everyday analogy**<br><br>The total on the main diagonal of a seating chart where each person’s row and column share a number. *Where it breaks down:* a real table has a meaning for each cell, but the trace just adds the diagonal whatever it means.<br><br>**Common misconception**<br><br>“The trace measures how big a matrix is.” It can be negative or zero for a big matrix, because it adds signed diagonal entries and ignores the rest. |
+
+**What changed.** Unchanged.
+
+
+#### Predict hint(s)
+
+| Before | After |
+|---|---|
+| tr-a: Add the entries from top left to bottom right.<br><br>tr-b: You may use the rule tr(BA) = tr(AB) and multiply in whichever order you prefer. | tr-a: Add the entries from top left to bottom right.<br><br>tr-b: You may use the rule tr(BA) = tr(AB) and multiply in whichever order you prefer. |
+
+**What changed.** Unchanged.
+
+
+#### Stage 6 reveal reasoning (data/checks, shown after the learner predicts)
+
+| Before | After |
+|---|---|
+| No. Moving the first matrix to the back, or the last to the front, keeps the trace: tr(ABC) = tr(BCA) = tr(CAB). Swapping two neighbours can change it, and the tests include an example where it does. | No. Moving the first matrix to the back, or the last to the front, keeps the trace: tr(ABC) = tr(BCA) = tr(CAB). Swapping two neighbours can change it. Take A with rows (0, 1) and (0, 0), B with rows (0, 0) and (1, 0), and C with rows (1, 0) and (0, 0). Then tr(ABC) = 1 but tr(BAC) = 0. |
+
+**What changed.** The old text said “…and the tests include an example where it does” (process talk). It now gives the example: A rows (0, 1) and (0, 0), B rows (0, 0) and (1, 0), C rows (1, 0) and (0, 0), so tr(ABC) = 1 but tr(BAC) = 0. The prompt and the id are unchanged.
+
+**CHECK.** The counterexample is computed in tests/decomposition-math.test.mjs (“the Trace card’s counterexample…”): tr(ABC) = 1, tr(BAC) = 0, tr(BCA) = tr(CAB) = 1, so the text and the code agree. I also checked it by hand: AB has rows (1, 0) and (0, 0), so ABC has trace 1; BA has rows (0, 0) and (0, 1), so BAC is the zero matrix.
+
+
+**Facts preserved.** Every number (5, 30, the diagonal sum, and the matrices in the counterexample), every formula (tr(A) = Σ a_ii, tr(A + B), tr(cA), tr(AB) = tr(BA), the cyclic rule for three matrices, the double sums in the test, tr(AᵀA)), the Motivated tag, the Simplified caveat, the Conceptual link label, the “no documented step” statement, the glossary terms and the Spot-it and Predict questions are unchanged. Checked by tests/facts-preserved.test.mjs. Two exceptions, both for the arithmetic (1 + 4 + 9 + 16) the draft spells out in stage 5 (new numbers 9 and 16); the worked-example stepper already shows the same sum, and 30 still comes from code. The counterexample in the reveal is computed by a new test in tests/decomposition-math.test.mjs. Stage 2 to 4, objectives, takeaways, Teach it and the other check items are untouched.
 
