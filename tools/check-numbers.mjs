@@ -5,7 +5,7 @@
 //   --dump     with --browser, also writes the rendered text per page (for before/after diffs).
 import fs from "node:fs";
 import path from "node:path";
-import { noisyNumbers, unroundedInterpolations } from "./lib/number-noise.mjs";
+import { hyphenMinuses, noisyNumbers, unroundedInterpolations } from "./lib/number-noise.mjs";
 import { requirePlaywright, serveStatic, siteRoot } from "./lib/playwright.mjs";
 
 const flag = (n) => process.argv.includes(n);
@@ -57,21 +57,36 @@ if (doBrowser) {
     await page.waitForTimeout(300);
     // The page text and TeX, then every step of every stepper (steps are shown one at a time).
     const texts = await page.evaluate(() => {
+      // Visible text only (no TeX source, no visually-hidden MathML), for the hyphen-minus scan.
+      const visible = (root) => {
+        const parts = [];
+        const walk = (n) => {
+          if (n.nodeType === 3) { parts.push(n.textContent); return; }
+          if (n.nodeType !== 1 || ["SCRIPT", "STYLE", "TEMPLATE", "NOSCRIPT"].includes(n.tagName) || n.classList.contains("katex-mathml") || n.hidden) return;
+          n.childNodes.forEach(walk);
+          if (/^(P|LI|DIV|H[1-6]|TR|SECTION|BR)$/.test(n.tagName)) parts.push("\n");
+        };
+        walk(root);
+        return parts.join("");
+      };
       const tex = (root) => [...root.querySelectorAll('annotation[encoding="application/x-tex"]')].map((a) => `$${a.textContent}$`).join("\n");
       const out = [(document.querySelector("main")?.innerText ?? "") + "\n" + tex(document)];
+      const vis = [visible(document.querySelector("main") ?? document.body)];
       document.querySelectorAll("[data-stepper]").forEach((host) => {
         const next = [...host.querySelectorAll("button")].find((b) => b.textContent.trim() === "Next step");
         let guard = 0;
         while (next && !next.disabled && guard++ < 30) {
           next.click();
           out.push(`[stepper ${host.dataset.stepper}] ` + host.querySelector(".stepper-body").innerText + "\n" + tex(host));
+          vis.push(visible(host.querySelector(".stepper-body")));
         }
       });
-      return out;
+      return { out, vis };
     });
-    const all = texts.join("\n\n");
+    const all = texts.out.join("\n\n");
     if (dump) fs.writeFileSync(path.join(dump, `${pg.key}.txt`), all);
     for (const h of noisyNumbers(all)) { failures++; console.error(`${pg.key}: "${h.token}" (${h.why})`); }
+    for (const h of hyphenMinuses(texts.vis.join("\n"))) { failures++; console.error(`${pg.key}: "${h.token}" (${h.why})`); }
     seen++;
     await page.close();
   }

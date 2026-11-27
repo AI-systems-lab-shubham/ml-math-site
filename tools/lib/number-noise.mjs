@@ -33,3 +33,15 @@ export function unroundedInterpolations(source) {
   });
   return out;
 }
+
+/** A hyphen-minus directly before a digit in visible text ("-3", "(-1, 2)"): negative numbers must use the real minus sign (U+2212).
+ *  Hyphens inside a word or a range ("GPT-3", "top-5", "2-3", "x-1") have a letter, digit or closing bracket before them and are not flagged.
+ *  Returns [{ token, why }]. Visible text only: TeX source legitimately uses "-". */
+export function hyphenMinuses(text) {
+  const out = [];
+  for (const m of String(text).matchAll(/(?<![\p{L}\p{N})\]\-])-(?=\d)/gu)) {
+    const around = String(text).slice(Math.max(0, m.index - 12), m.index + 8).replace(/\s+/g, " ");
+    out.push({ token: around, why: "hyphen-minus before a digit; use the real minus sign (−)" });
+  }
+  return out;
+}

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { noisyNumbers, unroundedInterpolations } from "../tools/lib/number-noise.mjs";
+import { hyphenMinuses, noisyNumbers, unroundedInterpolations } from "../tools/lib/number-noise.mjs";
 import { denoise, norm2 } from "../assets/js/analytic-math.mjs";
 
 test("noisyNumbers flags float noise", () => {
@@ -27,4 +27,9 @@ test("denoise removes float noise only", () => {
 test("unroundedInterpolations finds raw float expressions in template literals", () => {
   const src = "const a = `L2 = √${norm2(v) ** 2}`;\nconst b = `ok √${denoise(norm2(v) ** 2)}`;\nconst c = `ok ${r3(Math.sqrt(2))}`;\nconst d = `ok ${2 ** 3 /* num-ok: exact */}`;";
   assert.deepEqual(unroundedInterpolations(src).map((h) => h.line), [1]);
+});
+
+test("hyphenMinuses flags a hyphen-minus before a digit and leaves the real minus and hyphenated words alone", () => {
+  for (const bad of ["is -3 here", "the point (-1, 2)", "gives -0.5", "x = -4", "-1 to 1", "(1, -2)"]) assert.equal(hyphenMinuses(bad).length, 1, bad);
+  for (const ok of ["is \u22123 here", "(\u22121, 2)", "GPT-3", "top-5 accuracy", "pages 2-3", "x-1", "(a)-1", "2022-05-01", "arXiv:2106.09685", "a self-2 thing", "plain text"]) assert.deepEqual(hyphenMinuses(ok), [], ok);
 });
