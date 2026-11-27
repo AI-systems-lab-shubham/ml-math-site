@@ -22,6 +22,7 @@ const VIEW_NARROW = "170 50 300 300";
 const glue = (s) => s.replace(/ = (?=\S)/g, "\u00a0=\u00a0").replace(/([−+×]) (?=\S)/g, "$1\u00a0");
 const r2 = (x) => Math.round(x * 100) / 100;
 const f2 = (x) => n(x);                                       // 2 decimals, real minus sign
+const RANK_EXAMPLE = 8;   // the rank the low-rank card uses to show a layered copy costing more than the picture
 const f3 = (x) => String(Math.round(x * 1000) / 1000).replace("-", "−");
 const tag = (parent, p, str, color, dx = 8, dy = -8, anchor = "start") =>
   text(parent, px(p[0]) + dx, py(p[1]) + dy, str, { "text-anchor": anchor, style: `fill:var(--c-${color})` });
@@ -432,7 +433,8 @@ const calcs = {
   storageDiff: () => String(storageTruncated(512, 512, 8) - storageLoRA(512, 512, 8)),
   storage16: () => String(storageFull(16, 16)),
   per16: () => String(storageTruncated(16, 16, 1)),
-  rank8of16: () => String(storageTruncated(16, 16, 8)),
+  rankExample: () => String(RANK_EXAMPLE),
+  rank8of16: () => String(storageTruncated(16, 16, RANK_EXAMPLE)),
   rank7of16: () => String(storageTruncated(16, 16, 7)),
   breakEven16: () => String(breakEvenRank(16, 16)),
   loraRank: () => String(hu.r),
