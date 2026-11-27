@@ -207,13 +207,13 @@ export function drawAxes(canvas, { xMin, xMax, yMin, yMax, left = 48, right = 61
   for (let x = Math.ceil(xMin / xStep) * xStep; x <= xMax + 1e-9; x += xStep) {
     svg("line", { class: x === 0 ? "axis" : "grid", x1: sx(x), x2: sx(x), y1: top, y2: bottom }, canvas);
     const t = svg("text", { class: "tick-label", x: sx(x), y: bottom + 18, "text-anchor": "middle" }, canvas);
-    t.textContent = String(Math.round(x * 100) / 100);
+    t.textContent = minusSign(Math.round(x * 100) / 100);
   }
   for (let y = Math.ceil(yMin / yStep) * yStep; y <= yMax + 1e-9; y += yStep) {
     svg("line", { class: y === 0 ? "axis" : "grid", x1: left, x2: right, y1: sy(y), y2: sy(y) }, canvas);
     if (y === yMin) continue; // the corner label would collide with the first x label
     const t = svg("text", { class: "tick-label", x: left - 8, y: sy(y) + 4, "text-anchor": "end" }, canvas);
-    t.textContent = String(Math.round(y * 100) / 100);
+    t.textContent = minusSign(Math.round(y * 100) / 100);
   }
   const plot = svg("g", { "clip-path": `url(#${clipId})` }, canvas);
   return { sx, sy, plot };
@@ -227,9 +227,12 @@ export function axisNames(canvas, { sx, sy }, { xMax, yMax, right = 616 }, names
   yt.textContent = names.y;
 }
 
+/** Display only: the real minus sign (−) for a negative number, never the hyphen-minus. */
+export const minusSign = (s) => String(s).replace(/(^|[^\w.])-(?=\d)/g, "$1−");
+
 export const fmt = (n, digits = 2) => {
   const r = Math.round(n * 10 ** digits) / 10 ** digits;
-  return String(Object.is(r, -0) ? 0 : r);
+  return minusSign(String(Object.is(r, -0) ? 0 : r));
 };
 
 /* ---------- worked-example stepper ---------- */

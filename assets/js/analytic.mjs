@@ -365,7 +365,7 @@ const stepperData = {
       { title: "Multiply entry by entry, then add", text: `For a = ${tup(a)} and b = ${tup(b)}: ${a[0]}×${b[0]} + ${a[1]}×${b[1]} = ${dot(a, b)}.`, tex: `\\mathbf{a}\\cdot\\mathbf{b}=3\\cdot4+2\\cdot0=${dot(a, b)}` },
       { title: "The same number from lengths and an angle", text: `‖a‖ = √${denoise(norm2(a) ** 2)} ≈ ${r3(norm2(a))}, ‖b‖ = ${denoise(norm2(b))}, and the angle between them is about ${r2(toDegrees(angleBetween(a, b)))}°. Multiply: ${r3(norm2(a))} × ${denoise(norm2(b))} × cos ${r2(toDegrees(angleBetween(a, b)))}° ≈ ${r2(dotFromAngle(a, b))}.`, tex: `\\|\\mathbf{a}\\|\\|\\mathbf{b}\\|\\cos\\theta\\approx${r2(dotFromAngle(a, b))}` },
       { title: "Read it as a shadow", text: `The shadow of a on the line of b is ${r2(shadowLength(a, b))} long. Multiply it by the length of b: ${r2(shadowLength(a, b))} × ${denoise(norm2(b))} = ${r2(shadowLength(a, b) * norm2(b))}, the dot product again.`, tex: `\\text{shadow}\\times\\|\\mathbf{b}\\|=${r2(shadowLength(a, b))}\\times${denoise(norm2(b))}=${r2(shadowLength(a, b) * norm2(b))}` },
-      { title: "The sign tells the direction", text: `${tup(c)}·${tup(d)} = ${dot(c, d)} (positive: same way). (1, 0)·(0, 5) = ${dot([1, 0], [0, 5])} (right angles). (1, 0)·(−2, 1) = ${dot([1, 0], [-2, 1])} (opposite ways).`, tex: `${dot(c, d)}>0,\\quad ${dot([1, 0], [0, 5])}=0,\\quad ${dot([1, 0], [-2, 1])}<0` },
+      { title: "The sign tells the direction", text: `${tup(c)}·${tup(d)} = ${n(dot(c, d))} (positive: same way). (1, 0)·(0, 5) = ${n(dot([1, 0], [0, 5]))} (right angles). (1, 0)·(−2, 1) = ${n(dot([1, 0], [-2, 1]))} (opposite ways).`, tex: `${dot(c, d)}>0,\\quad ${dot([1, 0], [0, 5])}=0,\\quad ${dot([1, 0], [-2, 1])}<0` },
     ];
   },
   angle() {

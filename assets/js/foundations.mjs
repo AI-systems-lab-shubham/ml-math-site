@@ -9,7 +9,7 @@ import {
   cosSinDegrees, forceComponents, positionEncodingPair, entryAt, pH,
 } from "./foundations-math.mjs";
 import {
-  svg, slider, radios, widgetShell, drawAxes, axisNames, makeScale, fmt, mountStepper, mountWhenNeeded, mountPredict, mountSpotIt, mountExplain,
+  svg, slider, radios, widgetShell, drawAxes, axisNames, makeScale, fmt, minusSign, mountStepper, mountWhenNeeded, mountPredict, mountSpotIt, mountExplain,
 } from "./widgets.mjs";
 import { renderMath } from "./math-render.mjs";
 import { initGlossary, prepare } from "./glossary.mjs";
@@ -458,7 +458,7 @@ const stepperData = {
     return [
       { title: "The rule", text: "Double the input, then add 1. Same input, same output, every time.", tex: "f(x)=2x+1" },
       ...rows.map((p) => ({
-        title: `Feed in ${p.x}`, text: `Replace x with ${p.x} and work it out.`,
+        title: `Feed in ${minus(p.x)}`, text: `Replace x with ${minus(p.x)} and work it out.`,
         tex: `f(${p.x})=2\\times(${p.x})+1=${p.y}`,
       })),
       { title: "Read the table as points", text: "Each pair (input, output) is one point on the graph.", tex: rows.map((p) => `(${p.x},${p.y})`).join(",\;") },
@@ -634,7 +634,7 @@ async function boot() {
   document.querySelectorAll("[data-predict]").forEach((h) => mountPredict(h, predictions[h.dataset.predict]));
   document.querySelectorAll(".spot-it").forEach(mountSpotIt);
   document.querySelectorAll(".explain-back").forEach(mountExplain);
-  document.querySelectorAll("[data-calc]").forEach((el) => { el.textContent = calcs[el.dataset.calc](); });
+  document.querySelectorAll("[data-calc]").forEach((el) => { el.textContent = minusSign(calcs[el.dataset.calc]()); });
   renderMath();
   const shell = await initShell({ moduleId: document.querySelector('meta[name="module-id"]')?.content, conceptId: document.querySelector('meta[name="concept-id"]')?.content });
   initLesson(shell);

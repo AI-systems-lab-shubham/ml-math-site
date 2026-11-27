@@ -1,5 +1,5 @@
 // Shared by the Module 1 pages: small formatters, the plane drawing helpers and the page boot sequence.
-import { svg, html, fmt, nextId, mountStepper, mountWhenNeeded, mountPredict, mountSpotIt, mountExplain } from "./widgets.mjs";
+import { svg, html, fmt, minusSign, nextId, mountStepper, mountWhenNeeded, mountPredict, mountSpotIt, mountExplain } from "./widgets.mjs";
 import { renderMath } from "./math-render.mjs";
 import { initGlossary } from "./glossary.mjs";
 import { initShell } from "./shell.mjs";
@@ -146,7 +146,7 @@ export async function bootPage({ widgetMounts, stepperData, predictions, calcs, 
   document.querySelectorAll("[data-predict]").forEach((h) => mountPredict(h, predictions[h.dataset.predict]));
   document.querySelectorAll(".spot-it").forEach(mountSpotIt);
   document.querySelectorAll(".explain-back").forEach(mountExplain);
-  document.querySelectorAll("[data-calc]").forEach((el) => { el.textContent = calcs[el.dataset.calc](); });
+  document.querySelectorAll("[data-calc]").forEach((el) => { el.textContent = minusSign(calcs[el.dataset.calc]()); });
   document.querySelectorAll("[data-tex-calc]").forEach((el) => { el.dataset.tex = texCalcs[el.dataset.texCalc](); });
   renderMath();
   const shell = await initShell({ moduleId: document.querySelector('meta[name="module-id"]')?.content, conceptId: document.querySelector('meta[name="concept-id"]')?.content });
