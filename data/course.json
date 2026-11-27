@@ -687,8 +687,7 @@
           "objectives": [
             "Define an [[eigenvector|eigenvector]] and its [[eigenvalue|eigenvalue]] by Av = λv with v not the zero vector, and say why an eigenvector is only defined up to scale (2v and −3v work too)",
             "Find the eigenvalues of a 2×2 matrix as (tr ± √(tr² − 4 det))/2, and use the [[discriminant|discriminant]] to tell whether there are two, one repeated, or no real eigenvalues",
-            "Recognise the standard cases: a projection (eigenvalues 1 and 0), a scaling, a rotation (no real eigenvector), and a shear (one eigenvector direction, a [[defective matrix|defective-matrix]])",
-            "Check that the eigenvalues add up to the trace and multiply to the determinant"
+            "Recognise the standard cases: a projection (eigenvalues 1 and 0), a scaling, a rotation (no real eigenvector), and a shear (one eigenvector direction, a [[defective matrix|defective-matrix]]), and check that the eigenvalues add up to the trace and multiply to the determinant"
           ],
           "takeaways": [
             "An [[eigenvector|eigenvector]] v of A is a non-zero arrow with Av = λv: A only stretches it, by the [[eigenvalue|eigenvalue]] λ, so it stays on its own line. Any non-zero multiple of it works too, so an eigenvector is a direction, not one particular arrow.",

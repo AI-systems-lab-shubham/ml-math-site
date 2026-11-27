@@ -120,7 +120,7 @@ Two cards, rewritten in the voice of `docs/VOICE.md`, starting from `docs/TONE-P
 | | Words | “you/your” | per 1,000 words | Contractions |
 |---|---|---|---|---|
 | Before | 1705 | 7 | 4.1 | 1 |
-| After | 1952 | 18 | 9.2 | 12 |
+| After | 1953 | 18 | 9.2 | 12 |
 
 
 #### Tagline
@@ -138,11 +138,11 @@ Two cards, rewritten in the voice of `docs/VOICE.md`, starting from `docs/TONE-P
 
 | Before | After |
 |---|---|
-| Define an eigenvector and its eigenvalue by Av = λv with v not the zero vector, and explain why an eigenvector is defined only up to scale<br><br>Find the eigenvalues of a 2×2 matrix as (tr ± √(tr² − 4 det))/2 and use the discriminant to say whether there are two, one repeated, or no real eigenvalues<br><br>Name the standard cases: a projection (eigenvalues 1 and 0), a scaling, a rotation (no real eigenvector), and a shear (one eigenvector direction, a defective matrix), and check that the eigenvalues add up to the trace and multiply to the determinant | Define an eigenvector and its eigenvalue by Av = λv with v not the zero vector, and say why an eigenvector is only defined up to scale (2v and −3v work too)<br><br>Find the eigenvalues of a 2×2 matrix as (tr ± √(tr² − 4 det))/2, and use the discriminant to tell whether there are two, one repeated, or no real eigenvalues<br><br>Recognise the standard cases: a projection (eigenvalues 1 and 0), a scaling, a rotation (no real eigenvector), and a shear (one eigenvector direction, a defective matrix)<br><br>Check that the eigenvalues add up to the trace and multiply to the determinant |
+| Define an eigenvector and its eigenvalue by Av = λv with v not the zero vector, and explain why an eigenvector is defined only up to scale<br><br>Find the eigenvalues of a 2×2 matrix as (tr ± √(tr² − 4 det))/2 and use the discriminant to say whether there are two, one repeated, or no real eigenvalues<br><br>Name the standard cases: a projection (eigenvalues 1 and 0), a scaling, a rotation (no real eigenvector), and a shear (one eigenvector direction, a defective matrix), and check that the eigenvalues add up to the trace and multiply to the determinant | Define an eigenvector and its eigenvalue by Av = λv with v not the zero vector, and say why an eigenvector is only defined up to scale (2v and −3v work too)<br><br>Find the eigenvalues of a 2×2 matrix as (tr ± √(tr² − 4 det))/2, and use the discriminant to tell whether there are two, one repeated, or no real eigenvalues<br><br>Recognise the standard cases: a projection (eigenvalues 1 and 0), a scaling, a rotation (no real eigenvector), and a shear (one eigenvector direction, a defective matrix), and check that the eigenvalues add up to the trace and multiply to the determinant |
 
-**What changed.** Split three long objectives into four, one idea each. Objective 1 now says “why only the direction matters”. Objective 2 keeps the full formula and the exact three cases; the TONE-PASS shortening to “count the real ones” would have lost “one repeated”, so I did not use it.
+**What changed.** Back to three objectives, because `tests/e2e/lesson-nav.mjs` allows two to three per card. Objective 1 reads “…is only defined up to scale (2v and −3v work too)”. Objective 2 keeps the full formula and all three cases (the TONE-PASS shortening to “count the real ones” would have lost “one repeated”). Objective 3 is the original’s long one again: the standard cases, “and check that the eigenvalues add up to the trace and multiply to the determinant”, with the defective-matrix term kept.
 
-**CHECK.** Objective 1: “why an eigenvector is defined only up to scale” became “why only the direction matters”. These say the same thing in this card (stage 1 explains it with 2v and −3v), but the second is less exact about scaling by any non-zero number.
+**CHECK.** Objective 3 is long (about 45 words, over the voice guide’s “about 25”) because the three-objective limit forces two ideas onto one line. It is the same sentence as the original with “Name” changed to “Recognise”.
 
 
 #### Stage 1 Meaning
