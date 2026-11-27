@@ -8,7 +8,7 @@ const real = JSON.parse(readFileSync(new URL("data/course.json", root), "utf8"))
 const termIds = new Set(JSON.parse(readFileSync(new URL("data/glossary.json", root), "utf8")).entries.map((e) => e.id));
 const realFs = { read: (p) => (existsSync(new URL(p, root)) ? readFileSync(new URL(p, root), "utf8") : null), termIds };
 
-const concept = (id, extra = {}) => ({ id, title: id, anchor: `concept-${id}`, path: `m/${id}/`, size: "full", minutes: 5, status: "built", objectives: ["x"], takeaways: [], ...extra });
+const concept = (id, extra = {}) => ({ id, title: id, anchor: `concept-${id}`, path: `m/${id}/`, size: "full", minutes: 5, status: "built", objectives: ["x", "y"], takeaways: [], ...extra });
 const good = () => ({ modules: [{ id: "m1", status: "built", path: "m/", minutes: 10, prerequisites: [], concepts: [concept("c1"), concept("c2"), concept("c3", { status: "planned" })] }, { id: "m2", status: "planned", path: "n/", prerequisites: ["m1"], concepts: [] }] });
 const overview = '<a href="c1/">c1</a><a href="c2/">c2</a><script type="application/json" id="old-links">{"concept-c1":"c1/","concept-c2":"c2/"}</script><script src="assets/js/old-links.mjs"></script>';
 const cpage = (id) => `<meta name="concept-id" content="${id}"><article class="concept-card" id="concept-${id}"></article>`;
@@ -115,4 +115,17 @@ test("a card that links to a later card fails; a link back is fine, and the outl
   assert.deepEqual(checkCourse(good(), fsOf(backward)), []);
   const outlineOnly = pages({ "m/c1/index.html": '<nav class="site-nav"><a href="../c2/">c2</a></nav><meta name="concept-id" content="c1"><article class="concept-card" id="concept-c1"></article>' });
   assert.deepEqual(checkCourse(good(), fsOf(outlineOnly)), []);
+});
+
+test("objectives: 1 and 4 fail with the card and the count named; 2 and 3 pass", () => {
+  const withN = (n) => { const c = good(); c.modules[0].concepts[0].objectives = Array.from({ length: n }, (_, i) => `o${i}`); return c; };
+  for (const n of [0, 1, 4, 5]) {
+    const errs = checkCourse(withN(n), fs);
+    assert.ok(errs.some((e) => e.startsWith("c1:") && e.includes(`has ${n} objective`) && e.includes("2 to 3")), `${n} objectives: ${errs}`);
+  }
+  for (const n of [2, 3]) assert.deepEqual(checkCourse(withN(n), fs), [], `${n} objectives`);
+});
+test("objectives: a missing list fails", () => {
+  const c = good(); delete c.modules[0].concepts[0].objectives;
+  assert.ok(checkCourse(c, fs).some((e) => e.startsWith("c1:") && e.includes("2 to 3")));
 });

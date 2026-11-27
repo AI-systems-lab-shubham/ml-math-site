@@ -35,7 +35,9 @@ export function checkCourse(course, fs) {
       if (c.status === "built" && m.status !== "built") errors.push(`${c.id}: built concept inside planned module ${m.id}`);
       if (c.status === "built") {
         if (!(c.minutes > 0)) errors.push(`${c.id}: minutes must be positive`);
-        if (!Array.isArray(c.objectives) || c.objectives.length === 0) errors.push(`${c.id}: needs at least one objective`);
+        // The same 2 to 3 range tests/e2e/lesson-nav.mjs checks on the rendered page; here it runs in --fast, without a browser.
+        if (!Array.isArray(c.objectives)) errors.push(`${c.id}: needs a list of 2 to 3 objectives`);
+        else if (c.objectives.length < 2 || c.objectives.length > 3) errors.push(`${c.id}: has ${c.objectives.length} objective${c.objectives.length === 1 ? "" : "s"}; each card needs 2 to 3`);
         for (const r of c.requires ?? []) if (!course.modules.some((x) => x.concepts.some((y) => y.id === r))) errors.push(`${c.id}: requires unknown concept ${r}`);
         if (fs.termIds) for (const text of [...c.objectives, ...(c.takeaways ?? [])]) for (const t of termIdsIn(text)) if (!fs.termIds.has(t)) errors.push(`${c.id}: unknown glossary term "${t}"`);
         if (typeof c.path !== "string" || !c.path.startsWith(m.path) || !c.path.endsWith("/")) errors.push(`${c.id}: path must be a folder inside ${m.path}`);
