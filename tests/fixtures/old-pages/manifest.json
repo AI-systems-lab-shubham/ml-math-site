@@ -27,7 +27,7 @@
       "date": "2026-11-27",
       "baseline": "ec74043",
       "note": "Voice rewrite (Build mode, docs/TRACE-REWRITE-DRAFT.md): tagline and stages 1, 5, 6, 7 reworded; the stage 6 reveal reasoning in data/checks/m03-trace.json now shows a worked counterexample instead of 'the tests include an example'. Module 3 was never frozen; listed so the page hash is pinned and facts-preserved runs on it.",
-      "sha256": "071229a95756265db7f7029c7e79118a8f808422f5b1966f111ec81521c16480"
+      "sha256": "0f2cbd5905917c4fbcbf1d1d0d1a99f4dd24c63278e0c065afdc9d5a2d6ea967"
     }
   ]
 }
