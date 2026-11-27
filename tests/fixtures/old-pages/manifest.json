@@ -10,16 +10,16 @@
       "anchor": "concept-variables",
       "date": "2026-11-26",
       "baseline": "4b98d5d",
-      "note": "Voice pilot (docs/VOICE.md, docs/TONE-PASS.md): tagline, stages 1, 5, 6, 7, Predict hint and Teach it reworded. Exempt from the word-for-word freeze; tests/facts-preserved.test.mjs checks numbers, formulas, citations, tags and caveats against the baseline commit.",
-      "sha256": "048e054b02aef92a71a4c5d0798551b9c7ab0cd736739d7b5d39a603f6c881f2"
+      "note": "Voice pilot (docs/VOICE.md, docs/TONE-PASS.md): tagline, stages 1, 5, 6, 7, Predict hint and Teach it reworded, then a second pass (contractions, a question asked aloud). Exempt from the word-for-word freeze; tests/facts-preserved.test.mjs checks numbers, formulas, citations, tags and caveats against the baseline commit.",
+      "sha256": "91029621ef1249c89f3d222e518cf47d44eacef9dfba41d938022d5bd47bfe65"
     },
     {
       "concept": "m03-eigenvectors",
       "anchor": "concept-eigenvectors",
       "date": "2026-11-26",
       "baseline": "4b98d5d",
-      "note": "Voice pilot (docs/VOICE.md, docs/TONE-PASS.md): tagline, stages 1, 5, 6, 7 and Teach it reworded. Module 3 was never frozen; listed so the page hash is pinned and facts-preserved runs on it.",
-      "sha256": "f7e75a306fe083254141cbdc72d46b3e17192758df7e943007f15389f8a570e0"
+      "note": "Voice pilot (docs/VOICE.md, docs/TONE-PASS.md): tagline, stages 1, 5, 6, 7 and Teach it reworded. Module 3 was never frozen; listed so the page hash is pinned and facts-preserved runs on it. Second pass: contractions, a question asked aloud before stage 6, a backward link to the Determinant card.",
+      "sha256": "343a8f5f262cd19e89ac7fd47ca916617736851e052dd8018de69130a648384d"
     }
   ]
 }

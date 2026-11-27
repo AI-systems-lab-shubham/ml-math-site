@@ -86,7 +86,7 @@ function metrics(text) {
     ["Sentences (approx.)", sentences.length],
     ["Average sentence length (words)", sentences.length ? (total / sentences.length).toFixed(1) : "0"],
     ['"you" / "your"', count(/\byour?s?\b/gi)],
-    ["Contractions", count(/\b[A-Za-z]+(?:n['’]t|['’](?:s|re|ve|ll|d|m))\b/g)],
+    ["Contractions", count(/\b[A-Za-z]+(?:n['’]t|['’](?:re|ve|ll|d|m))\b|\b(?:it|that|there|here|let|what|who|where|how|he|she)['’]s\b/gi)],   // curly or straight; possessives (card’s) are not contractions
     ["Questions (?)", count(/\?/g)],
     ['"this card"', count(/\bthis card\b/gi)],
     ['"tested code"', count(/\btested code\b/gi)],

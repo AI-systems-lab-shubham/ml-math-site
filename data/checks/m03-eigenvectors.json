@@ -20,7 +20,7 @@
           ]
         ]
       },
-      "hint": "Start with the trace and the determinant of the matrix, then put them into λ = (tr ± √(tr² − 4 det)) / 2.",
+      "hint": "You’ll need the trace and the determinant first, then put them into λ = (tr ± √(tr² − 4 det)) / 2.",
       "explain": "From the trace and determinant, the two roots of the quadratic are the eigenvalues. The larger one is {answer}."
     },
     {
@@ -42,7 +42,7 @@
           ]
         ]
       },
-      "hint": "Add the two diagonal entries to get the trace. For the determinant, take ad − bc.",
+      "hint": "You’ll need the trace (add the two diagonal entries) and the determinant, ad − bc.",
       "explain": "tr² − 4 det is {answer}. It is negative, so a quarter turn has no real eigenvalues: no real arrow keeps its line."
     },
     {

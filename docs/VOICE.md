@@ -19,7 +19,7 @@ Not: a textbook, a spec sheet, a checklist, or a build log.
 - **How good explainers sound.** 3Blue1Brown: picture first, let the learner feel the idea is theirs. Gilbert Strang: asks questions out loud, admits what is surprising, keeps a human voice. StatQuest: tiny steps, a clear storyline, "simple without dumbing down".
 - **Limit.** These studies are mostly short lab lessons, not a long web course. Treat the rules as a strong default, and confirm with real learners (section 10).
 
-## 4. Ten rules
+## 4. Twelve rules
 1. **Talk to one person.** "You", "we", "let's". Never "the learner", "one should", "it can be seen that".
 2. **Start from something they have felt.** Water in a bath, a ramp, a phone battery. Then name the idea.
 3. **Say why before what.** Give the problem that forces the idea, then the idea.
@@ -30,6 +30,8 @@ Not: a textbook, a spec sheet, a checklist, or a build log.
 8. **Symbols arrive after meaning, and get read aloud.** "x-sub-i means the i-th entry."
 9. **No process talk.** The reader never hears about checks, tests, the build, or the card template.
 10. **Warm is not padded.** No cheerleading ("Great job!"), no filler ("It is worth noting"). Every sentence teaches or connects.
+11. **Use natural contractions in prose.** "Doesn't", "that's", "you'll", "let's", "won't". Keep definitions, formulas, formal statements and sourced claims uncontracted, because they are read as statements of record. Example: "Here's where people trip: 3x isn't one new symbol." Next to the definition: "A variable is a name for a number we have not picked yet." Contractions never replace a possessive: "the card's idea" is not a contraction.
+12. **Ask the question aloud, then link back in the text.** Before a step that needs a reason, ask the question a learner would ask, answer it in one sentence from facts already on the card, and point back to the earlier card that made the idea (links go backward only). Example: "Why do we want A − λI to have no inverse? Because an eigenvector is not zero, and a matrix with an inverse only sends the zero vector to zero. ... Remember the Determinant card: a determinant of 0 meant the square got squashed and nothing could undo it."
 
 ## 5. The precision contract (never traded for warmth)
 - Definitions keep their exact mathematical meaning. Plain language sits beside the formal statement, not in place of it.
@@ -85,6 +87,8 @@ Keep the seven stage names for navigation, but allow a short human subtitle unde
 - [ ] Opens with something the reader has experienced.
 - [ ] "You" or "we" appears naturally; no "the learner".
 - [ ] Every symbol is read aloud when introduced.
+- [ ] Prose uses natural contractions; definitions and formulas do not.
+- [ ] The hardest step is preceded by a question asked aloud, with a backward link where an earlier card applies.
 - [ ] The worked example is narrated with reasons.
 - [ ] At least one named trip-up.
 - [ ] The analogy states where it breaks.
