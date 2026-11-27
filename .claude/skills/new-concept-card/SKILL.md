@@ -19,7 +19,7 @@ Read `docs/CONCEPT-CARD.md` (template and skeleton) and `docs/GLOSSARY.md` befor
    - `in-an-llm`: state the link precisely from publicly documented work and say what is simplified. If the link is only conceptual, say so. Never claim insider knowledge of any company's systems.
    - Full cards end with a `details.teach-it` panel; every card ends with a `<footer>` citing MML chapter numbers (no copied text or figures).
 4. **Glossary.** Mark every technical term and symbol with `data-term` / `data-sym`; add missing entries to `data/glossary.json` (plain-language and mathematical definitions).
-5. **Course data.** Set the concept's status in `data/course.json` to built only when the card is complete.
+5. **Course data.** Set the concept's status in `data/course.json` to built only when the card is complete. Each card has 2 to 3 objectives and 3 to 4 takeaways (`check-course` checks the objectives; `e2e-lesson-nav` checks both, so run `node tools/verify.mjs --only e2e-lesson-nav` after changing either list). Each card also needs a voice mode (`voice`: A, AB or B in `data/course.json`; choose it with `docs/VOICE.md` section 12) and an entry in `docs/CARD-BRIEFS.md` headed `**Title** (concept-id). Mode X.`; `check-course` fails if either is missing or they disagree.
 6. **Check the card**, not the whole site: `node --test tests/*.test.mjs`, `node tools/check-glossary.mjs`, `node tools/check-claims.mjs`, then `node tools/ui-verify.mjs --pages <module id> --checks structure,glossary-ids,hscroll,overlap`. Fix and re-run. The full verify belongs to the end of the module session.
 
 ## Do not

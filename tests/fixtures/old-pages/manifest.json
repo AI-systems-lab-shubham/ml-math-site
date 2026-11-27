@@ -3,5 +3,23 @@
   "files": {
     "00-foundations.html": "20536cccc623d045f490ad2e0f8dddfba6832d4ef9a303fdceff062151b32b7a",
     "01-linear-algebra.html": "a8294e7463b866e16cb7681bb78c1bf3c11609c8e0cea83436c2fb23d5db235c"
-  }
+  },
+  "rewritten": [
+    {
+      "concept": "m00-variables",
+      "anchor": "concept-variables",
+      "date": "2026-11-26",
+      "baseline": "4b98d5d",
+      "note": "Voice pilot (docs/VOICE.md, docs/TONE-PASS.md): tagline, stages 1, 5, 6, 7, Predict hint and Teach it reworded, then a second pass (contractions, a question asked aloud). Exempt from the word-for-word freeze; tests/facts-preserved.test.mjs checks numbers, formulas, citations, tags and caveats against the baseline commit.",
+      "sha256": "baae4066c9ecb8288676374b75200a09b1389f0ae7b786792f5bfbc2aedcecf8"
+    },
+    {
+      "concept": "m03-eigenvectors",
+      "anchor": "concept-eigenvectors",
+      "date": "2026-11-26",
+      "baseline": "4b98d5d",
+      "note": "Voice pilot (docs/VOICE.md, docs/TONE-PASS.md): tagline, stages 1, 5, 6, 7 and Teach it reworded. Module 3 was never frozen; listed so the page hash is pinned and facts-preserved runs on it. Second pass: contractions, a question asked aloud before stage 6, a backward link to the Determinant card.",
+      "sha256": "b6577c6a239a53609a262f7bcf2d602dc596bfe314381443495fdcd54a42814d"
+    }
+  ]
 }

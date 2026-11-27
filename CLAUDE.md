@@ -31,6 +31,8 @@ An interactive static website that teaches the maths behind machine learning and
 ## Non-negotiable quality rules
 **Teaching**
 - Every concept follows the seven-stage Concept Card. Nothing is too simple to explain (even x + y = 4).
+- Each card has 2 to 3 objectives and 3 to 4 takeaways (`check-course` enforces the objectives in `--fast`; `tests/e2e/lesson-nav.mjs` enforces both on the rendered page; run `node tools/verify.mjs --only e2e-lesson-nav` after changing either list).
+- Each card needs a voice mode (`"voice": "A" | "AB" | "B"` in `data/course.json`, see `docs/VOICE.md` section 12) and an entry in `docs/CARD-BRIEFS.md` headed `**Title** (concept-id). Mode X.`; `check-course` fails if either is missing or they disagree.
 - Start from meaning and a real or physical picture, then give the notation. Never open with a bare formula.
 - Every concept ends with an "In an LLM" connection. State it precisely, from publicly documented knowledge. If the link is only conceptual, say so. Never claim insider knowledge of any company's systems.
 - Tag every "How to arrive at it" as Derived, Motivated or Convention.

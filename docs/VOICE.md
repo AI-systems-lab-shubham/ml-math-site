@@ -19,7 +19,7 @@ Not: a textbook, a spec sheet, a checklist, or a build log.
 - **How good explainers sound.** 3Blue1Brown: picture first, let the learner feel the idea is theirs. Gilbert Strang: asks questions out loud, admits what is surprising, keeps a human voice. StatQuest: tiny steps, a clear storyline, "simple without dumbing down".
 - **Limit.** These studies are mostly short lab lessons, not a long web course. Treat the rules as a strong default, and confirm with real learners (section 10).
 
-## 4. Ten rules
+## 4. Twelve rules
 1. **Talk to one person.** "You", "we", "let's". Never "the learner", "one should", "it can be seen that".
 2. **Start from something they have felt.** Water in a bath, a ramp, a phone battery. Then name the idea.
 3. **Say why before what.** Give the problem that forces the idea, then the idea.
@@ -30,6 +30,8 @@ Not: a textbook, a spec sheet, a checklist, or a build log.
 8. **Symbols arrive after meaning, and get read aloud.** "x-sub-i means the i-th entry."
 9. **No process talk.** The reader never hears about checks, tests, the build, or the card template.
 10. **Warm is not padded.** No cheerleading ("Great job!"), no filler ("It is worth noting"). Every sentence teaches or connects.
+11. **Use natural contractions in prose.** "Doesn't", "that's", "you'll", "let's", "won't". Keep definitions, formulas, formal statements and sourced claims uncontracted, because they are read as statements of record. Example: "Here's where people trip: 3x isn't one new symbol." Next to the definition: "A variable is a name for a number we have not picked yet." Contractions never replace a possessive: "the card's idea" is not a contraction.
+12. **Ask the question aloud, then link back in the text.** Before a step that needs a reason, ask the question a learner would ask, answer it in one sentence from facts already on the card, and point back to the earlier card that made the idea (links go backward only). Example: "Why do we want A − λI to have no inverse? Because an eigenvector is not zero, and a matrix with an inverse only sends the zero vector to zero. ... Remember the Determinant card: a determinant of 0 meant the square got squashed and nothing could undo it."
 
 ## 5. The precision contract (never traded for warmth)
 - Definitions keep their exact mathematical meaning. Plain language sits beside the formal statement, not in place of it.
@@ -85,9 +87,64 @@ Keep the seven stage names for navigation, but allow a short human subtitle unde
 - [ ] Opens with something the reader has experienced.
 - [ ] "You" or "we" appears naturally; no "the learner".
 - [ ] Every symbol is read aloud when introduced.
+- [ ] Prose uses natural contractions; definitions and formulas do not.
+- [ ] The hardest step is preceded by a question asked aloud, with a backward link where an earlier card applies.
 - [ ] The worked example is narrated with reasons.
 - [ ] At least one named trip-up.
 - [ ] The analogy states where it breaks.
 - [ ] No filler or process words.
 - [ ] Every claim, number, and definition is as exact as before (diff against the old card).
 - [ ] CLAIMS.md updated if wording changed.
+
+## 12. Explanation modes (A Foundation, A+B Bridge, B Build)
+
+Every card has exactly one mode, stored as `voice: "A" | "AB" | "B"` in data/course.json. The mode changes how much scaffolding the card carries. It never changes what is true or how exact it is.
+
+### Where this comes from
+- Readers of the pilot said the best style depends on the topic: picture-led for things you can see, a bridge for ideas that join earlier knowledge to later, to-the-point for ideas built from earlier ones.
+- Supporting research: concreteness fading (Fyfe et al. 2014) for A; the obstacle of formalism and Harel's concreteness, necessity and generalisability (Dorier, Harel) for AB; expertise reversal (Kalyuga 2007) for B.
+- Limit: those studies are mostly university students in short lessons, and none tests these three modes. Treat the mode of each card as a default and confirm with readers. Each card's brief in docs/CARD-BRIEFS.md says whether its placement rests on a study or on judgement.
+
+### The shared floor (all three modes)
+- Speak to one person: you, we, contractions.
+- No process talk (tests, checks, the card template, "this card").
+- Every analogy says where it breaks.
+- Every symbol is read aloud when it first appears.
+- Precision is identical in all modes: same definitions, same numbers, same tags, same claims.
+- Backward links only. At most one plain signpost sentence to a later module, with no explanation ("Module 6 puts this to work.").
+
+### A: Foundation
+For first meetings with ideas you can see or hold.
+- Stage 1 opens in an everyday scene the reader has lived (a labelled box, glasses of water, a ramp). Name the idea only after the scene.
+- Symbols come last, one at a time.
+- The worked example is narrated in full, every step with its reason.
+- Plain words. Short paragraphs. One image per card, kept consistent.
+
+### AB: Bridge
+For ideas that join something already learned to something harder later. These are where readers are documented to compute correctly yet understand wrongly, or must connect two representations.
+- Stage 1 opens from the earlier card's image ("Remember the shadow from the Dot product card?"), then names the gap ("Here is where people stall: ...").
+- Show the two representations side by side (the formula and the picture, the procedure and the meaning) and say out loud how they connect.
+- Derive before defining where the card's brief says so (area scaling before the determinant formula).
+- Stage 6 is told as a rediscovery, with the learner's prediction at the pivot.
+- One named trip-up per card, taken from CARD-BRIEFS.md.
+
+### B: Build
+For ideas assembled from pieces the reader already has.
+- Open with the question the idea answers, then one line recalling the pieces ("You already have two tools: ... and ..."), each linked backward.
+- Shorter sentences, symbols used straight away, fewer analogies. Keep the narrated worked example, but let steps the reader has met before go faster.
+- Warmth stays: the same "you", the same honesty about difficulty. B means brisk, not cold.
+- Because learners can skip around, the recall line is mandatory. Never drop it.
+
+### Choosing a mode (for new cards)
+1. Can the idea be seen or held, and is it a first meeting? Use A.
+2. Is there a documented gap between computing and understanding, or two representations to connect? Use AB.
+3. Is it mainly a recombination of earlier cards? Use B.
+4. No evidence either way? Choose by the rules above, mark it "judgement" in CARD-BRIEFS.md, and test it with readers.
+
+### Changing a mode
+Change `voice` in course.json and the entry in CARD-BRIEFS.md together, and say why in the commit message. A mode change means the card's stages 1, 5, 6 and 7 are rewritten, not just relabelled.
+
+### Per-card checklist additions
+- [ ] The card's mode matches CARD-BRIEFS.md.
+- [ ] The named trip-up from the brief appears in the text.
+- [ ] B cards carry the recall line; AB cards open from an earlier image.

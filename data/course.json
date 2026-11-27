@@ -24,14 +24,15 @@
           "size": "compact",
           "minutes": 8,
           "status": "built",
+          "voice": "A",
           "objectives": [
-            "Explain a [[variable|variable]] as a labelled box that holds a number",
-            "Evaluate a simple [[expression|expression]] for a given value"
+            "Say what a [[variable|variable]] is: a labelled box that holds a number",
+            "Work out the value of a simple [[expression|expression]] once you are told which number is in the box"
           ],
           "takeaways": [
-            "A letter stands for a number that can change or is not yet known.",
-            "An [[expression|expression]] is a recipe that turns the numbers in the boxes into a new number.",
-            "Naming things lets us state a rule once and use it for every value."
+            "A letter stands for a number that can change, or one we don’t know yet.",
+            "An [[expression|expression]] is a recipe: put numbers in the boxes and it gives you a new number.",
+            "Because the box has a name, you can state a rule once and use it for every value."
           ],
           "requires": []
         },
@@ -43,6 +44,7 @@
           "size": "full",
           "minutes": 15,
           "status": "built",
+          "voice": "A",
           "objectives": [
             "Explain an [[equation|equation]] as a rule linking quantities, not an instruction",
             "Describe why one [[equation|equation]] with two [[unknowns|unknown]] gives a line of solutions",
@@ -65,6 +67,7 @@
           "size": "full",
           "minutes": 12,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Describe a [[function|function]] as a machine with one [[output|output]] per [[input|input]]",
             "Read a value from a [[graph|graph]]"
@@ -86,6 +89,7 @@
           "size": "full",
           "minutes": 12,
           "status": "built",
+          "voice": "A",
           "objectives": [
             "Compute the [[slope|slope]] between two points",
             "Explain what m and b mean in y = mx + b"
@@ -107,6 +111,7 @@
           "size": "full",
           "minutes": 12,
           "status": "built",
+          "voice": "A",
           "objectives": [
             "Explain an [[exponent|exponent]] as repeated multiplication",
             "Tell [[growth|growth]] from [[decay|decay]] by the size of the [[base|base]]"
@@ -128,6 +133,7 @@
           "size": "full",
           "minutes": 14,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Explain a [[logarithm|logarithm]] as a count of multiplication steps",
             "Use log(ab) = log a + log b",
@@ -150,6 +156,7 @@
           "size": "full",
           "minutes": 10,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Expand a Σ [[sum|sum]] into its terms",
             "Write a short [[sum|sum]] using Σ"
@@ -171,6 +178,7 @@
           "size": "compact",
           "minutes": 8,
           "status": "built",
+          "voice": "A",
           "objectives": [
             "Convert between a [[ratio|ratio]], a fraction and a [[percentage|percentage]]",
             "Compute a [[mean|mean]]"
@@ -190,6 +198,7 @@
           "size": "compact",
           "minutes": 8,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Describe [[sine|sine]] and [[cosine|cosine]] as the two coordinates of a point on a circle",
             "Say which one is the horizontal part"
@@ -211,6 +220,7 @@
           "size": "compact",
           "minutes": 8,
           "status": "built",
+          "voice": "A",
           "objectives": [
             "Read [[subscripts|subscript]], hats and the symbols ∈ and ∀",
             "Recognise a bold letter as a [[vector|vector]]"
@@ -250,6 +260,7 @@
           "size": "full",
           "minutes": 14,
           "status": "built",
+          "voice": "A",
           "objectives": [
             "Write a trip such as “3 east, 2 north” as a [[vector|vector]] and draw it as an arrow",
             "Read any [[component|component]] of a vector by its position, for example the third entry of (3, 2, 7)",
@@ -273,6 +284,7 @@
           "size": "full",
           "minutes": 14,
           "status": "built",
+          "voice": "A",
           "objectives": [
             "Add two vectors tip to tail, and by adding the entries in matching positions",
             "[[Scale|scaling]] a vector by a [[scalar|scalar]], including a negative one",
@@ -296,6 +308,7 @@
           "size": "full",
           "minutes": 14,
           "status": "built",
+          "voice": "A",
           "objectives": [
             "Read a [[matrix|matrix]] as a table and give its [[shape|shape]] as rows × columns",
             "Use a matrix as a machine: scale each [[column|column]] by the matching input entry and add",
@@ -319,6 +332,7 @@
           "size": "full",
           "minutes": 16,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Multiply a [[matrix|matrix]] by a vector as one [[dot product|dot-product]] per [[row|row]]",
             "Decide from their [[shapes|shape]] whether two matrices can be multiplied, and give the shape of the product",
@@ -343,6 +357,7 @@
           "size": "compact",
           "minutes": 10,
           "status": "built",
+          "voice": "B",
           "objectives": [
             "Turn a [[matrix|matrix]] into its [[transpose|transpose]] by swapping rows and columns, and give the new [[shape|shape]]",
             "Say what the [[identity matrix|identity-matrix]] does and why multiplying by it changes nothing",
@@ -366,6 +381,7 @@
           "size": "full",
           "minutes": 14,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Write two [[equations|equation]] in two [[unknowns|unknown]] as one matrix equation Ax = b",
             "Read a [[system of equations|system-of-equations]] as two lines, and say whether they cross once, never, or lie on top of each other",
@@ -390,6 +406,7 @@
           "size": "compact",
           "minutes": 10,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Describe the [[span|span]] of one or two vectors as everything their [[linear combinations|linear-combination]] can reach",
             "Tell whether vectors are [[linearly independent|linearly-independent]], and say what a [[basis|basis]] is",
@@ -414,6 +431,7 @@
           "size": "full",
           "minutes": 14,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Describe a [[linear transformation|linear-transformation]] as a map that keeps straight lines straight and the origin fixed, and write its matrix from where the unit arrows land",
             "Write the matrices for a [[rotation|rotation]], a scaling, a [[shear|shear]] and a [[projection|projection]], and say which are invertible",
@@ -458,6 +476,7 @@
           "size": "full",
           "minutes": 14,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Compute the [[L2 norm|l2-norm]] (straight-line length) and the [[L1 norm|l1-norm]] (grid-walk length) of a [[vector|vector]]",
             "Explain why the L2 norm is Pythagoras and why the L1 norm ignores signs",
@@ -481,6 +500,7 @@
           "size": "compact",
           "minutes": 8,
           "status": "built",
+          "voice": "B",
           "objectives": [
             "Compute the [[distance|distance]] between two points as the [[norm|norm]] of their difference",
             "Say how the L2 and L1 distances differ for the same two points"
@@ -502,6 +522,7 @@
           "size": "full",
           "minutes": 15,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Compute a [[dot product|dot-product]] by multiplying matching entries and adding",
             "Explain it as a shadow, ‖a‖‖b‖cos θ, and read its sign as same direction, right angles or opposite",
@@ -527,6 +548,7 @@
           "size": "full",
           "minutes": 14,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Compute the [[cosine similarity|cosine-similarity]] of two vectors and turn it into an [[angle|angle]]",
             "Explain why cosine similarity lies in [−1, 1] and ignores length",
@@ -549,6 +571,7 @@
           "size": "compact",
           "minutes": 8,
           "status": "built",
+          "voice": "B",
           "objectives": [
             "Test whether two vectors are [[orthogonal|orthogonal]] by checking that their dot product is 0",
             "State that the zero vector is orthogonal to every vector"
@@ -571,6 +594,7 @@
           "size": "full",
           "minutes": 14,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Compute the [[projection|projection]] of a vector a onto a vector b with ((a·b)/(b·b)) b",
             "Show that the leftover a − projection is [[orthogonal|orthogonal]] to b",
@@ -595,6 +619,7 @@
           "size": "compact",
           "minutes": 9,
           "status": "built",
+          "voice": "B",
           "objectives": [
             "Show that the [[variance|variance]] of a dot product of d independent entries with mean 0 and variance 1 is d",
             "Explain why dividing by √d_{k} brings the variance back to 1, and state the assumption this needs"
@@ -637,6 +662,7 @@
           "size": "compact",
           "minutes": 8,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Compute the [[determinant|determinant]] ad − bc of a 2×2 matrix and read it as the signed area that the [[unit square|unit-square]] is scaled to",
             "Say what a negative determinant means (the [[orientation|orientation]] flips) and what zero means (the square collapses to a line or a point, so the matrix has no [[inverse|inverse-matrix]])"
@@ -660,6 +686,7 @@
           "size": "compact",
           "minutes": 8,
           "status": "built",
+          "voice": "B",
           "objectives": [
             "Compute the [[trace|trace]] of a [[square matrix|square-matrix]] as the sum of the entries on its [[diagonal|diagonal]]",
             "Show that tr(AB) = tr(BA) even when AB and BA are different matrices",
@@ -684,16 +711,17 @@
           "size": "full",
           "minutes": 16,
           "status": "built",
+          "voice": "AB",
           "objectives": [
-            "Define an [[eigenvector|eigenvector]] and its [[eigenvalue|eigenvalue]] by Av = λv with v not the zero vector, and explain why an eigenvector is defined only up to scale",
-            "Find the eigenvalues of a 2×2 matrix as (tr ± √(tr² − 4 det))/2 and use the [[discriminant|discriminant]] to say whether there are two, one repeated, or no real eigenvalues",
-            "Name the standard cases: a projection (eigenvalues 1 and 0), a scaling, a rotation (no real eigenvector), and a shear (one eigenvector direction, a [[defective matrix|defective-matrix]]), and check that the eigenvalues add up to the trace and multiply to the determinant"
+            "Define an [[eigenvector|eigenvector]] and its [[eigenvalue|eigenvalue]] by Av = λv with v not the zero vector, and say why an eigenvector is only defined up to scale (2v and −3v work too)",
+            "Find the eigenvalues of a 2×2 matrix as (tr ± √(tr² − 4 det))/2, and use the [[discriminant|discriminant]] to tell whether there are two, one repeated, or no real eigenvalues",
+            "Recognise the standard cases: a projection (eigenvalues 1 and 0), a scaling, a rotation (no real eigenvector), and a shear (one eigenvector direction, a [[defective matrix|defective-matrix]]), and check that the eigenvalues add up to the trace and multiply to the determinant"
           ],
           "takeaways": [
-            "An [[eigenvector|eigenvector]] v of A satisfies Av = λv with v not zero: A only stretches it by the [[eigenvalue|eigenvalue]] λ, so it stays on its own line. Any non-zero multiple of it is one too, so it is a direction, not a single arrow.",
-            "For a 2×2 matrix the eigenvalues are (tr ± √(tr² − 4 det))/2; the sum is the trace and the product is the determinant.",
-            "If the [[discriminant|discriminant]] tr² − 4 det is negative there are no real eigenvalues, as for a rotation by an angle that is not a multiple of π.",
-            "A shear with rows (1, k) and (0, 1), k not 0, has eigenvalue 1 but only one eigenvector direction."
+            "An [[eigenvector|eigenvector]] v of A is a non-zero arrow with Av = λv: A only stretches it, by the [[eigenvalue|eigenvalue]] λ, so it stays on its own line. Any non-zero multiple of it works too, so an eigenvector is a direction, not one particular arrow.",
+            "For a 2×2 matrix the eigenvalues are (tr ± √(tr² − 4 det))/2. Add them and you get the trace; multiply them and you get the determinant.",
+            "When the [[discriminant|discriminant]] tr² − 4 det is negative there are no real eigenvalues. A rotation by an angle that is not a multiple of π is an example.",
+            "A shear with rows (1, k) and (0, 1), where k is not 0, has eigenvalue 1 but only one eigenvector direction."
           ],
           "requires": [
             "m03-determinant",
@@ -709,6 +737,7 @@
           "size": "compact",
           "minutes": 10,
           "status": "built",
+          "voice": "B",
           "objectives": [
             "Write a matrix with a full set of independent eigenvectors as A = PDP^{-1}, with the eigenvectors as the columns of P and the eigenvalues on the diagonal of D",
             "Compute A^n as PD^nP^{-1}, and say why the shear cannot be written this way",
@@ -734,6 +763,7 @@
           "size": "full",
           "minutes": 16,
           "status": "built",
+          "voice": "AB",
           "objectives": [
             "Describe any matrix as a rotation or flip, a stretch along the axes, then another rotation or flip: A = UΣV^T",
             "Read the [[singular values|singular-value]] as the semi-axes of the [[ellipse|ellipse]] the unit circle becomes, and say that the largest is the biggest stretch",
@@ -759,6 +789,7 @@
           "size": "full",
           "minutes": 15,
           "status": "built",
+          "voice": "B",
           "objectives": [
             "Build the rank-k approximation A_k = σ₁u₁v₁^T + … + σₖuₖvₖ^T from the first k terms of the SVD",
             "State the [[Eckart–Young theorem|eckart-young]]: no other rank-k matrix is closer, and the squared error is the sum of the discarded squared singular values",
