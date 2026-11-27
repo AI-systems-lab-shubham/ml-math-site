@@ -31,6 +31,9 @@ export const ARTICLE_EDITS = {
   "concept-variables": [
     { from: " (plus a few other operations we meet later).", to: " (plus a few other operations).", why: "Remove the forward pointer (F1)." },
   ],
+  "concept-sigma": [
+    { from: "a receipt lines are arbitrary prices", to: "a receipt's lines are arbitrary prices", why: "Grammar: missing possessive (voice-fixes session)." },
+  ],
   "concept-equations": [
     { from: "(solving systems of linear equations) for the full treatment, coming in Module 1.", to: "(solving systems of linear equations).", why: "Remove the forward pointer." },
   ],
