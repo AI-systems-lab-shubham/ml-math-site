@@ -86,13 +86,13 @@
     <header>
       <p class="eyebrow">Full card · 3 of 6</p>
       <h1>Eigenvalues and eigenvectors</h1>
-      <p class="muted">Directions that a transformation only stretches, shrinks or flips, and what to do when there are none.</p>
+      <p class="muted">Some arrows a transformation never turns: it only stretches, shrinks or flips them. And what to do when there are none.</p>
     </header>
 
     <section data-stage="meaning">
       <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
-      <p>Push on a sheet of rubber so that it stretches and slants. Most lines drawn on it tilt to new directions. But some line may stay exactly where it was, as a line: points slide along it and never leave. An arrow lying along that line comes out pointing along the same line, longer, shorter or reversed. Such an arrow is an <span class="term" data-term="eigenvector">eigenvector</span> of the matrix, and the factor by which it is stretched is its <span class="term" data-term="eigenvalue">eigenvalue</span>.</p>
-      <p>In symbols, A v = λv: applying the matrix A to v gives the same arrow multiplied by the number λ (the Greek letter lambda). We insist that v is not the zero vector, because the zero vector fits for every λ and tells us nothing. And only the direction matters: if v works then so does 2v, or −3v. Only a square matrix can have eigenvectors, because the output must live in the same space as the input.</p>
+      <p>Picture a sheet of rubber with a grid drawn on it. Push on it so that it stretches and slants. Most of the lines you drew tilt to new directions. But some line may stay exactly where it was, as a line: points slide along it and never leave it. An arrow lying along that line comes out pointing along the same line, longer, shorter or reversed. Such an arrow is an <span class="term" data-term="eigenvector">eigenvector</span> of the matrix, and the factor by which it is stretched is its <span class="term" data-term="eigenvalue">eigenvalue</span>. The picture below lets you do the pushing yourself.</p>
+      <p>Now the symbols. We write A v = λv and read it aloud as “A times v equals lambda times v”. In words: applying the matrix A to v gives the same arrow multiplied by the number λ (the Greek letter lambda). Three small rules go with it. First, v must not be the zero vector, because the zero vector fits for every λ and tells us nothing. Second, only the direction matters: if v works then so does 2v, or −3v. Third, only a square matrix can have eigenvectors, because the output must live in the same space as the input.</p>
       <div class="math-display" data-tex-display="A\mathbf{v}=\lambda\mathbf{v},\qquad \mathbf{v}\neq\mathbf{0}">A v = λ v, v ≠ 0</div>
     </section>
     <section data-stage="picture">
@@ -123,8 +123,8 @@
     </section>
     <section data-stage="why-when">
       <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
-      <p>Eigenvectors turn a complicated transformation into one-dimensional pieces: along each eigenvector the matrix is just a number. For a 2×2 matrix the eigenvalues come from the trace and determinant: λ = (tr ± √(tr² − 4 det)) / 2, so their sum is the trace and their product is the determinant (<span data-calc="eigSum">…</span> and <span data-calc="eigProd">…</span> for the worked example).</p>
-      <p><strong>When it does not fit.</strong> The <span class="term" data-term="discriminant">discriminant</span> tr² − 4 det decides which case you are in. Every number in this table comes from tested code:</p>
+      <p>You reach for eigenvectors when a transformation looks complicated and you want to break it into simple pieces. They turn it into one-dimensional pieces: along each eigenvector the matrix acts as a single number. For a 2×2 matrix the eigenvalues come from the trace and determinant: λ = (tr ± √(tr² − 4 det)) / 2, so their sum is the trace and their product is the determinant (<span data-calc="eigSum">…</span> and <span data-calc="eigProd">…</span> for the worked example).</p>
+      <p><strong>When it does not fit.</strong> Here is each kind of 2×2 case in one table, with an example. The <span class="term" data-term="discriminant">discriminant</span> tr² − 4 det tells you which row you are in.</p>
       <div class="table-scroll" tabindex="0" role="region" aria-label="The cases for a 2 by 2 matrix, scrolls sideways on narrow screens">
       <table>
         <thead><tr><th scope="col">Matrix</th><th scope="col">tr² − 4 det</th><th scope="col">Real eigenvalues</th><th scope="col">Eigenvector directions</th></tr></thead>
@@ -137,42 +137,43 @@
         </tbody>
       </table>
       </div>
-      <p>A rotation by an angle that is not a multiple of π has no real eigenvalues, because its tr² − 4 det is negative (here tr = <span data-calc="rotTrace">…</span> and det = 1), and no real arrow keeps its line. The shear with k not 0 has its eigenvalue 1 repeated, and only the arrows along the x-axis stay on their line, so it has too few eigenvectors to span the plane.</p>
+      <p>Two rows deserve a second look. A rotation by an angle that is not a multiple of π has no real eigenvalues, because its tr² − 4 det is negative (here tr = <span data-calc="rotTrace">…</span> and det = 1), and no real arrow keeps its line. The shear with k not 0 has its eigenvalue 1 repeated, and only the arrows along the x-axis stay on their line, so it has too few eigenvectors to span the plane.</p>
     </section>
     <section data-stage="how-to-arrive">
       <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-derived">✓ Derived</span></p>
+      <p>Suppose you had to find these special arrows yourself, starting from nothing but the rule A v = λv. Where do you begin? Four steps get you there.</p>
       <ol>
-        <li><strong>The requirement.</strong> Find v, not zero, with A v = λv. Move everything to one side: (A − λI) v = 0, where I is the identity matrix.</li>
-        <li><strong>What that demands.</strong> The matrix A − λI sends a non-zero arrow to zero. A matrix with an inverse only sends the zero vector to zero, so A − λI must have no inverse: its determinant is 0.</li>
-        <li><strong>Write it out.</strong> det(A − λI) = (a − λ)(d − λ) − bc = λ² − (a + d)λ + (ad − bc) = λ² − tr λ + det.</li>
-        <li><strong>Solve.</strong> Set it to 0 and use the quadratic formula: λ = (tr ± √(tr² − 4 det)) / 2. For each λ, solve (A − λI) v = 0 for v.</li>
+        <li><strong>The requirement.</strong> We want a v, not zero, with A v = λv. Move everything to one side and it becomes (A − λI) v = 0, where I is the identity matrix.</li>
+        <li><strong>What that demands.</strong> The matrix A − λI has to send a non-zero arrow to zero. A matrix with an inverse only sends the zero vector to zero, so A − λI must have no inverse: its determinant is 0.</li>
+        <li><strong>Write it out.</strong> Expanding the determinant gives det(A − λI) = (a − λ)(d − λ) − bc = λ² − (a + d)λ + (ad − bc) = λ² − tr λ + det.</li>
+        <li><strong>Solve.</strong> Set it to 0 and use the quadratic formula: λ = (tr ± √(tr² − 4 det)) / 2. Then, for each λ, solve (A − λI) v = 0 for v.</li>
       </ol>
       <div data-checks="reveal"></div>
     </section>
     <section data-stage="in-an-llm">
       <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
-        <li><strong>Nothing specific to claim.</strong> Eigenvalues and eigenvectors are not a named step in how a transformer processes text, and this card makes no claim that they are. The real-life examples above are where this card’s idea is used.</li>
+        <li><strong>An honest note.</strong> Eigenvalues and eigenvectors are not a named step in how a transformer processes text, and we won’t pretend otherwise. The idea earns its place as a tool for understanding matrices, and the real uses are the ones in Real life above: vibration, spinning bodies and PageRank.</li>
       </ul>
-      <div class="callout simplified"><p><strong>Simplified.</strong> This card works with 2×2 matrices. Larger matrices have as many eigenvalues as they have rows, but finding them takes more than a quadratic formula.</p></div>
+      <div class="callout simplified"><p><strong>Simplified.</strong> Here we work only with 2×2 matrices. Larger matrices have as many eigenvalues as they have rows, but finding them takes more than a quadratic formula.</p></div>
       <div data-checks="explain"></div>
     </section>
 
     <details class="teach-it">
       <summary>Teach it</summary>
       <h3>60-second explanation</h3>
-      <p>“A matrix usually tilts arrows. An eigenvector is an arrow it does not tilt: it only stretches or flips it, by a number called the eigenvalue. To find them, ask when A minus λ times the identity has no inverse, set its determinant to zero, and solve the quadratic. The two answers add to the trace and multiply to the determinant. If the discriminant is negative there are none; if the eigenvalue repeats there may be only one direction.”</p>
+      <p>“A matrix usually tilts arrows. An eigenvector is an arrow it does not tilt: it only stretches or flips it, by a number called the eigenvalue. To find them, ask when A minus λ times the identity has no inverse. That happens when its determinant is zero, so set the determinant to zero and solve the quadratic. The two answers add to the trace and multiply to the determinant. If the discriminant is negative there are none; if the eigenvalue repeats there may be only one direction.”</p>
       <h3>Everyday analogy</h3>
-      <p>A spinning merry-go-round seen from above: everything turns except the pole at the centre. <em>Where it breaks down:</em> an eigenvector is a direction kept, not a point at rest, and it can be stretched along the way.</p>
+      <p>Picture a spinning merry-go-round seen from above. Everything turns except the pole at the centre. <em>Where it breaks down:</em> an eigenvector is a direction that is kept, not a point at rest, and it can be stretched along the way.</p>
       <h3>Whiteboard sequence</h3>
-      <ol><li>Draw v and Av from one point, tilted differently.</li><li>Rotate v until Av lies along it.</li><li>Write A v = λ v beside the two parallel arrows.</li><li>Compute tr and det and the discriminant.</li><li>Solve for λ, then find v for each λ.</li></ol>
+      <ol><li>Draw v and Av from one point, tilted differently.</li><li>Rotate v until Av lies along it.</li><li>Write A v = λ v beside the two parallel arrows.</li><li>Work out tr and det, then the discriminant.</li><li>Solve for λ, then find v for each λ.</li></ol>
       <h3>Questions learners ask</h3>
       <p><strong>Can an eigenvalue be negative or zero?</strong> Yes. Negative means the arrow is flipped as well as stretched; zero means it is squashed to nothing.</p>
       <p><strong>Why must v not be zero?</strong> Because A·0 = λ·0 for every λ, so it would make every number an eigenvalue and tell us nothing.</p>
-      <p><strong>Does every matrix have eigenvectors?</strong> Not real ones: a rotation by an angle that is not a multiple of π has none, and a shear has too few.</p>
+      <p><strong>Does every matrix have eigenvectors?</strong> Not always. Over the real numbers, a rotation by an angle that is not a multiple of π has none, and a shear has too few.</p>
       <h3>Common misconception</h3>
-      <p>“An eigenvector is one particular arrow.” It is a direction: every non-zero multiple of it is an eigenvector too.</p>
+      <p>“An eigenvector is one particular arrow.” It is not. It is a direction: every non-zero multiple of it is an eigenvector too, so 2v and −3v count as well as v.</p>
     </details>
     <footer>Further reading: MML Ch 4.2 (eigenvalues and eigenvectors).</footer>
   </article>

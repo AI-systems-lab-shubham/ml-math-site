@@ -6,6 +6,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, posix } from "node:path";
+import { rewrittenAnchors } from "./lib/rewritten.mjs";
 import { editArticle, editOverviewPart, isDroppedLeftover } from "./lib/post-split-edits.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -182,7 +183,8 @@ ${TOC}
 </body>
 </html>
 `;
-      files.set(`${dir}index.html`, page);
+      // A card whose voice was deliberately rewritten is hand-owned now: never regenerate it (see tools/lib/rewritten.mjs).
+      if (!rewrittenAnchors().has(c.anchor)) files.set(`${dir}index.html`, page);
     });
 
     // Overview: title, lede, time, outcomes, the primary button and the list of built concepts. Nothing else.

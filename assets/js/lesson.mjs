@@ -50,7 +50,7 @@ export function initLesson(shell) {
 
   const needs = (c.requires ?? []).map((id) => findConcept(course, id)).filter(Boolean);
   const builds = needs.length
-    ? `Builds on: ${needs.map((n) => `<a href="${hrefTo(n.concept.path)}">${esc(n.concept.title)}</a>`).join(", ")} (a suggestion, not a lock)`
+    ? `Before this: ${needs.map((n) => `<a href="${hrefTo(n.concept.path)}">${esc(n.concept.title)}</a>`).join(", ")}`
     : "Needs only high-school maths";
   header.append(el(`<p class="lesson-meta"><span>About ${c.minutes} min</span><span>${c.size === "full" ? "Full card" : "Compact card"}</span><span>${builds}</span></p>`));
 

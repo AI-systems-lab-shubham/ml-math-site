@@ -25,13 +25,13 @@
           "minutes": 8,
           "status": "built",
           "objectives": [
-            "Explain a [[variable|variable]] as a labelled box that holds a number",
-            "Evaluate a simple [[expression|expression]] for a given value"
+            "Say what a [[variable|variable]] is: a labelled box that holds a number",
+            "Work out the value of a simple [[expression|expression]] once you are told which number is in the box"
           ],
           "takeaways": [
-            "A letter stands for a number that can change or is not yet known.",
-            "An [[expression|expression]] is a recipe that turns the numbers in the boxes into a new number.",
-            "Naming things lets us state a rule once and use it for every value."
+            "A letter stands for a number that can change, or one we do not know yet.",
+            "An [[expression|expression]] is a recipe: put numbers in the boxes and it gives you a new number.",
+            "Because the box has a name, you can state a rule once and use it for every value."
           ],
           "requires": []
         },
@@ -685,15 +685,16 @@
           "minutes": 16,
           "status": "built",
           "objectives": [
-            "Define an [[eigenvector|eigenvector]] and its [[eigenvalue|eigenvalue]] by Av = λv with v not the zero vector, and explain why an eigenvector is defined only up to scale",
-            "Find the eigenvalues of a 2×2 matrix as (tr ± √(tr² − 4 det))/2 and use the [[discriminant|discriminant]] to say whether there are two, one repeated, or no real eigenvalues",
-            "Name the standard cases: a projection (eigenvalues 1 and 0), a scaling, a rotation (no real eigenvector), and a shear (one eigenvector direction, a [[defective matrix|defective-matrix]]), and check that the eigenvalues add up to the trace and multiply to the determinant"
+            "Define an [[eigenvector|eigenvector]] and its [[eigenvalue|eigenvalue]] by Av = λv with v not the zero vector, and say why only the direction matters",
+            "Find the eigenvalues of a 2×2 matrix as (tr ± √(tr² − 4 det))/2, and use the [[discriminant|discriminant]] to tell whether there are two, one repeated, or no real eigenvalues",
+            "Recognise the standard cases: a projection (eigenvalues 1 and 0), a scaling, a rotation (no real eigenvector), and a shear (one eigenvector direction, a [[defective matrix|defective-matrix]])",
+            "Check that the eigenvalues add up to the trace and multiply to the determinant"
           ],
           "takeaways": [
-            "An [[eigenvector|eigenvector]] v of A satisfies Av = λv with v not zero: A only stretches it by the [[eigenvalue|eigenvalue]] λ, so it stays on its own line. Any non-zero multiple of it is one too, so it is a direction, not a single arrow.",
-            "For a 2×2 matrix the eigenvalues are (tr ± √(tr² − 4 det))/2; the sum is the trace and the product is the determinant.",
-            "If the [[discriminant|discriminant]] tr² − 4 det is negative there are no real eigenvalues, as for a rotation by an angle that is not a multiple of π.",
-            "A shear with rows (1, k) and (0, 1), k not 0, has eigenvalue 1 but only one eigenvector direction."
+            "An [[eigenvector|eigenvector]] v of A is a non-zero arrow with Av = λv: A only stretches it, by the [[eigenvalue|eigenvalue]] λ, so it stays on its own line. Any non-zero multiple of it works too, so an eigenvector is a direction, not one particular arrow.",
+            "For a 2×2 matrix the eigenvalues are (tr ± √(tr² − 4 det))/2. Add them and you get the trace; multiply them and you get the determinant.",
+            "When the [[discriminant|discriminant]] tr² − 4 det is negative there are no real eigenvalues. A rotation by an angle that is not a multiple of π is an example.",
+            "A shear with rows (1, k) and (0, 1), where k is not 0, has eigenvalue 1 but only one eigenvector direction."
           ],
           "requires": [
             "m03-determinant",

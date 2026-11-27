@@ -89,13 +89,14 @@
     <header>
       <p class="eyebrow">Compact card · 1 of 10</p>
       <h1>Variables and expressions</h1>
-      <p class="muted">A letter is a labelled empty box that a number can go into.</p>
+      <p class="muted">A letter is a labelled empty box, and you can put a number in it.</p>
     </header>
 
     <section data-stage="meaning">
       <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
-      <p>Imagine a box with a label on it and nothing inside yet. That is a <span class="term" data-term="variable">variable</span>: a name for a number we have not picked. Put 4 in the box and every place the label appears means 4. Put 10 in and it means 10.</p>
-      <p>An <span class="term" data-term="expression">expression</span> is a recipe that uses the box. Our example is “three copies of the box, plus 2”. We write it <span class="math" data-tex="3x+2">3x+2</span>. When a number sits next to a letter, the multiplication sign is hidden: <span class="math" data-tex="3x">3x</span> means <span class="math" data-tex="3\times x">3 × x</span>.</p>
+      <p>Think of an empty box with a label stuck on the front, like a moving box marked “kitchen”. The label is a name, and the box is waiting for something to go in it. A <span class="term" data-term="variable">variable</span> works the same way: it is a name for a number we have not picked yet. Put 4 in the box and every place the label appears means 4. Put 10 in and it means 10.</p>
+      <p>Now put the box to work. An <span class="term" data-term="expression">expression</span> is a recipe that uses the box. Ours says “three copies of the box, plus 2”, and we write it <span class="math" data-tex="3x+2">3x+2</span>. Read it aloud as “three x plus two”.</p>
+      <p>This is where people trip: when a number sits next to a letter, the multiplication sign is hidden. So <span class="math" data-tex="3x">3x</span> is not one new symbol. It means <span class="math" data-tex="3\times x">3 × x</span>.</p>
     </section>
 
     <section data-stage="picture">
@@ -135,34 +136,35 @@
         <h3>Predict, then reveal</h3>
         <p><label for="p-var">Put 5 in the box. What does 3x + 2 come to?</label></p>
         <div class="row"><input id="p-var" type="number" inputmode="decimal"><button class="button-secondary button-small" type="button" data-check>Check my answer</button><button class="button-secondary button-small" type="button" data-hint>Hint</button></div>
-        <p class="hint-text" hidden>Replace x with 5, do the multiplication first, then the addition.</p>
+        <p class="hint-text" hidden>Put the 5 into the box, in place of x. Then multiply first and add after.</p>
       </div>
     </section>
 
     <section data-stage="why-when">
       <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
-      <p>Without variables you would write a separate sentence for every case: “3 times 4, plus 2”, “3 times 5, plus 2”, and so on. A variable lets one statement cover every case at once.</p>
-      <p>Use one whenever a rule should hold for many numbers. If you only ever need one specific number, just write the number.</p>
+      <p>Without variables you would need a separate sentence for every case: “3 times 4, plus 2”, “3 times 5, plus 2”, and so on. One letter lets a single statement cover every case at once.</p>
+      <p>Reach for a variable whenever a rule should hold for many numbers. If you only ever need one specific number, write the number itself.</p>
     </section>
 
     <section data-stage="how-to-arrive">
       <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-convention">◆ Convention</span></p>
-      <p>Any mark could stand for the box: a square, a star, the letter k. We could have chosen differently, and the maths would not change. The habit is to use letters from the end of the alphabet (x, y, z) for quantities that vary and letters from the start (a, b, c) for fixed numbers we have not specified.</p>
+      <p>Suppose you had to choose a mark for the box yourself. A square would work, and so would a star, or the letter k. Any mark could stand for the box. We could have chosen differently, and the maths would not change.</p>
+      <p>In practice the habit is to use letters from the end of the alphabet (x, y, z) for quantities that vary and letters from the start (a, b, c) for fixed numbers we have not specified.</p>
     </section>
 
     <section data-stage="in-an-llm">
       <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
-      <p>Every number a language model learns is a variable, called a <span class="term" data-term="parameter">parameter</span>, until training fixes its value. The model is a very large expression made of those variables. GPT-3 (2020) has 175 billion of them (Brown et al., 2020).</p>
+      <p>In a language model, every number the model learns is one of these empty boxes. It is called a <span class="term" data-term="parameter">parameter</span>, and it stays a variable until training fixes its value. The model as a whole is a very large expression made of those variables. GPT-3 (2020) has 175 billion of them (Brown et al., 2020).</p>
       <div class="callout simplified"><p><strong>Simplified.</strong> A real model's expression is enormously bigger than 3x + 2, but it is built from the same pieces: numbers, variables, multiplication and addition (plus a few other operations).</p></div>
     </section>
 
     <details class="teach-it">
       <summary>Teach it</summary>
       <h3>Everyday analogy</h3>
-      <p>A form with blanks: “Dear ____”. The blank stands for whatever name you fill in. <em>Where it breaks down:</em> a blank on a form is filled once, but a letter in maths can be filled with different numbers to see what happens, and the same letter means the same number everywhere in one problem.</p>
+      <p>Think of a form with blanks, like “Dear ____”. The blank stands for whatever name you fill in. <em>Where it breaks down:</em> a blank on a form is filled once, but a letter in maths can be filled with different numbers so you can see what happens, and within one problem the same letter means the same number everywhere.</p>
       <h3>Common misconception</h3>
-      <p>“x always means the same number.” It does not. x is a placeholder; its value is whatever the problem says or whatever we choose for the moment.</p>
+      <p>“x always means the same number.” It does not. x is a placeholder, and its value is whatever the problem says or whatever you choose for the moment.</p>
     </details>
     <footer>Further reading: MML Ch 1 (motivation) for how these pieces become machine learning.</footer>
   </article>

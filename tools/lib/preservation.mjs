@@ -1,6 +1,7 @@
 // Content-preservation check for the split: the text of the new concept pages, in order, must equal the text of
 // the old long module page, apart from the hero parts that moved on purpose (see HOWTO in tools/split-modules.mjs).
 import { textOf, firstDiff } from "./html-text.mjs";
+import { rewrittenAnchors } from "./rewritten.mjs";
 import { parseOld, splitDotted, HOWTO } from "../split-modules.mjs";
 
 const article = (html) => html?.match(/<article class="concept-card"[\s\S]*?<\/article>/)?.[0] ?? "";
@@ -8,17 +9,20 @@ const calloutOf = (html) => html.match(/<div class="callout">[\s\S]*?<\/div>/)?.
 
 // oldHtml: the old module page. conceptHtmls: the new concept pages in course order. overviewHtml: the new overview.
 // homeHtml and hintJs (assets/js/first-hint.js): where the two how-to sentences now live. Returns a list of problems (empty = preserved).
-export function comparePreservation({ oldHtml, conceptHtmls, overviewHtml, homeHtml, hintJs }) {
+export function comparePreservation({ skipAnchors, oldHtml, conceptHtmls, overviewHtml, homeHtml, hintJs }) {
   const problems = [];
   const old = parseOld(oldHtml);
+  const skip = skipAnchors ?? rewrittenAnchors();
+  const anchorOf = (h) => article(h).match(/<article class="concept-card" id="([^"]+)"/)?.[1];
   if (conceptHtmls.length !== old.articles.length) {
     problems.push(`expected ${old.articles.length} concept pages, found ${conceptHtmls.length}`);
   }
 
   // 1. The concept cards, in order. A callout that moved into a card is taken out before comparing.
   const stripCallout = (a) => a.replace(/<div class="callout">[\s\S]*?<\/div>/, "");
-  const want = old.articles.map((a) => textOf(a.html)).join(" ¶ ");
-  const got = conceptHtmls.map((h) => textOf(stripCallout(article(h)))).join(" ¶ ");
+  // Rewritten cards are left out of the word-for-word comparison on both sides (facts-preserved test covers them).
+  const want = old.articles.filter((a) => !skip.has(a.id)).map((a) => textOf(a.html)).join(" ¶ ");
+  const got = conceptHtmls.filter((h) => !skip.has(anchorOf(h))).map((h) => textOf(stripCallout(article(h)))).join(" ¶ ");
   const d = firstDiff(want, got);
   if (d) problems.push(`concept text: ${d}`);
 

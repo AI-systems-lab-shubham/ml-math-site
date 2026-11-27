@@ -1,0 +1,16 @@
+{
+  "m03-eigenvectors": [
+    {
+      "kind": "removed",
+      "category": "label",
+      "token": "Nothing specific to claim",
+      "reason": "Stage 7 lead-in relabelled \"An honest note\" per TONE-PASS section 6: the old label read as legal hedging. The claim itself (no direct link to an LLM; Conceptual) is unchanged."
+    },
+    {
+      "kind": "added",
+      "category": "label",
+      "token": "An honest note",
+      "reason": "Replacement lead-in for the stage 7 label above; same sentence still says eigenvectors are not a named step in a transformer."
+    }
+  ]
+}

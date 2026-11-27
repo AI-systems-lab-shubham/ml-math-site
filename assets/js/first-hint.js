@@ -6,7 +6,7 @@
 (function () {
   var KEY = "mlmath:ui:v1";
   var AUTO_PAGES = 2;
-  var HINT = "Terms with a dotted underline are a tap or hover away from a plain-language and a mathematical definition. Expand all and Collapse all open or close every Teach it panel and symbol list on a page. Answer reveals stay closed.";
+  var HINT = "Terms with a dotted underline are a tap or hover away from a plain-language and a mathematical definition. Expand all and Collapse all open or close every Teach it panel and symbol list on a page. Answer reveals stay closed. Nothing is locked: the “Before this” line on a card is a suggestion, and you can open any card in any order.";
   var anchor = document.currentScript;
   if (!anchor || !anchor.parentNode) return;
   var node = null;

@@ -3,5 +3,23 @@
   "files": {
     "00-foundations.html": "20536cccc623d045f490ad2e0f8dddfba6832d4ef9a303fdceff062151b32b7a",
     "01-linear-algebra.html": "a8294e7463b866e16cb7681bb78c1bf3c11609c8e0cea83436c2fb23d5db235c"
-  }
+  },
+  "rewritten": [
+    {
+      "concept": "m00-variables",
+      "anchor": "concept-variables",
+      "date": "2026-11-26",
+      "baseline": "4b98d5d",
+      "note": "Voice pilot (docs/VOICE.md, docs/TONE-PASS.md): tagline, stages 1, 5, 6, 7, Predict hint and Teach it reworded. Exempt from the word-for-word freeze; tests/facts-preserved.test.mjs checks numbers, formulas, citations, tags and caveats against the baseline commit.",
+      "sha256": "048e054b02aef92a71a4c5d0798551b9c7ab0cd736739d7b5d39a603f6c881f2"
+    },
+    {
+      "concept": "m03-eigenvectors",
+      "anchor": "concept-eigenvectors",
+      "date": "2026-11-26",
+      "baseline": "4b98d5d",
+      "note": "Voice pilot (docs/VOICE.md, docs/TONE-PASS.md): tagline, stages 1, 5, 6, 7 and Teach it reworded. Module 3 was never frozen; listed so the page hash is pinned and facts-preserved runs on it.",
+      "sha256": "a11bb378ad7adaa25cae48b17e009a37b741fa4ada711b5aaac643bfc312a1a0"
+    }
+  ]
 }
