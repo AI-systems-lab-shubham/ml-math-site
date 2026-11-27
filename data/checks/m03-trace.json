@@ -79,7 +79,7 @@
       "id": "cyclic",
       "slot": "reveal",
       "prompt": "Before you continue, predict: is tr(ABC) always equal to tr(BAC)?",
-      "reasoning": "No. Moving the first matrix to the back, or the last to the front, keeps the trace: tr(ABC) = tr(BCA) = tr(CAB). Swapping two neighbours can change it, and the tests include an example where it does."
+      "reasoning": "No. Moving the first matrix to the back, or the last to the front, keeps the trace: tr(ABC) = tr(BCA) = tr(CAB). Swapping two neighbours can change it. Take A with rows (0, 1) and (0, 0), B with rows (0, 0) and (1, 0), and C with rows (1, 0) and (0, 0). Then tr(ABC) = 1 but tr(BAC) = 0."
     }
   ]
 }

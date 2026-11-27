@@ -12,5 +12,19 @@
       "token": "An honest note",
       "reason": "Replacement lead-in for the stage 7 label above; same sentence still says eigenvectors are not a named step in a transformer."
     }
+  ],
+  "m03-trace": [
+    {
+      "kind": "added",
+      "category": "number",
+      "token": "9",
+      "reason": "Stage 5 now spells out the sum of squared entries as (1 + 4 + 9 + 16), the draft's wording; the worked-example stepper (assets/js/decomposition.mjs, trace, step 'Squared entries') already shows 1 + 4 + 9 + 16 = 30 for the same matrix, and the 30 on the page still comes from the squaredEntries calc."
+    },
+    {
+      "kind": "added",
+      "category": "number",
+      "token": "16",
+      "reason": "Stage 5 now spells out the sum of squared entries as (1 + 4 + 9 + 16), the draft's wording; the worked-example stepper (assets/js/decomposition.mjs, trace, step 'Squared entries') already shows 1 + 4 + 9 + 16 = 30 for the same matrix, and the 30 on the page still comes from the squaredEntries calc."
+    }
   ]
 }

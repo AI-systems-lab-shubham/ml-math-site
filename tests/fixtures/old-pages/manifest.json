@@ -20,6 +20,14 @@
       "baseline": "4b98d5d",
       "note": "Voice pilot (docs/VOICE.md, docs/TONE-PASS.md): tagline, stages 1, 5, 6, 7 and Teach it reworded. Module 3 was never frozen; listed so the page hash is pinned and facts-preserved runs on it. Second pass: contractions, a question asked aloud before stage 6, a backward link to the Determinant card.",
       "sha256": "b6577c6a239a53609a262f7bcf2d602dc596bfe314381443495fdcd54a42814d"
+    },
+    {
+      "concept": "m03-trace",
+      "anchor": "concept-trace",
+      "date": "2026-11-27",
+      "baseline": "ec74043",
+      "note": "Voice rewrite (Build mode, docs/TRACE-REWRITE-DRAFT.md): tagline and stages 1, 5, 6, 7 reworded; the stage 6 reveal reasoning in data/checks/m03-trace.json now shows a worked counterexample instead of 'the tests include an example'. Module 3 was never frozen; listed so the page hash is pinned and facts-preserved runs on it.",
+      "sha256": "0f2cbd5905917c4fbcbf1d1d0d1a99f4dd24c63278e0c065afdc9d5a2d6ea967"
     }
   ]
 }

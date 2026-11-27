@@ -86,13 +86,14 @@
     <header>
       <p class="eyebrow">Compact card · 2 of 6</p>
       <h1>Trace</h1>
-      <p class="muted">One number from adding the diagonal, with a surprising rule about products.</p>
+      <p class="muted">One number from the diagonal, and a rule about products that looks wrong at first.</p>
     </header>
 
     <section data-stage="meaning">
       <h2 class="stage-heading"><span class="stage-number">01</span> Meaning</h2>
-      <p>Take a square table of numbers and walk down it from the top left corner to the bottom right. The entries you step on are the <span class="term" data-term="diagonal">diagonal</span>. Add them up and you have the <span class="term" data-term="trace">trace</span> of the <span class="term" data-term="square-matrix">square matrix</span>. Nothing else is needed: the entries off the diagonal do not count at all.</p>
-      <p>We write the trace of A as tr(A). The entry in row i and column i is a<sub>ii</sub>, and the trace adds those for every i.</p>
+      <p>Is there one number that sums up a square table? There are plenty, and the trace is one of the simplest. Walk down the table from the top left corner to the bottom right and add the entries you step on. Those entries are the <span class="term" data-term="diagonal">diagonal</span>, and their sum is the <span class="term" data-term="trace">trace</span>. Everything off the diagonal is ignored.</p>
+      <p>You already have what you need to see why this is worth having: <a href="../../01-linear-algebra/matmul/">matrix multiplication</a>, <a href="../../01-linear-algebra/transpose-inverse/">transposes</a>, and the sum of squared entries from the <a href="../../02-analytic-geometry/norms/">Norms</a> card. The trace ties them together through one identity, tr(A<sup>T</sup>A), which you will meet below.</p>
+      <p>We write the trace of A as tr(A). Read a<sub>ii</sub> as “a-i-i”: the entry in row i and column i. The trace adds those for every i.</p>
       <div class="math-display" data-tex-display="\operatorname{tr}(A)=\sum_{i}a_{ii}=a_{11}+a_{22}+\dots+a_{nn}">tr(A) = a₁₁ + a₂₂ + … + aₙₙ</div>
     </section>
     <section data-stage="picture">
@@ -124,27 +125,28 @@
     </section>
     <section data-stage="why-when">
       <h2 class="stage-heading"><span class="stage-number">05</span> Why and when</h2>
-      <p>The trace squeezes a whole table into one number that behaves nicely: it adds (tr(A + B) = tr(A) + tr(B)), it scales (tr(cA) = c tr(A)), and it ignores the order of a product: tr(AB) = tr(BA). That last rule is surprising, because AB and BA are usually different matrices, as the worked example showed. It extends to three matrices, but only by moving the last one to the front: tr(ABC) = tr(CAB) = tr(BCA), while swapping two neighbours can change the answer.</p>
-      <p><strong>When it does not fit.</strong> The trace throws away everything off the diagonal, so very different matrices can share a trace, and it can be negative or zero, so it is not a measure of size. For size, use the sum of squared entries: tr(A<sup>T</sup>A) = <span data-calc="squaredEntries">…</span> for the matrix in the worked example, which is the squared <span class="term" data-term="frobenius-norm">Frobenius norm</span>.</p>
+      <p>Why keep a number that throws most of the table away? Because it behaves well. It adds: tr(A + B) = tr(A) + tr(B). It scales: tr(cA) = c·tr(A). And it ignores the order of a product: tr(AB) = tr(BA).</p>
+      <p>That last one should make you suspicious. AB and BA are usually different matrices, as the worked example showed, and yet their traces match. It reaches three matrices only by cycling them: you can move the last matrix to the front, so tr(ABC) = tr(CAB) = tr(BCA), but swapping two neighbours can change the answer.</p>
+      <p><strong>When it does not fit.</strong> The trace ignores everything off the diagonal, so very different matrices can share a trace. It can also be negative or zero, so it is not a measure of size. For size, use tr(A<sup>T</sup>A), the sum of all the squared entries, which is <span data-calc="squaredEntries">…</span> for the matrix in the worked example (1 + 4 + 9 + 16). That is the squared <span class="term" data-term="frobenius-norm">Frobenius norm</span>.</p>
     </section>
     <section data-stage="how-to-arrive">
       <h2 class="stage-heading"><span class="stage-number">06</span> How to arrive at it</h2>
       <p><span class="badge badge-motivated">◆ Motivated</span></p>
       <ol>
-        <li><strong>The wish.</strong> A single number from a square table that adds when tables add, scales when they scale, and does not change if we multiply two tables in the other order.</li>
-        <li><strong>The candidates.</strong> The product of the diagonal does not add. The largest entry does not add either. The sum of the diagonal does add and scale.</li>
-        <li><strong>The test.</strong> tr(AB) = Σ<sub>i</sub> Σ<sub>j</sub> a<sub>ij</sub>b<sub>ji</sub>, and tr(BA) = Σ<sub>i</sub> Σ<sub>j</sub> b<sub>ij</sub>a<sub>ji</sub>: the same terms with the names i and j swapped. So the order does not matter.</li>
-        <li><strong>The choice.</strong> The sum of the diagonal is a good fit among several. This is a motivated choice, not a forced one, and we have not shown that it is the only one.</li>
+        <li><strong>The wish.</strong> Suppose you want to squeeze a square table into one number, and you have three wishes. If you add two tables, the numbers add. If you scale a table, the number scales. And if you multiply two tables, the number doesn’t care which order you did it in.</li>
+        <li><strong>The candidates.</strong> Try some candidates. The product of the diagonal entries doesn’t add. The largest entry doesn’t add either. The sum of the diagonal adds and scales.</li>
+        <li><strong>The test.</strong> Does it ignore the order? Write the product out entry by entry: tr(AB) = Σ<sub>i</sub> Σ<sub>j</sub> a<sub>ij</sub>b<sub>ji</sub>, and tr(BA) = Σ<sub>i</sub> Σ<sub>j</sub> b<sub>ij</sub>a<sub>ji</sub>. These are the same terms with the names i and j swapped, so the order doesn’t matter.</li>
+        <li><strong>The choice.</strong> An honest limit: this is a motivated choice, not a forced one. The diagonal sum fits the wishes, and we haven’t shown it is the only number that does.</li>
       </ol>
       <div data-checks="reveal"></div>
     </section>
     <section data-stage="in-an-llm">
       <h2 class="stage-heading"><span class="stage-number">07</span> In an LLM</h2>
       <ul>
-        <li><strong>Conceptual link: the squared size of a weight matrix.</strong> Weight decay penalises the squared L2 norm of the weights (see the <a href="../../02-analytic-geometry/norms/">Norms</a> card), and for a weight matrix W that sum of squared entries is tr(W<sup>T</sup>W). That is an identity about numbers; it does not say how any model is trained beyond what the Norms card states.</li>
-        <li>There is no specific, documented step of a language model that we can point to as a trace.</li>
+        <li><strong>Conceptual link: the squared size of a weight matrix.</strong> Weight decay penalises the squared L2 norm of the weights (see the <a href="../../02-analytic-geometry/norms/">Norms</a> card), and for a weight matrix W that sum of squared entries is tr(W<sup>T</sup>W). That is an identity about numbers. It does not say how any model is trained beyond what the Norms card states.</li>
+        <li>To be straight with you: no specific, documented step of a language model is a trace.</li>
       </ul>
-      <div class="callout simplified"><p><strong>Simplified.</strong> The identity holds for any matrix. It is a different way to write a sum, not a claim about a particular model.</p></div>
+      <div class="callout simplified"><p><strong>Simplified.</strong> The identity holds for any matrix. It is a different way of writing a sum, not a claim about a particular model.</p></div>
     </section>
 
     <details class="teach-it">
