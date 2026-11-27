@@ -1,18 +1,19 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
-import { checkCourse } from "../tools/check-course.mjs";
+import { checkCourse, parseBriefs } from "../tools/check-course.mjs";
 
 const root = new URL("../", import.meta.url);
 const real = JSON.parse(readFileSync(new URL("data/course.json", root), "utf8"));
 const termIds = new Set(JSON.parse(readFileSync(new URL("data/glossary.json", root), "utf8")).entries.map((e) => e.id));
 const realFs = { read: (p) => (existsSync(new URL(p, root)) ? readFileSync(new URL(p, root), "utf8") : null), termIds };
 
-const concept = (id, extra = {}) => ({ id, title: id, anchor: `concept-${id}`, path: `m/${id}/`, size: "full", minutes: 5, status: "built", objectives: ["x", "y"], takeaways: [], ...extra });
+const concept = (id, extra = {}) => ({ id, title: id, anchor: `concept-${id}`, path: `m/${id}/`, size: "full", minutes: 5, status: "built", voice: "A", objectives: ["x", "y"], takeaways: ["a", "b", "c"], ...extra });
 const good = () => ({ modules: [{ id: "m1", status: "built", path: "m/", minutes: 10, prerequisites: [], concepts: [concept("c1"), concept("c2"), concept("c3", { status: "planned" })] }, { id: "m2", status: "planned", path: "n/", prerequisites: ["m1"], concepts: [] }] });
 const overview = '<a href="c1/">c1</a><a href="c2/">c2</a><script type="application/json" id="old-links">{"concept-c1":"c1/","concept-c2":"c2/"}</script><script src="assets/js/old-links.mjs"></script>';
 const cpage = (id) => `<meta name="concept-id" content="${id}"><article class="concept-card" id="concept-${id}"></article>`;
-const pages = (over = {}) => ({ "m/index.html": overview, "m/c1/index.html": cpage("c1"), "m/c2/index.html": cpage("c2"), ...over });
+const briefsDoc = (rows = [["c1", "A"], ["c2", "A"]]) => `# CARD-BRIEFS\n\nHow to read an entry.\n- **Mode:** A, AB or B.\n\n## Module 1\n\n${rows.map(([id, m], i) => `**Card ${i + 1}** (${id}). Mode ${m}. Basis: judgement.`).join("\n\n")}\n\n## Count\nx\n`;
+const pages = (over = {}) => ({ "docs/CARD-BRIEFS.md": briefsDoc(), "m/index.html": overview, "m/c1/index.html": cpage("c1"), "m/c2/index.html": cpage("c2"), ...over });
 const fsOf = (map) => ({ read: (p) => map[p] ?? null });
 const fs = fsOf(pages());
 
@@ -128,4 +129,71 @@ test("objectives: 1 and 4 fail with the card and the count named; 2 and 3 pass",
 test("objectives: a missing list fails", () => {
   const c = good(); delete c.modules[0].concepts[0].objectives;
   assert.ok(checkCourse(c, fs).some((e) => e.startsWith("c1:") && e.includes("2 to 3")));
+});
+
+// Takeaways: 3 to 4 (the same range as tests/e2e/lesson-nav.mjs, now also in --fast).
+test("takeaways: 0, 2 and 5 fail with the card and the count named; 3 and 4 pass", () => {
+  const withN = (n) => { const c = good(); c.modules[0].concepts[0].takeaways = Array.from({ length: n }, (_, i) => `t${i}`); return c; };
+  for (const n of [0, 2, 5]) {
+    const errs = checkCourse(withN(n), fs);
+    assert.ok(errs.some((e) => e.startsWith("c1:") && e.includes(`has ${n} takeaway`) && e.includes("3 to 4")), `${n}: ${errs}`);
+  }
+  for (const n of [3, 4]) assert.deepEqual(checkCourse(withN(n), fs), [], `${n} takeaways`);
+});
+
+// Voice modes and the briefs file.
+const withVoice = (v) => { const c = good(); if (v === undefined) delete c.modules[0].concepts[0].voice; else c.modules[0].concepts[0].voice = v; return c; };
+test("voice: a missing or invalid value fails; A, AB and B pass", () => {
+  for (const v of [undefined, "C", "a", "ab", "", null]) {
+    assert.ok(checkCourse(withVoice(v), fs).some((e) => e.startsWith("c1:") && e.includes("voice must be")), String(v));
+  }
+  for (const v of ["A", "AB", "B"]) assert.deepEqual(checkCourse(withVoice(v), fsOf(pages({ "docs/CARD-BRIEFS.md": briefsDoc([["c1", v], ["c2", "A"]]) }))), [], v);
+});
+test("voice: a planned card needs no voice", () => assert.deepEqual(checkCourse(good(), fs), []));
+test("briefs: a mode that differs from course.json fails and names both", () => {
+  const errs = checkCourse(good(), fsOf(pages({ "docs/CARD-BRIEFS.md": briefsDoc([["c1", "AB"], ["c2", "A"]]) })));
+  assert.ok(errs.some((e) => e.startsWith("c1:") && e.includes("voice is A") && e.includes("Mode AB") && /line \d+/.test(e)), String(errs));
+});
+test("briefs: a built card with no entry fails", () => {
+  const errs = checkCourse(good(), fsOf(pages({ "docs/CARD-BRIEFS.md": briefsDoc([["c1", "A"]]) })));
+  assert.ok(errs.some((e) => e.startsWith("c2:") && e.includes("no entry in docs/CARD-BRIEFS.md")), String(errs));
+});
+test("briefs: an entry whose id matches no card fails", () => {
+  const errs = checkCourse(good(), fsOf(pages({ "docs/CARD-BRIEFS.md": briefsDoc([["c1", "A"], ["c2", "A"], ["ghost", "B"]]) })));
+  assert.ok(errs.some((e) => e.includes("ghost") && e.includes("matches no card")), String(errs));
+});
+test("briefs: an entry for a planned card in course.json is allowed", () => {
+  assert.deepEqual(checkCourse(good(), fsOf(pages({ "docs/CARD-BRIEFS.md": briefsDoc([["c1", "A"], ["c2", "A"], ["c3", "B"]]) }))), []);
+});
+test("briefs: the file missing fails", () => {
+  assert.ok(checkCourse(good(), fsOf(pages({ "docs/CARD-BRIEFS.md": undefined }))).some((e) => e.includes("CARD-BRIEFS.md is missing")));
+});
+test("briefs: a heading that does not match the pattern fails with its line number", () => {
+  const bad = ["**Card 1.** Mode A.", "**Card 1** c1. Mode A.", "**Card 1** (c1) Mode A.", "**Card 1** (c1). Mode C.", "**Card 1** (C1). Mode A.", "**Card 1** (c1).  Mode A."];
+  for (const h of bad) {
+    const text = `# T\n\n## Module 1\n\n${h}\n`;
+    const { errors } = parseBriefs(text);
+    assert.equal(errors.length, 1, h);
+    assert.ok(errors[0].includes("line 5"), errors[0]);
+  }
+  assert.deepEqual(parseBriefs("## Module 1\n\n**Card** (c1). Mode AB.\n").errors, []);
+});
+test("briefs: a duplicate id fails", () => {
+  assert.ok(parseBriefs("## Module 1\n**A** (c1). Mode A.\n**B** (c1). Mode B.\n").errors.some((e) => e.includes("duplicate")));
+});
+test("briefs: text before the first Module heading and after Count is not parsed as entries", () => {
+  assert.deepEqual(parseBriefs("**Not an entry**\n## Module 0\n**Card** (c1). Mode A.\n## Count\n**Also not**\n").errors, []);
+});
+
+test("the real course: 9 A, 15 AB, 7 B, and the pilot cards are Variables = A and Eigenvalues = AB", () => {
+  const built = real.modules.flatMap((m) => m.concepts).filter((c) => c.status === "built");
+  const n = (v) => built.filter((c) => c.voice === v).length;
+  assert.deepEqual([n("A"), n("AB"), n("B"), built.length], [9, 15, 7, 31]);
+  assert.equal(built.find((c) => c.id === "m00-variables").voice, "A");
+  assert.equal(built.find((c) => c.id === "m03-eigenvectors").voice, "AB");
+});
+test("the real briefs file parses with no heading errors and one entry per built card", () => {
+  const { entries, errors } = parseBriefs(readFileSync(new URL("docs/CARD-BRIEFS.md", root), "utf8"));
+  assert.deepEqual(errors, []);
+  assert.equal(entries.size, 31);
 });

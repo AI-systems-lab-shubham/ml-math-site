@@ -9,6 +9,24 @@ import { chain, neighbours, termIdsIn, continueTarget, findConcept } from "../as
 const STATUSES = new Set(["built", "planned"]);
 
 // `fs` is injectable so tests can run without touching the disk. fs.termIds (optional) is the set of glossary ids.
+// docs/CARD-BRIEFS.md: one entry per card, each headed exactly `**Title** (concept-id). Mode X.` Returns the entries and any heading errors.
+export const BRIEF_HEADING = /^\*\*(.+?)\*\* \(([a-z0-9][a-z0-9-]*)\)\. Mode (A|AB|B)\./;
+export function parseBriefs(text) {
+  const entries = new Map(), errors = [];
+  let inEntries = false;
+  text.split("\n").forEach((line, i) => {
+    if (/^## Module\b/.test(line)) inEntries = true;
+    else if (/^## /.test(line)) inEntries = false;
+    if (!inEntries || !line.startsWith("**")) return;
+    const m = line.match(BRIEF_HEADING);
+    if (!m) { errors.push(`docs/CARD-BRIEFS.md line ${i + 1}: heading must be "**Title** (concept-id). Mode X." (X is A, AB or B): ${line.slice(0, 60)}`); return; }
+    if (entries.has(m[2])) errors.push(`docs/CARD-BRIEFS.md line ${i + 1}: duplicate entry for ${m[2]} (first on line ${entries.get(m[2]).line})`);
+    else entries.set(m[2], { mode: m[3], line: i + 1 });
+  });
+  return { entries, errors };
+}
+
+const VOICES = new Set(["A", "AB", "B"]);
 export function checkCourse(course, fs) {
   const errors = [];
   const seen = new Set();
@@ -18,6 +36,14 @@ export function checkCourse(course, fs) {
     else seen.add(id);
   };
   const moduleIds = new Set(course.modules.map((m) => m.id));
+  const briefText = fs.read("docs/CARD-BRIEFS.md");
+  const briefs = briefText === null ? null : parseBriefs(briefText);
+  if (briefs === null) errors.push("docs/CARD-BRIEFS.md is missing");
+  else {
+    errors.push(...briefs.errors);
+    const known = new Set(course.modules.flatMap((m) => m.concepts.map((c) => c.id)));
+    for (const [id, b] of briefs.entries) if (!known.has(id)) errors.push(`docs/CARD-BRIEFS.md line ${b.line}: entry "${id}" matches no card in data/course.json`);
+  }
 
   for (const m of course.modules) {
     once("module", m.id);
@@ -38,6 +64,16 @@ export function checkCourse(course, fs) {
         // The same 2 to 3 range tests/e2e/lesson-nav.mjs checks on the rendered page; here it runs in --fast, without a browser.
         if (!Array.isArray(c.objectives)) errors.push(`${c.id}: needs a list of 2 to 3 objectives`);
         else if (c.objectives.length < 2 || c.objectives.length > 3) errors.push(`${c.id}: has ${c.objectives.length} objective${c.objectives.length === 1 ? "" : "s"}; each card needs 2 to 3`);
+        // The same 3 to 4 range tests/e2e/lesson-nav.mjs checks on the rendered page.
+        if (!Array.isArray(c.takeaways)) errors.push(`${c.id}: needs a list of 3 to 4 takeaways`);
+        else if (c.takeaways.length < 3 || c.takeaways.length > 4) errors.push(`${c.id}: has ${c.takeaways.length} takeaway${c.takeaways.length === 1 ? "" : "s"}; each card needs 3 to 4`);
+        // Voice mode (docs/VOICE.md section 12) and its entry in docs/CARD-BRIEFS.md.
+        if (!VOICES.has(c.voice)) errors.push(`${c.id}: voice must be "A", "AB" or "B" (got ${c.voice === undefined ? "nothing" : JSON.stringify(c.voice)})`);
+        else if (briefs) {
+          const b = briefs.entries.get(c.id);
+          if (!b) errors.push(`${c.id}: no entry in docs/CARD-BRIEFS.md (add "**Title** (${c.id}). Mode ${c.voice}.")`);
+          else if (b.mode !== c.voice) errors.push(`${c.id}: voice is ${c.voice} in course.json but Mode ${b.mode} in docs/CARD-BRIEFS.md line ${b.line}`);
+        }
         for (const r of c.requires ?? []) if (!course.modules.some((x) => x.concepts.some((y) => y.id === r))) errors.push(`${c.id}: requires unknown concept ${r}`);
         if (fs.termIds) for (const text of [...c.objectives, ...(c.takeaways ?? [])]) for (const t of termIdsIn(text)) if (!fs.termIds.has(t)) errors.push(`${c.id}: unknown glossary term "${t}"`);
         if (typeof c.path !== "string" || !c.path.startsWith(m.path) || !c.path.endsWith("/")) errors.push(`${c.id}: path must be a folder inside ${m.path}`);
