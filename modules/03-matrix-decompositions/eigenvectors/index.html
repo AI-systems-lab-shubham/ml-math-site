@@ -145,7 +145,7 @@
       <p>Suppose you had to find these special arrows yourself, starting from nothing but the rule A v = λv. The key move is to look at the matrix A − λI, where I is the identity matrix. Why do we want that matrix to have no inverse? Because an eigenvector is not zero, and a matrix with an inverse only sends the zero vector to zero, so A − λI has to send a non-zero arrow to zero, and that is only possible if it has no inverse. We’ll take it in four steps.</p>
       <ol>
         <li><strong>The requirement.</strong> We want a v, not zero, with A v = λv. Move everything to one side and it becomes (A − λI) v = 0, where I is the identity matrix.</li>
-        <li><strong>What that demands.</strong> The matrix A − λI has to send a non-zero arrow to zero. A matrix with an inverse only sends the zero vector to zero, so A − λI must have no inverse: its determinant is 0. Remember the <a href="../determinant/">Determinant card</a>: a determinant of 0 meant the square got squashed and nothing could undo it.</li>
+        <li><strong>What that demands.</strong> A − λI must have no inverse, so its determinant is 0. Remember the <a href="../determinant/">Determinant card</a>: a determinant of 0 meant the square got squashed and nothing could undo it.</li>
         <li><strong>Write it out.</strong> Expanding the determinant gives det(A − λI) = (a − λ)(d − λ) − bc = λ² − (a + d)λ + (ad − bc) = λ² − tr λ + det.</li>
         <li><strong>Solve.</strong> Set it to 0 and use the quadratic formula: λ = (tr ± √(tr² − 4 det)) / 2. Then, for each λ, solve (A − λI) v = 0 for v.</li>
       </ol>

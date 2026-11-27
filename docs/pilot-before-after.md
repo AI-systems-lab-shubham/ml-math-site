@@ -20,7 +20,7 @@ Two cards, rewritten in the voice of `docs/VOICE.md`, starting from `docs/TONE-P
 | | Words | “you/your” | per 1,000 words | Contractions |
 |---|---|---|---|---|
 | Before | 753 | 7 | 9.3 | 1 |
-| After | 904 | 15 | 16.6 | 8 |
+| After | 906 | 15 | 16.6 | 8 |
 
 
 #### Tagline
@@ -47,11 +47,11 @@ Two cards, rewritten in the voice of `docs/VOICE.md`, starting from `docs/TONE-P
 
 | Before | After |
 |---|---|
-| Imagine a box with a label on it and nothing inside yet. That is a variable: a name for a number we have not picked. Put 4 in the box and every place the label appears means 4. Put 10 in and it means 10.<br><br>An expression is a recipe that uses the box. Our example is “three copies of the box, plus 2”. We write it 3x+2. When a number sits next to a letter, the multiplication sign is hidden: 3x means 3 × x. | Think of an empty box with a label stuck on the front, like a moving box marked “kitchen”. The label is a name, and the box is waiting for something to go in it. (A real moving box holds many things; this box holds exactly one number.) A variable works the same way: it is a name for a number we have not picked yet. Put 4 in the box and every place the label appears means 4. Put 10 in and it means 10.<br><br>Let’s put the box to work. An expression is a recipe that uses the box. Ours says “three copies of the box, plus 2”, and we write it 3x+2. Read it aloud as “three x plus two”.<br><br>Here’s where people trip: when a number sits next to a letter, the multiplication sign is hidden. So 3x isn’t one new symbol. It means 3 × x. |
+| Imagine a box with a label on it and nothing inside yet. That is a variable: a name for a number we have not picked. Put 4 in the box and every place the label appears means 4. Put 10 in and it means 10.<br><br>An expression is a recipe that uses the box. Our example is “three copies of the box, plus 2”. We write it 3x+2. When a number sits next to a letter, the multiplication sign is hidden: 3x means 3 × x. | Think of an empty box with a label stuck on the front, like a moving box marked “kitchen”. The label is a name, and the box is waiting for something to go in it. (A real moving box holds many things; this box holds one number at a time.) A variable works the same way: it is a name for a number we have not picked yet. Put 4 in the box and every place the label appears means 4. Put 10 in and it means 10.<br><br>Let’s put the box to work. An expression is a recipe that uses the box. Ours says “three copies of the box, plus 2”, and we write it 3x+2. Read it aloud as “three x plus two”.<br><br>Here’s where people trip: when a number sits next to a letter, the multiplication sign is hidden. So 3x isn’t one new symbol. It means 3 × x. |
 
 **What changed.** Opens with a box you have seen (a moving box with a label), says where the picture stops (“A real moving box holds many things; this box holds exactly one number”), reads 3x+2 aloud, and names the one place people trip. Contractions added in prose (“Let’s”, “Here’s”, “isn’t”); the definition sentence stays uncontracted.
 
-**CHECK.** The added parenthesis says the box holds “exactly one number”. At any one moment that is true. Later the card says a letter can be filled with different numbers to see what happens, which is a different moment, not a second number in the same box. Wording is yours; I did not change it.
+**CHECK.** The parenthesis now says the box “holds one number at a time”, as you asked. That fits the card: at any one moment the box has one number, and Teach it says the letter can be filled with different numbers to see what happens.
 
 **CHECK.** “Let’s put the box to work”, “Here’s where people trip” and “isn’t one new symbol” are new contractions in a sentence that used to say “This is where people trip” and “is not”. Meaning is unchanged.
 
@@ -120,7 +120,7 @@ Two cards, rewritten in the voice of `docs/VOICE.md`, starting from `docs/TONE-P
 | | Words | “you/your” | per 1,000 words | Contractions |
 |---|---|---|---|---|
 | Before | 1705 | 7 | 4.1 | 1 |
-| After | 1976 | 18 | 9.1 | 12 |
+| After | 1952 | 18 | 9.2 | 12 |
 
 
 #### Tagline
@@ -173,11 +173,17 @@ Two cards, rewritten in the voice of `docs/VOICE.md`, starting from `docs/TONE-P
 
 | Before | After |
 |---|---|
-| [tag: ✓ Derived]<br><br>• **The requirement.** Find v, not zero, with A v = λv. Move everything to one side: (A − λI) v = 0, where I is the identity matrix.<br><br>• **What that demands.** The matrix A − λI sends a non-zero arrow to zero. A matrix with an inverse only sends the zero vector to zero, so A − λI must have no inverse: its determinant is 0.<br><br>• **Write it out.** det(A − λI) = (a − λ)(d − λ) − bc = λ² − (a + d)λ + (ad − bc) = λ² − tr λ + det.<br><br>• **Solve.** Set it to 0 and use the quadratic formula: λ = (tr ± √(tr² − 4 det)) / 2. For each λ, solve (A − λI) v = 0 for v. | [tag: ✓ Derived]<br><br>Suppose you had to find these special arrows yourself, starting from nothing but the rule A v = λv. The key move is to look at the matrix A − λI, where I is the identity matrix. Why do we want that matrix to have no inverse? Because an eigenvector is not zero, and a matrix with an inverse only sends the zero vector to zero, so A − λI has to send a non-zero arrow to zero, and that is only possible if it has no inverse. We’ll take it in four steps.<br><br>• **The requirement.** We want a v, not zero, with A v = λv. Move everything to one side and it becomes (A − λI) v = 0, where I is the identity matrix.<br><br>• **What that demands.** The matrix A − λI has to send a non-zero arrow to zero. A matrix with an inverse only sends the zero vector to zero, so A − λI must have no inverse: its determinant is 0. Remember the Determinant card: a determinant of 0 meant the square got squashed and nothing could undo it.<br><br>• **Write it out.** Expanding the determinant gives det(A − λI) = (a − λ)(d − λ) − bc = λ² − (a + d)λ + (ad − bc) = λ² − tr λ + det.<br><br>• **Solve.** Set it to 0 and use the quadratic formula: λ = (tr ± √(tr² − 4 det)) / 2. Then, for each λ, solve (A − λI) v = 0 for v. |
+| [tag: ✓ Derived]<br><br>• **The requirement.** Find v, not zero, with A v = λv. Move everything to one side: (A − λI) v = 0, where I is the identity matrix.<br><br>• **What that demands.** The matrix A − λI sends a non-zero arrow to zero. A matrix with an inverse only sends the zero vector to zero, so A − λI must have no inverse: its determinant is 0.<br><br>• **Write it out.** det(A − λI) = (a − λ)(d − λ) − bc = λ² − (a + d)λ + (ad − bc) = λ² − tr λ + det.<br><br>• **Solve.** Set it to 0 and use the quadratic formula: λ = (tr ± √(tr² − 4 det)) / 2. For each λ, solve (A − λI) v = 0 for v. | [tag: ✓ Derived]<br><br>Suppose you had to find these special arrows yourself, starting from nothing but the rule A v = λv. The key move is to look at the matrix A − λI, where I is the identity matrix. Why do we want that matrix to have no inverse? Because an eigenvector is not zero, and a matrix with an inverse only sends the zero vector to zero, so A − λI has to send a non-zero arrow to zero, and that is only possible if it has no inverse. We’ll take it in four steps.<br><br>• **The requirement.** We want a v, not zero, with A v = λv. Move everything to one side and it becomes (A − λI) v = 0, where I is the identity matrix.<br><br>• **What that demands.** A − λI must have no inverse, so its determinant is 0. Remember the Determinant card: a determinant of 0 meant the square got squashed and nothing could undo it.<br><br>• **Write it out.** Expanding the determinant gives det(A − λI) = (a − λ)(d − λ) − bc = λ² − (a + d)λ + (ad − bc) = λ² − tr λ + det.<br><br>• **Solve.** Set it to 0 and use the quadratic formula: λ = (tr ± √(tr² − 4 det)) / 2. Then, for each λ, solve (A − λI) v = 0 for v. |
 
-**What changed.** Starts as a story (“Suppose you had to find these special arrows yourself… Where do you begin? Four steps get you there.”). The four steps keep their bold labels, now with fuller sentences. Still Derived; the logic is unchanged. The Reveal question after the list is unchanged.
+**What changed.** Starts as a story and asks the key question out loud before step 1: “Why do we want that matrix to have no inverse?”, answered in one sentence from facts on the card. Step 2 is shorter and links back to the Determinant card. The four steps keep their bold labels and logic. Still Derived. The Reveal question after the list is unchanged.
 
-**CHECK.** Step 3 now says “Expanding the determinant gives”. I added nothing about a, b, c, d; the original did not define them either.
+**CHECK.** The question and its one-sentence answer now carry the argument, and step 2 is trimmed to what only it adds: “A − λI must have no inverse, so its determinant is 0”, plus the Determinant link. The two sentences removed from step 2 (“A − λI has to send a non-zero arrow to zero”, “a matrix with an inverse only sends the zero vector to zero”) are both in the opening answer, word for word in meaning. The logical step “no inverse, so determinant 0” is unchanged from the original.
+
+**CHECK.** The one-sentence answer is new text: an eigenvector is not zero; a matrix with an inverse only sends the zero vector to zero; so A − λI has to send a non-zero arrow to zero, which is only possible if it has no inverse. It is the same argument as the original step 2, moved earlier.
+
+**CHECK.** “The key move is to look at the matrix A − λI” says in advance what step 1 derives. Step 1 still introduces it.
+
+**CHECK.** Link back: “a determinant of 0 meant the square got squashed and nothing could undo it.” The Determinant card says a determinant of 0 means the area is 0 (squashed to a line or point), and that a non-zero determinant means nothing is lost so an inverse exists. “Nothing could undo it” is my paraphrase of the second, in the words you gave.
 
 
 #### Stage 7 In an LLM
